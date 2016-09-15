@@ -8,6 +8,7 @@ object MicroServiceBuild extends Build with MicroService {
 }
 
 private object AppDependencies {
+
   import play.PlayImport._
   import play.core.PlayVersion
 
@@ -36,7 +37,7 @@ private object AppDependencies {
 
   trait TestDependencies {
     lazy val scope: String = "test"
-    lazy val test : Seq[ModuleID] = ???
+    lazy val test: Seq[ModuleID] = ???
   }
 
   object Test {
@@ -51,6 +52,20 @@ private object AppDependencies {
     }.test
   }
 
-  def apply() = compile ++ Test()
-}
+  object IntegrationTest {
+    def apply() = new TestDependencies {
 
+      override lazy val scope: String = "it"
+
+      override lazy val test = Seq(
+        "org.scalatestplus" %% "play" % "1.2.0" % scope,
+        "org.scalatest" %% "scalatest" % scalaTestVersion % scope,
+        "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope,
+        "org.pegdown" % "pegdown" % pegDownVersion % scope,
+        "com.typesafe.play" %% "play-test" % PlayVersion.current % scope
+      )
+    }.test
+  }
+
+  def apply() = compile ++ Test() ++ IntegrationTest()
+}
