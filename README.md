@@ -1,6 +1,8 @@
 **CC Eligibility**
 ----
-![Build status](https://ci-dev.tax.service.gov.uk/buildStatus/icon?job=cc-eligibility)
+
+[![Build Status](https://travis-ci.org/hmrc/cc-eligibility.svg?branch=master)](https://travis-ci.org/hmrc/cc-eligibility) [ ![Download](https://api.bintray.com/packages/hmrc/releases/cc-eligibility/images/download.svg) ](https://bintray.com/hmrc/releases/cc-eligibility/_latestVersion)
+
 
 The Childcare Eligibility will help parents to quickly self-assess their and child's eligibility from Tax-Free Childcare, Tax Credits, Employer-Supported Childcare and <br />
 understand how much support they could get. This will help parents to make a decision on which scheme will best suit their needs.
