@@ -1,0 +1,40 @@
+{
+  "eligibility": {
+    "tc": null,
+    "esc": null,
+    "tfc": {
+      "from": "2016-08-27",
+      "until": "2016-11-27",
+      "householdEligibility": false,
+      "periods": [
+        {
+          "from" : "2016-08-27",
+          "until" : "2016-11-27",
+          "periodEligibility" : false,
+          "claimants" : [
+            {
+              "qualifying" : true,
+              "isPartner" : false,
+              "failures" : []
+            },
+            {
+              "qualifying" : false,
+              "isPartner" : true,
+              "failures" : []
+            }
+          ],
+          "children" : [
+            {
+              "id" : 0,
+              "name" : "Child 1",
+              "qualifying" : true,
+              "from" : "2016-08-27",
+              "until" : "2016-11-27",
+              "failures" : []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

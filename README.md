@@ -1,11 +1,45 @@
+**CC Eligibility**
+----
+![Build status](https://ci-dev.tax.service.gov.uk/buildStatus/icon?job=cc-eligibility)
 
-# cc-eligibility
+The Childcare Eligibility will help parents to quickly self-assess their and child's eligibility from Tax-Free Childcare, Tax Credits, Employer-Supported Childcare and <br />
+understand how much support they could get. This will help parents to make a decision on which scheme will best suit their needs.
 
-[![Build Status](https://travis-ci.org/hmrc/cc-eligibility.svg?branch=master)](https://travis-ci.org/hmrc/cc-eligibility) [ ![Download](https://api.bintray.com/packages/hmrc/releases/cc-eligibility/images/download.svg) ](https://bintray.com/hmrc/releases/cc-eligibility/_latestVersion)
+The Eligibility micro-service common to all the schemes (Tax, Credit, Tax-Free Childcare, Employee Supported Childcare) of childcare calculator.
 
-This is a placeholder README.md for a new repository
+The service will accept the parent details and children details as input request in json format and returns whether the scheme, parent and/or children are eligible to apply in
+a json format.
 
-### License
+
+* **Endpoint URLs**
+
+  * **TC  :**  /cc-eligibility/tax-credits/eligibility
+
+  * **ESC :**  /cc-eligibility/employer-vouchers/eligibility
+
+  * **TFC :**  /cc-eligibility/tax-free-childcare/eligibility
+
+
+
+* **Port Number**
+
+  * **CC Eligibility :** 9375
+
+
+
+* **Method:**
+
+  All requests are of type `POST`
+
+
+For TC Eligibility documentation, please click [here](README_TC.md).
+
+For ESC Eligibility documentation, please click [here](README_ESC.md).
+
+For TFC Eligibility documentation, please click [here](README_TFC.md).
+
+
+License
+---
 
 This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
-    

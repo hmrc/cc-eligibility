@@ -1,0 +1,53 @@
+{
+  "payload": {
+    "taxYears": [
+      {
+        "from": "2016-08-27",
+        "until": "2017-04-06",
+        "claimants": [
+          {
+            "liveOrWork": true,
+            "isPartner": false,
+            "schemesClaiming": {
+            },
+            "employerProvidesESC": true,
+            "elements": {
+              "vouchers": true
+            }
+          },
+          {
+            "liveOrWork": false,
+            "isPartner": true,
+            "schemesClaiming": {
+            },
+            "employerProvidesESC": false,
+            "elements": {
+              "vouchers": false
+            }
+          }
+        ],
+        "children": [
+          {
+            "id": 0,
+            "name": "Child 1",
+            "dob": "2002-09-12",
+            "disability": {
+              "disabled": false,
+              "severelyDisabled": false
+            }
+          },
+          {
+            "id": 1,
+            "name": "Child 2",
+            "childcareCost": 3000.00,
+            "dob": "2002-09-12",
+            "disability": {
+              "disabled": false,
+              "severelyDisabled": false
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

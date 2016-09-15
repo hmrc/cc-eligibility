@@ -1,0 +1,80 @@
+{
+  "payload": {
+    "tfc": {
+      "from": "2016-09-01",
+      "numberOfPeriods": 6,
+      "claimants": [
+        {
+          "hoursPerWeek": 16.50,
+          "liveOrWork": true,
+          "isPartner": true,
+          "totalIncome": 99000.00,
+          "earnedIncome": 0.00,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          },
+          "schemesClaiming": {
+            "esc": true,
+            "tc": false,
+            "uc": false,
+            "cg": false
+          },
+          "otherSupport": {
+            "disabilityBenefitsOrAllowances":false,
+            "severeDisabilityBenefitsOrAllowances":false,
+            "incomeBenefitsOrAllowances":false,
+            "carersAllowance":false
+          }
+        },
+        {
+          "hoursPerWeek": 16.50,
+          "liveOrWork": true,
+          "isPartner": false,
+          "totalIncome": 99000.00,
+          "earnedIncome": 0.00,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          },
+          "schemesClaiming": {
+            "esc": true,
+            "tc": false,
+            "uc": false,
+            "cg": false
+          },
+          "otherSupport": {
+            "disabilityBenefitsOrAllowances":false,
+            "severeDisabilityBenefitsOrAllowances":false,
+            "incomeBenefitsOrAllowances":false,
+            "carersAllowance":false
+          }
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2010-08-25",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 2",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2012-06-20",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        }
+      ]
+    }
+  }
+}

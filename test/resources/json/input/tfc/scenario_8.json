@@ -1,0 +1,46 @@
+{
+  "payload": {
+    "tfc": {
+      "from": "2016-08-27",
+      "numberOfPeriods": 1,
+      "claimants": [
+        {
+          "hoursPerWeek": 16.50,
+          "liveOrWork": true,
+          "isPartner": false,
+          "totalIncome": 99000.00,
+          "earnedIncome": 0.00,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          },
+          "schemesClaiming": {
+            "esc": false,
+            "tc": false,
+            "uc": false,
+            "cg": false
+          },
+          "otherSupport": {
+            "disabilityBenefitsOrAllowances":false,
+            "severeDisabilityBenefitsOrAllowances":false,
+            "incomeBenefitsOrAllowances":false,
+            "carersAllowance":false
+          }
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2011-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        }
+      ]
+    }
+  }
+}

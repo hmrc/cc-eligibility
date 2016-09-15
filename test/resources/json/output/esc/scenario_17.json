@@ -1,0 +1,80 @@
+{
+  "eligibility": {
+    "esc": {
+      "taxYears": [
+        {
+          "from": "2016-08-27",
+          "until": "2017-04-06",
+          "periods": [
+            {
+              "from": "2016-08-27",
+              "until": "2016-09-01",
+              "claimants": [
+                {
+                  "qualifying": true,
+                  "isPartner": false,
+                  "eligibleMonthsInPeriod": 1,
+                  "elements": {
+                    "vouchers": true
+                  },
+                  "failures": []
+                },
+                {
+                  "qualifying": true,
+                  "isPartner": true,
+                  "eligibleMonthsInPeriod": 1,
+                  "elements": {
+                    "vouchers": true
+                  },
+                  "failures": []
+                }
+              ],
+              "children": [
+                {
+                  "id": 0,
+                  "name": "Child 1",
+                  "qualifying": true,
+                  "failures": []
+                }
+              ]
+            },
+            {
+            "from": "2016-09-01",
+            "until": "2017-04-06",
+            "claimants": [
+            {
+              "qualifying": true,
+              "isPartner": false,
+              "eligibleMonthsInPeriod": 0,
+              "elements": {
+              "vouchers": false
+              },
+              "failures": []
+            },
+            {
+              "qualifying": true,
+              "isPartner": true,
+              "eligibleMonthsInPeriod": 0,
+              "elements": {
+              "vouchers": false
+            },
+            "failures": []
+            }
+            ],
+            "children": [
+            {
+              "id": 0,
+              "name": "Child 1",
+              "qualifying": false,
+              "failures": []
+            }
+            ]
+            }
+          ]
+        }
+      ]
+    },
+    "tc": null,
+    "tfc": null
+  }
+}

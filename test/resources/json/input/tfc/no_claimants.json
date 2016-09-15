@@ -1,0 +1,23 @@
+{
+  "payload": {
+    "tfc": {
+      "from": "2016-08-27",
+      "until": "2017-04-06",
+      "claimants": [
+      ],
+      "children": [
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        }
+      ]
+    }
+  }
+}

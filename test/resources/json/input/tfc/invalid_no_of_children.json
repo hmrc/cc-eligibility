@@ -1,0 +1,321 @@
+{
+  "payload": {
+    "tfc": {
+      "from": "2016-08-27",
+      "until": "2017-04-06",
+      "claimants": [
+        {
+          "hoursPerWeek": 30.00,
+          "liveOrWork": true,
+          "isPartner": false,
+          "totalIncome": 0.00,
+          "earnedIncome": 0.00,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          },
+          "schemesClaiming": {
+            "esc": false,
+            "tc": false,
+            "uc": false,
+            "cg": false
+          },
+          "otherSupport": {
+            "disabilityBenefitsOrAllowances":false,
+            "severeDisabilityBenefitsOrAllowances":false,
+            "incomeBenefitsOrAllowances":false,
+            "carersAllowance":false
+          }
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 0,
+          "name": "Child 1",
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          }
+        }
+      ]
+    }
+  }
+}

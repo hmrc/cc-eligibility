@@ -1,0 +1,39 @@
+{
+    "eligibility": {
+      "esc": {
+        "taxYears": [
+          {
+            "from": "2016-08-27",
+            "until": "2017-04-06",
+            "periods": [
+              {
+                "from": "2016-08-27",
+                "until": "2017-04-06",
+                "claimants": [
+                  {
+                    "qualifying": true,
+                    "isPartner": false,
+                    "eligibleMonthsInPeriod": 0,
+                    "elements": {
+                      "vouchers": false
+                    },
+                    "failures": []
+                  }
+                ],
+                "children": [
+                  {
+                    "id": 0,
+                    "name": "Child 1",
+                    "qualifying": false,
+                    "failures": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "tc": null,
+      "tfc": null
+    }
+}

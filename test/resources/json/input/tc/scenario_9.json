@@ -1,0 +1,60 @@
+{
+    "payload": {
+          "taxYears": [
+              {
+                  "from": "2016-08-27",
+                  "until": "2017-04-06",
+                  "claimants": [
+                      {
+                          "hoursPerWeek": 32.5,
+                          "liveOrWork": true,
+                          "isPartner": false,
+                          "qualifyingAge": true,
+                          "totalIncome": 0.00,
+                          "previousTotalIncome": 0.00,
+                          "disability": {
+                              "disabled": true,
+                              "severelyDisabled": true
+                          },
+                          "schemesClaiming": {
+                              "tfc": false,
+                              "esc" : false,
+                              "tc": false
+                          }
+                      },
+                      {
+                          "hoursPerWeek": 0.00,
+                          "liveOrWork": true,
+                          "isPartner": true,
+                          "qualifyingAge": true,
+                          "totalIncome": 0.00,
+                          "previousTotalIncome": 0.00,
+                          "disability": {
+                              "disabled": false,
+                              "severelyDisabled": false
+                          },
+                          "schemesClaiming": {
+                              "tfc": false,
+                              "esc" : false,
+                              "tc": false
+                          }
+                      }
+                  ],
+                  "children": [
+                      {
+                        "id": 0,
+                        "name": "Child 1",
+                        "childcareCost": 3000.00,
+                        "childcareCostPeriod": "Month",
+                        "dob": "2014-05-12",
+                        "disability": {
+                          "disabled": false,
+                          "severelyDisabled": false
+                        },
+                        "education": null
+                      }
+                  ]
+              }
+          ]
+    }
+}

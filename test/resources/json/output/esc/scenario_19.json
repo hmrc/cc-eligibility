@@ -1,0 +1,93 @@
+{
+  "eligibility": {
+    "esc": {
+      "taxYears": [
+        {
+          "from": "2016-06-27",
+          "until": "2017-04-06",
+          "periods": [
+            {
+              "from": "2016-06-27",
+              "until": "2016-09-01",
+              "claimants": [
+                {
+                  "qualifying": true,
+                  "isPartner": false,
+                  "eligibleMonthsInPeriod": 3,
+                  "elements": {
+                    "vouchers": true
+                  },
+                  "failures": []
+                },
+                {
+                  "qualifying": false,
+                  "isPartner": true,
+                  "eligibleMonthsInPeriod": 0,
+                  "elements": {
+                    "vouchers": false
+                  },
+                  "failures": []
+                }
+              ],
+              "children": [
+                {
+                  "id": 0,
+                  "name": "Child 1",
+                  "qualifying": true,
+                  "failures": []
+                },
+                {
+                  "id": 1,
+                  "name": "Child 2",
+                  "qualifying": true,
+                  "failures": []
+                }
+              ]
+            },
+            {
+            "from": "2016-09-01",
+            "until": "2017-04-06",
+            "claimants": [
+              {
+              "qualifying": true,
+              "isPartner": false,
+              "eligibleMonthsInPeriod": 0,
+              "elements": {
+                "vouchers": false
+              },
+              "failures": []
+              },
+              {
+                "qualifying": false,
+                "isPartner": true,
+                "eligibleMonthsInPeriod": 0,
+                "elements": {
+                  "vouchers": false
+                },
+                "failures": []
+              }
+            ],
+            "children": [
+              {
+              "id": 0,
+              "name": "Child 1",
+              "qualifying": false,
+              "failures": []
+              },
+              {
+                "id": 1,
+                "name": "Child 2",
+                "qualifying": false,
+                "failures": []
+              }
+
+            ]
+            }
+          ]
+        }
+      ]
+    },
+    "tc": null,
+    "tfc": null
+  }
+}

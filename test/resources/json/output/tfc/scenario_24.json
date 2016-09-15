@@ -1,0 +1,121 @@
+{
+  "eligibility": {
+    "tc": null,
+    "esc": null,
+    "tfc": {
+      "from": "2016-03-07",
+      "until": "2017-03-07",
+      "householdEligibility": false,
+      "periods": [
+        {
+          "from" : "2016-03-07",
+          "until" : "2016-06-07",
+          "periodEligibility" : false,
+          "claimants" : [
+            {
+              "qualifying" : false,
+              "isPartner" : false,
+              "failures" : []
+            },
+            {
+              "qualifying" : true,
+              "isPartner" : true,
+              "failures" : []
+            }
+          ],
+          "children" : [
+            {
+              "id" : 0,
+              "name" : "Child 1",
+              "qualifying" : true,
+              "from" : "2016-03-07",
+              "until" : "2016-06-07",
+              "failures" : []
+            }
+          ]
+        },
+        {
+          "from" : "2016-06-07",
+          "until" : "2016-09-07",
+          "periodEligibility" : false,
+          "claimants" : [
+            {
+              "qualifying" : false,
+              "isPartner" : false,
+              "failures" : []
+            },
+            {
+              "qualifying" : true,
+              "isPartner" : true,
+              "failures" : []
+            }
+          ],
+          "children" : [
+            {
+              "id" : 0,
+              "name" : "Child 1",
+              "qualifying" : true,
+              "from" : "2016-06-07",
+              "until" : "2016-09-07",
+              "failures" : []
+            }
+          ]
+        },
+        {
+          "from" : "2016-09-07",
+          "until" : "2016-12-07",
+          "periodEligibility" : false,
+          "claimants" : [
+            {
+              "qualifying" : false,
+              "isPartner" : false,
+              "failures" : []
+            },
+            {
+              "qualifying" : true,
+              "isPartner" : true,
+              "failures" : []
+            }
+          ],
+          "children" : [
+            {
+              "id" : 0,
+              "name" : "Child 1",
+              "qualifying" : true,
+              "from" : "2016-09-07",
+              "until" : "2016-12-07",
+              "failures" : []
+            }
+          ]
+        },
+        {
+          "from" : "2016-12-07",
+          "until" : "2017-03-07",
+          "periodEligibility" : false,
+          "claimants" : [
+            {
+              "qualifying" : false,
+              "isPartner" : false,
+              "failures" : []
+            },
+            {
+              "qualifying" : true,
+              "isPartner" : true,
+              "failures" : []
+            }
+          ],
+          "children" : [
+            {
+              "id" : 0,
+              "name" : "Child 1",
+              "qualifying" : true,
+              "from" : "2016-12-07",
+              "until" : "2017-03-07",
+              "failures" : []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

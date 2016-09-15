@@ -1,0 +1,113 @@
+{
+  "payload": {
+    "taxYears": [
+      {
+        "from": "2016-06-27",
+        "until": "2017-04-06",
+        "claimants": [
+          {
+            "liveOrWork": true,
+            "isPartner": false,
+            "schemesClaiming": {
+              "tfc": false,
+              "esc" : false,
+              "tc": false
+            },
+            "employerProvidesESC": true,
+            "elements": {
+              "vouchers": true
+            }
+          },
+          {
+            "liveOrWork": true,
+            "isPartner": true,
+            "schemesClaiming": {
+              "tfc": false,
+              "esc" : false,
+              "tc": false
+            },
+            "employerProvidesESC": true,
+            "elements": {
+              "vouchers": true
+            }
+          }
+
+        ],
+        "children": [
+          {
+            "id": 0,
+            "name": "Child 1",
+            "dob": "2000-07-12",
+            "disability": {
+              "disabled": false,
+              "severelyDisabled": true
+            }
+          },
+          {
+            "id": 1,
+            "name": "Child 2",
+            "dob": "2017-05-31",
+            "disability": {
+              "disabled": false,
+              "severelyDisabled": false
+            }
+          }
+        ]
+      },
+      {
+        "from": "2017-04-06",
+        "until": "2017-06-27",
+        "claimants": [
+          {
+            "liveOrWork": true,
+            "isPartner": false,
+            "schemesClaiming": {
+              "tfc": false,
+              "esc" : false,
+              "tc": false
+            },
+            "employerProvidesESC": true,
+            "elements": {
+              "vouchers": true
+            }
+          },
+          {
+            "liveOrWork": true,
+            "isPartner": true,
+            "schemesClaiming": {
+              "tfc": false,
+              "esc" : false,
+              "tc": false
+            },
+            "employerProvidesESC": true,
+            "elements": {
+              "vouchers": true
+            }
+          }
+
+        ],
+        "children": [
+          {
+            "id": 0,
+            "name": "Child 1",
+            "dob": "2000-07-12",
+            "disability": {
+              "disabled": false,
+              "severelyDisabled": true
+            }
+          },
+          {
+            "id": 1,
+            "name": "Child 2",
+            "dob": "2017-04-30",
+            "disability": {
+              "disabled": false,
+              "severelyDisabled": false
+            }
+          }
+        ]
+      }
+
+    ]
+  }
+}

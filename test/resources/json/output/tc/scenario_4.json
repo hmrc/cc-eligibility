@@ -1,0 +1,61 @@
+{
+  "eligibility": {
+    "tc":{
+      "eligible": true,
+      "taxYears": [
+        {
+          "from": "2016-08-27",
+          "until": "2017-04-06",
+          "houseHoldIncome": 0.00,
+          "periods": [
+            {
+              "from": "2016-08-27",
+              "until": "2017-04-06",
+              "householdElements":
+              {
+                "basic": true,
+                "hours30": true,
+                "childcare": true,
+                "loneParent": true,
+                "secondParent": false,
+                "family": true
+              },
+              "claimants": [
+                {
+                  "qualifying": true,
+                  "isPartner": false,
+                  "claimantDisability":
+                  {
+                    "disability": true,
+                    "severeDisability": true
+                  },
+                  "failures": []
+                }
+              ],
+              "children": [
+                {
+                  "id": 0,
+                  "name": "Child 1",
+                  "childcareCost": 3000.00,
+                  "childcareCostPeriod": "Month",
+                  "qualifying": true,
+                  "childElements":
+                  {
+                    "child": true,
+                    "youngAdult": false,
+                    "disability": false,
+                    "severeDisability": false,
+                    "childcare": true
+                  },
+                  "failures": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "esc": null,
+    "tfc": null
+  }
+}
