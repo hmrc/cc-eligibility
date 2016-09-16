@@ -23,7 +23,6 @@ import play.api.libs.json._
 object EnumUtils {
   def enumReads[E <: Enumeration](enum: E): Reads[E#Value] =
     new Reads[E#Value] {
-      Logger.debug(s"EnumUtils.enumReads")
       def reads(json: JsValue): JsResult[E#Value] = json match {
         case JsString(s) => {
           try {
@@ -39,7 +38,6 @@ object EnumUtils {
 
   implicit def enumWrites[E <: Enumeration]: Writes[E#Value] =
     new Writes[E#Value] {
-      Logger.debug(s"EnumUtils.enumWrites")
       def writes(v: E#Value): JsValue = JsString(v.toString)
     }
 
@@ -63,7 +61,6 @@ object Periods extends Enumeration {
   implicit def enumWrites: Writes[Period] = EnumUtils.enumWrites
 
   def toString(period: Value): String = {
-    Logger.debug(s"Periods.toString")
     period match {
       case Weekly => Messages("cc.period.weekly")
       case Fortnightly => Messages("cc.period.fortnightly")
@@ -75,7 +72,6 @@ object Periods extends Enumeration {
   }
 
   def toPeriod(period: String): Value = {
-    Logger.debug(s"Periods.toPeriod")
     period.toLowerCase match {
       case "monthly" => Monthly
       case "3-monthly" => Quarterly

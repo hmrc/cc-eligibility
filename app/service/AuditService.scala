@@ -45,7 +45,7 @@ trait AuditService {
   }
 
   def buildEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)(implicit request: Request[_], hc: HeaderCarrier) = {
-    Logger.debug(s"AuditService.buildEvent")
+    Logger.info(s"AuditService.buildEvent")
     val auditEvent = DataEvent(
       auditSource =  auditSource,
       auditType = auditType,
@@ -55,7 +55,7 @@ trait AuditService {
   }
 
   private def generateDetails(request: Request[_], details: Map[String, String]): Map[String, String] = {
-    Logger.debug(s"AuditService.generateDetails")
+    Logger.info(s"AuditService.generateDetails")
     details ++ Map("deviceID" -> DeviceId(request).map(_.id).getOrElse("-"))
   }
 

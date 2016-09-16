@@ -36,7 +36,7 @@ val eligibility = new TFCEligibilityService
     import scala.concurrent.ExecutionContext.Implicits.global
 
     def determineChildStartDateInTFCPeriod(child: models.input.tfc.Child, periodFrom : LocalDate, periodUntil: LocalDate) : LocalDate = {
-      Logger.debug(s"TFCEligibilityService.determineChildStartDateInTFCPeriod - Begin")
+      Logger.info(s"TFCEligibilityService.determineChildStartDateInTFCPeriod")
       val childDob : java.util.Date = child.dob.toDate
       val childBirthdaySeptDate : java.util.Date = child.endWeek1stOfSeptemberDate(periodFrom)
 
@@ -51,12 +51,11 @@ val eligibility = new TFCEligibilityService
           child.dob
         case _ => null
       }
-      Logger.debug(s"TFCEligibilityService.determineChildStartDateInTFCPeriod - End")
       dob
     }
 
     def determineChildEndDateInTFCPeriod(child: models.input.tfc.Child, periodFrom : LocalDate, periodUntil: LocalDate) : LocalDate = {
-      Logger.debug(s"TFCEligibilityService.determineChildEndDateInTFCPeriod - Begin")
+      Logger.info(s"TFCEligibilityService.determineChildEndDateInTFCPeriod")
       val childDob : java.util.Date = child.dob.toDate
       val childBirthdaySeptDate : java.util.Date = child.endWeek1stOfSeptemberDate(periodFrom)
 
@@ -73,12 +72,11 @@ val eligibility = new TFCEligibilityService
               null
           }
       }
-      Logger.debug(s"TFCEligibilityService.determineChildEndDateInTFCPeriod - End")
       dob
     }
 
     def determinePeriodEligibility(outputClaimants : List[OutputClaimant],outputChildren : List[OutputChild]) : Boolean = {
-      Logger.debug(s"TFCEligibilityService.determinePeriodEligibility - Begin")
+      Logger.info(s"TFCEligibilityService.determinePeriodEligibility")
       val childEligibility = outputChildren.exists(child => child.qualifying)
 
      val periodEligibility =  outputClaimants match {
@@ -88,12 +86,11 @@ val eligibility = new TFCEligibilityService
           claimantList.head.qualifying && claimantList.tail.head.qualifying && childEligibility
         case _ => false
       }
-      Logger.debug(s"TFCEligibilityService.determinePeriodEligibility - End")
       periodEligibility
     }
 
     def determineTFCPeriods(tfc: TFC) : List[TFCPeriod] = {
-      Logger.debug(s"TFCEligibilityService.determineTFCPeriods - Begin")
+      Logger.info(s"TFCEligibilityService.determineTFCPeriods")
       val currentCalendar = Calendar.getInstance()
       currentCalendar.clear()
       currentCalendar.setTime(tfc.from.toDate)
@@ -114,12 +111,11 @@ val eligibility = new TFCEligibilityService
           children = outputChildren
         )
       }
-      Logger.debug(s"TFCEligibilityService.determineTFCPeriods - Begin")
       periods.toList
     }
 
     def determineChildrenEligibility(children: List[Child], periodFrom: LocalDate, periodUntil: LocalDate) : List[OutputChild] = {
-      Logger.debug(s"TFCEligibilityService.determineChildrenEligibility - Begin")
+      Logger.info(s"TFCEligibilityService.determineChildrenEligibility")
       val outputChildren = for(child <- children) yield {
         val qualifyStartDate = determineChildStartDateInTFCPeriod(child, periodFrom, periodUntil)
         val qualifyEndDate = determineChildEndDateInTFCPeriod(child, periodFrom, periodUntil)
@@ -135,12 +131,11 @@ val eligibility = new TFCEligibilityService
           failures = List()
         )
       }
-      Logger.debug(s"TFCEligibilityService.determineChildrenEligibility - End")
       outputChildren
     }
 
     def determineClaimantsEligibility(claimants: List[Claimant], periodStart : LocalDate) : List[OutputClaimant] = {
-      Logger.debug(s"TFCEligibilityService.determineClaimantsEligibility - Begin")
+      Logger.info(s"TFCEligibilityService.determineClaimantsEligibility")
       val outClaimants = for(claimant <- claimants) yield {
         OutputClaimant(
           qualifying = claimant.isQualifyingForTFC(periodStart),
@@ -149,13 +144,12 @@ val eligibility = new TFCEligibilityService
           failures = List()
         )
       }
-      Logger.debug(s"TFCEligibilityService.determineClaimantsEligibility - End")
       outClaimants
     }
 
 
     override def eligibility(request : models.input.tfc.Request) : Future[Eligibility] = {
-      Logger.debug(s"TFCEligibilityService.determineClaimantsEligibility - Begin")
+      Logger.info(s"TFCEligibilityService.determineClaimantsEligibility")
       val outputPeriods = determineTFCPeriods(request.payload.tfc)
       val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && request.payload.tfc.validHouseholdHours
 
@@ -171,7 +165,6 @@ val eligibility = new TFCEligibilityService
           )
         )
       }
-      Logger.debug(s"TFCEligibilityService.determineClaimantsEligibility - End")
       tfcEligibility
     }
   }

@@ -38,24 +38,23 @@ trait TCEligibilityController extends EligibilityController {
   val auditEvent : AuditEvents
 
   override def eligible = Action.async(parse.json) {
-    Logger.debug(s"TCEligibilityController.eligible")
     implicit request =>
       request.body.validate[Request].fold(
         error => {
-          Logger.debug(s"\n\nTC Validation JsError: ${JsError.toFlatJson(error).toString()}\n\n")
+          Logger.warn(s"\n\nTC Validation JsError: ${JsError.toFlatJson(error).toString()}\n\n")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
-          Logger.debug(s"\n\nTC Validation passed : ${result.toString}\n\n")
+          Logger.info(s"\n\nTC Validation passed : ${result.toString}\n\n")
           auditEvent.auditTCRequest(result.toString)
           eligibility.eligibility(result).map {
             response =>
-              Logger.debug(s"\n\nTC Eligibility Result: ${response.toString}\n\n")
+              Logger.info(s"\n\nTC Eligibility Result: ${response.toString}\n\n")
               auditEvent.auditTFCResponse(utils.JSONFactory.generateResultJson(response).toString())
               Ok(utils.JSONFactory.generateResultJson(response))
           } recover {
             case e: Exception =>
-              Logger.debug(s"\n\nTax Credits Eligibility Exception: ${e.getMessage}\n\n")
+              Logger.warn(s"\n\nTax Credits Eligibility Exception: ${e.getMessage}\n\n")
               InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
           }
         }

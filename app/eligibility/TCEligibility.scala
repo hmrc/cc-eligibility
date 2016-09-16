@@ -40,7 +40,7 @@ trait TCEligibility extends CCEligibility {
     import scala.concurrent.ExecutionContext.Implicits.global
 
     private def determineStartDatesOfPeriodsInTaxYear(taxYear: models.input.tc.TaxYear) : List[LocalDate] = {
-      Logger.debug(s"TCEligibilityService.determineStartDatesOfPeriodsInTaxYear - Begin")
+      Logger.info(s"TCEligibilityService.determineStartDatesOfPeriodsInTaxYear")
       val dates : List[Option[LocalDate]] = for (child <- taxYear.children) yield {
         val isBeingBorn = child.isBeingBornInTaxYear(taxYear)
         val turns15 = child.isTurning15Before1September(taxYear.from, taxYear.until)
@@ -63,12 +63,11 @@ trait TCEligibility extends CCEligibility {
       val filtered = dates.flatten
       val inserted: List[LocalDate] = filtered.:::(List(taxYear.from))
       val sorted = inserted.sortBy(x => x.toDate.getTime)
-      Logger.debug(s"TCEligibilityService.determineStartDatesOfPeriodsInTaxYear - End")
       sorted.distinct
     }
 
     def determineHouseholdEligibilityForPeriod(ty: TaxYear, periodStart: LocalDate) : models.output.tc.HouseholdElements = {
-      Logger.debug(s"TCEligibilityService.determineHouseholdEligibilityForPeriod - Begin")
+      Logger.info(s"TCEligibilityService.determineHouseholdEligibilityForPeriod")
       val householdElements = models.output.tc.HouseholdElements(
         basic = ty.getBasicElement(periodStart),
         hours30 = ty.gets30HoursElement(periodStart),
@@ -77,12 +76,11 @@ trait TCEligibility extends CCEligibility {
         secondParent = ty.gets2ndAdultElement(periodStart),
         family = ty.getsFamilyElement(periodStart)
       )
-      Logger.debug(s"TCEligibilityService.determineHouseholdEligibilityForPeriod - End")
       householdElements
     }
 
     def determineClaimantsEligibilityForPeriod(ty : models.input.tc.TaxYear) : List[models.output.tc.OutputClaimant] = {
-      Logger.debug(s"TCEligibilityService.determineClaimantsEligibilityForPeriod - Begin")
+      Logger.info(s"TCEligibilityService.determineClaimantsEligibilityForPeriod")
       for (claimant <- ty.claimants) yield {
         val claimantIsQualifying = claimant.isQualifyingForTC
         val claimantIsPartner = claimant.isPartner
@@ -99,13 +97,12 @@ trait TCEligibility extends CCEligibility {
           //TODO Implement failures
           failures = List()
         )
-        Logger.debug(s"TCEligibilityService.determineClaimantsEligibilityForPeriod - End")
         outputClaimant
       }
     }
 
     def determineChildrensEligibilityForPeriod(children: List[Child], periodStart: LocalDate) : List[models.output.tc.OutputChild] = {
-      Logger.debug(s"TCEligibilityService.determineChildrensEligibilityForPeriod - Begin")
+      Logger.info(s"TCEligibilityService.determineChildrensEligibilityForPeriod")
       for (child <- children) yield {
         val childElement = child.getsChildElement(periodStart)
         val youngAdultElement = child.getsYoungAdultElement(periodStart)
@@ -130,13 +127,12 @@ trait TCEligibility extends CCEligibility {
           //TODO Implement failures
           failures = List()
         )
-        Logger.debug(s"TCEligibilityService.determineChildrensEligibilityForPeriod - End")
         outputChild
       }
     }
 
    private def determinePeriodsForTaxYear(ty: models.input.tc.TaxYear) : List[models.output.tc.TCPeriod] = {
-     Logger.debug(s"TCEligibilityService.determinePeriodsForTaxYear - Begin")
+     Logger.info(s"TCEligibilityService.determinePeriodsForTaxYear")
       // get all date ranges of splits for tax year
       val datesOfChanges = determineStartDatesOfPeriodsInTaxYear(ty)
       // multiple periods have been identified
@@ -155,12 +151,11 @@ trait TCEligibility extends CCEligibility {
             children = childrensEligibility
           )
         }
-     Logger.debug(s"TCEligibilityService.determinePeriodsForTaxYear - End")
         periods
     }
 
     private def constructTaxYearsWithPeriods(request : models.input.tc.Request) : List[models.output.tc.TaxYear] = {
-      Logger.debug(s"TCEligibilityService.constructTaxYearsWithPeriods - Begin")
+      Logger.info(s"TCEligibilityService.constructTaxYearsWithPeriods")
       val taxYears : List[models.input.tc.TaxYear] = request.payload.taxYears
 
       val constructedTaxYears : List[models.output.tc.TaxYear] = for (ty <- taxYears) yield {
@@ -172,13 +167,11 @@ trait TCEligibility extends CCEligibility {
             periods = determinePeriodsForTaxYear(ty)
           )
         }
-
-      Logger.debug(s"TCEligibilityService.constructTaxYearsWithPeriods - End: \n $constructedTaxYears \n for request : \n $request")
       constructedTaxYears
     }
 
     def calculateIncomeDisregard(currentIncome : BigDecimal, previousTotalIncome : BigDecimal,periodStart : LocalDate) : BigDecimal = {
-      Logger.debug(s"TCEligibilityService.calculateIncomeDisregard - Begin")
+      Logger.info(s"TCEligibilityService.calculateIncomeDisregard")
       val taxYearConfig = TCConfig.getConfig(periodStart)
       val incomeDisregard = if(currentIncome < previousTotalIncome){ // if current income falls
       val incomeDifferenceComparison: BigDecimal = taxYearConfig.currentIncomeFallDifferenceAmount
@@ -203,22 +196,20 @@ trait TCEligibility extends CCEligibility {
       } else { // if both incomes are equal
         currentIncome
       }
-      Logger.debug(s"TCEligibilityService.calculateIncomeDisregard - End")
       incomeDisregard
     }
 
     //TODO maybe to check for this at the controller level before all element check?
     def isEligibleForTC(listOfTaxYears : List[models.input.tc.TaxYear]) : Boolean = {
-      Logger.debug(s"TCEligibilityService.isEligibleForTC - Begin")
+      Logger.info(s"TCEligibilityService.isEligibleForTC")
       //if the fulnction "exists" finds a TY where a household does not qualify, it will return TRUE
       //TRUE means that a non qualifying family exists, so we need to return FALSE as method is checking if isEligibleForTC
       val eligibleForTC = !listOfTaxYears.exists((ty: TaxYear) => !ty.isCoupleQualifyingForTC)
-      Logger.debug(s"TCEligibilityService.isEligibleForTC - End")
       eligibleForTC
     }
 
     override def eligibility(request : models.input.BaseRequest) : Future[Eligibility] = {
-      Logger.debug(s"TCEligibilityService.eligibility")
+      Logger.info(s"TCEligibilityService.eligibility")
       request match {
         case request : models.input.tc.Request =>
           Future {

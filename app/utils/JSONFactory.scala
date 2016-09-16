@@ -26,7 +26,6 @@ object JSONFactory extends JSONFactory
 trait JSONFactory {
 
   def generateErrorJSON(status: Int, errors: Either[Seq[(JsPath, Seq[ValidationError])], Exception]): JsObject = {
-    Logger.debug(s"JSONFactory.generateErrorJSON")
     errors match {
       case Left(e) =>
         val errorsSequence = errorBuilder(e)
@@ -37,12 +36,10 @@ trait JSONFactory {
   }
 
   def generateResultJson(response : Eligibility): JsObject = {
-    Logger.debug(s"JSONFactory.generateResultJson")
     Json.obj("eligibility" -> Json.toJson[Eligibility](response))
   }
 
   def errorBuilder(errors: Seq[(JsPath, Seq[ValidationError])]): JsArray = {
-    Logger.debug(s"JSONFactory.errorBuilder")
     errors.nonEmpty match {
       case true => {
         JsArray(

@@ -30,7 +30,6 @@ import play.api.Play._
 trait CCConfig {
 
   def september1stForDate(date: LocalDate) : LocalDate = {
-    Logger.debug(s"CCConfig.september1stForDate - Begin")
     val currentYear = determineTaxYearFromNow(date)
 
     val calendar = Calendar.getInstance()
@@ -39,12 +38,10 @@ trait CCConfig {
     calendar.set(Calendar.DAY_OF_MONTH, 1)
     calendar.set(Calendar.YEAR, currentYear)
     val september1 = calendar.getTime
-    Logger.debug(s"CCConfig.september1stForDate - End")
     LocalDate.fromDateFields(september1)
   }
 
   def previousSeptember1stForDate(date: LocalDate) : LocalDate = {
-    Logger.debug(s"CCConfig.previousSeptember1stForDate - Begin")
     val currentYear = determineTaxYearFromNow(date)
 
     val calendar = Calendar.getInstance()
@@ -53,12 +50,10 @@ trait CCConfig {
     calendar.set(Calendar.DAY_OF_MONTH, 1)
     calendar.set(Calendar.YEAR, currentYear -1)
     val september1 = calendar.getTime
-    Logger.debug(s"CCConfig.previousSeptember1stForDate - End")
     LocalDate.fromDateFields(september1)
   }
 
   def september1stFollowingChildBirthday(childBirthday: LocalDate) : LocalDate = {
-    Logger.debug(s"CCConfig.september1stFollowingChildBirthday - Begin")
     // plot the child's birthday (e.g. 16th birthday) on the calendar
     val childBirthdayCalendar = Calendar.getInstance()
     childBirthdayCalendar.clear()
@@ -78,12 +73,10 @@ trait CCConfig {
     }
 
     val september1 = septemberCalendar.getTime
-    Logger.debug(s"CCConfig.september1stFollowingChildBirthday - End")
     LocalDate.fromDateFields(september1)
   }
 
   def determineTaxYearFromNow(from: LocalDate) : Int = {
-    Logger.debug(s"CCConfig.determineTaxYearFromNow - Begin")
     val currentCalendar = Calendar.getInstance()
     currentCalendar.clear()
     currentCalendar.setTime(from.toDate)
@@ -109,7 +102,6 @@ trait CCConfig {
     } else {
       periodYear
     }
-    Logger.debug(s"CCConfig.determineTaxYearFromNow - End")
     taxYear
   }
 }
