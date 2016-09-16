@@ -329,7 +329,6 @@ class TCEligibilitySpec extends UnitSpec with FakeCCEligibilityApplication with 
           x shouldBe a[Request]
 
           val response = TCEligibility.eligibility.eligibility(x)
-          Logger.debug(s"\n\n multiple tax year split response: ${response.value} \n\n")
 
           response.isInstanceOf[Future[Eligibility]] shouldBe true
           response.tc.get.taxYears.length shouldBe 2
@@ -387,7 +386,6 @@ class TCEligibilitySpec extends UnitSpec with FakeCCEligibilityApplication with 
           x shouldBe a[Request]
 
           val response = TCEligibility.eligibility.eligibility(x)
-          Logger.debug(s"\n\n multiple tax year split response: ${response.value} \n\n")
 
           response.isInstanceOf[Future[Eligibility]] shouldBe true
           response.tc.get.taxYears.length shouldBe 2
@@ -449,7 +447,6 @@ class TCEligibilitySpec extends UnitSpec with FakeCCEligibilityApplication with 
           x shouldBe a[Request]
 
           val response = TCEligibility.eligibility.eligibility(x)
-          Logger.debug(s"\n\n multiple tax year split response: ${response.value} \n\n")
 
           response.isInstanceOf[Future[Eligibility]] shouldBe true
           response.tc.get.taxYears.length shouldBe 2
@@ -510,7 +507,6 @@ class TCEligibilitySpec extends UnitSpec with FakeCCEligibilityApplication with 
           x shouldBe a[Request]
 
           val response = TCEligibility.eligibility.eligibility(x)
-          Logger.debug(s"\n\n multiple tax year split response: ${response.value} \n\n")
 
           response.isInstanceOf[Future[Eligibility]] shouldBe true
           response.tc.get.taxYears.length shouldBe 2
@@ -569,7 +565,6 @@ class TCEligibilitySpec extends UnitSpec with FakeCCEligibilityApplication with 
           x shouldBe a[Request]
 
           val response = TCEligibility.eligibility.eligibility(x)
-          Logger.debug(s"\n\n multiple tax year split response: ${response.value} \n\n")
 
           response.isInstanceOf[Future[Eligibility]] shouldBe true
           response.tc.get.taxYears.length shouldBe 2
@@ -624,7 +619,6 @@ class TCEligibilitySpec extends UnitSpec with FakeCCEligibilityApplication with 
           x shouldBe a[Request]
 
           val response = TCEligibility.eligibility.eligibility(x)
-          Logger.debug(s"\n\n multiple tax year split response: ${response.value} \n\n")
 
           response.isInstanceOf[Future[Eligibility]] shouldBe true
           response.tc.get.taxYears.length shouldBe 2
@@ -682,7 +676,6 @@ class TCEligibilitySpec extends UnitSpec with FakeCCEligibilityApplication with 
           x shouldBe a[Request]
 
           val response = TCEligibility.eligibility.eligibility(x)
-          Logger.debug(s"\n\n multiple tax year split response: ${response.value} \n\n")
 
           response.isInstanceOf[Future[Eligibility]] shouldBe true
           response.tc.get.taxYears.length shouldBe 2

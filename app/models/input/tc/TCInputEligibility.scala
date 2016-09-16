@@ -325,10 +325,8 @@ case class Child(
     val ageIncrease = taxYearConfig.youngAdultAgeLimit
     val childsBirthday = childsBirthdayDateForAge(ageIncrease)
 
-    Logger.debug(s"child's $ageIncrease birthday: $childsBirthday")
     val requiresSplit = childsBirthday.after(taxYear.from.toDate) && childsBirthday.before(taxYear.until.toDate)
 
-    Logger.debug(s"requires split: $requiresSplit, child's $ageIncrease birthday: $childsBirthday")
     (requiresSplit, LocalDate.fromDateFields(childsBirthday))
   }
 
@@ -340,7 +338,6 @@ case class Child(
           val childsStartEducationAgeLimit: Int = taxYearConfig.childAgeLimitEducation
           val childs19thBirthday = childsBirthdayDateForAge(years = childsStartEducationAgeLimit)
           val educationStartDate = x.startDate
-          Logger.debug(s"childs 19th birthday $childs19thBirthday, education start date $educationStartDate")
           educationStartDate.toDate.before(childs19thBirthday)
         } else {
           false
@@ -360,9 +357,6 @@ case class Child(
 
     val child16Birthday = childsBirthdayDateForAge(years = threshold16)
     val september1stFollowing16thBirthday = TCConfig.september1stFollowingChildBirthday(LocalDate.fromDateFields(child16Birthday))
-
-    Logger.debug(s"\n getsChildElement: childs 16th birthday ${LocalDate.fromDateFields(child16Birthday)} september1For16thBirthday: $september1stFollowing16thBirthday")
-
     val septemberRule = periodStart.toDate.before(september1stFollowing16thBirthday.toDate)
 
     // child is born > -1 && hasn't passed their 16th birthday september checkpoint

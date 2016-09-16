@@ -1,4 +1,6 @@
 import sbt._
+import play.PlayImport._
+import play.core.PlayVersion
 
 object MicroServiceBuild extends Build with MicroService {
 
@@ -8,9 +10,6 @@ object MicroServiceBuild extends Build with MicroService {
 }
 
 private object AppDependencies {
-
-  import play.PlayImport._
-  import play.core.PlayVersion
 
   private val microserviceBootstrapVersion = "4.4.0"
   private val playHealthVersion = "1.1.0"
@@ -52,19 +51,5 @@ private object AppDependencies {
     }.test
   }
 
-  object IntegrationTest {
-    def apply() = new TestDependencies {
-
-      override lazy val scope: String = "it"
-      override lazy val test = Seq(
-        "org.scalatestplus" %% "play" % scalaTestPlusVersion % scope,
-        "org.scalatest" %% "scalatest" % scalaTestVersion % scope,
-        "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope,
-        "org.pegdown" % "pegdown" % pegDownVersion % scope,
-        "com.typesafe.play" %% "play-test" % PlayVersion.current % scope
-      )
-    }.test
-  }
-
-  def apply() = compile ++ Test() ++ IntegrationTest()
+  def apply() = compile ++ Test()
 }
