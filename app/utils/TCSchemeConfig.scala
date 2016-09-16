@@ -38,27 +38,23 @@ case class TCTaxYearConfig(
 object TCConfig extends CCConfig {
 
   def getTCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
-    Logger.debug(s"TCConfig.getTCConfigDefault")
     configs.filter(x => {
       x.getString("rule-date").equals(Some("default"))
     }).head
   }
 
   def getTCConfigExcludingDefault(configs :Seq[play.api.Configuration]) : Seq[play.api.Configuration] = {
-    Logger.debug(s"TCConfig.getTCConfigExcludingDefault")
     configs.filter(x => {
       !x.getString("rule-date").equals(Some("default"))
     })
   }
   def getSortedTCConfigExcludingDefault(configsExcludingDefault : Seq[play.api.Configuration]) = {
-    Logger.debug(s"TCConfig.getSortedTCConfigExcludingDefault")
     configsExcludingDefault.sortBy(c => {
       new SimpleDateFormat("dd-mm-yyyy").parse(c.getString("rule-date").get)
     }).reverse
   }
 
   def getConfigHelper (currentDate : LocalDate, taxYearConfigs : List[Configuration], acc : Option[Configuration], i : Int) : Option[Configuration] = {
-    Logger.debug(s"TCConfig.getConfigHelper")
     taxYearConfigs match {
       case Nil => acc
       case head :: tail =>
@@ -74,7 +70,6 @@ object TCConfig extends CCConfig {
   }
 
   def getTCTaxYearConfig(configuration : play.api.Configuration) = {
-    Logger.debug(s"TCConfig.getTCTaxYearConfig")
     TCTaxYearConfig(
       childAgeLimit = configuration.getInt("child-age-limit").getOrElse(15),
       childAgeLimitDisabled = configuration.getInt("child-age-limit-disabled").getOrElse(16),
@@ -89,7 +84,6 @@ object TCConfig extends CCConfig {
   }
 
   def getConfig(currentDate: LocalDate): TCTaxYearConfig = {
-    Logger.debug(s"TCConfig.getConfig")
     val configs : Seq[play.api.Configuration] = Play.application.configuration.getConfigSeq("tc.rule-change").get
     val configsExcludingDefault = getTCConfigExcludingDefault(configs)
     val defaultConfig = getTCConfigDefault(configs)

@@ -30,13 +30,12 @@ import scala.concurrent.Future
 trait CCEligibilityHelpers {
 
   def fromAndUntilDateForPeriod[T <: BaseTaxYear](date : LocalDate, i : Int, datesOfChanges : List[LocalDate], ty : T) : (LocalDate, LocalDate) = {
-    Logger.debug(s"CCEligibilityHelpers.fromAndUntilDateForPeriod - Begin")
+    Logger.info(s"CCEligibilityHelpers.fromAndUntilDateForPeriod")
     val from = if (i == 0) { date } else {
       val previousDate = datesOfChanges(i)
       previousDate
     }
     val until = if (i == datesOfChanges.length - 1) { ty.until } else { datesOfChanges(i + 1) }
-    Logger.debug(s"CCEligibilityHelpers.fromAndUntilDateForPeriod - End")
     (from, until)
   }
 

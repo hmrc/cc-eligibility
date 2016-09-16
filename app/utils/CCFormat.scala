@@ -27,14 +27,13 @@ trait CCFormat {
   val datePattern = "yyyy-MM-dd"
 
   implicit def jodaLocalDateWrites(pattern: String): Writes[LocalDate] = new Writes[LocalDate] {
-    Logger.debug(s"CCFormat.jodaLocalDateWrites - Begin")
+    Logger.info(s"CCFormat.jodaLocalDateWrites")
     val df = DateTimeFormat.forPattern(pattern)
     def writes(d: LocalDate) : JsValue = {
       val date = if (d != null)
         JsString(d.toString(df))
       else
         JsNull
-      Logger.debug(s"CCFormat.jodaLocalDateWrites - End")
       date
     }
   }
