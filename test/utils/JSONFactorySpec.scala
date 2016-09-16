@@ -179,9 +179,7 @@ class JSONFactorySpec extends UnitSpec with FakeCCEligibilityApplication {
           }
         """.stripMargin)
 
-      Logger.debug(outputJson.toString())
       val result = utils.JSONFactory.generateResultJson(eligibility)
-      Logger.debug(result.toString())
       result shouldBe outputJson
     }
 
@@ -274,9 +272,7 @@ class JSONFactorySpec extends UnitSpec with FakeCCEligibilityApplication {
         }
         """.stripMargin)
 
-      Logger.debug(outputJson.toString())
       val result = utils.JSONFactory.generateResultJson(eligibilityOutputModel)
-      Logger.debug(result.toString())
       result shouldBe outputJson
     }
 
@@ -385,9 +381,7 @@ class JSONFactorySpec extends UnitSpec with FakeCCEligibilityApplication {
       }
         """.stripMargin)
 
-      Logger.debug(outputJson.toString())
       val result = utils.JSONFactory.generateResultJson(eligibilityOutputModel)
-      Logger.debug(result.toString())
       result shouldBe outputJson
     }
   }
