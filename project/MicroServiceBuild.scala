@@ -52,19 +52,19 @@ private object AppDependencies {
     }.test
   }
 
-  object IntegrationTest {
-    def apply() = new TestDependencies {
+//  object IntegrationTest {
+//    def apply() = new TestDependencies {
+//
+//      override lazy val scope: String = "it"
+//      override lazy val test = Seq(
+//        "org.scalatestplus" %% "play" % scalaTestPlusVersion % scope,
+//        "org.scalatest" %% "scalatest" % scalaTestVersion % scope,
+//        "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope,
+//        "org.pegdown" % "pegdown" % pegDownVersion % scope,
+//        "com.typesafe.play" %% "play-test" % PlayVersion.current % scope
+//      )
+//    }.test
+//  }
 
-      override lazy val scope: String = "it"
-      override lazy val test = Seq(
-        "org.scalatestplus" %% "play" % scalaTestPlusVersion % scope,
-        "org.scalatest" %% "scalatest" % scalaTestVersion % scope,
-        "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope,
-        "org.pegdown" % "pegdown" % pegDownVersion % scope,
-        "com.typesafe.play" %% "play-test" % PlayVersion.current % scope
-      )
-    }.test
-  }
-
-  def apply() = compile ++ Test() ++ IntegrationTest()
+  def apply() = compile ++ Test() //++ IntegrationTest()
 }
