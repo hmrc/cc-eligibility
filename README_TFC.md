@@ -1,5 +1,5 @@
-**TFC ELIGIBILITY**
------
+# TFC ELIGIBILITY
+
 The TFC Eligibility micro-service will accept the parent details and children details as input request in json format and returns whether the scheme, parent and/or children are eligible to apply in a json format.
 
 * **Data Parameters**
