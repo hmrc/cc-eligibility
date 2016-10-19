@@ -53,7 +53,7 @@ case class TFC(
                 children: List[Child]
                 ) {
 
-  def validHouseholdHours = {
+  def validHouseholdHours  : Boolean = {
     if(claimants.length > 1) {
       ((claimants.head.isWorkingAtLeast16HoursPerWeek(from)), (claimants.last.isWorkingAtLeast16HoursPerWeek(from))) match {
         case (true,true) => true
@@ -185,11 +185,11 @@ case class Child  (
                     disability: Disability
                     ) extends models.input.BaseChild {
 
-  def isDisabled = {
+  def isDisabled : Boolean = {
     disability.severelyDisabled || disability.disabled
   }
 
-  def getChildBirthday(periodStart : LocalDate) = {
+  def getChildBirthday(periodStart : LocalDate) : Date = {
     isDisabled match {
       case true => getChild16Birthday(periodStart)
       case _ => getChild11Birthday(periodStart)
@@ -208,14 +208,14 @@ case class Child  (
     childsBirthdayDateForAge(ageIncrease)
   }
 
-  def getWeekEnd(calendar : Calendar, weekStart : Int) = {
+  def getWeekEnd(calendar : Calendar, weekStart : Int) : Date = {
     while (calendar.get(Calendar.DAY_OF_WEEK) != weekStart || calendar.get(Calendar.DAY_OF_MONTH) == 1) {
       calendar.add(Calendar.DATE, 1)
     }
     calendar.getTime
   }
 
-  def firstOfSeptember(septemberCalendar : Calendar, childBirthday: Date, childBirthdayCalendar: Calendar) = {
+  def firstOfSeptember(septemberCalendar : Calendar, childBirthday: Date, childBirthdayCalendar: Calendar) : Date = {
     septemberCalendar.setFirstDayOfWeek(Calendar.SUNDAY)
     septemberCalendar.setTime(childBirthday) // today
     septemberCalendar.set(Calendar.MONTH, Calendar.SEPTEMBER) // september in calendar year

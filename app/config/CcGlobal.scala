@@ -53,11 +53,11 @@ object AuthParamsControllerConfiguration extends AuthParamsControllerConfig {
 
 object MicroserviceAuditFilter extends AuditFilter with AppName {
   override val auditConnector = MicroserviceAuditConnector
-  override def controllerNeedsAuditing(controllerName: String) = ControllerConfiguration.paramsForController(controllerName).needsAuditing
+  override def controllerNeedsAuditing(controllerName: String) : Boolean = ControllerConfiguration.paramsForController(controllerName).needsAuditing
 }
 
 object MicroserviceLoggingFilter extends LoggingFilter {
-  override def controllerNeedsLogging(controllerName: String) = ControllerConfiguration.paramsForController(controllerName).needsLogging
+  override def controllerNeedsLogging(controllerName: String) : Boolean = ControllerConfiguration.paramsForController(controllerName).needsLogging
 }
 
 object MicroserviceAuthFilter extends AuthorisationFilter {

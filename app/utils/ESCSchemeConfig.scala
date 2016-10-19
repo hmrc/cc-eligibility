@@ -40,7 +40,7 @@ object ESCConfig extends CCConfig {
       !x.getString("rule-date").equals(Some("default"))
     })
   }
-  def getSortedESCConfigExcludingDefault(configsExcludingDefault : Seq[play.api.Configuration]) = {
+  def getSortedESCConfigExcludingDefault(configsExcludingDefault : Seq[play.api.Configuration]) : Seq[play.api.Configuration] = {
     configsExcludingDefault.sortBy(c => {
       val predicate = new SimpleDateFormat("dd-mm-yyyy").parse(c.getString("rule-date").get)
       predicate
@@ -63,7 +63,7 @@ object ESCConfig extends CCConfig {
     }
   }
 
-  def getESCTaxYearConfig(configuration : play.api.Configuration) = {
+  def getESCTaxYearConfig(configuration : play.api.Configuration) : ESCTaxYearConfig = {
     ESCTaxYearConfig(
       childAgeLimit = configuration.getInt("child-age-limit").get,
       childAgeLimitDisabled = configuration.getInt("child-age-limit-disabled").get

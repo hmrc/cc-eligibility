@@ -61,7 +61,7 @@ trait BaseChild {
   }
 
   // TODO REMOVE THE BIRTHDAY IS AFTER PERIOD START DATE?
-  def isSplittingPeriodOn1stSeptemberForYear(claimDate: LocalDate, endDate : LocalDate, years: Int) = {
+  def isSplittingPeriodOn1stSeptemberForYear(claimDate: LocalDate, endDate : LocalDate, years: Int) : Tuple2[Boolean, LocalDate] = {
     val september1 = CCConfig.september1stForDate(claimDate)
     val previousSeptember1 = CCConfig.previousSeptember1stForDate(claimDate)
 

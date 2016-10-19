@@ -330,7 +330,7 @@ case class Child(
     (requiresSplit, LocalDate.fromDateFields(childsBirthday))
   }
 
-  def inEducation(periodStart : LocalDate) = {
+  def inEducation(periodStart : LocalDate) : Boolean = {
     val taxYearConfig = TCConfig.getConfig(periodStart)
     education match {
       case Some(x) =>
@@ -346,7 +346,7 @@ case class Child(
     }
   }
 
-  def isDisabled = {
+  def isDisabled : Boolean = {
     disability.severelyDisabled || disability.disabled
   }
 

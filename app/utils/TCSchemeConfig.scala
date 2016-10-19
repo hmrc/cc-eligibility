@@ -48,7 +48,7 @@ object TCConfig extends CCConfig {
       !x.getString("rule-date").equals(Some("default"))
     })
   }
-  def getSortedTCConfigExcludingDefault(configsExcludingDefault : Seq[play.api.Configuration]) = {
+  def getSortedTCConfigExcludingDefault(configsExcludingDefault : Seq[play.api.Configuration]) : Seq[Configuration] = {
     configsExcludingDefault.sortBy(c => {
       new SimpleDateFormat("dd-mm-yyyy").parse(c.getString("rule-date").get)
     }).reverse
@@ -69,7 +69,7 @@ object TCConfig extends CCConfig {
     }
   }
 
-  def getTCTaxYearConfig(configuration : play.api.Configuration) = {
+  def getTCTaxYearConfig(configuration : play.api.Configuration) : TCTaxYearConfig = {
     TCTaxYearConfig(
       childAgeLimit = configuration.getInt("child-age-limit").getOrElse(15),
       childAgeLimitDisabled = configuration.getInt("child-age-limit-disabled").getOrElse(16),
