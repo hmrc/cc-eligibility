@@ -100,7 +100,8 @@ object Claimant extends CCFormat {
 }
 
 case class ClaimantsElements(
-                             // claimants qualification is determined by employer providing esc and children's qualification (if there is at least 1 qualifying child)
+                             // claimants qualification is determined by employer providing esc and
+                             // children's qualification (if there is at least 1 qualifying child)
                              vouchers : Boolean = false
                              )
 
@@ -144,7 +145,7 @@ case class Child (
     isSplittingPeriodOn1stSeptemberForYear(periodStart, periodUntil, ageIncrease)
   }
 
-  def isDisabled = {
+  def isDisabled : Boolean = {
     disability.severelyDisabled || disability.disabled
   }
 

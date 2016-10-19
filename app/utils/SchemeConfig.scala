@@ -97,7 +97,8 @@ trait CCConfig {
     aprilCalendar.set(Calendar.DAY_OF_MONTH, 5)
     val april5th = aprilCalendar.getTime
 
-    val taxYear = if ((periodStart.compareTo(january1st) == 0 || periodStart.after(january1st)) && (periodStart.before(april5th) || periodStart.compareTo(april5th) == 0)) {
+    val taxYear = if ((periodStart.compareTo(january1st) == 0 || periodStart.after(january1st))
+      && (periodStart.before(april5th) || periodStart.compareTo(april5th) == 0)) {
       periodYear-1
     } else {
       periodYear

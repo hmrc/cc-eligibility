@@ -62,8 +62,9 @@ case class TFC(
         case _ =>   false
       }
     }
-    else
+    else {
       (claimants.head.isWorkingAtLeast16HoursPerWeek(from))
+    }
   }
 }
 

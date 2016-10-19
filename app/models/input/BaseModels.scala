@@ -76,8 +76,10 @@ trait BaseChild {
           //if child's 15/16(if disabled) birthday after 1st September of current tax year no split is required
           case birthday if birthday.after(september1.toDate) =>
             false
-          //if child's 15/16(if disabled) birthday is after the 1st September of previous tax year, child is eligible until the 1st September of the current year
-          case birthday if (birthday.after(previousSeptember1.toDate) || birthday.equals(previousSeptember1.toDate)) && claimDate.toDate.before(september1.toDate) =>
+          //if child's 15/16(if disabled) birthday is after the 1st September of previous tax year,
+          // child is eligible until the 1st September of the current year
+          case birthday if (birthday.after(previousSeptember1.toDate)
+            || birthday.equals(previousSeptember1.toDate)) && claimDate.toDate.before(september1.toDate) =>
             true
           case _ =>
             false

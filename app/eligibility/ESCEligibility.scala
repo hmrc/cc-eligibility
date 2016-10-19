@@ -133,7 +133,8 @@ trait ESCEligibility extends CCEligibility {
       }
     }
 
-    def determineClaimantsEligibilityForPeriod(children: List[Child], claimants: List[Claimant], periodStart : LocalDate, periodEnd: LocalDate) : List[models.output.esc.OutputClaimant] = {
+    def determineClaimantsEligibilityForPeriod(children: List[Child], claimants: List[Claimant], periodStart : LocalDate,
+                                               periodEnd: LocalDate) : List[models.output.esc.OutputClaimant] = {
       Logger.info(s"ESCEligibilityService.determineClaimantsEligibilityForPeriod")
       val outputClaimants = for (claimant <- claimants) yield {
         val hasQualifyingChildren = hasQualifyingChildForPeriod(children, periodStart)
@@ -199,7 +200,8 @@ trait ESCEligibility extends CCEligibility {
     def generateTaxYears(taxYears : List[models.input.esc.TaxYear]) : List[models.output.esc.TaxYear] = {
       Logger.info(s"ESCEligibilityService.generateTaxYears")
       @tailrec
-      def generateTaxYearsHelper(taxYears : List[models.input.esc.TaxYear], acc : List[models.output.esc.TaxYear], i : Int) : List[models.output.esc.TaxYear] = {
+      def generateTaxYearsHelper(taxYears : List[models.input.esc.TaxYear],
+                                 acc : List[models.output.esc.TaxYear], i : Int) : List[models.output.esc.TaxYear] = {
         Logger.info(s"ESCEligibilityService.generateTaxYearsHelper")
         taxYears match {
           case Nil => acc

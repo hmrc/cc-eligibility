@@ -42,11 +42,13 @@ trait AuditService {
 
   import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
-  def sendEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)(implicit request: Request[_], hc: HeaderCarrier) : Future[AuditResult] = {
+  def sendEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)
+               (implicit request: Request[_], hc: HeaderCarrier) : Future[AuditResult] = {
     auditConnector.sendEvent(buildEvent(auditType, details, sessionId))
   }
 
-  def buildEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)(implicit request: Request[_], hc: HeaderCarrier) : DataEvent = {
+  def buildEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)
+                (implicit request: Request[_], hc: HeaderCarrier) : DataEvent = {
     Logger.info(s"AuditService.buildEvent")
     val auditEvent = DataEvent(
       auditSource =  auditSource,
