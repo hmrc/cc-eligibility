@@ -77,21 +77,24 @@ case class TaxYear(
     }
   }
 
+  private def getChildCareElementBasedOnWorkingHoursAndIncapacitation(resultTuple : Tuple2[Int, Int], periodStart : LocalDate) : Boolean = {
+    resultTuple match {
+      case (2, 1) => isCoupleQualifyingForTC// one claimant cannot be incapacitated and both working
+      case (2, 0) => isCoupleQualifyingForTC // both claimants are working, none incapacitated (don't care about disability)
+      case (1, 1) => getChildCareElementWhen1ClaimantWorks16hrsAnd1IsIncapacitated(periodStart)
+      case (_, 2) => false // both claimants cannot be working and incapacitated
+      case (1, 0) => false // one partner is working, another does not qualify
+      case (0, _) => false // no claimants working at least 16 hours (don't care about incapacitated and disability)
+    }
+  }
+
   def claimantsGetChildcareElement(periodStart : LocalDate) : Boolean = {
     isCouple match {
       case true =>
         val numberOfClaimants16Hours = claimants.foldLeft(0)((acc, claimant) => if(claimant.isWorkingAtLeast16HoursPerWeek(periodStart)) acc + 1 else acc)
         val numberOfClaimantsIncapacitated = claimants.foldLeft(0)((acc, claimant) => if (claimant.isIncapacitated) acc + 1 else acc)
         val resultTuple = (numberOfClaimants16Hours, numberOfClaimantsIncapacitated)
-
-        resultTuple match {
-          case (2, 1) => isCoupleQualifyingForTC// one claimant cannot be incapacitated and both working
-          case (2, 0) => isCoupleQualifyingForTC // both claimants are working, none incapacitated (don't care about disability)
-          case (1, 1) => getChildCareElementWhen1ClaimantWorks16hrsAnd1IsIncapacitated(periodStart)
-          case (_, 2) => false // both claimants cannot be working and incapacitated
-          case (1, 0) => false // one partner is working, another does not qualify
-          case (0, _) => false // no claimants working at least 16 hours (don't care about incapacitated and disability)
-        }
+        getChildCareElementBasedOnWorkingHoursAndIncapacitation(resultTuple, periodStart)
 
       case false =>
         val claimant = claimants.head
@@ -167,7 +170,6 @@ case class TaxYear(
         //Order: isClaimant16Hours, isPartner16Hours, isClaimantDisabled, isPartnerDisabled, isCoupleWorking24Hours,
         // isClaimantIncapacitated, isPartnerIncapacitated
         doesHouseHoldQualify(resultTuple, householdQualifies)
-
 
       case false =>
         val claimant = claimants.head
