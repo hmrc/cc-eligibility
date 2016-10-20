@@ -60,30 +60,32 @@ trait BaseChild {
     (childBorn1stSept)
   }
 
+  private def isSplittingPeriod1stSeptBeforeEndDate(claimDate: LocalDate, years: Int, september1 : LocalDate) = {
+    val previousSeptember1 = CCConfig.previousSeptember1stForDate(claimDate)
+    val childBirthday = childsBirthdayDateForAge(years)
+    childBirthday match {
+      //if child's 15/16(if disabled) birthday after 1st September of current tax year no split is required
+      case birthday if birthday.after(september1.toDate) =>
+        false
+      //if child's 15/16(if disabled) birthday is after the 1st September of previous tax year,
+      // child is eligible until the 1st September of the current year
+      case birthday if (birthday.after(previousSeptember1.toDate)
+        || birthday.equals(previousSeptember1.toDate)) && claimDate.toDate.before(september1.toDate) =>
+        true
+      case _ =>
+        false
+    }
+  }
+
   // TODO REMOVE THE BIRTHDAY IS AFTER PERIOD START DATE?
   def isSplittingPeriodOn1stSeptemberForYear(claimDate: LocalDate, endDate : LocalDate, years: Int) : Tuple2[Boolean, LocalDate] = {
     val september1 = CCConfig.september1stForDate(claimDate)
-    val previousSeptember1 = CCConfig.previousSeptember1stForDate(claimDate)
-
-    val childBirthday = childsBirthdayDateForAge(years)
-
     val requiresSplit = september1 match {
       //if child's 15/16(if disabled) birthday after end date of current tax year no split is required
       case september1 if september1.toDate.after(endDate.toDate) =>
         false
       case _ =>
-        childBirthday match {
-          //if child's 15/16(if disabled) birthday after 1st September of current tax year no split is required
-          case birthday if birthday.after(september1.toDate) =>
-            false
-          //if child's 15/16(if disabled) birthday is after the 1st September of previous tax year,
-          // child is eligible until the 1st September of the current year
-          case birthday if (birthday.after(previousSeptember1.toDate)
-            || birthday.equals(previousSeptember1.toDate)) && claimDate.toDate.before(september1.toDate) =>
-            true
-          case _ =>
-            false
-        }
+        isSplittingPeriod1stSeptBeforeEndDate(claimDate, years, september1)
     }
     (requiresSplit, LocalDate.fromDateFields(september1.toDate))
   }
