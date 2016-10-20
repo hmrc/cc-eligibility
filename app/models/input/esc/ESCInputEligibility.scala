@@ -171,13 +171,14 @@ case class Child (
 }
 
 object Child extends CCFormat {
+  val nameLength = 25
   def validID(id: Short): Boolean = {
     id >= 0
   }
 
   implicit val childReads: Reads[Child] = (
     (JsPath \ "id").read[Short].filter(ValidationError(Messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
-      (JsPath \ "name").readNullable[String](maxLength[String](25)) and
+      (JsPath \ "name").readNullable[String](maxLength[String](nameLength)) and
         (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
           (JsPath \ "disability").read[Disability]
     )(Child.apply _)

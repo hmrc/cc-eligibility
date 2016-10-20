@@ -77,6 +77,7 @@ trait CCConfig {
   }
 
   def determineTaxYearFromNow(from: LocalDate) : Int = {
+
     val currentCalendar = Calendar.getInstance()
     currentCalendar.clear()
     currentCalendar.setTime(from.toDate)
