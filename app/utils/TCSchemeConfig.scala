@@ -48,7 +48,7 @@ object TCConfig extends CCConfig {
       !x.getString("rule-date").equals(Some("default"))
     })
   }
-  def getSortedTCConfigExcludingDefault(configsExcludingDefault : Seq[play.api.Configuration]) = {
+  def getSortedTCConfigExcludingDefault(configsExcludingDefault : Seq[play.api.Configuration]) : Seq[Configuration] = {
     configsExcludingDefault.sortBy(c => {
       new SimpleDateFormat("dd-mm-yyyy").parse(c.getString("rule-date").get)
     }).reverse
@@ -69,17 +69,33 @@ object TCConfig extends CCConfig {
     }
   }
 
-  def getTCTaxYearConfig(configuration : play.api.Configuration) = {
+  def getTCTaxYearConfig(configuration : play.api.Configuration) : TCTaxYearConfig = {
+    val defaultCurrentIncomeRiseDifferenceAmount = 2500
+    val defaultCurrentIncomeFallDifferenceAmount = 2500
+    val defaultHours30Worked = 30.00
+    val defaultMinimumHoursWorkedIfCouple = 24.00
+    val defaultMinimumHoursWorked = 16.00
+    val defaultYoungAdultAgeLimit = 20
+    val defaultChildLimitEducation = 19
+    val defaultChildAgeLimitDisabled = 16
+    val defaultChildAgeLimit = 15
+
     TCTaxYearConfig(
-      childAgeLimit = configuration.getInt("child-age-limit").getOrElse(15),
-      childAgeLimitDisabled = configuration.getInt("child-age-limit-disabled").getOrElse(16),
-      childAgeLimitEducation = configuration.getInt("young-adult-education-age-limit").getOrElse(19),
-      youngAdultAgeLimit = configuration.getInt("young-adult-age-limit").getOrElse(20),
-      minimumHoursWorked = configuration.getDouble("minimum-hours-worked-per-week").getOrElse(16.00),
-      minimumHoursWorkedIfCouple = configuration.getDouble("minimum-hours-worked-if-couple-per-week").getOrElse(24.00),
-      hours30Worked = configuration.getDouble("hours-30-worked-per-week").getOrElse(30.00),
-      currentIncomeFallDifferenceAmount = configuration.getInt("current-income-fall-difference-amount").getOrElse(2500),
-      currentIncomeRiseDifferenceAmount = configuration.getInt("current-income-rise-difference-amount").getOrElse(2500)
+      childAgeLimit = configuration.getInt("child-age-limit").getOrElse(defaultChildAgeLimit),
+      childAgeLimitDisabled = configuration.getInt("child-age-limit-disabled").getOrElse(defaultChildAgeLimitDisabled),
+      childAgeLimitEducation = configuration.getInt("young-adult-education-age-limit").
+        getOrElse(defaultChildLimitEducation),
+      youngAdultAgeLimit = configuration.getInt("young-adult-age-limit").
+        getOrElse(defaultYoungAdultAgeLimit),
+      minimumHoursWorked = configuration.getDouble("minimum-hours-worked-per-week")
+        .getOrElse(defaultMinimumHoursWorked),
+      minimumHoursWorkedIfCouple = configuration.getDouble("minimum-hours-worked-if-couple-per-week")
+        .getOrElse(defaultMinimumHoursWorkedIfCouple),
+      hours30Worked = configuration.getDouble("hours-30-worked-per-week").getOrElse(defaultHours30Worked),
+      currentIncomeFallDifferenceAmount = configuration.getInt("current-income-fall-difference-amount").
+        getOrElse(defaultCurrentIncomeFallDifferenceAmount),
+      currentIncomeRiseDifferenceAmount = configuration.getInt("current-income-rise-difference-amount").
+        getOrElse(defaultCurrentIncomeRiseDifferenceAmount)
     )
   }
 

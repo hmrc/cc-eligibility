@@ -72,6 +72,24 @@ trait ESCEligibility extends CCEligibility {
       causesSplit
     }
 
+    private def splitDates(taxYear : TaxYear, sortedSplitDates : List[LocalDate]) : List[LocalDate]  = {
+      val September1 = ESCConfig.september1stForDate(taxYear.from)
+      sortedSplitDates.head match {
+        case firstDateInList : LocalDate if firstDateInList.toDate.equals(September1.toDate) =>
+          //                  return split date on 1st September and the date when child is being born
+          val childBorn1stSept = taxYear.children.exists(ch => ch.isBeingBornOn1stSeptInTaxYear(taxYear))
+          childBorn1stSept match {
+            case true =>
+              List(sortedSplitDates.head)
+            case false =>
+              sortedSplitDates.slice(0, 2)
+          }
+        case firstDateInList : LocalDate =>
+          //                  return just the date when the child is being born either before or after 1st September.
+          List(sortedSplitDates.head)
+      }
+    }
+
     def generateSplitDates(taxYear : TaxYear) : List[LocalDate] = {
       Logger.info(s"ESCEligibilityService.generateSplitDates")
       val numberOfChildrenEligibleInTaxYearWithNoSplits = taxYear.children.exists(ch => !causesSplit(ch, taxYear) && ch.qualifiesForESC(taxYear.from))
@@ -81,26 +99,12 @@ trait ESCEligibility extends CCEligibility {
           List()
         case false =>
           //THERE ARE CHILDREN BEING BORN or CAUSE A SPLIT (TURNS 15 or 16)
-          val September1 = ESCConfig.september1stForDate(taxYear.from)
           val sortedSplitDates: List[LocalDate] = splitDatesForChildren(taxYear)
           sortedSplitDates match {
             case date if date.length == 1 =>
               sortedSplitDates
             case date if date.length > 1 =>
-              sortedSplitDates.head match {
-                case firstDateInList : LocalDate if firstDateInList.toDate.equals(September1.toDate) =>
-//                  return split date on 1st September and the date when child is being born
-                  val childBorn1stSept = taxYear.children.exists(ch => ch.isBeingBornOn1stSeptInTaxYear(taxYear))
-                  childBorn1stSept match {
-                    case true =>
-                      List(sortedSplitDates.head)
-                    case false =>
-                      sortedSplitDates.slice(0, 2)
-                  }
-                case firstDateInList : LocalDate =>
-//                  return just the date when the child is being born either before or after 1st September.
-                  List(sortedSplitDates.head)
-              }
+              splitDates(taxYear, sortedSplitDates)
             case _ =>
               List()
           }
@@ -133,7 +137,8 @@ trait ESCEligibility extends CCEligibility {
       }
     }
 
-    def determineClaimantsEligibilityForPeriod(children: List[Child], claimants: List[Claimant], periodStart : LocalDate, periodEnd: LocalDate) : List[models.output.esc.OutputClaimant] = {
+    def determineClaimantsEligibilityForPeriod(children: List[Child], claimants: List[Claimant], periodStart : LocalDate,
+                                               periodEnd: LocalDate) : List[models.output.esc.OutputClaimant] = {
       Logger.info(s"ESCEligibilityService.determineClaimantsEligibilityForPeriod")
       val outputClaimants = for (claimant <- claimants) yield {
         val hasQualifyingChildren = hasQualifyingChildForPeriod(children, periodStart)
@@ -199,7 +204,8 @@ trait ESCEligibility extends CCEligibility {
     def generateTaxYears(taxYears : List[models.input.esc.TaxYear]) : List[models.output.esc.TaxYear] = {
       Logger.info(s"ESCEligibilityService.generateTaxYears")
       @tailrec
-      def generateTaxYearsHelper(taxYears : List[models.input.esc.TaxYear], acc : List[models.output.esc.TaxYear], i : Int) : List[models.output.esc.TaxYear] = {
+      def generateTaxYearsHelper(taxYears : List[models.input.esc.TaxYear],
+                                 acc : List[models.output.esc.TaxYear], i : Int) : List[models.output.esc.TaxYear] = {
         Logger.info(s"ESCEligibilityService.generateTaxYearsHelper")
         taxYears match {
           case Nil => acc

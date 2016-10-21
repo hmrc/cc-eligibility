@@ -27,7 +27,8 @@ case class ESCEligibilityModel(
                                 )
 
 object ESCEligibilityModel {
-  implicit val escEligible : Writes[ESCEligibilityModel] = (JsPath \ "taxYears").write[List[TaxYear]].contramap { (eligibility: ESCEligibilityModel) => eligibility.taxYears}
+  implicit val escEligible : Writes[ESCEligibilityModel] =
+    (JsPath \ "taxYears").write[List[TaxYear]].contramap { (eligibility: ESCEligibilityModel) => eligibility.taxYears}
 }
 
 case class TaxYear(
@@ -61,7 +62,8 @@ object ESCPeriod extends CCFormat{
 }
 
 case class ClaimantElements(
-                             // claimants qualification is determined by employer providing esc and children's qualification (if there is at least 1 qualifying child)
+                             // claimants qualification is determined by employer providing esc
+                             // and children's qualification (if there is at least 1 qualifying child)
                             vouchers : Boolean = false
                            )
 

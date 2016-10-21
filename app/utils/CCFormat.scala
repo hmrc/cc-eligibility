@@ -30,10 +30,12 @@ trait CCFormat {
     Logger.info(s"CCFormat.jodaLocalDateWrites")
     val df = DateTimeFormat.forPattern(pattern)
     def writes(d: LocalDate) : JsValue = {
-      val date = if (d != null)
+      val date = if (d != null) {
         JsString(d.toString(df))
-      else
+      }
+      else {
         JsNull
+      }
       date
     }
   }

@@ -20,7 +20,7 @@ import controllers.EligibilityController
 import eligibility.TFCEligibility
 import models.input.tfc.Request
 import play.api.Logger
-import play.api.libs.json.JsError
+import play.api.libs.json.{JsValue, JsError}
 import play.api.mvc.Action
 import service.AuditEvents
 
@@ -37,7 +37,7 @@ trait TFCEligibilityController extends EligibilityController {
 
   val auditEvent : AuditEvents
 
-  override def eligible = Action.async(parse.json) {
+  override def eligible : Action[JsValue] = Action.async(parse.json) {
     implicit request =>
       request.body.validate[Request].fold(
         error => {

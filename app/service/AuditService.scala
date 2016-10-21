@@ -21,10 +21,12 @@ import config.MicroserviceAuditConnector
 import play.api.Logger
 import play.api.mvc.Request
 import uk.gov.hmrc.play.audit.http.config.LoadAuditingConfig
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
+import uk.gov.hmrc.play.audit.http.connector.{AuditResult, AuditConnector}
 import uk.gov.hmrc.play.audit.model.{DataEvent, DeviceId}
 import uk.gov.hmrc.play.config.{RunMode, AppName}
 import uk.gov.hmrc.play.http.HeaderCarrier
+
+import scala.concurrent.Future
 
 
 object AuditService extends AuditService {
@@ -40,11 +42,13 @@ trait AuditService {
 
   import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
-  def sendEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)(implicit request: Request[_], hc: HeaderCarrier) = {
+  def sendEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)
+               (implicit request: Request[_], hc: HeaderCarrier) : Future[AuditResult] = {
     auditConnector.sendEvent(buildEvent(auditType, details, sessionId))
   }
 
-  def buildEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)(implicit request: Request[_], hc: HeaderCarrier) = {
+  def buildEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)
+                (implicit request: Request[_], hc: HeaderCarrier) : DataEvent = {
     Logger.info(s"AuditService.buildEvent")
     val auditEvent = DataEvent(
       auditSource =  auditSource,

@@ -53,7 +53,7 @@ case class TFC(
                 children: List[Child]
                 ) {
 
-  def validHouseholdHours = {
+  def validHouseholdHours  : Boolean = {
     if(claimants.length > 1) {
       ((claimants.head.isWorkingAtLeast16HoursPerWeek(from)), (claimants.last.isWorkingAtLeast16HoursPerWeek(from))) match {
         case (true,true) => true
@@ -62,8 +62,9 @@ case class TFC(
         case _ =>   false
       }
     }
-    else
+    else {
       (claimants.head.isWorkingAtLeast16HoursPerWeek(from))
+    }
   }
 }
 
@@ -185,11 +186,11 @@ case class Child  (
                     disability: Disability
                     ) extends models.input.BaseChild {
 
-  def isDisabled = {
+  def isDisabled : Boolean = {
     disability.severelyDisabled || disability.disabled
   }
 
-  def getChildBirthday(periodStart : LocalDate) = {
+  def getChildBirthday(periodStart : LocalDate) : Date = {
     isDisabled match {
       case true => getChild16Birthday(periodStart)
       case _ => getChild11Birthday(periodStart)
@@ -208,14 +209,14 @@ case class Child  (
     childsBirthdayDateForAge(ageIncrease)
   }
 
-  def getWeekEnd(calendar : Calendar, weekStart : Int) = {
+  def getWeekEnd(calendar : Calendar, weekStart : Int) : Date = {
     while (calendar.get(Calendar.DAY_OF_WEEK) != weekStart || calendar.get(Calendar.DAY_OF_MONTH) == 1) {
       calendar.add(Calendar.DATE, 1)
     }
     calendar.getTime
   }
 
-  def firstOfSeptember(septemberCalendar : Calendar, childBirthday: Date, childBirthdayCalendar: Calendar) = {
+  def firstOfSeptember(septemberCalendar : Calendar, childBirthday: Date, childBirthdayCalendar: Calendar) : Date = {
     septemberCalendar.setFirstDayOfWeek(Calendar.SUNDAY)
     septemberCalendar.setTime(childBirthday) // today
     septemberCalendar.set(Calendar.MONTH, Calendar.SEPTEMBER) // september in calendar year
@@ -245,6 +246,7 @@ case class Child  (
 
 
 object Child extends CCFormat {
+  val nameLength = 25
   def validID(id: Short): Boolean = {
     id >= 0
   }
@@ -255,7 +257,7 @@ object Child extends CCFormat {
 
   implicit val childReads: Reads[Child] = (
     (JsPath \ "id").read[Short].filter(ValidationError(Messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
-      (JsPath \ "name").readNullable[String](maxLength[String](25)) and
+      (JsPath \ "name").readNullable[String](maxLength[String](nameLength)) and
         (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(Messages("cc.elig.childcare.spend.too.low")))(x => childSpendValidation(x)) and
           (JsPath \ "childcareCostPeriod").read[Periods.Period] and
             (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
