@@ -154,7 +154,11 @@ case class TaxYear(
       case (true, _, _, _, true, false, _) => householdQualifies // claimant is working >= 16h per week, another don't care (but total is 24h per week)
       case (_, true, _, _, true, _, false) => householdQualifies // partner is working >= 16h per week, another don't care (but total is 24h per week)
       case (true, _, true, _, _, false, _) => householdQualifies // claimant is disabled and working >= 16h per week, partner don't care
-      case (_, true, _, true, _, _, false) => householdQualifies // partner is disabled and working >= 16h per week, claimant don't care
+      case (_, true, _, true, _, _, false) => householdQualifies // partner is disabled and working >= 16h per week, claimant don't care      case (_, true, true, _, _, false, _) => householdQualifies // claimant is disabled, partner works >= 16
+
+      case (_, true, true, _, _, _, false) => householdQualifies // claimant is disabled, partner works >= 16
+      case (true, _, _, true, _, _, false) => householdQualifies // partner is disabled, claimant works >= 16
+
       case (true, false, _, _, _, false, true) => householdQualifies // claimant is working >= 16h per week, partner is incapacitated
       case (false, true, _, _, _, true, false) => householdQualifies // partner is working >= 16h per week, claimant is incapacitated
       case _ => false //no one works at least 16h per week (e.g. both incapacitated)
