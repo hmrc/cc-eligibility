@@ -1161,7 +1161,7 @@ class TCEligibilitySpec extends UnitSpec with FakeCCEligibilityApplication with 
       val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming())
       val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1, claimant2), children = List(child1))
 
-      val outputHousehold = models.output.tc.HouseholdElements(basic = false, hours30 = false, childcare = false, loneParent = false, secondParent = false, family = true)
+      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = false, loneParent = false, secondParent = true, family = true)
 
       val result = TCEligibility.eligibility.determineHouseholdEligibilityForPeriod(ty, periodStartDate)
       result shouldBe outputHousehold

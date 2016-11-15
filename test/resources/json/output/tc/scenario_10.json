@@ -12,11 +12,11 @@
                 "from": "2016-08-27",
                 "until": "2017-04-06",
                 "householdElements": {
-                  "basic": false,
+                  "basic": true,
                   "hours30": false,
                   "childcare": false,
                   "loneParent": false,
-                  "secondParent": false,
+                  "secondParent": true,
                   "family": true
                 },
                 "claimants": [
