@@ -206,7 +206,7 @@ trait TCEligibility extends CCEligibility {
     //TODO maybe to check for this at the controller level before all element check?
     def isEligibleForTC(listOfTaxYears : List[models.input.tc.TaxYear]) : Boolean = {
       Logger.info(s"TCEligibilityService.isEligibleForTC")
-      //if the fulnction "exists" finds a TY where a household does not qualify, it will return TRUE
+      //if the function "exists" finds a TY where a household does not qualify, it will return TRUE
       //TRUE means that a non qualifying family exists, so we need to return FALSE as method is checking if isEligibleForTC
       val eligibleForTC = !listOfTaxYears.exists((ty: TaxYear) => !ty.isCoupleQualifyingForTC)
       eligibleForTC
