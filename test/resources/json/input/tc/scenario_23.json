@@ -19,6 +19,9 @@
                               "tfc": false,
                               "esc" : false,
                               "tc": false
+                          },
+                          "otherSupport": {
+                            "carersAllowance": false
                           }
                       }
                   ],
@@ -55,6 +58,9 @@
                               "tfc": false,
                               "esc" : false,
                               "tc": false
+                          },
+                          "otherSupport": {
+                            "carersAllowance": false
                           }
                       }
                   ],
