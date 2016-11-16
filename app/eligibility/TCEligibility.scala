@@ -97,6 +97,8 @@ trait TCEligibility extends CCEligibility {
           //TODO Implement failures
           failures = List()
         )
+
+        println("============ outputClaimant: " + outputClaimant)
         outputClaimant
       }
     }
@@ -142,6 +144,8 @@ trait TCEligibility extends CCEligibility {
           val claimantsEligibility = determineClaimantsEligibilityForPeriod(ty)
           val childrensEligibility = determineChildrensEligibilityForPeriod(ty.children, periodStart = fromAndUntil._1)
           val householdEligibility = determineHouseholdEligibilityForPeriod(ty, periodStart = fromAndUntil._1)
+
+        println("=========== householdEligibility: " + householdEligibility)
 
           models.output.tc.TCPeriod(
             from = fromAndUntil._1,
