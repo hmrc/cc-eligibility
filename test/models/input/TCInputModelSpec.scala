@@ -1541,14 +1541,26 @@ class TCInputModelSpec extends UnitSpec with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2013-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(true))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(true))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
         val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
       "(joint claimants with child, both claimants are 16, 1 claimant working 16 hours + carers allowance, 1 partner not working)(non-disabled) determine if get basic element" in {
+        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+        val dateOfBirth1 = LocalDate.parse("2013-08-31", formatter)
+        val periodStart = LocalDate.parse("2016-08-31", formatter)
+
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(true))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        taxYear.getBasicElement(periodStart) shouldBe true
+      }
+
+      "(joint claimants with child, both claimants are 16, 1 claimant not working + carers allowance, 1 partner working 16 hours)(non-disabled) determine if get basic element" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth1 = LocalDate.parse("2013-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
@@ -1560,28 +1572,40 @@ class TCInputModelSpec extends UnitSpec with FakeCCEligibilityApplication {
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
-      "(joint claimants with child, both claimants are 16, 1 claimant not working + carers allowance, 1 partner working 16 hours)(non-disabled) determine if get basic element" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-        val dateOfBirth1 = LocalDate.parse("2013-08-31", formatter)
-        val periodStart = LocalDate.parse("2016-08-31", formatter)
-
-        val claimant = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(true))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = false, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
-        taxYear.getBasicElement(periodStart) shouldBe true
-      }
-
       "(joint claimants with child, both claimants are 16, 1 claimant not working, 1 partner working 16 hours + carers allowance)(non-disabled) determine if get basic element" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth1 = LocalDate.parse("2013-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = false, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(true))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(true))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
         val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
+      }
+
+      "(joint claimants with child, both claimants are 16, 1 claimant not working + carers allowance, 1 partner working 15 hours)(non-disabled) determine if get basic element" in {
+        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+        val dateOfBirth1 = LocalDate.parse("2013-08-31", formatter)
+        val periodStart = LocalDate.parse("2016-08-31", formatter)
+
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(true))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 15.00, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        taxYear.getBasicElement(periodStart) shouldBe false
+      }
+
+      "(joint claimants with child, both claimants are 16, 1 claimant not working, 1 partner working 15 hours + carers allowance)(non-disabled) determine if get basic element" in {
+        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+        val dateOfBirth1 = LocalDate.parse("2013-08-31", formatter)
+        val periodStart = LocalDate.parse("2016-08-31", formatter)
+
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 15.00, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(true))
+        val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        taxYear.getBasicElement(periodStart) shouldBe false
       }
 
       "(joint claimants with child, both claimants are 16, 1 claimant working 8 hours, 1 claimant working 4 hours) determine if get basic element" in {
@@ -1734,7 +1758,7 @@ class TCInputModelSpec extends UnitSpec with FakeCCEligibilityApplication {
         val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
         val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
-        taxYear.getBasicElement(periodStart) shouldBe false
+        taxYear.getBasicElement(periodStart) shouldBe true
       }
 
       "(joint claimants)(partner is working + incapacitated)(claimant is working) determine if get basic element" in {
@@ -1748,7 +1772,7 @@ class TCInputModelSpec extends UnitSpec with FakeCCEligibilityApplication {
         val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
         val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
-        taxYear.getBasicElement(periodStart) shouldBe false
+        taxYear.getBasicElement(periodStart) shouldBe true
       }
 
       "(joint claimants)(claimant is not working)(partner is not working + incapacitated) determine if get basic element" in {
