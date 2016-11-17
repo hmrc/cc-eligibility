@@ -31,7 +31,7 @@ trait MicroService {
       libraryDependencies ++= appDependencies,
       retrieveManaged := true,
       resolvers := Seq(
-        Resolver.typesafeRepo("releases")
+        Resolver.bintrayRepo("hmrc", "releases")
       )
     )
 }

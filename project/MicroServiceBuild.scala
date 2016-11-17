@@ -14,13 +14,13 @@ private object AppDependencies {
   private val microserviceBootstrapVersion = "4.4.0"
   private val playHealthVersion = "1.1.0"
   private val jsonSchemaValidator = "2.2.6"
-  private val playConfigVersion = "2.1.0"
-  private val playAuthorisationVersion = "3.3.0"
+  private val playConfigVersion = "3.0.0"
+  private val playAuthorisationVersion = "3.4.0"
   private val playJsonLoggerVersion = "2.1.1"
   private val scalaTestVersion = "2.2.6"
   private val scalaTestPlusVersion = "1.2.0"
   private val pegDownVersion = "1.6.0"
-  private val hmrcTestVersion = "1.8.0"
+  private val hmrcTestVersion = "1.9.0"
 
   val compile = Seq(
     ws,

@@ -120,56 +120,53 @@ case class TaxYear(
   }
 
   private def determineClaimantDisabled(claimant : Claimant) : Boolean = {
-    (claimant.isQualifyingForTC
-      && (claimant.disability.disabled && claimant.disability.severelyDisabled)
-      || claimant.disability.disabled )
+    claimant.isQualifyingForTC && (claimant.disability.disabled || claimant.disability.severelyDisabled)
   }
 
-  private def getResultTuple(periodStart: LocalDate) = {
+  private def doesHouseHoldQualify(periodStart: LocalDate, householdQualifies : Boolean) : Boolean = {
+
+    // TODO: Remove conditions for incapacitated
+    def determineIncapacitated(person: Claimant): Boolean =
+      person.isQualifyingForTC && person.isIncapacitated
+
+    // claimant can't work and being incapacitated
+    def determineWorking16hours(person: Claimant): Boolean =
+      person.isQualifyingForTC && person.isWorkingAtLeast16HoursPerWeek(periodStart) && !person.isIncapacitated
+
+    def determineCarer(person: Claimant): Boolean =
+      person.isQualifyingForTC && person.otherSupport.carersAllowance
+
     val taxYearConfig = TCConfig.getConfig(periodStart)
-    val minimumHours : Double = taxYearConfig.minimumHoursWorkedIfCouple
-    val isClaimantWorking16Hours : Boolean = claimants.head.isQualifyingForTC && claimants.head.isWorkingAtLeast16HoursPerWeek(periodStart)
-    val isPartnerWorking16Hours : Boolean = claimants.tail.head.isQualifyingForTC && claimants.tail.head.isWorkingAtLeast16HoursPerWeek(periodStart)
+    val minimumHours: Double = taxYearConfig.minimumHoursWorkedIfCouple
 
-    val isClaimantIncapacitated : Boolean = claimants.head.isQualifyingForTC && claimants.head.isIncapacitated
-    val isPartnerIncapacitated : Boolean = claimants.tail.head.isQualifyingForTC && claimants.tail.head.isIncapacitated
+    val claimant = claimants.head
+    val partner = claimants.last
 
-    val isClaimantDisabled : Boolean = determineClaimantDisabled(claimants.head)
-    val isPartnerDisabled : Boolean = determineClaimantDisabled(claimants.tail.head)
+    val isCoupleWorking24Hours: Boolean =
+      claimant.isQualifyingForTC && partner.isQualifyingForTC && (getTotalHouseholdWorkingHours >= minimumHours)
 
-    val isCoupleWorking24Hours : Boolean =  (claimants.head.isQualifyingForTC
-      && claimants.tail.head.isQualifyingForTC && getTotalHouseholdWorkingHours >= minimumHours)
+    val isOneOfCoupleWorking16h = determineWorking16hours(claimant) || determineWorking16hours(partner)
+    val isOneOfCoupleDisabled = determineClaimantDisabled(claimant) || determineClaimantDisabled(partner)
+    val isOneOfCoupleCarer = determineCarer(claimant) || determineCarer(partner)
+    val isOneOfCoupeIncapacitated = determineIncapacitated(claimant) || determineIncapacitated(partner)
 
-    val resultTuple = (isClaimantWorking16Hours, isPartnerWorking16Hours, isClaimantDisabled, isPartnerDisabled,
-      isCoupleWorking24Hours, isClaimantIncapacitated, isPartnerIncapacitated)
-    resultTuple
-  }
-
-  private def doesHouseHoldQualify(resultTuple : Tuple7[Boolean, Boolean, Boolean ,
-    Boolean, Boolean, Boolean, Boolean], householdQualifies : Boolean) : Boolean = {
-    resultTuple match {
-      case (true, _, _, _, _, true, _) => false // claimant cannot be working and incapacitated
-      case (_, true, _, _, _, _, true) => false // partner cannot be working and incapacitated
-      case (true, true, _, _, _, false, false) => householdQualifies // both are working >= 16h per week
-      case (true, _, _, _, true, false, _) => householdQualifies // claimant is working >= 16h per week, another don't care (but total is 24h per week)
-      case (_, true, _, _, true, _, false) => householdQualifies // partner is working >= 16h per week, another don't care (but total is 24h per week)
-      case (true, _, true, _, _, false, _) => householdQualifies // claimant is disabled and working >= 16h per week, partner don't care
-      case (_, true, _, true, _, _, false) => householdQualifies // partner is disabled and working >= 16h per week, claimant don't care
-      case (true, false, _, _, _, false, true) => householdQualifies // claimant is working >= 16h per week, partner is incapacitated
-      case (false, true, _, _, _, true, false) => householdQualifies // partner is working >= 16h per week, claimant is incapacitated
-      case _ => false //no one works at least 16h per week (e.g. both incapacitated)
+    if(
+      isOneOfCoupleWorking16h && (
+        isOneOfCoupleDisabled || isOneOfCoupleCarer || isCoupleWorking24Hours || isOneOfCoupeIncapacitated
+        )
+    ) {
+      householdQualifies
+    }
+    else {
+      false
     }
   }
+
   def getBasicElement(periodStart: LocalDate) : Boolean = {
-
-
     isCouple match {
       case true =>
-        val resultTuple =  getResultTuple(periodStart)
         val householdQualifies : Boolean = isCoupleQualifyingForTC && householdHasChildOrYoungPerson(periodStart)
-        //Order: isClaimant16Hours, isPartner16Hours, isClaimantDisabled, isPartnerDisabled, isCoupleWorking24Hours,
-        // isClaimantIncapacitated, isPartnerIncapacitated
-        doesHouseHoldQualify(resultTuple, householdQualifies)
+        doesHouseHoldQualify(periodStart, householdQualifies)
 
       case false =>
         val claimant = claimants.head
@@ -248,6 +245,13 @@ object TaxYear extends CCFormat {
     )(TaxYear.apply _)
 }
 
+case class OtherSupport(
+                         carersAllowance: Boolean = false
+                         )
+object OtherSupport {
+  implicit val otherSupportFormat = Json.format[OtherSupport]
+}
+
 case class Claimant(
                      hours: Double = 0.00,
                      liveOrWork:  Boolean = false,
@@ -255,7 +259,8 @@ case class Claimant(
                      totalIncome: BigDecimal = BigDecimal(0.00),
                      previousTotalIncome: BigDecimal = BigDecimal(0.00),
                      disability: Disability,
-                     schemesClaiming: SchemesClaiming
+                     schemesClaiming: SchemesClaiming,
+                     otherSupport: OtherSupport
                      ) extends models.input.BaseClaimant {
 
   // TODO THIS MAY NEED EXPANDED FOR KNOCKOUT CONDITIONS FOR TC
@@ -302,7 +307,8 @@ object Claimant extends CCFormat {
       (JsPath \ "totalIncome").read[BigDecimal].filter(ValidationError(Messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
       (JsPath \ "previousTotalIncome").read[BigDecimal].filter(ValidationError(Messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
       (JsPath \ "disability").read[Disability] and
-      (JsPath \ "schemesClaiming").read[SchemesClaiming]
+      (JsPath \ "schemesClaiming").read[SchemesClaiming] and
+      (JsPath \ "otherSupport").read[OtherSupport]
     )(Claimant.apply _)
 }
 
