@@ -16,12 +16,9 @@
 
 package utils
 
-import java.text.SimpleDateFormat
 import java.util.Calendar
 
 import org.joda.time.LocalDate
-import play.api.{Logger, Configuration, Play}
-import play.api.Play._
 
 /**
  * Created by adamconder on 03/08/15.

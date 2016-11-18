@@ -20,7 +20,6 @@ import models.input.tfc.Request
 import models.input.{BaseRequest, BaseTaxYear}
 import models.output.OutputAPIModel.Eligibility
 import org.joda.time.LocalDate
-import play.api.Logger
 
 import scala.concurrent.Future
 /**
@@ -30,7 +29,6 @@ import scala.concurrent.Future
 trait CCEligibilityHelpers {
 
   def fromAndUntilDateForPeriod[T <: BaseTaxYear](date : LocalDate, i : Int, datesOfChanges : List[LocalDate], ty : T) : (LocalDate, LocalDate) = {
-    Logger.info(s"CCEligibilityHelpers.fromAndUntilDateForPeriod")
     val from = if (i == 0) { date } else {
       val previousDate = datesOfChanges(i)
       previousDate

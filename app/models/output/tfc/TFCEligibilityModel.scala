@@ -16,11 +16,11 @@
 
 package models.output.tfc
 
+import org.joda.time.LocalDate
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Writes._
 import play.api.libs.json.{JsPath, Writes}
 import utils.CCFormat
-import org.joda.time.LocalDate
 
 case class TFCEligibilityModel(
                                 from: LocalDate,

@@ -17,22 +17,15 @@
 package utils
 
 import controllers.FakeCCEligibilityApplication
-import eligibility.{ESCEligibility, TFCEligibility}
-import models.input.esc._
-import models.input.tfc._
 import models.output.OutputAPIModel._
 import models.output.esc.{ESCEligibilityModel, ESCPeriod}
-import models.output.tc.TaxYear
 import models.output.tc._
 import models.output.tfc._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import play.api.Logger
 import play.api.data.validation.ValidationError
 import play.api.libs.json._
 import uk.gov.hmrc.play.test.UnitSpec
-
-import scala.concurrent.Future
 
 class JSONFactorySpec extends UnitSpec with FakeCCEligibilityApplication {
 

@@ -20,7 +20,7 @@ import controllers.EligibilityController
 import eligibility.ESCEligibility
 import models.input.esc.Request
 import play.api.Logger
-import play.api.libs.json.{JsValue, JsError}
+import play.api.libs.json.JsValue
 import play.api.mvc.Action
 import service.AuditEvents
 
@@ -41,15 +41,15 @@ trait ESCEligibilityController extends EligibilityController {
     implicit request =>
       request.body.validate[Request].fold(
         error => {
-          Logger.warn(s"\n\nESC Validation JsError: ${JsError.toFlatJson(error).toString()}\n\n")
+          Logger.warn(s"\n\nESC Validation JsError *****\n\n")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
-          Logger.info(s"\n\nESC Validation passed : ${result.toString}\n\n")
+          Logger.info(s"\n\nESC Validation passed ******\n")
           auditEvent.auditESCRequest(result.toString)
           eligibility.eligibility(result).map {
             response =>
-              Logger.info(s"\n\nESC Eligibility Result: ${response.toString}\n\n")
+              Logger.info(s"\n\nESC Eligibility Response *****\n\n")
               auditEvent.auditESCResponse(utils.JSONFactory.generateResultJson(response).toString())
               Ok(utils.JSONFactory.generateResultJson(response))
           } recover {

@@ -17,7 +17,6 @@
 package utils
 
 import models.output.OutputAPIModel.Eligibility
-import play.api.Logger
 import play.api.data.validation.ValidationError
 import play.api.libs.json._
 

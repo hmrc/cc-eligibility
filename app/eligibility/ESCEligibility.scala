@@ -19,11 +19,11 @@ package eligibility
 import models.input.BaseRequest
 import models.input.esc._
 import models.output.OutputAPIModel.Eligibility
-import models.output.esc.{ESCEligibilityModel, OutputClaimant}
+import models.output.esc.ESCEligibilityModel
 import org.joda.time.LocalDate
 import play.api.Logger
 import play.api.i18n.Messages
-import utils.{ESCConfig}
+import utils.ESCConfig
 
 import scala.annotation.tailrec
 import scala.concurrent.Future
@@ -43,7 +43,6 @@ trait ESCEligibility extends CCEligibility {
 
     //TODO investigate if the end date should return 31st Aug instead of 1st Sept to get correct number of months
     private def splitDatesForChildren(taxYear : TaxYear) : List[LocalDate] = {
-      Logger.info(s"ESCEligibilityService.splitDatesForChildren")
       val dates : List[Option[LocalDate]] = for (child <- taxYear.children) yield {
         val isBeingBorn = child.isBeingBornInTaxYear(taxYear)
         val turns15 = child.isTurning15Before1September(taxYear.from, taxYear.until)
@@ -63,7 +62,6 @@ trait ESCEligibility extends CCEligibility {
     }
 
    private def causesSplit(child: Child, taxYear : TaxYear) : Boolean = {
-     Logger.info(s"ESCEligibilityService.causesSplit")
       val isBeingBorn = child.isBeingBornInTaxYear(taxYear)
       val turns15 = child.isTurning15Before1September(taxYear.from, taxYear.until)
       val turns16 = child.isTurning16Before1September(taxYear.from, taxYear.until)
@@ -85,13 +83,12 @@ trait ESCEligibility extends CCEligibility {
               sortedSplitDates.slice(0, 2)
           }
         case firstDateInList : LocalDate =>
-          //                  return just the date when the child is being born either before or after 1st September.
+          //return just the date when the child is being born either before or after 1st September.
           List(sortedSplitDates.head)
       }
     }
 
     def generateSplitDates(taxYear : TaxYear) : List[LocalDate] = {
-      Logger.info(s"ESCEligibilityService.generateSplitDates")
       val numberOfChildrenEligibleInTaxYearWithNoSplits = taxYear.children.exists(ch => !causesSplit(ch, taxYear) && ch.qualifiesForESC(taxYear.from))
 
       val splitDateList = numberOfChildrenEligibleInTaxYearWithNoSplits match {
@@ -113,7 +110,6 @@ trait ESCEligibility extends CCEligibility {
     }
 
     def determineStartDatesOfPeriodsInTaxYear(taxYear: TaxYear) : List[LocalDate] = {
-      Logger.info(s"ESCEligibilityService.determineStartDatesOfPeriodsInTaxYear")
       val filtered: List[LocalDate] = generateSplitDates(taxYear)
       val taxYearStart : LocalDate = taxYear.from
       val inserted: List[LocalDate] = filtered.::(taxYearStart)
@@ -121,25 +117,21 @@ trait ESCEligibility extends CCEligibility {
     }
 
     def hasQualifyingChildForPeriod(children: List[Child], periodStart: LocalDate) : Boolean = {
-      Logger.info(s"ESCEligibilityService.hasQualifyingChildForPeriod")
       val qualifyingChild = children.exists(child => child.qualifiesForESC(periodStart))
       qualifyingChild
     }
 
     def numberOfQualifyingMonthsForPeriod(qualifying: Boolean, periodStart: LocalDate, periodEnd: LocalDate) : Int = {
-      Logger.info(s"ESCEligibilityService.numberOfQualifyingMonthsForPeriod")
       qualifying match {
         case true =>
           (periodEnd.getYear - periodStart.getYear) * 12 + (periodEnd.getMonthOfYear - periodStart.getMonthOfYear)
         case _ =>
           0
-
       }
     }
 
     def determineClaimantsEligibilityForPeriod(children: List[Child], claimants: List[Claimant], periodStart : LocalDate,
                                                periodEnd: LocalDate) : List[models.output.esc.OutputClaimant] = {
-      Logger.info(s"ESCEligibilityService.determineClaimantsEligibilityForPeriod")
       val outputClaimants = for (claimant <- claimants) yield {
         val hasQualifyingChildren = hasQualifyingChildForPeriod(children, periodStart)
         val claimantQualifying = claimant.isClaimantQualifyingForESC
@@ -162,7 +154,6 @@ trait ESCEligibility extends CCEligibility {
     }
 
     def determineChildrensEligibilityForPeriod(children: List[Child], periodStart: LocalDate) : List[models.output.esc.OutputChild] = {
-      Logger.info(s"ESCEligibilityService.determineChildrensEligibilityForPeriod")
       val outputChildren = for(child <- children) yield {
         val eligible = child.qualifiesForESC(periodStart)
         models.output.esc.OutputChild(
@@ -177,7 +168,6 @@ trait ESCEligibility extends CCEligibility {
     }
 
     def determinePeriodsForTaxYear(ty: TaxYear) : List[models.output.esc.ESCPeriod] = {
-      Logger.info(s"ESCEligibilityService.determinePeriodsForTaxYear")
       val datesOfChanges = determineStartDatesOfPeriodsInTaxYear(ty)
 
       val periods = for((date, i) <- datesOfChanges.zipWithIndex) yield {
@@ -202,17 +192,13 @@ trait ESCEligibility extends CCEligibility {
     }
 
     def generateTaxYears(taxYears : List[models.input.esc.TaxYear]) : List[models.output.esc.TaxYear] = {
-      Logger.info(s"ESCEligibilityService.generateTaxYears")
       @tailrec
       def generateTaxYearsHelper(taxYears : List[models.input.esc.TaxYear],
                                  acc : List[models.output.esc.TaxYear], i : Int) : List[models.output.esc.TaxYear] = {
-        Logger.info(s"ESCEligibilityService.generateTaxYearsHelper")
         taxYears match {
           case Nil => acc
           case head :: tail =>
             val periods = determinePeriodsForTaxYear(head)
-            //val needToReduce = checkIfEligibleMonthsNeedToReduceForSecondTaxYear(i, acc, periods)
-
             val ty: models.output.esc.TaxYear = models.output.esc.TaxYear(from = head.from, until = head.until, periods = periods)
 
             generateTaxYearsHelper(tail, acc.::(ty), i + 1)
@@ -222,7 +208,6 @@ trait ESCEligibility extends CCEligibility {
     }
 
     override def eligibility(request : BaseRequest) : Future[Eligibility] = {
-      Logger.info(s"ESCEligibilityService.eligibility")
       request match {
         case request : models.input.esc.Request =>
           Future {
@@ -235,7 +220,7 @@ trait ESCEligibility extends CCEligibility {
             )
           }
         case _ =>
-          Logger.warn(s"ESCEligibilityService.eligibility - Exception :$request")
+          Logger.warn(s"ESCEligibilityService.eligibility - Exception *****")
           throw new IllegalArgumentException(Messages("cc.elig.wrong.type"))
       }
     }

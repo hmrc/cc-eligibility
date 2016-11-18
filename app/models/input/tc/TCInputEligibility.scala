@@ -17,13 +17,12 @@
 package models.input.tc
 
 import org.joda.time.LocalDate
-import play.api.Logger
 import play.api.data.validation.ValidationError
 import play.api.i18n.Messages
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
-import utils.{TCConfig, CCFormat, Periods}
+import utils.{CCFormat, Periods, TCConfig}
 
 case class Request(
                     payload: Payload
@@ -240,8 +239,8 @@ object TaxYear extends CCFormat {
   implicit val taxYearReads: Reads[TaxYear] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
-      (JsPath \ "claimants").read[List[Claimant]].filter(ValidationError(Messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
-      (JsPath \ "children").read[List[Child]].filter(ValidationError(Messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
+        (JsPath \ "claimants").read[List[Claimant]].filter(ValidationError(Messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
+          (JsPath \ "children").read[List[Child]].filter(ValidationError(Messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
     )(TaxYear.apply _)
 }
 
@@ -303,12 +302,12 @@ object Claimant extends CCFormat {
   implicit val claimantReads: Reads[Claimant] = (
     (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
       (JsPath \ "liveOrWork").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "totalIncome").read[BigDecimal].filter(ValidationError(Messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
-      (JsPath \ "previousTotalIncome").read[BigDecimal].filter(ValidationError(Messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
-      (JsPath \ "disability").read[Disability] and
-      (JsPath \ "schemesClaiming").read[SchemesClaiming] and
-      (JsPath \ "otherSupport").read[OtherSupport]
+        (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
+          (JsPath \ "totalIncome").read[BigDecimal].filter(ValidationError(Messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
+            (JsPath \ "previousTotalIncome").read[BigDecimal].filter(ValidationError(Messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
+              (JsPath \ "disability").read[Disability] and
+                (JsPath \ "schemesClaiming").read[SchemesClaiming] and
+                  (JsPath \ "otherSupport").read[OtherSupport]
     )(Claimant.apply _)
 }
 
@@ -322,7 +321,7 @@ object Disability {
   implicit val disabilityReads: Reads[Disability] = (
     (JsPath \ "disabled").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "incapacitated").read[Boolean].orElse(Reads.pure(false))
+        (JsPath \ "incapacitated").read[Boolean].orElse(Reads.pure(false))
     )(Disability.apply _)
 }
 
@@ -463,11 +462,11 @@ object Child extends CCFormat {
   implicit val childReads: Reads[Child] = (
     (JsPath \ "id").read[Short].filter(ValidationError(Messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
       (JsPath \ "name").readNullable[String](maxLength[String](nameLength)) and
-      (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(Messages("cc.elig.childcare.spend.too.low")))(x => childSpendValidation(x)) and
-      (JsPath \ "childcareCostPeriod").read[Periods.Period] and
-      (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
-      (JsPath \ "disability").read[Disability] and
-      (JsPath \ "education").readNullable[Education]
+        (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(Messages("cc.elig.childcare.spend.too.low")))(x => childSpendValidation(x)) and
+          (JsPath \ "childcareCostPeriod").read[Periods.Period] and
+            (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
+              (JsPath \ "disability").read[Disability] and
+                (JsPath \ "education").readNullable[Education]
     )(Child.apply _)
 }
 

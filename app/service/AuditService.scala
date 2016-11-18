@@ -18,12 +18,9 @@ package service
 
 
 import config.MicroserviceAuditConnector
-import play.api.Logger
 import play.api.mvc.Request
-import uk.gov.hmrc.play.audit.http.config.LoadAuditingConfig
-import uk.gov.hmrc.play.audit.http.connector.{AuditResult, AuditConnector}
+import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.{DataEvent, DeviceId}
-import uk.gov.hmrc.play.config.{RunMode, AppName}
 import uk.gov.hmrc.play.http.HeaderCarrier
 
 import scala.concurrent.Future
@@ -49,17 +46,14 @@ trait AuditService {
 
   def buildEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)
                 (implicit request: Request[_], hc: HeaderCarrier) : DataEvent = {
-    Logger.info(s"AuditService.buildEvent")
-    val auditEvent = DataEvent(
+    DataEvent(
       auditSource =  auditSource,
       auditType = auditType,
       tags = hc.headers.toMap,
       detail = generateDetails(request, details))
-    auditEvent
   }
 
   private def generateDetails(request: Request[_], details: Map[String, String]): Map[String, String] = {
-    Logger.info(s"AuditService.generateDetails")
     details ++ Map("deviceID" -> DeviceId(request).map(_.id).getOrElse("-"))
   }
 

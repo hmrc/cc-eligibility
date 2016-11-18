@@ -21,8 +21,8 @@ import models.input.tc.TaxYear
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.Play
-import uk.gov.hmrc.play.test.UnitSpec
 import play.api.Play._
+import uk.gov.hmrc.play.test.UnitSpec
 
 class TCSchemeConfigSpec extends UnitSpec with FakeCCEligibilityApplication {
 

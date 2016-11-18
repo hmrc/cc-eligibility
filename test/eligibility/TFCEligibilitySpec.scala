@@ -20,7 +20,7 @@ import controllers.FakeCCEligibilityApplication
 import eligibility.TFCEligibility.TFCEligibilityService
 import models.input.tfc._
 import models.output.OutputAPIModel.Eligibility
-import models.output.tfc.{TFCEligibilityModel, TFCPeriod, OutputChild, OutputClaimant}
+import models.output.tfc.{OutputChild, OutputClaimant, TFCEligibilityModel, TFCPeriod}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.mock.MockitoSugar

@@ -19,8 +19,8 @@ package utils
 import java.text.SimpleDateFormat
 
 import org.joda.time.LocalDate
-import play.api.{Logger, Play, Configuration}
 import play.api.Play._
+import play.api.{Configuration, Play}
 
 case class TCTaxYearConfig(
                              childAgeLimit: Int,

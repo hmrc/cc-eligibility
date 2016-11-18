@@ -27,7 +27,6 @@ import models.output.tc.{ChildElements, ClaimantDisability, TCEligibilityModel}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.mock.MockitoSugar
-import play.api.Logger
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.Periods
