@@ -16,7 +16,6 @@
 
 package utils
 
-import play.api.Logger
 import play.api.i18n.Messages
 import play.api.libs.json._
 

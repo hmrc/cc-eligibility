@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import controllers.tfc.TFCEligibilityController
-import eligibility.{TFCEligibility}
+import eligibility.TFCEligibility
 import helper.JsonRequestHelper._
 import models.input.tfc.Request
 import org.mockito.Matchers.{eq => mockEq}

@@ -19,7 +19,7 @@ package utils
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.Logger
-import play.api.libs.json.{Writes, JsValue, JsString, JsNull}
+import play.api.libs.json.{JsNull, JsString, JsValue, Writes}
 
 object CCFormat extends CCFormat
 
@@ -27,7 +27,6 @@ trait CCFormat {
   val datePattern = "yyyy-MM-dd"
 
   implicit def jodaLocalDateWrites(pattern: String): Writes[LocalDate] = new Writes[LocalDate] {
-    Logger.info(s"CCFormat.jodaLocalDateWrites")
     val df = DateTimeFormat.forPattern(pattern)
     def writes(d: LocalDate) : JsValue = {
       val date = if (d != null) {

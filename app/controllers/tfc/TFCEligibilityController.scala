@@ -20,7 +20,7 @@ import controllers.EligibilityController
 import eligibility.TFCEligibility
 import models.input.tfc.Request
 import play.api.Logger
-import play.api.libs.json.{JsValue, JsError}
+import play.api.libs.json.JsValue
 import play.api.mvc.Action
 import service.AuditEvents
 
@@ -41,15 +41,15 @@ trait TFCEligibilityController extends EligibilityController {
     implicit request =>
       request.body.validate[Request].fold(
         error => {
-          Logger.warn(s"\n\nTFC Validation JsError: ${JsError.toFlatJson(error).toString()}\n\n")
+          Logger.warn(s"\n\nTFC Validation JsError *****\n\n")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
           auditEvent.auditTFCRequest(result.toString)
-          Logger.info(s"\n\nTFC Validation passed : ${result.toString}\n\n")
+          Logger.info(s"\n\nTFC Validation passed ******\n\n")
           eligibility.eligibility(result).map {
             response =>
-              Logger.info(s"\n\nTFC Eligibility Response: ${response.toString}\n\n")
+              Logger.info(s"\n\nTFC Eligibility Response *******\n\n")
               auditEvent.auditTFCResponse(utils.JSONFactory.generateResultJson(response).toString())
               Ok(utils.JSONFactory.generateResultJson(response))
           } recover {

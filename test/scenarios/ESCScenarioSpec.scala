@@ -26,7 +26,6 @@ import models.input.esc.Request
 import org.mockito.Matchers.{eq => mockEq}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
-import play.api.Logger
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest

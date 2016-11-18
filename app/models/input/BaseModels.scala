@@ -19,7 +19,7 @@ package models.input
 import java.util.{Calendar, Date}
 
 import org.joda.time.LocalDate
-import utils.{CCConfig}
+import utils.CCConfig
 
 trait BaseRequest {
   def payload : BasePayload
@@ -89,8 +89,6 @@ trait BaseChild {
     }
     (requiresSplit, LocalDate.fromDateFields(september1.toDate))
   }
-
-
 
   def childsBirthdayDateForAge(years: Int) : Date = {
     val dobCalendar = Calendar.getInstance()
