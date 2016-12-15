@@ -27,6 +27,8 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 import utils.{CCFormat, Periods, TFCConfig}
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 
 case class Request (
                      payload: Payload

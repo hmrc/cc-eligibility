@@ -45,11 +45,9 @@ trait TCEligibilityController extends EligibilityController {
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
-          Logger.info(s"\n\nTC Validation passed ******\n\n")
           auditEvent.auditTCRequest(result.toString)
           eligibility.eligibility(result).map {
             response =>
-              Logger.info(s"\n\nTC Eligibility response ******* \n\n")
               auditEvent.auditTFCResponse(utils.JSONFactory.generateResultJson(response).toString())
               Ok(utils.JSONFactory.generateResultJson(response))
           } recover {
