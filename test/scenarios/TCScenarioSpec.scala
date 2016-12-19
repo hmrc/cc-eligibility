@@ -60,7 +60,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_1.json")
@@ -85,7 +85,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_2.json")
@@ -110,7 +110,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_3.json")
@@ -135,8 +135,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
-
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_12.json")
       val outputJson: JsValue = Json.parse(outputResource.toString)
@@ -160,7 +159,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_5.json")
@@ -185,7 +184,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_6.json")
@@ -210,7 +209,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_7.json")
@@ -235,7 +234,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_8.json")
@@ -260,7 +259,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_9.json")
@@ -285,7 +284,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_10.json")
@@ -310,7 +309,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_11.json")
@@ -335,7 +334,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_12.json")
@@ -360,7 +359,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_14.json")
@@ -385,7 +384,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_15.json")
@@ -410,7 +409,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_16.json")
@@ -435,7 +434,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_17.json")
@@ -460,7 +459,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_18.json")
@@ -485,7 +484,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_20.json")
@@ -510,7 +509,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_21.json")
@@ -535,7 +534,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_22.json")
@@ -560,7 +559,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_23.json")
@@ -585,7 +584,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_24.json")
@@ -610,7 +609,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_25.json")
@@ -635,7 +634,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_26.json")
@@ -660,7 +659,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_27.json")
@@ -685,7 +684,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_28.json")
@@ -710,7 +709,7 @@ class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Moc
 
       // fake request to the controller through the API endpoint
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString()))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_29.json")
