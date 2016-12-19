@@ -16,6 +16,7 @@
 
 package controllers
 
+import akka.stream.Materializer
 import org.scalatest.Suite
 import play.api.test.FakeApplication
 import uk.gov.hmrc.play.test.WithFakeApplication
@@ -29,4 +30,6 @@ trait FakeCCEligibilityApplication extends WithFakeApplication {
     "govuk-tax.Test.services.contact-frontend.port" -> "9250"
   )
   override lazy val fakeApplication = FakeApplication(additionalConfiguration = config)
+  implicit lazy val mat: Materializer = fakeApplication.materializer
+
 }

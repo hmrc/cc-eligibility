@@ -46,10 +46,8 @@ trait TFCEligibilityController extends EligibilityController {
         },
         result => {
           auditEvent.auditTFCRequest(result.toString)
-          Logger.info(s"\n\nTFC Validation passed ******\n\n")
           eligibility.eligibility(result).map {
             response =>
-              Logger.info(s"\n\nTFC Eligibility Response *******\n\n")
               auditEvent.auditTFCResponse(utils.JSONFactory.generateResultJson(response).toString())
               Ok(utils.JSONFactory.generateResultJson(response))
           } recover {

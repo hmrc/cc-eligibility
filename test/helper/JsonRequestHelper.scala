@@ -16,6 +16,8 @@
 
 package helper
 
+import akka.stream.Materializer
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.iteratee.Input
 import play.api.libs.json.JsValue
 import play.api.mvc.Action
@@ -23,9 +25,11 @@ import play.api.test.FakeRequest
 
 object JsonRequestHelper {
 
-  import scala.concurrent.ExecutionContext.Implicits.global
+  def mockApp = new GuiceApplicationBuilder().build()
+  val mtrlzr = mockApp.injector.instanceOf[Materializer]
 
   def executeAction(action: Action[JsValue], request: FakeRequest[_], payload: String) =
-    action(request).feed(Input.El(payload.getBytes)).flatMap(_.run)
+    action(request).run()(mtrlzr)
+//    action(request).feed(Input.El(payload.getBytes)).flatMap(_.run)
 
 }

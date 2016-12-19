@@ -45,11 +45,9 @@ trait ESCEligibilityController extends EligibilityController {
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
-          Logger.info(s"\n\nESC Validation passed ******\n")
           auditEvent.auditESCRequest(result.toString)
           eligibility.eligibility(result).map {
             response =>
-              Logger.info(s"\n\nESC Eligibility Response *****\n\n")
               auditEvent.auditESCResponse(utils.JSONFactory.generateResultJson(response).toString())
               Ok(utils.JSONFactory.generateResultJson(response))
           } recover {

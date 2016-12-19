@@ -21,7 +21,6 @@ import java.text.SimpleDateFormat
 import org.joda.time.LocalDate
 import play.api.Play._
 import play.api.{Configuration, Play}
-import play.Application
 
 case class ESCTaxYearConfig(
                              childAgeLimit: Int,
@@ -30,7 +29,7 @@ case class ESCTaxYearConfig(
 
 object ESCConfig extends CCConfig {
 
-  def getESCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
+    def getESCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
     configs.filter(x => {
       x.getString("rule-date").equals(Some("default"))
     }).head
