@@ -29,10 +29,10 @@ import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
-import uk.gov.hmrc.play.test.UnitSpec
+import spec.CCSpecConfig
 import scala.concurrent.Future
 
-class ESCEligibilityControllerSpec extends UnitSpec with FakeCCEligibilityApplication with MockitoSugar {
+class ESCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApplication with MockitoSugar {
 
   val mockESCEligibilityController = new ESCEligibilityController with ESCEligibility {
     override val eligibility = mock[ESCEligibilityService]
@@ -44,7 +44,7 @@ class ESCEligibilityControllerSpec extends UnitSpec with FakeCCEligibilityApplic
   "ESCEligibilityController" should {
 
     "not return NOT_FOUND endpoint" in {
-      val result = route(FakeRequest(POST, "/cc-eligibility/employer-supported-childcare/eligibility"))
+      val result = route(app, FakeRequest(POST, "/cc-eligibility/employer-supported-childcare/eligibility"))
       result.isDefined shouldBe true
       status(result.get) should not be NOT_FOUND
     }

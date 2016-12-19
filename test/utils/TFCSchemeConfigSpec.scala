@@ -21,11 +21,9 @@ import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.Play
-import play.api.Play._
-import uk.gov.hmrc.play.test.UnitSpec
+import spec.CCSpecConfig
 
-class TFCSchemeConfigSpec extends UnitSpec with FakeCCEligibilityApplication {
-
+class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
   "TFC Scheme Config" should {
 

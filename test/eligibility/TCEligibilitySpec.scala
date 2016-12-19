@@ -28,12 +28,12 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.mock.MockitoSugar
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
-import uk.gov.hmrc.play.test.UnitSpec
+import spec.CCSpecConfig
 import utils.Periods
 
 import scala.concurrent.Future
 
-class TCEligibilitySpec extends UnitSpec with FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar {
+class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar {
 
   "TCEligibilityService" should {
 

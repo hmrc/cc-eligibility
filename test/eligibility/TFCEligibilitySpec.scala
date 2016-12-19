@@ -24,12 +24,12 @@ import models.output.tfc.{OutputChild, OutputClaimant, TFCEligibilityModel, TFCP
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.mock.MockitoSugar
-import uk.gov.hmrc.play.test.UnitSpec
+import spec.CCSpecConfig
 import utils.Periods
 
 import scala.concurrent.Future
 
-class TFCEligibilitySpec extends UnitSpec with FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar {
+class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar {
 
   "TFCEligibilityService" should {
 

@@ -25,11 +25,10 @@ import models.output.esc.ESCPeriod
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.mock.MockitoSugar
-import uk.gov.hmrc.play.test.UnitSpec
-
+import spec.CCSpecConfig
 import scala.concurrent.Future
 
-class ESCEligibilitySpec extends UnitSpec with FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar {
+class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar {
 
   "ESCEligibilityService" should {
 

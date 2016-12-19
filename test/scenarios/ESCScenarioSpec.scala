@@ -21,7 +21,6 @@ import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import controllers.esc.ESCEligibilityController
 import eligibility.ESCEligibility
-import helper.JsonRequestHelper._
 import models.input.esc.Request
 import org.mockito.Matchers.{eq => mockEq}
 import org.mockito.Mockito._
@@ -30,11 +29,10 @@ import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import service.AuditEvents
-import uk.gov.hmrc.play.test.UnitSpec
-
+import spec.CCSpecConfig
 import scala.concurrent.Future
 
-class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with MockitoSugar {
+class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with MockitoSugar {
 
   val mockESCEligibilityController = new ESCEligibilityController with ESCEligibility {
     override val eligibility: ESCEligibilityService = mock[ESCEligibilityService]
@@ -53,7 +51,7 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_1.json")
       val outputJson: JsValue = Json.parse(outputResource.toString)
@@ -72,10 +70,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_2.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_2.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -91,10 +89,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_3.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_3.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -110,10 +108,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_4.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_4.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -129,10 +127,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_5.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_5.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -148,10 +146,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_6.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_6.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -167,10 +165,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_7.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_7.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -186,10 +184,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_8.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_8.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -205,10 +203,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_9.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_9.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -224,10 +222,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_10.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_10.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -243,10 +241,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_11.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_11.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -262,10 +260,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_12.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_12.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -281,10 +279,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_13.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_13.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -300,10 +298,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_14.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_14.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -319,10 +317,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_15.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_15.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -337,10 +335,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_16.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_16.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -356,10 +354,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_17.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_17.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -375,10 +373,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_18.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_18.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -394,10 +392,10 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
-            val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_19.json")
-            val outputJson: JsValue = Json.parse(outputResource.toString)
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_19.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
 
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
@@ -413,7 +411,7 @@ class ESCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
-      val result = await(executeAction(controller.eligible, FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json"), inputJson.toString))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_20.json")
       val outputJson: JsValue = Json.parse(outputResource.toString)

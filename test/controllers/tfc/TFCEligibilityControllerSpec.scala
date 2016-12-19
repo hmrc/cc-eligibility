@@ -19,7 +19,6 @@ package controllers.tfc
 import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import eligibility.TFCEligibility
-import helper.JsonRequestHelper._
 import models.input.tfc.Request
 import models.output.OutputAPIModel.Eligibility
 import org.mockito.Matchers.{eq => mockEq, _}
@@ -30,11 +29,10 @@ import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
-import uk.gov.hmrc.play.test.UnitSpec
-
+import spec.CCSpecConfig
 import scala.concurrent.Future
 
-class TFCEligibilityControllerSpec extends UnitSpec with FakeCCEligibilityApplication with MockitoSugar {
+class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApplication with MockitoSugar {
 
   val mockTFCEligibilityController = new TFCEligibilityController with TFCEligibility {
     override val eligibility = mock[TFCEligibilityService]
@@ -46,15 +44,9 @@ class TFCEligibilityControllerSpec extends UnitSpec with FakeCCEligibilityApplic
   "TFCEligibilityController" should {
 
     "not return NOT_FOUND endpoint" in {
-      val result = route(FakeRequest(POST,"/cc-eligibility/tax-free-childcare/eligibility"))
+      val result = route(app, FakeRequest(POST, "/cc-eligibility/tax-free-childcare/eligibility"))
       result.isDefined shouldBe true
       status(result.get) should not be NOT_FOUND
-    }
-
-    "result false when incorrect endpoint" in {
-      val result = route(FakeRequest(POST,"/cc-eligibility/employer-supported-childcare/eligibility"))
-      result.isDefined shouldBe true
-      status(result.get) shouldBe BAD_REQUEST
     }
 
     "accept valid json should return Json body" in {

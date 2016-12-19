@@ -19,19 +19,18 @@ package service
 import controllers.FakeCCEligibilityApplication
 import org.scalatest.mock.MockitoSugar
 import play.api.test.FakeRequest
+import spec.CCSpecConfig
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.{AuditEvent, DataEvent}
 import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
-
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
  * Created by user on 25/04/16.
  */
-class AuditEventsTest extends UnitSpec with FakeCCEligibilityApplication with MockitoSugar {
+class AuditEventsTest extends CCSpecConfig with FakeCCEligibilityApplication with MockitoSugar {
   implicit val request = FakeRequest()
   implicit var hc = new HeaderCarrier()
 

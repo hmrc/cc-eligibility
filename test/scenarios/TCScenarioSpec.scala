@@ -21,7 +21,6 @@ import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import controllers.tc.TCEligibilityController
 import eligibility.TCEligibility
-import helper.JsonRequestHelper._
 import models.input.tc.Request
 import org.mockito.Matchers.{eq => mockEq}
 import org.mockito.Mockito._
@@ -30,14 +29,13 @@ import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import service.AuditEvents
-import uk.gov.hmrc.play.test.UnitSpec
-
+import spec.CCSpecConfig
 import scala.concurrent.Future
 
 /**
 * Created by adamconder on 11/09/15.
 */
-class TCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with MockitoSugar {
+class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with MockitoSugar {
 
   val mockTaxCreditEligibilityController = new TCEligibilityController with TCEligibility {
     override val eligibility : TCEligibilityService = mock[TCEligibilityService]

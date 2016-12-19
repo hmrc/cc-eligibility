@@ -19,7 +19,6 @@ package controllers.tc
 import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import eligibility.TCEligibility
-import helper.JsonRequestHelper._
 import models.input.tc.Request
 import models.output.OutputAPIModel.Eligibility
 import org.joda.time.LocalDate
@@ -32,11 +31,10 @@ import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
-import uk.gov.hmrc.play.test.UnitSpec
-
+import spec.CCSpecConfig
 import scala.concurrent.Future
 
-class TCEligibilityControllerSpec extends UnitSpec with FakeCCEligibilityApplication with MockitoSugar {
+class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApplication with MockitoSugar {
 
   val mockTCEligibilityController = new TCEligibilityController with TCEligibility {
     override val eligibility = mock[TCEligibilityService]
@@ -48,7 +46,7 @@ class TCEligibilityControllerSpec extends UnitSpec with FakeCCEligibilityApplica
   "TCEligibilityController" should {
 
     "not return NOT_FOUND endpoint" in {
-      val result = route(FakeRequest(POST, "/cc-eligibility/tax-credits/eligibility"))
+      val result = route(app, FakeRequest(POST, "/cc-eligibility/tax-credits/eligibility"))
       result.isDefined shouldBe true
       status(result.get) should not be NOT_FOUND
     }
