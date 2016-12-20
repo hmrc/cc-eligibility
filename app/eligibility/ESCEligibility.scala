@@ -24,7 +24,8 @@ import org.joda.time.LocalDate
 import play.api.Logger
 import play.api.i18n.Messages
 import utils.ESCConfig
-
+import play.api.i18n.Messages.Implicits._
+import play.api.Play.current
 import scala.annotation.tailrec
 import scala.concurrent.Future
 

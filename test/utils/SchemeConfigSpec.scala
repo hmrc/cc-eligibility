@@ -19,12 +19,12 @@ package utils
 import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import uk.gov.hmrc.play.test.UnitSpec
+import spec.CCSpecConfig
 
 /**
  * Created by lakshmi on 27/01/16.
  */
-class SchemeConfigSpec extends UnitSpec with FakeCCEligibilityApplication {
+class SchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
   "SchemeConfig" should {
 

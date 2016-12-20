@@ -23,10 +23,11 @@ import models.input.tc._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
-import uk.gov.hmrc.play.test.UnitSpec
+import spec.CCSpecConfig
 import utils.Periods
 
-class TCInputModelSpec extends UnitSpec with FakeCCEligibilityApplication {
+class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
+
   "TCInputEligibility" should {
 
     "read a valid JSON input and convert to a specific type" in {

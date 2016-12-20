@@ -25,9 +25,9 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.data.validation.ValidationError
 import play.api.libs.json._
-import uk.gov.hmrc.play.test.UnitSpec
+import spec.CCSpecConfig
 
-class JSONFactorySpec extends UnitSpec with FakeCCEligibilityApplication {
+class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
   "JSONFactory" should {
 

@@ -18,8 +18,7 @@ package eligibility
 
 import controllers.FakeCCEligibilityApplication
 import eligibility.TestEligibility.TestEligibilityService
-import uk.gov.hmrc.play.test.UnitSpec
-
+import spec.CCSpecConfig
 import scala.concurrent.Future
 
 trait TestEligibility extends CCEligibility {
@@ -32,7 +31,7 @@ trait TestEligibility extends CCEligibility {
 
 object TestEligibility extends TestEligibility
 
-class CCEligibilitySpec  extends UnitSpec with FakeCCEligibilityApplication {
+class CCEligibilitySpec  extends CCSpecConfig with FakeCCEligibilityApplication {
 
   "CCEligibility" should {
 

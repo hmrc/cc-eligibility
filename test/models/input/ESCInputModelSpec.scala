@@ -23,9 +23,9 @@ import models.input.esc._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{JsSuccess, JsValue, Json}
-import uk.gov.hmrc.play.test.UnitSpec
+import spec.CCSpecConfig
 
-class ESCInputModelSpec extends UnitSpec with FakeCCEligibilityApplication {
+class ESCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
   "ESCInputEligibility" should {
 

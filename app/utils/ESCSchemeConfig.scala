@@ -29,7 +29,7 @@ case class ESCTaxYearConfig(
 
 object ESCConfig extends CCConfig {
 
-  def getESCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
+    def getESCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
     configs.filter(x => {
       x.getString("rule-date").equals(Some("default"))
     }).head

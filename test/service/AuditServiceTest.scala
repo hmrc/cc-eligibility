@@ -18,19 +18,18 @@ package service
 
 import config.MicroserviceAuditConnector
 import play.api.test.FakeRequest
+import spec.CCSpecConfig
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.{AuditEvent, DataEvent}
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.http.logging.{ForwardedFor, SessionId}
-import uk.gov.hmrc.play.test.UnitSpec
-
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
  * Created by user on 22/04/16.
  */
-class AuditServiceTest extends UnitSpec {
+class AuditServiceTest extends CCSpecConfig {
 
   "AuditService" when {
 

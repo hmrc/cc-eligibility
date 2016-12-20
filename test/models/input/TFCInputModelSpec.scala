@@ -23,10 +23,10 @@ import models.input.tfc.{OtherSupport, _}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
-import uk.gov.hmrc.play.test.UnitSpec
+import spec.CCSpecConfig
 import utils.Periods
 
-class TFCInputModelSpec extends UnitSpec with FakeCCEligibilityApplication {
+class TFCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
   "TFCInputEligibility" should {
 
