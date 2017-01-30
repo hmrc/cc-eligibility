@@ -107,7 +107,7 @@ case class Claimant(
   def isTotalIncomeLessThan100000(periodStart:LocalDate) : Boolean = {
     val taxYearConfig = TFCConfig.getConfig(periodStart)
     val maximumTotalIncome : Double = taxYearConfig.maxIncomePerClaimant
-    totalIncome <= maximumTotalIncome
+    (totalIncome - taxYearConfig.personalAllowancePerClaimant) <= maximumTotalIncome
   }
 
   def isQualifyingForTFC(periodStart : LocalDate) : Boolean = {
