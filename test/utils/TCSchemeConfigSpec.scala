@@ -35,6 +35,8 @@ class TCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val ty = TaxYear(
         from = from,
         until = until,
+        totalIncome = BigDecimal(0),
+        previousTotalIncome = BigDecimal(0),
         claimants = List(),
         children = List()
       )
@@ -49,6 +51,8 @@ class TCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val ty = TaxYear(
         from = from,
         until = until,
+        totalIncome = BigDecimal(0),
+        previousTotalIncome = BigDecimal(0),
         claimants = List(),
         children = List()
       )

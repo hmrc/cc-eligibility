@@ -91,7 +91,6 @@ object TFC extends CCFormat {
 case class Claimant(
                      liveOrWork:  Boolean = false,
                      totalIncome: BigDecimal = BigDecimal(0.00),
-                     earnedIncome: BigDecimal = BigDecimal(0.00),
                      hoursPerWeek: Double = 0.00,
                      isPartner: Boolean = false,
                      disability: Disability,
@@ -126,12 +125,11 @@ object Claimant extends CCFormat {
   implicit val claimantReads: Reads[Claimant] = (
     (JsPath \ "liveOrWork").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "totalIncome").read[BigDecimal].filter(ValidationError(Messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
-        (JsPath \ "earnedIncome").read[BigDecimal].filter(ValidationError(Messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
-          (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
-            (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-              (JsPath \ "disability").read[Disability] and
-                (JsPath \ "schemesClaiming").read[SchemesClaiming] and
-                  (JsPath \ "otherSupport").read[OtherSupport]
+        (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
+          (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
+            (JsPath \ "disability").read[Disability] and
+              (JsPath \ "schemesClaiming").read[SchemesClaiming] and
+                (JsPath \ "otherSupport").read[OtherSupport]
     )(Claimant.apply _)
 }
 

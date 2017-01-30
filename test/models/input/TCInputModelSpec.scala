@@ -47,8 +47,6 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
           x.payload.taxYears.head.claimants.head.hours.isInstanceOf[Double] shouldBe true
           x.payload.taxYears.head.claimants.head.liveOrWork.isInstanceOf[Boolean] shouldBe true
           x.payload.taxYears.head.claimants.head.isPartner.isInstanceOf[Boolean] shouldBe true
-          x.payload.taxYears.head.claimants.head.totalIncome shouldBe a[BigDecimal]
-          x.payload.taxYears.head.claimants.head.previousTotalIncome shouldBe a[BigDecimal]
           x.payload.taxYears.head.claimants.head.disability shouldBe a[Disability]
           x.payload.taxYears.head.claimants.head.schemesClaiming shouldBe a[SchemesClaiming]
 
@@ -211,7 +209,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
 
-        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, children = List(child), claimants = List())
+        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List())
         val (x, y) = child.isBeingBornInTaxYear(taxYear = taxYear)
         x shouldBe false
         y shouldBe LocalDate.parse("1997-06-05", formatter)
@@ -225,7 +223,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
 
-        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, children = List(child), claimants = List())
+        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List())
         val (x, y) = child.isBeingBornInTaxYear(taxYear = taxYear)
         x shouldBe false
         y shouldBe LocalDate.parse("1997-03-05", formatter)
@@ -239,7 +237,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
 
-        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, children = List(child), claimants = List())
+        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List())
 
         val (x, y) = child.isBeingBornInTaxYear(taxYear = taxYear)
         x shouldBe false
@@ -254,7 +252,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
 
-        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, children = List(child), claimants = List())
+        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List())
 
         val (x, y) = child.isBeingBornInTaxYear(taxYear = taxYear)
         x shouldBe false
@@ -269,7 +267,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
 
-        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, children = List(child), claimants = List())
+        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List())
 
         val (x, y) = child.isBeingBornInTaxYear(taxYear = taxYear)
         x shouldBe false
@@ -285,7 +283,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(0.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
 
-        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, children = List(child), claimants = List())
+        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List())
 
         val (x, y) = child.isBeingBornInTaxYear(taxYear = taxYear)
         x shouldBe true
@@ -305,7 +303,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(0.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
 
-        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, children = List(child), claimants = List())
+        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List())
 
         val (x, y) = child.isBeingBornInTaxYear(taxYear = taxYear)
         x shouldBe true
@@ -324,7 +322,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(0.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
 
-        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, children = List(child), claimants = List())
+        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List())
 
         val (x, y) = child.isBeingBornInTaxYear(taxYear = taxYear)
         x shouldBe false
@@ -341,7 +339,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(0.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
 
-        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, children = List(child), claimants = List())
+        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List())
 
         val (x, y) = child.isBeingBornInTaxYear(taxYear = taxYear)
         x shouldBe false
@@ -358,7 +356,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(0.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
 
-        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, children = List(child), claimants = List())
+        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List())
 
         val (x, y) = child.isBeingBornInTaxYear(taxYear = taxYear)
         x shouldBe false
@@ -375,7 +373,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(0.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
 
-        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, children = List(child), claimants = List())
+        val taxYear = TaxYear(from = taxYearStart, until = taxYearEnd, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List())
 
         val (x, y) = child.isBeingBornInTaxYear(taxYear = taxYear)
         x shouldBe false
@@ -928,48 +926,14 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
     "TaxYear" should {
 
-      "calculate household income (single claimant)" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-        val periodStart = LocalDate.parse("2011-08-30", formatter)
-        val periodEnd = LocalDate.parse("2012-08-30", formatter)
-
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 20000.00, previousTotalIncome = 18000.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(), claimants = List(claimant))
-        taxYear.getTotalHouseholdIncome._1 shouldBe 20000.00
-        taxYear.getTotalHouseholdIncome._2 shouldBe 18000.00
-      }
-
-      "calculate household income (couple)" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-        val periodStart = LocalDate.parse("2011-08-30", formatter)
-        val periodEnd = LocalDate.parse("2012-08-30", formatter)
-
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 20000.00, previousTotalIncome = 18000.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 20000.00, previousTotalIncome = 18000.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(), claimants = List(claimant, claimant2))
-        taxYear.getTotalHouseholdIncome._1 shouldBe 40000.00
-        taxYear.getTotalHouseholdIncome._2 shouldBe 36000.00
-      }
-
-      "calculate household income (0 income)" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-        val periodStart = LocalDate.parse("2011-08-30", formatter)
-        val periodEnd = LocalDate.parse("2012-08-30", formatter)
-
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(), claimants = List(claimant))
-        taxYear.getTotalHouseholdIncome._1 shouldBe 0.00
-        taxYear.getTotalHouseholdIncome._2 shouldBe 0.00
-      }
-
       "(claimant with a child < 15, non disabled) determine if household has a child or young person" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2006-08-31", formatter)
         val periodStart = LocalDate.parse("2021-08-30", formatter)
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child), claimants = List(claimant))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List(claimant))
         taxYear.householdHasChildOrYoungPerson(periodStart) shouldBe true
       }
 
@@ -979,8 +943,8 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2021-08-30", formatter)
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child), claimants = List(claimant))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00,disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List(claimant))
         taxYear.householdHasChildOrYoungPerson(periodStart) shouldBe true
       }
 
@@ -991,8 +955,8 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val educationStartDate = LocalDate.parse("2019-09-05", formatter)
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child), claimants = List(claimant))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List(claimant))
         taxYear.householdHasChildOrYoungPerson(periodStart) shouldBe true
       }
 
@@ -1002,8 +966,8 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2021-08-30", formatter)
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child), claimants = List(claimant))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List(claimant))
         taxYear.householdHasChildOrYoungPerson(periodStart) shouldBe false
       }
 
@@ -1013,254 +977,254 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2021-08-30", formatter)
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child), claimants = List(claimant))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List(claimant))
         taxYear.householdHasChildOrYoungPerson(periodStart) shouldBe false
       }
 
       "(two claimants) determine total household working hours" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 20.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 20.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 20.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 20.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.getTotalHouseholdWorkingHours shouldBe 40.00
       }
 
       "(two claimants) (one doesn't work) determine total household working hours" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 20.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 20.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.getTotalHouseholdWorkingHours shouldBe 20.00
       }
 
       "(two claimants) (both doesn't work) determine total household working hours" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.getTotalHouseholdWorkingHours shouldBe 0.00
       }
 
       "(one claimant) (doesn't work) determine total household working hours" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1))
 
         taxYear.getTotalHouseholdWorkingHours shouldBe 0.00
       }
 
       "(one claimant) (works) determine total household working hours" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 0.02, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 0.02, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1))
 
         taxYear.getTotalHouseholdWorkingHours shouldBe 0.02
       }
 
       "(two claimants) determine if we have a couple" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.isCouple shouldBe true
       }
 
       "(single claimant) determine if we have a couple" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1))
 
         taxYear.isCouple shouldBe false
       }
 
       "(single claimant, < 16 hours, disabled)(non qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 10.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 10.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
       }
 
       "(single claimant, < 16 hours, non disabled)(non qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 10.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 10.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
       }
 
       "(single claimant, < 16 hours, incapacitated)(non qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 10.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 10.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
       }
 
       "(single claimant, > 16 hours, disabled)(qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 50.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 50.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe true
       }
 
       "(single claimant, > 16 hours, non disabled)(qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 50.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 50.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe true
       }
 
       "(single claimant, > 16 hours, incapacitated)(non qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 50.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 50.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
       }
 
       "(two claimants, (> 16 hours, < 16 hours)(disabled, non disabled))(both qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 18.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 14.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 18.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 14.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
       }
 
       "(two claimants, (< 16 hours, < 16 hours)(disabled, disabled))(both non - qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 14.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 1.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 14.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 1.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
       }
 
       "(two claimants, (< 16 hours, < 16 hours)(incapacitated, incapacitated))(both non - qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 0.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
       }
 
       "(two claimants, (< 16 hours, < 16 hours)(non disabled, non disabled))(both non qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 14.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 14.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 14.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 14.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
       }
 
       "(two claimants, (16 hours, < 16 hours)(incapaciated, disabled))(both non - qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
       }
 
       "(two claimants, (< 16 hours, > 16 hours)(non disabled, non disabled))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 0.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
       }
 
       "(two claimants, (< 16 hours, > 16 hours)(incapacitated, non disabled))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 0.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe true
       }
 
       "(two claimants, (< 16 hours, > 16 hours)(disabled, incapacitated))(both non qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 0.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 0.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
       }
 
       "(two claimants, (> 16 hours, > 16 hours)(non disabled, disabled))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe true
       }
 
       "(two claimants, (> 16 hours, > 16 hours)(non disabled, incapacitated))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe true
       }
 
       "(two claimants, (> 16 hours, > 16 hours)(disabled, incapacitated))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe true
       }
 
       "(two claimants, (> 16 hours, > 16 hours)(disabled, disabled))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe true
       }
 
       "(two claimants, (> 16 hours, > 16 hours)(incapacitated, incapacitated))(none qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
       }
 
       "(two claimants, (> 16 hours, > 16 hours)(non disabled, non disabled))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe true
       }
 
       "(two claimants, (< 16 hours, < 16 hours)(disabled, disabled))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 15.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 15.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
       }
 
       "(two claimants, (< 16 hours, < 16 hours)(disabled, incapacitated))(none qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 15.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 15.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
       }
 
       "(two claimants, (> 16 hours, non live or work)(non disabled, non disabled))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = false, isPartner = true, hours = 20.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = false, isPartner = true, hours = 20.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
       }
 
       "(two claimants, (> 16 hours, non live or work)(non disabled, incapacitated))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = false, isPartner = true, hours = 20.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = false, isPartner = true, hours = 20.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
       }
 
       "(two claimants, (> 16 hours, non live or work)(incapacitated, non disabled))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = false, isPartner = true, hours = 20.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = false, isPartner = true, hours = 20.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
 
         taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
       }
@@ -1271,8 +1235,8 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child), claimants = List(claimant))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List(claimant))
         taxYear.householdGetsChildcareElement(periodStart) shouldBe true
       }
 
@@ -1284,8 +1248,8 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
         val child2 = Child(id = 0, name = Some("Child 2"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false), education = None)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1, child2), claimants = List(claimant))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1, child2), claimants = List(claimant))
         taxYear.householdGetsChildcareElement(periodStart) shouldBe true
       }
 
@@ -1295,8 +1259,8 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child), claimants = List(claimant))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List(claimant))
         taxYear.householdGetsChildcareElement(periodStart) shouldBe false
       }
 
@@ -1306,8 +1270,8 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 19.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child), claimants = List(claimant))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 19.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List(claimant))
         taxYear.householdGetsChildcareElement(periodStart) shouldBe false
       }
 
@@ -1317,8 +1281,8 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 1.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child), claimants = List(claimant))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 1.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List(claimant))
         taxYear.householdGetsChildcareElement(periodStart) shouldBe false
       }
 
@@ -1425,9 +1389,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth = LocalDate.parse("2014-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child), claimants = List(claimant))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List(claimant))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1436,9 +1400,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth = LocalDate.parse("1993-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child), claimants = List(claimant))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List(claimant))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1448,10 +1412,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth2 = LocalDate.parse("2003-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
         val child2 = Child(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth2, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1, child2), claimants = List(claimant))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1, child2), claimants = List(claimant))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1460,9 +1424,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth = LocalDate.parse("2011-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 15, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 15, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child), claimants = List(claimant))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List(claimant))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1471,9 +1435,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth = LocalDate.parse("2011-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child), claimants = List(claimant))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List(claimant))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1482,10 +1446,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2013-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 15, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 15, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1494,10 +1458,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2013-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 24, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 24, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1506,10 +1470,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2013-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 8, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 8, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1518,10 +1482,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2013-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 4, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 4, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1530,10 +1494,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2013-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1545,7 +1509,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val claimant2 = Claimant(liveOrWork = true, isPartner = true, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(true))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1557,7 +1521,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(true))
         val claimant2 = Claimant(liveOrWork = true, isPartner = true, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1569,7 +1533,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(true))
         val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1581,7 +1545,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(true))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1593,7 +1557,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(true))
         val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 15.00, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1605,7 +1569,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 15.00, disability = Disability(), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(true))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1614,10 +1578,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2013-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 4, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 8, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 4, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 8, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1626,10 +1590,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2013-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 15, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 15, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 15, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 15, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1638,10 +1602,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2013-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1650,10 +1614,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2013-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1662,10 +1626,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2013-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1675,10 +1639,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 0, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 0, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1688,10 +1652,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1701,10 +1665,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1714,10 +1678,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1727,10 +1691,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1741,10 +1705,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1755,10 +1719,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1769,10 +1733,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1783,10 +1747,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1797,10 +1761,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 14, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 14, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1811,10 +1775,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 14, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 14, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1825,10 +1789,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 14, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 14, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1839,10 +1803,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 14, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 14, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1853,10 +1817,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
 
       }
@@ -1868,10 +1832,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1882,10 +1846,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1896,10 +1860,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1910,10 +1874,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1924,10 +1888,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe true
       }
 
@@ -1938,10 +1902,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1952,10 +1916,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.getBasicElement(periodStart) shouldBe false
       }
 
@@ -1967,10 +1931,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2014-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.gets2ndAdultElement(periodStart) shouldBe true
       }
 
@@ -1979,10 +1943,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("1966-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant2))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant2))
         taxYear.gets2ndAdultElement(periodStart) shouldBe false
       }
 
@@ -1990,9 +1954,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant, claimant2))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant, claimant2))
         taxYear.gets2ndAdultElement(periodStart) shouldBe false //because it won't get the basic element
       }
 
@@ -2001,9 +1965,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2014-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant))
         taxYear.gets2ndAdultElement(periodStart) shouldBe false
       }
 
@@ -2012,9 +1976,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("1987-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant))
         taxYear.gets2ndAdultElement(periodStart) shouldBe false
       }
 
@@ -2022,8 +1986,8 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant))
         taxYear.gets2ndAdultElement(periodStart) shouldBe false
       }
 
@@ -2034,10 +1998,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2015-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant1 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant1))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant1))
         taxYear.getsLoneParentElement(periodStart) shouldBe false
       }
 
@@ -2046,9 +2010,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2015-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant))
         taxYear.getsLoneParentElement(periodStart) shouldBe true
       }
 
@@ -2057,9 +2021,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2017-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant))
         taxYear.getsLoneParentElement(periodStart) shouldBe false
       }
 
@@ -2068,9 +2032,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("1992-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant))
         taxYear.getsLoneParentElement(periodStart) shouldBe false
       }
 
@@ -2080,9 +2044,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2015-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant))
         taxYear.getsLoneParentElement(periodStart) shouldBe true
       }
 
@@ -2093,10 +2057,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2015-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
         val child2 = Child(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth2, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1, child2), claimants = List(claimant))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1, child2), claimants = List(claimant))
         taxYear.getsLoneParentElement(periodStart) shouldBe false
       }
 
@@ -2106,9 +2070,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant))
         taxYear.getsLoneParentElement(periodStart) shouldBe false
       }
 
@@ -2119,9 +2083,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2006-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 30, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 30, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant))
         taxYear.gets30HoursElement(periodStart) shouldBe true
       }
 
@@ -2130,9 +2094,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2006-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 29.99, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 29.99, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant))
         taxYear.gets30HoursElement(periodStart) shouldBe false
       }
 
@@ -2141,10 +2105,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2006-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 30, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant1 = Claimant(liveOrWork = true, isPartner = true, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 30, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = true, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant1))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant1))
         taxYear.gets30HoursElement(periodStart) shouldBe true
       }
 
@@ -2153,10 +2117,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2006-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant1 = Claimant(liveOrWork = true, isPartner = true, hours = 14, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = true, hours = 14, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant1))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant1))
         taxYear.gets30HoursElement(periodStart) shouldBe true
       }
 
@@ -2165,10 +2129,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2006-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 15, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant1 = Claimant(liveOrWork = true, isPartner = true, hours = 15, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 15, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = true, hours = 15, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant1))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant1))
         taxYear.gets30HoursElement(periodStart) shouldBe false
       }
 
@@ -2177,10 +2141,10 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("2006-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant1 = Claimant(liveOrWork = true, isPartner = true, hours = 12, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = true, hours = 12, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant1))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant1))
         taxYear.gets30HoursElement(periodStart) shouldBe false
       }
 
@@ -2189,31 +2153,31 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val dateOfBirth1 = LocalDate.parse("1996-08-31", formatter)
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant1 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant, claimant1))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant, claimant1))
         taxYear.gets30HoursElement(periodStart) shouldBe false
       }
 
       "(couple, one doesn't work in UK, another does) determine if claimants qualify for TC scheme " in {
-        val claimant = Claimant(liveOrWork = false, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant1 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant, claimant1))
+        val claimant = Claimant(liveOrWork = false, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant, claimant1))
         taxYear.isCoupleQualifyingForTC shouldBe false
       }
 
       "(couple, both don't work in UK) determine if claimants qualify for TC scheme " in {
-        val claimant = Claimant(liveOrWork = false, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant1 = Claimant(liveOrWork = false, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant, claimant1))
+        val claimant = Claimant(liveOrWork = false, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant1 = Claimant(liveOrWork = false, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant, claimant1))
         taxYear.isCoupleQualifyingForTC shouldBe false
       }
 
       "(couple, both work in UK) determine if claimants qualify for TC scheme " in {
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant1 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(), claimants = List(claimant, claimant1))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant, claimant1))
         taxYear.isCoupleQualifyingForTC shouldBe true
       }
 
@@ -2225,8 +2189,8 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val claimant = Claimant(liveOrWork = false, isPartner = false, hours = 0, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant))
+        val claimant = Claimant(liveOrWork = false, isPartner = false, hours = 0, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant))
         taxYear.getsFamilyElement(periodStart) shouldBe false
       }
 
@@ -2236,8 +2200,8 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 0, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 0, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant))
         taxYear.getsFamilyElement(periodStart) shouldBe true
       }
 
@@ -2249,8 +2213,8 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
 
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 30, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 30, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant))
         taxYear.getsFamilyElement(periodStart) shouldBe true
       }
 
@@ -2260,8 +2224,8 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val periodStart = LocalDate.parse("2016-08-31", formatter)
 
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 1, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 1, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant))
         taxYear.getsFamilyElement(periodStart) shouldBe false
       }
 
@@ -2272,8 +2236,8 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val educationStartDate = LocalDate.parse("2006-09-05", formatter)
 
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1), claimants = List(claimant))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1), claimants = List(claimant))
         taxYear.getsFamilyElement(periodStart) shouldBe false
       }
 
@@ -2286,9 +2250,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
         val child2 = Child(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false), education = None)
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 2, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1, child2), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 2, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1, child2), claimants = List(claimant1, claimant2))
         taxYear.getsFamilyElement(periodStart) shouldBe true
       }
 
@@ -2301,9 +2265,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
         val child2 = Child(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false), education = None)
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = false, isPartner = true, hours = 2, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1, child2), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = false, isPartner = true, hours = 2, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1, child2), claimants = List(claimant1, claimant2))
         taxYear.getsFamilyElement(periodStart) shouldBe false
       }
 
@@ -2316,46 +2280,46 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
         val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false), education = Some(Education(inEducation = true, startDate = educationStartDate)))
         val child2 = Child(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth2, disability = Disability(disabled = true, severelyDisabled = false), education = None)
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 2, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, children = List(child1, child2), claimants = List(claimant1, claimant2))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 2, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child1, child2), claimants = List(claimant1, claimant2))
         taxYear.getsFamilyElement(periodStart) shouldBe false
       }
 
       "determine if at least one claimant in the household working 16h (1 claimant, <16h)" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, claimants = List(claimant1), children = List())
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1), children = List())
 
         taxYear.isOneOfClaimantsWorking16h(taxYear.from) shouldBe false
       }
 
       "determine if at least one claimant in the household working 16h (1 claimant, =16h)" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, claimants = List(claimant1), children = List())
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1), children = List())
 
         taxYear.isOneOfClaimantsWorking16h(taxYear.from) shouldBe true
       }
 
       "determine if at least one claimant in the household working 16h (2 claimant, <16h, >16h)" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = false, hours = 0.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, claimants = List(claimant1, claimant2), children = List())
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = false, hours = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1, claimant2), children = List())
 
         taxYear.isOneOfClaimantsWorking16h(taxYear.from) shouldBe true
       }
 
       "determine if at least one claimant in the household working 16h (2 claimant, <16h, <16h)" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, claimants = List(claimant1, claimant2), children = List())
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant2 = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1, claimant2), children = List())
 
         taxYear.isOneOfClaimantsWorking16h(taxYear.from) shouldBe false
       }
 
       "determine if at least one claimant in the household working 16h (2 claimant, >16h, >16h)" in {
-        val claimant2 = Claimant(liveOrWork = true, isPartner = false, hours = 17.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 40.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, claimants = List(claimant1, claimant2), children = List())
+        val claimant2 = Claimant(liveOrWork = true, isPartner = false, hours = 17.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 40.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1, claimant2), children = List())
 
         taxYear.isOneOfClaimantsWorking16h(taxYear.from) shouldBe true
       }
@@ -2365,124 +2329,124 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
     "Claimant" should {
 
       "(qualifying) determine if claimant is qualifying for Tax Credits" in {
-        val claimant = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.isQualifyingForTC shouldBe true
       }
 
       "(not qualifying) determine if claimant is qualifying for Tax Credits" in {
-        val claimant = Claimant(liveOrWork = false, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = false, isPartner = false, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.isQualifyingForTC shouldBe false
       }
 
       "(lives in uk, is disabled) determine if claimant gets disability element" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val periodStart = LocalDate.parse("2017-08-31", formatter)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.getDisabilityElement(periodStart) shouldBe true
       }
 
       "(lives in uk, is disabled, doesn't work) determine if claimant gets disability element" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val periodStart = LocalDate.parse("2017-08-31", formatter)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.getDisabilityElement(periodStart) shouldBe false
       }
 
       "(lives in uk, is not disabled) determine if claimant gets disability element" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val periodStart = LocalDate.parse("2017-08-31", formatter)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.getDisabilityElement(periodStart) shouldBe false
       }
 
       "(lives outside uk, is disabled) determine if claimant gets disability element" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val periodStart = LocalDate.parse("2017-08-31", formatter)
-        val claimant = Claimant(liveOrWork = false, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = false, isPartner = false, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.getDisabilityElement(periodStart) shouldBe false
       }
 
       "(lives outside uk, is not disabled) determine if claimant gets disability element" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val periodStart = LocalDate.parse("2017-08-31", formatter)
-        val claimant = Claimant(liveOrWork = false, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = false, isPartner = false, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.getDisabilityElement(periodStart) shouldBe false
       }
 
       "(lives in uk, is severely disabled) determine if claimant qualifies for severe disability element" in {
-        val claimant = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.isClaimantQualifyingForSevereDisabilityElement shouldBe true
       }
 
       "(lives in uk, is not severely disabled) determine if claimant qualifies for severe disability element" in {
-        val claimant = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.isClaimantQualifyingForSevereDisabilityElement shouldBe false
       }
 
       "(lives in uk, is severely disabled, but not disabled) determine if claimant qualifies for severe disability element" in {
-        val claimant = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.isClaimantQualifyingForSevereDisabilityElement shouldBe true
       }
 
       "(lives outside uk, is severely disabled) determine if claimant qualifies for severe disability element" in {
-        val claimant = Claimant(liveOrWork = false, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = false, isPartner = false, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.isClaimantQualifyingForSevereDisabilityElement shouldBe false
       }
 
       "(lives outside uk, is not severely disabled) determine if claimant qualifies for severe disability element" in {
-        val claimant = Claimant(liveOrWork = false, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = false, isPartner = false, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.isClaimantQualifyingForSevereDisabilityElement shouldBe false
       }
 
       "(> 16 hours) determine if working at least 16 hours per week" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val periodStart = LocalDate.parse("2017-08-31", formatter)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 20.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 20.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.isWorkingAtLeast16HoursPerWeek(periodStart) shouldBe true
       }
 
       "(< 16 hours) determine if working at least 16 hours per week" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val periodStart = LocalDate.parse("2017-08-31", formatter)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.isWorkingAtLeast16HoursPerWeek(periodStart) shouldBe false
       }
 
       "(is 16 hours) determine if working at least 16 hours per week" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val periodStart = LocalDate.parse("2017-08-31", formatter)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.isWorkingAtLeast16HoursPerWeek(periodStart) shouldBe true
       }
 
       "(> 24 hours) determine if working at least 24 hours per week" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val periodStart = LocalDate.parse("2017-08-31", formatter)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 25.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 25.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.isWorkingAtLeast24HoursPerWeek(periodStart) shouldBe true
       }
 
       "(< 24 hours) determine if working at least 24 hours per week" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val periodStart = LocalDate.parse("2017-08-31", formatter)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.isWorkingAtLeast24HoursPerWeek(periodStart) shouldBe false
       }
 
       "(is 24 hours) determine if working at least 24 hours per week" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val periodStart = LocalDate.parse("2017-08-31", formatter)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 24.00, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 24.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.isWorkingAtLeast24HoursPerWeek(periodStart) shouldBe true
       }
 
       "(is incapacitated) determine if a claimant is incapacitated" in {
-        val claimant = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = true, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = false, severelyDisabled = true, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.isIncapacitated shouldBe true
       }
 
       "(is not incapacitated) determine if a claimant is incapacitated" in {
-        val claimant = Claimant(liveOrWork = true, isPartner = false, totalIncome = 0.00, previousTotalIncome = 0.00, disability = Disability(disabled = false, severelyDisabled = true, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
+        val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = false, severelyDisabled = true, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.isIncapacitated shouldBe false
       }
     }

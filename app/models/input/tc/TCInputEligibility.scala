@@ -51,6 +51,8 @@ object Payload {
 case class TaxYear(
                     from: LocalDate,
                     until: LocalDate,
+                    totalIncome: BigDecimal,
+                    previousTotalIncome: BigDecimal,
                     claimants: List[Claimant],
                     children: List[Child]
                     ) extends models.input.BaseTaxYear {
@@ -198,15 +200,6 @@ case class TaxYear(
     }
   }
 
-  def getTotalHouseholdIncome : (BigDecimal, BigDecimal) = {
-    isCouple match {
-      case true =>
-        (claimants.head.totalIncome + claimants.tail.head.totalIncome, claimants.head.previousTotalIncome + claimants.tail.head.previousTotalIncome)
-      case false =>
-        (claimants.head.totalIncome, claimants.head.previousTotalIncome)
-    }
-  }
-
   def isOneOfClaimantsWorking16h(periodStart : LocalDate) : Boolean = {
     isCouple match {
       case true =>
@@ -228,11 +221,17 @@ object TaxYear extends CCFormat {
     noOfClaimant.length > 0 && noOfClaimant.length < 3
   }
 
+  def validateIncome(income: BigDecimal): Boolean = {
+    income >= BigDecimal(0.00)
+  }
+
   implicit val taxYearReads: Reads[TaxYear] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
-        (JsPath \ "claimants").read[List[Claimant]].filter(ValidationError(Messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
-          (JsPath \ "children").read[List[Child]].filter(ValidationError(Messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
+        (JsPath \ "totalIncome").read[BigDecimal].filter(ValidationError(Messages("cc.elig.income.less.than.0")))(validateIncome(_)) and
+          (JsPath \ "previousTotalIncome").read[BigDecimal].filter(ValidationError(Messages("cc.elig.income.less.than.0")))(validateIncome(_)) and
+            (JsPath \ "claimants").read[List[Claimant]].filter(ValidationError(Messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
+              (JsPath \ "children").read[List[Child]].filter(ValidationError(Messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
     )(TaxYear.apply _)
 }
 
@@ -247,8 +246,6 @@ case class Claimant(
                      hours: Double = 0.00,
                      liveOrWork:  Boolean = false,
                      isPartner: Boolean = false,
-                     totalIncome: BigDecimal = BigDecimal(0.00),
-                     previousTotalIncome: BigDecimal = BigDecimal(0.00),
                      disability: Disability,
                      schemesClaiming: SchemesClaiming,
                      otherSupport: OtherSupport
@@ -287,19 +284,13 @@ case class Claimant(
 
 object Claimant extends CCFormat {
 
-  def validateIncome(income: BigDecimal): Boolean = {
-    income >= BigDecimal(0.00)
-  }
-
   implicit val claimantReads: Reads[Claimant] = (
     (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
       (JsPath \ "liveOrWork").read[Boolean].orElse(Reads.pure(false)) and
         (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-          (JsPath \ "totalIncome").read[BigDecimal].filter(ValidationError(Messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
-            (JsPath \ "previousTotalIncome").read[BigDecimal].filter(ValidationError(Messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
-              (JsPath \ "disability").read[Disability] and
-                (JsPath \ "schemesClaiming").read[SchemesClaiming] and
-                  (JsPath \ "otherSupport").read[OtherSupport]
+           (JsPath \ "disability").read[Disability] and
+              (JsPath \ "schemesClaiming").read[SchemesClaiming] and
+                (JsPath \ "otherSupport").read[OtherSupport]
     )(Claimant.apply _)
 }
 
