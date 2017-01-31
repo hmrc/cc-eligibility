@@ -4,13 +4,13 @@
       {
         "from": "2016-08-27T18:46:17",
         "until": "2017-04-06",
+        "totalIncome": 0.00,
+        "previousTotalIncome": 0.00,
         "claimants": [
           {
             "hoursPerWeek": 30.00,
             "liveOrWork": true,
             "isPartner": false,
-            "totalIncome": 0.00,
-            "previousTotalIncome": 0.00,
             "disability": {
               "disabled": false,
               "severelyDisabled": false,

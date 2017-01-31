@@ -4,14 +4,14 @@
               {
                   "from": "2016-08-27",
                   "until": "2017-04-06",
+                  "totalIncome": 0.00,
+                  "previousTotalIncome": 0.00,
                   "claimants": [
                       {
                           "hoursPerWeek": 32.5,
                           "liveOrWork": true,
                           "isPartner": false,
                           "qualifyingAge": true,
-                          "totalIncome": 0.00,
-                          "previousTotalIncome": 0.00,
                           "disability": {
                               "disabled": true,
                               "severelyDisabled": true
@@ -30,8 +30,6 @@
                           "liveOrWork": true,
                           "isPartner": true,
                           "qualifyingAge": true,
-                          "totalIncome": 0.00,
-                          "previousTotalIncome": 0.00,
                           "disability": {
                               "disabled": false,
                               "severelyDisabled": false

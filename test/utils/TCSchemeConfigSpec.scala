@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,8 @@ class TCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val ty = TaxYear(
         from = from,
         until = until,
+        totalIncome = BigDecimal(0),
+        previousTotalIncome = BigDecimal(0),
         claimants = List(),
         children = List()
       )
@@ -49,6 +51,8 @@ class TCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val ty = TaxYear(
         from = from,
         until = until,
+        totalIncome = BigDecimal(0),
+        previousTotalIncome = BigDecimal(0),
         claimants = List(),
         children = List()
       )

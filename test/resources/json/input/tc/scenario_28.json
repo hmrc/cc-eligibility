@@ -4,13 +4,13 @@
               {
                   "from": "2016-09-10",
                   "until": "2017-04-06",
+                  "totalIncome": 0.00,
+                  "previousTotalIncome": 0.00,
                   "claimants": [
                       {
                           "hoursPerWeek": 15.00,
                           "liveOrWork": true,
                           "isPartner": false,
-                          "totalIncome": 0.00,
-                          "previousTotalIncome": 0.00,
                           "disability": {
                               "disabled": false,
                               "severelyDisabled": false,
@@ -25,26 +25,24 @@
                             "carersAllowance": false
                           }
                       },
-                        {
-                            "hoursPerWeek": 20.00,
-                            "liveOrWork": true,
-                            "isPartner": true,
-                            "totalIncome": 0.00,
-                            "previousTotalIncome": 0.00,
-                            "disability": {
-                                "disabled": false,
-                                "severelyDisabled": false,
-                                "incapacitated": true
-                            },
-                            "schemesClaiming": {
-                                "tfc": false,
-                                "esc" : false,
-                                "tc": false
-                            },
-                            "otherSupport": {
-                              "carersAllowance": false
-                            }
-                        }
+                      {
+                          "hoursPerWeek": 20.00,
+                          "liveOrWork": true,
+                          "isPartner": true,
+                          "disability": {
+                              "disabled": false,
+                              "severelyDisabled": false,
+                              "incapacitated": true
+                          },
+                          "schemesClaiming": {
+                              "tfc": false,
+                              "esc" : false,
+                              "tc": false
+                          },
+                          "otherSupport": {
+                            "carersAllowance": false
+                          }
+                      }
                   ],
                   "children": [
                       {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -154,7 +154,7 @@ trait TCEligibility extends CCEligibility {
       val taxYears : List[models.input.tc.TaxYear] = request.payload.taxYears
 
       val constructedTaxYears : List[models.output.tc.TaxYear] = for (ty <- taxYears) yield {
-        val incomeWithDisregard = calculateIncomeDisregard(ty.getTotalHouseholdIncome._1, ty.getTotalHouseholdIncome._2, ty.from)
+        val incomeWithDisregard = calculateIncomeDisregard(ty.totalIncome, ty.previousTotalIncome, ty.from)
           models.output.tc.TaxYear(
             from = ty.from,
             until = ty.until,

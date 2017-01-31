@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,13 +49,15 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
         childAgeLimit = defaultConfig.getInt("child-age-limit").get,
         childAgeLimitDisabled = defaultConfig.getInt("child-age-limit-disabled").get,
         minimumHoursWorked = defaultConfig.getDouble("minimum-hours-worked-per-week").get,
-        maxIncomePerClaimant = defaultConfig.getDouble("maximum-income-per-claimant").get
+        maxIncomePerClaimant = defaultConfig.getDouble("maximum-income-per-claimant").get,
+        personalAllowancePerClaimant = defaultConfig.getDouble("personal-allowance").get
       )
 
       resultTaxYearConfig.childAgeLimit shouldBe 11
       resultTaxYearConfig.childAgeLimitDisabled shouldBe 16
       resultTaxYearConfig.minimumHoursWorked shouldBe 16.00
       resultTaxYearConfig.maxIncomePerClaimant shouldBe 100000.00
+      resultTaxYearConfig.personalAllowancePerClaimant shouldBe 11000.00
     }
 
     "return default tax year rule" in {
