@@ -22,6 +22,8 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.Play
 import spec.CCSpecConfig
+import org.scalatest.prop.TableDrivenPropertyChecks.forAll
+import org.scalatest.prop.Tables.Table
 
 class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
@@ -60,17 +62,26 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
       resultTaxYearConfig.personalAllowancePerClaimant shouldBe 11000.00
     }
 
-    "return default tax year rule" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val current = LocalDate.parse("01-01-2015", formatter)
+    val testCases = Table(
+      ("date", "childAgeLimit", "childAgeLimitDisabled", "minimumHoursWorked", "maxIncomePerClaimant", "personalAllowancePerClaimant"),
+      ("01-01-2015", 11, 16, 16.00, 100000.00, 11000.00)
+    )
 
-      val result = TFCConfig.getConfig(current)
-      result.childAgeLimit shouldBe 11
-      result.childAgeLimitDisabled shouldBe 16
-      result.minimumHoursWorked shouldBe 16.00
-      result.maxIncomePerClaimant shouldBe 100000.00
+    forAll(testCases) { case (date, childAgeLimit, childAgeLimitDisabled, minimumHoursWorked, maxIncomePerClaimant, personalAllowancePerClaimant) =>
+      s"return correct data for ${date}" in {
+        val pattern = "dd-MM-yyyy"
+        val formatter = DateTimeFormat.forPattern(pattern)
+        val current = LocalDate.parse("01-01-2015", formatter)
+
+        val result = TFCConfig.getConfig(current)
+        result.childAgeLimit shouldBe 11
+        result.childAgeLimitDisabled shouldBe 16
+        result.minimumHoursWorked shouldBe 16.00
+        result.maxIncomePerClaimant shouldBe 100000.00
+        result.personalAllowancePerClaimant shouldBe 11000.00
+      }
     }
+
 
     "return 2019 tax year rule as 2018" in {
       val pattern = "dd-MM-yyyy"
@@ -82,6 +93,7 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
       result.childAgeLimitDisabled shouldBe 16
       result.minimumHoursWorked shouldBe 16.00
       result.maxIncomePerClaimant shouldBe 100000.00
+      result.personalAllowancePerClaimant shouldBe 11500.00
     }
 
     "return 2018 tax year rule" in {
@@ -94,6 +106,7 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
       result.childAgeLimitDisabled shouldBe 16
       result.minimumHoursWorked shouldBe 16.00
       result.maxIncomePerClaimant shouldBe 100000.00
+      result.personalAllowancePerClaimant shouldBe 11500.00
     }
 
     "return 2018 tax year rule on the date of change" in {
@@ -106,6 +119,7 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
       result.childAgeLimitDisabled shouldBe 16
       result.minimumHoursWorked shouldBe 16.00
       result.maxIncomePerClaimant shouldBe 100000.00
+      result.personalAllowancePerClaimant shouldBe 11500.00
     }
 
     "return 2017 tax year rule" in {
@@ -118,6 +132,7 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
       result.childAgeLimitDisabled shouldBe 16
       result.minimumHoursWorked shouldBe 16.00
       result.maxIncomePerClaimant shouldBe 100000.00
+      result.personalAllowancePerClaimant shouldBe 11500.00
     }
 
     "return 2017 tax year rule on the date of change" in {
@@ -130,6 +145,7 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
       result.childAgeLimitDisabled shouldBe 16
       result.minimumHoursWorked shouldBe 16.00
       result.maxIncomePerClaimant shouldBe 100000.00
+      result.personalAllowancePerClaimant shouldBe 11500.00
     }
 
     "return 2016 tax year rule" in {
@@ -142,6 +158,7 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
       result.childAgeLimitDisabled shouldBe 16
       result.minimumHoursWorked shouldBe 16.00
       result.maxIncomePerClaimant shouldBe 100000.00
+      result.personalAllowancePerClaimant shouldBe 11000.00
     }
 
     "return 2016 tax year rule on the date of change" in {
@@ -154,6 +171,7 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
       result.childAgeLimitDisabled shouldBe 16
       result.minimumHoursWorked shouldBe 16.00
       result.maxIncomePerClaimant shouldBe 100000.00
+      result.personalAllowancePerClaimant shouldBe 11000.00
     }
   }
 }
