@@ -63,115 +63,30 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
     }
 
     val testCases = Table(
-      ("date", "childAgeLimit", "childAgeLimitDisabled", "minimumHoursWorked", "maxIncomePerClaimant", "personalAllowancePerClaimant"),
-      ("01-01-2015", 11, 16, 16.00, 100000.00, 11000.00)
+      ("test", "date", "childAgeLimit", "childAgeLimitDisabled", "minimumHoursWorked", "maxIncomePerClaimant", "personalAllowancePerClaimant"),
+      ("default tax year rule", "01-01-2015", 11, 16, 16.00, 100000.00, 11000.00),
+      ("2019 tax year rule as 2018", "01-01-2019", 11, 16, 16.00, 100000.00, 11500.00),
+      ("2018 tax year rule", "01-08-2018", 11, 16, 16.00, 100000.00, 11500.00),
+      ("2018 tax year rule on the date of change", "06-04-2018", 11, 16, 16.00, 100000.00, 11500.00),
+      ("2017 tax year rule", "01-08-2017", 11, 16, 16.00, 100000.00, 11500.00),
+      ("2017 tax year rule on the date of change", "06-04-2017", 11, 16, 16.00, 100000.00, 11500.00),
+      ("2016 tax year rule", "01-08-2016", 11, 16, 16.00, 100000.00, 11000.00),
+      ("2016 tax year rule on the date of change", "06-04-2016", 11, 16, 16.00, 100000.00, 11000.00)
     )
 
-    forAll(testCases) { case (date, childAgeLimit, childAgeLimitDisabled, minimumHoursWorked, maxIncomePerClaimant, personalAllowancePerClaimant) =>
-      s"return correct data for ${date}" in {
+    forAll(testCases) { case (test, date, childAgeLimit, childAgeLimitDisabled, minimumHoursWorked, maxIncomePerClaimant, personalAllowancePerClaimant) =>
+      s"return ${test} (date: ${date} childAgeLimit: ${childAgeLimit} childAgeLimitDisabled: ${childAgeLimitDisabled} minimumHoursWorked: ${minimumHoursWorked} maxIncomePerClaimant: ${maxIncomePerClaimant} personalAllowancePerClaimant: ${personalAllowancePerClaimant})" in {
         val pattern = "dd-MM-yyyy"
         val formatter = DateTimeFormat.forPattern(pattern)
-        val current = LocalDate.parse("01-01-2015", formatter)
+        val current = LocalDate.parse(date, formatter)
 
         val result = TFCConfig.getConfig(current)
-        result.childAgeLimit shouldBe 11
-        result.childAgeLimitDisabled shouldBe 16
-        result.minimumHoursWorked shouldBe 16.00
-        result.maxIncomePerClaimant shouldBe 100000.00
-        result.personalAllowancePerClaimant shouldBe 11000.00
+        result.childAgeLimit shouldBe childAgeLimit
+        result.childAgeLimitDisabled shouldBe childAgeLimitDisabled
+        result.minimumHoursWorked shouldBe minimumHoursWorked
+        result.maxIncomePerClaimant shouldBe maxIncomePerClaimant
+        result.personalAllowancePerClaimant shouldBe personalAllowancePerClaimant
       }
-    }
-
-
-    "return 2019 tax year rule as 2018" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val current = LocalDate.parse("01-01-2019", formatter)
-
-      val result = TFCConfig.getConfig(current)
-      result.childAgeLimit shouldBe 11
-      result.childAgeLimitDisabled shouldBe 16
-      result.minimumHoursWorked shouldBe 16.00
-      result.maxIncomePerClaimant shouldBe 100000.00
-      result.personalAllowancePerClaimant shouldBe 11500.00
-    }
-
-    "return 2018 tax year rule" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val current = LocalDate.parse("01-08-2018", formatter)
-
-      val result = TFCConfig.getConfig(current)
-      result.childAgeLimit shouldBe 11
-      result.childAgeLimitDisabled shouldBe 16
-      result.minimumHoursWorked shouldBe 16.00
-      result.maxIncomePerClaimant shouldBe 100000.00
-      result.personalAllowancePerClaimant shouldBe 11500.00
-    }
-
-    "return 2018 tax year rule on the date of change" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val current = LocalDate.parse("06-04-2018", formatter)
-
-      val result = TFCConfig.getConfig(current)
-      result.childAgeLimit shouldBe 11
-      result.childAgeLimitDisabled shouldBe 16
-      result.minimumHoursWorked shouldBe 16.00
-      result.maxIncomePerClaimant shouldBe 100000.00
-      result.personalAllowancePerClaimant shouldBe 11500.00
-    }
-
-    "return 2017 tax year rule" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val current = LocalDate.parse("01-08-2017", formatter)
-
-      val result = TFCConfig.getConfig(current)
-      result.childAgeLimit shouldBe 11
-      result.childAgeLimitDisabled shouldBe 16
-      result.minimumHoursWorked shouldBe 16.00
-      result.maxIncomePerClaimant shouldBe 100000.00
-      result.personalAllowancePerClaimant shouldBe 11500.00
-    }
-
-    "return 2017 tax year rule on the date of change" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val current = LocalDate.parse("06-04-2017", formatter)
-
-      val result = TFCConfig.getConfig(current)
-      result.childAgeLimit shouldBe 11
-      result.childAgeLimitDisabled shouldBe 16
-      result.minimumHoursWorked shouldBe 16.00
-      result.maxIncomePerClaimant shouldBe 100000.00
-      result.personalAllowancePerClaimant shouldBe 11500.00
-    }
-
-    "return 2016 tax year rule" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val current = LocalDate.parse("01-08-2016", formatter)
-
-      val result = TFCConfig.getConfig(current)
-      result.childAgeLimit shouldBe 11
-      result.childAgeLimitDisabled shouldBe 16
-      result.minimumHoursWorked shouldBe 16.00
-      result.maxIncomePerClaimant shouldBe 100000.00
-      result.personalAllowancePerClaimant shouldBe 11000.00
-    }
-
-    "return 2016 tax year rule on the date of change" in {
-      val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
-      val current = LocalDate.parse("06-04-2016", formatter)
-
-      val result = TFCConfig.getConfig(current)
-      result.childAgeLimit shouldBe 11
-      result.childAgeLimitDisabled shouldBe 16
-      result.minimumHoursWorked shouldBe 16.00
-      result.maxIncomePerClaimant shouldBe 100000.00
-      result.personalAllowancePerClaimant shouldBe 11000.00
     }
   }
 }
