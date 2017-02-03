@@ -59,12 +59,12 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
       resultTaxYearConfig.childAgeLimitDisabled shouldBe 16
       resultTaxYearConfig.minimumHoursWorked shouldBe 16.00
       resultTaxYearConfig.maxIncomePerClaimant shouldBe 100000.00
-      resultTaxYearConfig.personalAllowancePerClaimant shouldBe 11000.00
+      resultTaxYearConfig.personalAllowancePerClaimant shouldBe 11500.00
     }
 
     val testCases = Table(
       ("test", "date", "childAgeLimit", "childAgeLimitDisabled", "minimumHoursWorked", "maxIncomePerClaimant", "personalAllowancePerClaimant"),
-      ("default tax year rule", "01-01-2015", 11, 16, 16.00, 100000.00, 11000.00),
+      ("default tax year rule", "01-01-2015", 11, 16, 16.00, 100000.00, 11500.00),
       ("2019 tax year rule as 2018", "01-01-2019", 11, 16, 16.00, 100000.00, 11500.00),
       ("2018 tax year rule", "01-08-2018", 11, 16, 16.00, 100000.00, 11500.00),
       ("2018 tax year rule on the date of change", "06-04-2018", 11, 16, 16.00, 100000.00, 11500.00),
