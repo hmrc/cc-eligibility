@@ -810,5 +810,80 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       jsonBodyOf(result) shouldBe outputJson
     }
 
+    "(Scenario 41) single parent qualifying eligibility and qualifying child" in {
+      val controller = mockTFCEligibilityController
+
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_41.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[Request]
+
+      val eligible = TFCEligibility.eligibility.eligibility(request.get)
+
+      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_41.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
+    "(Scenario 42) single parent not qualifying eligibility and qualifying child" in {
+      val controller = mockTFCEligibilityController
+
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_42.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[Request]
+
+      val eligible = TFCEligibility.eligibility.eligibility(request.get)
+
+      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_42.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
+    "(Scenario 43)(Couple) Claimant and partner qualifying, one qualifying child" in {
+      val controller = mockTFCEligibilityController
+
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_43.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[Request]
+
+      val eligible = TFCEligibility.eligibility.eligibility(request.get)
+
+      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_43.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+    "(Scenario 43)(Couple) Claimant and partner not qualifying, one qualifying child" in {
+      val controller = mockTFCEligibilityController
+
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_44.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[Request]
+
+      val eligible = TFCEligibility.eligibility.eligibility(request.get)
+
+      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_44.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
   }
 }
