@@ -239,7 +239,7 @@ class TFCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
       }
 
       "claimant and partner both not qualify (claimant fails maximum earnings rule)" in {
-        val claimant = Claimant(liveOrWork = true, hoursPerWeek = 9.50, totalIncome = 111001, isPartner = false,  schemesClaiming = SchemesClaiming(esc = true), disability = Disability(), otherSupport = OtherSupport())
+        val claimant = Claimant(liveOrWork = true, hoursPerWeek = 9.50, totalIncome = 115001, isPartner = false,  schemesClaiming = SchemesClaiming(esc = true), disability = Disability(), otherSupport = OtherSupport())
         val partner = Claimant(liveOrWork = true, hoursPerWeek = 4.50, totalIncome = 52000, isPartner = true,  schemesClaiming = SchemesClaiming(esc = true), disability = Disability(), otherSupport = OtherSupport())
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
@@ -251,7 +251,7 @@ class TFCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
       "claimant qualify and partner not qualify (partner fails maximum earnings rule)" in {
         val claimant = Claimant(liveOrWork = true, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false,  schemesClaiming = SchemesClaiming(esc = true), disability = Disability(), otherSupport = OtherSupport())
-        val partner = Claimant(liveOrWork = true, hoursPerWeek = 14.50, totalIncome = 111001, isPartner = true,  schemesClaiming = SchemesClaiming(esc = true), disability = Disability(), otherSupport = OtherSupport())
+        val partner = Claimant(liveOrWork = true, hoursPerWeek = 14.50, totalIncome = 115001, isPartner = true,  schemesClaiming = SchemesClaiming(esc = true), disability = Disability(), otherSupport = OtherSupport())
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
