@@ -289,9 +289,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         x shouldBe true
         y shouldBe LocalDate.parse("2017-08-30", formatter)
 
-        child.getsChildElement(taxYearStart) shouldBe false
+        child.isChild(taxYearStart) shouldBe false
         // if a split occurred again then we would recheck the child for a later date
-        child.getsChildElement(secondPeriodStart) shouldBe true
+        child.isChild(secondPeriodStart) shouldBe true
       }
 
       "(child is being born in current tax year, after september 1st) determine if child is yet to be born" in {
@@ -309,9 +309,9 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         x shouldBe true
         y shouldBe LocalDate.parse("2017-09-02", formatter)
 
-        child.getsChildElement(taxYearStart) shouldBe false
+        child.isChild(taxYearStart) shouldBe false
         // if a split occurred again then we would recheck the child for a later date
-        child.getsChildElement(secondPeriodStart) shouldBe true
+        child.isChild(secondPeriodStart) shouldBe true
       }
 
       "(child is born prior to tax year start date) determine if child is yet to be born" in {
@@ -328,7 +328,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         x shouldBe false
         y shouldBe LocalDate.parse("2017-03-01", formatter)
 
-        child.getsChildElement(taxYearStart) shouldBe true
+        child.isChild(taxYearStart) shouldBe true
       }
 
       "(child is born on tax year start date) determine if child is yet to be born" in {
@@ -345,7 +345,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         x shouldBe false
         y shouldBe LocalDate.parse("2017-04-06", formatter)
 
-        child.getsChildElement(taxYearStart) shouldBe true
+        child.isChild(taxYearStart) shouldBe true
       }
 
       "(child is born on tax year end date) determine if child is yet to be born" in {
@@ -362,7 +362,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         x shouldBe false
         y shouldBe LocalDate.parse("2018-04-06", formatter)
 
-        child.getsChildElement(taxYearStart) shouldBe false
+        child.isChild(taxYearStart) shouldBe false
       }
 
       "(child is born after the tax year) determine if child is yet to be born" in {
@@ -378,8 +378,8 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val (x, y) = child.isBeingBornInTaxYear(taxYear = taxYear)
         x shouldBe false
         y shouldBe LocalDate.parse("2018-09-01", formatter)
-        child.getsChildElement(taxYearStart) shouldBe false
-        child.getsChildElement(taxYearEnd) shouldBe false
+        child.isChild(taxYearStart) shouldBe false
+        child.isChild(taxYearEnd) shouldBe false
       }
 
       "(Child < 16) determine if child gets child element" in {
@@ -388,7 +388,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val today = LocalDate.parse("2016-08-31", formatter)
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
-        child.getsChildElement(today) shouldBe true
+        child.isChild(today) shouldBe true
       }
 
       "(Child > 16) determine if child gets child element" in {
@@ -397,7 +397,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val today = LocalDate.parse("2016-08-31", formatter)
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
-        child.getsChildElement(today) shouldBe false
+        child.isChild(today) shouldBe false
       }
 
       "(Child is 16 and is 31august) determine if child gets child element" in {
@@ -406,7 +406,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val today = LocalDate.parse("2016-08-31", formatter)
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
-        child.getsChildElement(today) shouldBe true
+        child.isChild(today) shouldBe true
       }
 
       "(Child is 16 and is 1st September) determine if child gets child element" in {
@@ -415,7 +415,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val today = LocalDate.parse("2016-09-01", formatter)
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
-        child.getsChildElement(today) shouldBe false
+        child.isChild(today) shouldBe false
       }
 
       "(Young adult < 16) determine if get young adult element" in {
@@ -559,7 +559,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val today = LocalDate.parse("2016-08-31", formatter)
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
-        child.getsChildElement(today) shouldBe false
+        child.isChild(today) shouldBe false
       }
 
 
@@ -569,7 +569,7 @@ class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
         val today = LocalDate.parse("2016-08-31", formatter)
 
         val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false), education = None)
-        child.getsChildElement(today) shouldBe true
+        child.isChild(today) shouldBe true
       }
 
       "(Young adult > 16 && < 20 and in education - started education before 19th birthday) determine if get young adult element" in {

@@ -780,7 +780,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val outputChild2 = models.output.tc.OutputChild(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = true, severeDisability = false, childcare = true), failures = List())
       val outputChild3 = models.output.tc.OutputChild(id = 2, name = Some("Child 3"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = true, disability = true, severeDisability = true), failures = List())
 
-      result shouldBe List(outputChild1, outputChild2, outputChild3)
+      result shouldBe List(outputChild3, outputChild2, outputChild1)
     }
 
     "populate the child's elements model for a period (3 children: 1st < 16, 2nd is 15, 3rd is 19)(1st September)" in {
@@ -801,7 +801,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val outputChild2 = models.output.tc.OutputChild(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = true, severeDisability = false, childcare = true), failures = List())
       val outputChild3 = models.output.tc.OutputChild(id = 2, name = Some("Child 3"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = true, disability = true, severeDisability = true), failures = List())
 
-      result shouldBe List(outputChild1, outputChild2, outputChild3)
+      result shouldBe List(outputChild3, outputChild2, outputChild1)
     }
 
     "populate the child's elements model for a period (3 children: 1st < 16, 2nd is 16, 3rd is 20)" in {
@@ -822,7 +822,152 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val outputChild2 = models.output.tc.OutputChild(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = true, severeDisability = false, childcare = true), failures = List())
       val outputChild3 = models.output.tc.OutputChild(id = 2, name = Some("Child 3"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = false, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false), failures = List())
 
+      result shouldBe List(outputChild3, outputChild2, outputChild1)
+    }
+
+    "get child's element for all childen born before 6.4.2017" in {
+
+      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+
+      val dateOfBirth1 = LocalDate.parse("2008-02-01", formatter)
+      val dateOfBirth2 = LocalDate.parse("2011-06-15", formatter)
+      val dateOfBirth3 = LocalDate.parse("2013-12-26", formatter)
+      val dateOfBirth4 = LocalDate.parse("2017-04-06", formatter)
+
+
+      val periodStartDate = LocalDate.parse("2020-04-06", formatter)
+
+      val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+      val child2 = Child(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+      val child3 = Child(id = 2, name = Some("Child 3"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth3, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+      val child4 = Child(id = 3, name = Some("Child 4"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth4, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+
+      val result = TCEligibility.eligibility.determineChildrensEligibilityForPeriod(List(child1, child2, child3, child4), periodStartDate)
+
+      val outputChild1 = models.output.tc.OutputChild(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+      val outputChild2 = models.output.tc.OutputChild(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+      val outputChild3 = models.output.tc.OutputChild(id = 2, name = Some("Child 3"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+      val outputChild4 = models.output.tc.OutputChild(id = 3, name = Some("Child 4"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+
+      result shouldBe List(outputChild1, outputChild2, outputChild3, outputChild4)
+    }
+
+    "restrict child's element for 2 childen born after 6.4.2017" in {
+
+      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+
+      val dateOfBirth1 = LocalDate.parse("2017-05-01", formatter)
+      val dateOfBirth2 = LocalDate.parse("2018-07-05", formatter)
+      val dateOfBirth3 = LocalDate.parse("2019-06-08", formatter)
+
+      val periodStartDate = LocalDate.parse("2020-04-06", formatter)
+
+      val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+      val child2 = Child(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+      val child3 = Child(id = 2, name = Some("Child 3"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth3, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+
+      val result = TCEligibility.eligibility.determineChildrensEligibilityForPeriod(List(child1, child2, child3), periodStartDate)
+
+      val outputChild1 = models.output.tc.OutputChild(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+      val outputChild2 = models.output.tc.OutputChild(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+      val outputChild3 = models.output.tc.OutputChild(id = 2, name = Some("Child 3"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+
       result shouldBe List(outputChild1, outputChild2, outputChild3)
+    }
+
+    "child's element is paid for 2 childen" in {
+
+      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+
+      val dateOfBirth1 = LocalDate.parse("2013-02-19", formatter)
+      val dateOfBirth2 = LocalDate.parse("2017-07-05", formatter)
+
+      val periodStartDate = LocalDate.parse("2018-04-06", formatter)
+
+      val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+      val child2 = Child(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+
+      val result = TCEligibility.eligibility.determineChildrensEligibilityForPeriod(List(child1, child2), periodStartDate)
+
+      val outputChild1 = models.output.tc.OutputChild(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+      val outputChild2 = models.output.tc.OutputChild(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+
+      result shouldBe List(outputChild1, outputChild2)
+    }
+
+    "multiple births are treated as one if there is no more of one child before that" in {
+
+      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+
+      val dateOfBirth1 = LocalDate.parse("2017-05-01", formatter)
+      val dateOfBirth2 = LocalDate.parse("2018-10-10", formatter)
+      val dateOfBirth3 = LocalDate.parse("2018-10-10", formatter)
+      val dateOfBirth4 = LocalDate.parse("2019-04-06", formatter)
+
+      val periodStartDate = LocalDate.parse("2020-04-06", formatter)
+
+      val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+      val child2 = Child(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+      val child3 = Child(id = 2, name = Some("Child 3"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth3, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+      val child4 = Child(id = 3, name = Some("Child 4"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth4, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+
+      val result = TCEligibility.eligibility.determineChildrensEligibilityForPeriod(List(child1, child2, child3, child4), periodStartDate)
+
+      val outputChild1 = models.output.tc.OutputChild(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+      val outputChild2 = models.output.tc.OutputChild(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+      val outputChild3 = models.output.tc.OutputChild(id = 2, name = Some("Child 3"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+      val outputChild4 = models.output.tc.OutputChild(id = 3, name = Some("Child 4"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+
+      result shouldBe List(outputChild1, outputChild2, outputChild3, outputChild4)
+    }
+
+    "multiple births are treated as separate if there are no children born before that" in {
+
+      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+
+      val dateOfBirth1 = LocalDate.parse("2018-10-10", formatter)
+      val dateOfBirth2 = LocalDate.parse("2018-10-10", formatter)
+      val dateOfBirth3 = LocalDate.parse("2019-04-06", formatter)
+
+      val periodStartDate = LocalDate.parse("2020-04-06", formatter)
+
+      val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+      val child2 = Child(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+      val child3 = Child(id = 2, name = Some("Child 3"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth3, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+
+      val result = TCEligibility.eligibility.determineChildrensEligibilityForPeriod(List(child1, child2, child3), periodStartDate)
+
+      val outputChild1 = models.output.tc.OutputChild(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+      val outputChild2 = models.output.tc.OutputChild(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+      val outputChild3 = models.output.tc.OutputChild(id = 2, name = Some("Child 3"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+
+      result shouldBe List(outputChild1, outputChild2, outputChild3)
+    }
+
+    "multiple births don't receive child element if there are two children born before that" in {
+
+      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+
+      val dateOfBirth1 = LocalDate.parse("2017-05-01", formatter)
+      val dateOfBirth2 = LocalDate.parse("2018-10-10", formatter)
+      val dateOfBirth3 = LocalDate.parse("2019-04-06", formatter)
+      val dateOfBirth4 = LocalDate.parse("2019-04-06", formatter)
+
+      val periodStartDate = LocalDate.parse("2020-04-06", formatter)
+
+      val child1 = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+      val child2 = Child(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+      val child3 = Child(id = 2, name = Some("Child 3"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth3, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+      val child4 = Child(id = 3, name = Some("Child 4"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth4, disability = Disability(disabled = false, severelyDisabled = false), education = None)
+
+      val result = TCEligibility.eligibility.determineChildrensEligibilityForPeriod(List(child1, child2, child3, child4), periodStartDate)
+
+      val outputChild1 = models.output.tc.OutputChild(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+      val outputChild2 = models.output.tc.OutputChild(id = 1, name = Some("Child 2"), childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+      val outputChild3 = models.output.tc.OutputChild(id = 2, name = Some("Child 3"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+      val outputChild4 = models.output.tc.OutputChild(id = 3, name = Some("Child 4"), childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
+
+      result shouldBe List(outputChild1, outputChild2, outputChild3, outputChild4)
     }
 
     "populate the claimant's elements model for a period (1 claimant, non-disabled, non - qualifying)" in {
@@ -1343,6 +1488,5 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
           e shouldBe a[IllegalArgumentException]
       }
     }
-
   }
 }

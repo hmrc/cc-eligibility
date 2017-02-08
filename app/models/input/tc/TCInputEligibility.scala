@@ -114,7 +114,7 @@ case class TaxYear(
 
   def householdHasChildOrYoungPerson(now : LocalDate = LocalDate.now) : Boolean = {
     val numberOfYoungPersonsOrChildren = children.foldLeft(0)((acc, child) =>
-      if(child.getsChildElement(now) || child.getsYoungAdultElement(now)) {
+      if(child.isChild(now) || child.getsYoungAdultElement(now)) {
       acc + 1
     } else {
         acc
@@ -374,7 +374,7 @@ case class Child(
     disability.severelyDisabled || disability.disabled
   }
 
-  def getsChildElement(periodStart: LocalDate) : Boolean = {
+  def isChild(periodStart: LocalDate) : Boolean = {
     val taxYearConfig = TCConfig.getConfig(periodStart)
     val threshold16 = taxYearConfig.childAgeLimitDisabled
     val childAge = age(periodStart)
@@ -397,11 +397,11 @@ case class Child(
   }
 
   def getsDisabilityElement(periodStart: LocalDate) : Boolean = {
-    (getsChildElement(periodStart) || getsYoungAdultElement(periodStart)) && (disability.disabled || disability.severelyDisabled)
+    (isChild(periodStart) || getsYoungAdultElement(periodStart)) && (disability.disabled || disability.severelyDisabled)
   }
 
   def getsSevereDisabilityElement(periodStart: LocalDate) : Boolean = {
-    (getsChildElement(periodStart) || getsYoungAdultElement(periodStart)) && disability.severelyDisabled
+    (isChild(periodStart) || getsYoungAdultElement(periodStart)) && disability.severelyDisabled
   }
 
   def getsChildcareElement(periodStart: LocalDate) : Boolean = {
