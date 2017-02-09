@@ -103,7 +103,7 @@ trait TCEligibility extends CCEligibility {
       }
     }
 
-    def determineChildrensEligibilityForPeriod(children: List[Child], periodStart: LocalDate): List[OutputChild] = {
+    def determineChildrenEligibilityForPeriod(children: List[Child], periodStart: LocalDate): List[OutputChild] = {
 
       val childLimit = TCConfig.childElementLimit
       val dtf = DateTimeFormat.forPattern("dd-mm-yyyy")
@@ -159,7 +159,7 @@ trait TCEligibility extends CCEligibility {
           val fromAndUntil = fromAndUntilDateForPeriod(date, i, datesOfChanges, ty)
 
           val claimantsEligibility = determineClaimantsEligibilityForPeriod(ty)
-          val childrensEligibility = determineChildrensEligibilityForPeriod(ty.children, periodStart = fromAndUntil._1)
+          val childrenEligibility = determineChildrenEligibilityForPeriod(ty.children, periodStart = fromAndUntil._1)
           val householdEligibility = determineHouseholdEligibilityForPeriod(ty, periodStart = fromAndUntil._1)
 
           models.output.tc.TCPeriod(
@@ -167,7 +167,7 @@ trait TCEligibility extends CCEligibility {
             until = fromAndUntil._2,
             householdElements = householdEligibility,
             claimants = claimantsEligibility,
-            children = childrensEligibility
+            children = childrenEligibility
           )
         }
         periods

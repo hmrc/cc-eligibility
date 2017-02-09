@@ -318,7 +318,7 @@ object SchemesClaiming{
   implicit val disabilityReads: Reads[SchemesClaiming] = (
     (JsPath \ "tfc").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "esc").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "tc").read[Boolean].orElse(Reads.pure(false))
+        (JsPath \ "tc").read[Boolean].orElse(Reads.pure(false))
     )(SchemesClaiming.apply _)
 }
 
@@ -430,7 +430,6 @@ case class Child(
     }
   }
 }
-
 
 object Child extends CCFormat {
   val nameLength = 25
