@@ -105,10 +105,6 @@ trait TCEligibility extends CCEligibility {
 
     def determineChildrenEligibilityForPeriod(children: List[Child], periodStart: LocalDate): List[OutputChild] = {
 
-      val childLimit = TCConfig.childElementLimit
-      val dtf = DateTimeFormat.forPattern("dd-mm-yyyy")
-      val childDate = dtf.parseLocalDate(TCConfig.childElementDateConstraint)
-
       def helper(children: List[Child], outputChildren: List[OutputChild], childrenWithChildElement: List[LocalDate]): List[OutputChild] = {
         if(children.isEmpty) {
           outputChildren
@@ -117,8 +113,8 @@ trait TCEligibility extends CCEligibility {
           val child = children.head
           val isChild = child.isChild(periodStart)
           val getsChildElement: Boolean = (
-              child.dob.isBefore(childDate) ||
-                childrenWithChildElement.length < childLimit ||
+              child.dob.isBefore(TCConfig.childDate6thApril2017) ||
+                childrenWithChildElement.length < TCConfig.childElementLimit ||
                 childrenWithChildElement.contains(child.dob)
               ) && isChild
           val modifiedChildrenWithChildElement = if(getsChildElement) {

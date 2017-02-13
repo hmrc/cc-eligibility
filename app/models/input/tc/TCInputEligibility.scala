@@ -17,6 +17,7 @@
 package models.input.tc
 
 import org.joda.time.LocalDate
+import org.joda.time.format.DateTimeFormat
 import play.api.data.validation.ValidationError
 import play.api.i18n.Messages
 import play.api.libs.functional.syntax._
@@ -112,13 +113,27 @@ case class TaxYear(
     }
   }
 
-  def householdHasChildOrYoungPerson(now : LocalDate = LocalDate.now) : Boolean = {
+  def householdHasChildOrYoungPerson(now: LocalDate = LocalDate.now, isFamily: Boolean = false) : Boolean = {
+    
     val numberOfYoungPersonsOrChildren = children.foldLeft(0)((acc, child) =>
-      if(child.isChild(now) || child.getsYoungAdultElement(now)) {
-      acc + 1
-    } else {
-        acc
-      })
+      if(isFamily) { //Only for family element check if it falls before 6th April 2017
+        if(now.isBefore(TCConfig.childDate6thApril2017)) {
+          if(child.isChild(now) || child.getsYoungAdultElement(now)) {
+            acc + 1
+          } else {
+            acc
+          }
+        } else {
+          acc
+        }
+      } else {
+        if(child.isChild(now) || child.getsYoungAdultElement(now)) {
+          acc + 1
+        } else {
+          acc
+        }
+      }
+    )
     numberOfYoungPersonsOrChildren > 0
   }
 
@@ -193,10 +208,10 @@ case class TaxYear(
     }
   }
 
-  def getsFamilyElement(now : LocalDate = LocalDate.now) : Boolean = {
+  def getsFamilyElement(now: LocalDate = LocalDate.now) : Boolean = {
     isCouple match {
-      case true => isCoupleQualifyingForTC && householdHasChildOrYoungPerson(now)
-      case false => claimants.head.isQualifyingForTC && householdHasChildOrYoungPerson(now)
+      case true => isCoupleQualifyingForTC && householdHasChildOrYoungPerson(now, true)
+      case false => claimants.head.isQualifyingForTC && householdHasChildOrYoungPerson(now, true)
     }
   }
 

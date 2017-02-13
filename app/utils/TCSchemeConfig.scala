@@ -19,6 +19,7 @@ package utils
 import java.text.SimpleDateFormat
 
 import org.joda.time.LocalDate
+import org.joda.time.format.DateTimeFormat
 import play.api.Play._
 import play.api.{Configuration, Play}
 import sun.reflect.generics.reflectiveObjects.NotImplementedException
@@ -40,6 +41,8 @@ object TCConfig extends CCConfig {
 
   val childElementLimit = configuration.getInt("tc.child-element-limit").getOrElse(throw new NotImplementedException)
   val childElementDateConstraint = configuration.getString("tc.child-element-date-constraint").getOrElse(throw new NotImplementedException)
+//  val dtf = DateTimeFormat.forPattern("dd-mm-yyyy")
+  val childDate6thApril2017 = DateTimeFormat.forPattern("dd-mm-yyyy").parseLocalDate(TCConfig.childElementDateConstraint)
 
   def getTCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
     configs.filter(x => {

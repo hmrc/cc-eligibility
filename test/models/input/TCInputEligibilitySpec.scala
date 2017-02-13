@@ -26,7 +26,7 @@ import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import spec.CCSpecConfig
 import utils.Periods
 
-class TCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
+class TCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
   "TCInputEligibility" should {
 
