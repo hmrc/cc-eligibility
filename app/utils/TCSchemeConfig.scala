@@ -39,10 +39,8 @@ case class TCTaxYearConfig(
 
 object TCConfig extends CCConfig {
 
-  val childElementLimit = configuration.getInt("tc.child-element-limit").getOrElse(throw new NotImplementedException)
-  val childElementDateConstraint = configuration.getString("tc.child-element-date-constraint").getOrElse(throw new NotImplementedException)
-//  val dtf = DateTimeFormat.forPattern("dd-mm-yyyy")
-  val childDate6thApril2017 = DateTimeFormat.forPattern("dd-mm-yyyy").parseLocalDate(TCConfig.childElementDateConstraint)
+  val childElementLimit = configuration.getInt("tc.child-element-limit").get
+  val childDate6thApril2017 = DateTimeFormat.forPattern("dd-MM-yyyy").parseLocalDate(configuration.getString("tc.child-element-date-constraint").get)
 
   def getTCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
     configs.filter(x => {
@@ -57,7 +55,7 @@ object TCConfig extends CCConfig {
   }
   def getSortedTCConfigExcludingDefault(configsExcludingDefault : Seq[play.api.Configuration]) : Seq[Configuration] = {
     configsExcludingDefault.sortBy(c => {
-      new SimpleDateFormat("dd-mm-yyyy").parse(c.getString("rule-date").get)
+      new SimpleDateFormat("dd-MM-yyyy").parse(c.getString("rule-date").get)
     }).reverse
   }
 
@@ -65,7 +63,7 @@ object TCConfig extends CCConfig {
     taxYearConfigs match {
       case Nil => acc
       case head :: tail =>
-        val configDate = new SimpleDateFormat("dd-mm-yyyy").parse(head.getString("rule-date").get)
+        val configDate = new SimpleDateFormat("dd-MM-yyyy").parse(head.getString("rule-date").get)
 
         // exit tail recursive
         if (currentDate.toDate.after(configDate) || currentDate.toDate.compareTo(configDate) == 0) {

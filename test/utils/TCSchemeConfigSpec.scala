@@ -255,5 +255,6 @@ class TCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication 
       result.currentIncomeFallDifferenceAmount shouldBe 2500
       result.currentIncomeRiseDifferenceAmount shouldBe 2500
     }
+
   }
 }
