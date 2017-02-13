@@ -41,21 +41,6 @@
               ],
               "children": [
                 {
-                  "id": 0,
-                  "name": "Child 1",
-                  "childcareCost": 3000.00,
-                  "childcareCostPeriod": "Month",
-                  "qualifying": true,
-                  "childElements": {
-                    "child": true,
-                    "youngAdult": false,
-                    "disability": false,
-                    "severeDisability": false,
-                    "childcare": true
-                  },
-                  "failures": []
-                },
-                {
                   "id": 1,
                   "name": "Child 2",
                   "childcareCost": 3000.00,
@@ -69,8 +54,22 @@
                     "childcare": true
                   },
                   "failures": []
+                },
+                {
+                  "id": 0,
+                  "name": "Child 1",
+                  "childcareCost": 3000.00,
+                  "childcareCostPeriod": "Month",
+                  "qualifying": true,
+                  "childElements": {
+                    "child": true,
+                    "youngAdult": false,
+                    "disability": false,
+                    "severeDisability": false,
+                    "childcare": true
+                  },
+                  "failures": []
                 }
-
               ]
             }
           ]

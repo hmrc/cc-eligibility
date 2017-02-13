@@ -79,6 +79,17 @@ class ESCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
 
     }
 
+    "return 2018 tax year rule" in {
+      val pattern = "dd-MM-yyyy"
+      val formatter = DateTimeFormat.forPattern(pattern)
+      val current = LocalDate.parse("06-04-2018", formatter)
+
+      val result = ESCConfig.getConfig(current)
+
+      result.childAgeLimit shouldBe 15
+      result.childAgeLimitDisabled shouldBe 16
+    }
+
     "return 2018 tax year rule as 2017" in {
       val pattern = "dd-MM-yyyy"
       val formatter = DateTimeFormat.forPattern(pattern)

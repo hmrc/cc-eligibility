@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat
 import org.joda.time.LocalDate
 import play.api.Play._
 import play.api.{Configuration, Play}
+import sun.reflect.generics.reflectiveObjects.NotImplementedException
 
 case class TCTaxYearConfig(
                              childAgeLimit: Int,
@@ -36,6 +37,9 @@ case class TCTaxYearConfig(
 
 
 object TCConfig extends CCConfig {
+
+  val childElementLimit = configuration.getInt("tc.child-element-limit").getOrElse(throw new NotImplementedException)
+  val childElementDateConstraint = configuration.getString("tc.child-element-date-constraint").getOrElse(throw new NotImplementedException)
 
   def getTCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
     configs.filter(x => {

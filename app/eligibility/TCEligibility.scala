@@ -20,12 +20,16 @@ import models.input.tc.{Child, TaxYear}
 import models.output.OutputAPIModel.Eligibility
 import models.output.tc.{ChildElements, ClaimantDisability, TCEligibilityModel}
 import org.joda.time.LocalDate
+import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 import play.api.Logger
 import play.api.i18n.Messages
+import play.api.libs.json.Format
+import play.data.format.Formats.DateFormatter
 import utils.TCConfig
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import scala.concurrent.Future
+import models.output.tc.OutputChild
 
 /**
  * Created by adamconder on 24/07/15.
@@ -99,33 +103,52 @@ trait TCEligibility extends CCEligibility {
       }
     }
 
-    def determineChildrensEligibilityForPeriod(children: List[Child], periodStart: LocalDate) : List[models.output.tc.OutputChild] = {
-      for (child <- children) yield {
-        val childElement = child.getsChildElement(periodStart)
-        val youngAdultElement = child.getsYoungAdultElement(periodStart)
-        val disabilityElement = child.getsDisabilityElement(periodStart)
-        val severeDisabilityElement = child.getsSevereDisabilityElement(periodStart)
-        val childcareElement = child.getsChildcareElement(periodStart)
-        val childIsQualifying = childElement || youngAdultElement
+    def determineChildrenEligibilityForPeriod(children: List[Child], periodStart: LocalDate): List[OutputChild] = {
 
-       val outputChild =  models.output.tc.OutputChild(
-          id = child.id,
-          name = child.name,
-          childcareCost = child.childcareCost,
-          childcareCostPeriod = child.childcareCostPeriod,
-          qualifying = childIsQualifying,
-          childElements = ChildElements(
-            child = childElement,
-            youngAdult = youngAdultElement,
-            disability = disabilityElement,
-            severeDisability = severeDisabilityElement,
-            childcare = childcareElement
-          ),
-          //TODO Implement failures
-          failures = List()
-        )
-        outputChild
+      val childLimit = TCConfig.childElementLimit
+      val dtf = DateTimeFormat.forPattern("dd-mm-yyyy")
+      val childDate = dtf.parseLocalDate(TCConfig.childElementDateConstraint)
+
+      def helper(children: List[Child], outputChildren: List[OutputChild], childrenWithChildElement: List[LocalDate]): List[OutputChild] = {
+        if(children.isEmpty) {
+          outputChildren
+        }
+        else {
+          val child = children.head
+          val isChild = child.isChild(periodStart)
+          val getsChildElement: Boolean = (
+              child.dob.isBefore(childDate) ||
+                childrenWithChildElement.length < childLimit ||
+                childrenWithChildElement.contains(child.dob)
+              ) && isChild
+          val modifiedChildrenWithChildElement = if(getsChildElement) {
+            childrenWithChildElement :+ child.dob
+          }
+          else {
+            childrenWithChildElement
+          }
+          val youngAdultElement = child.getsYoungAdultElement(periodStart)
+
+          val outputChild = OutputChild(
+            id = child.id,
+            name = child.name,
+            childcareCost = child.childcareCost,
+            childcareCostPeriod = child.childcareCostPeriod,
+            qualifying = isChild || youngAdultElement,
+            childElements = ChildElements(
+              child = getsChildElement,
+              youngAdult = youngAdultElement,
+              disability = child.getsDisabilityElement(periodStart),
+              severeDisability = child.getsSevereDisabilityElement(periodStart),
+              childcare = child.getsChildcareElement(periodStart)
+            ),
+            failures = List()
+          )
+          helper(children.tail, outputChildren :+ outputChild, modifiedChildrenWithChildElement)
+        }
       }
+
+      helper(children.sortWith((child1, child2) => child1.dob.isBefore(child2.dob)), List.empty, List.empty)
     }
 
    private def determinePeriodsForTaxYear(ty: models.input.tc.TaxYear) : List[models.output.tc.TCPeriod] = {
@@ -136,7 +159,7 @@ trait TCEligibility extends CCEligibility {
           val fromAndUntil = fromAndUntilDateForPeriod(date, i, datesOfChanges, ty)
 
           val claimantsEligibility = determineClaimantsEligibilityForPeriod(ty)
-          val childrensEligibility = determineChildrensEligibilityForPeriod(ty.children, periodStart = fromAndUntil._1)
+          val childrenEligibility = determineChildrenEligibilityForPeriod(ty.children, periodStart = fromAndUntil._1)
           val householdEligibility = determineHouseholdEligibilityForPeriod(ty, periodStart = fromAndUntil._1)
 
           models.output.tc.TCPeriod(
@@ -144,7 +167,7 @@ trait TCEligibility extends CCEligibility {
             until = fromAndUntil._2,
             householdElements = householdEligibility,
             claimants = claimantsEligibility,
-            children = childrensEligibility
+            children = childrenEligibility
           )
         }
         periods
