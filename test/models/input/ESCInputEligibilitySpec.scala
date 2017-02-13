@@ -25,7 +25,7 @@ import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import spec.CCSpecConfig
 
-class ESCInputModelSpec extends CCSpecConfig with FakeCCEligibilityApplication {
+class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
   "ESCInputEligibility" should {
 

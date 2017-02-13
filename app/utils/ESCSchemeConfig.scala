@@ -42,7 +42,7 @@ object ESCConfig extends CCConfig {
   }
   def getSortedESCConfigExcludingDefault(configsExcludingDefault : Seq[play.api.Configuration]) : Seq[play.api.Configuration] = {
     configsExcludingDefault.sortBy(c => {
-      val predicate = new SimpleDateFormat("dd-mm-yyyy").parse(c.getString("rule-date").get)
+      val predicate = new SimpleDateFormat("dd-MM-yyyy").parse(c.getString("rule-date").get)
       predicate
       //c
     }).reverse
@@ -52,7 +52,7 @@ object ESCConfig extends CCConfig {
     taxYearConfigs match {
       case Nil => acc
       case head :: tail =>
-        val configDate = new SimpleDateFormat("dd-mm-yyyy").parse(head.getString("rule-date").get)
+        val configDate = new SimpleDateFormat("dd-MM-yyyy").parse(head.getString("rule-date").get)
 
         // exit tail recursive
         if (currentDate.toDate.after(configDate) || currentDate.toDate.compareTo(configDate) == 0) {
