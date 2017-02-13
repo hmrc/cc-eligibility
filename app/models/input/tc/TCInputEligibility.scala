@@ -115,7 +115,6 @@ case class TaxYear(
 
   def householdHasChildOrYoungPerson(now: LocalDate = LocalDate.now, isFamily: Boolean = false) : Boolean = {
     //if called from getsFamilyElement isFamily is true and also checks for the period start date is before 6th April 2017
-
     children.exists(child => (isFamily && child.dob.isBefore(TCConfig.childDate6thApril2017) && (child.isChild(now) || child.getsYoungAdultElement(now)))
                             || (!isFamily && (child.isChild(now) || child.getsYoungAdultElement(now))))
   }
