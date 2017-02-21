@@ -74,7 +74,9 @@ case class HouseholdElements(
                             childcare: Boolean = false,
                             loneParent: Boolean = false,
                             secondParent: Boolean = false,
-                            family: Boolean = false
+                            family: Boolean = false,
+                            wtc: Boolean = false,
+                            ctc: Boolean = false
                               )
 
 object HouseholdElements {
@@ -84,7 +86,9 @@ object HouseholdElements {
         (JsPath \ "childcare").write[Boolean] and
           (JsPath \ "loneParent").write[Boolean] and
             (JsPath \ "secondParent").write[Boolean] and
-              (JsPath \ "family").write[Boolean]
+              (JsPath \ "family").write[Boolean] and
+                (JsPath \ "wtc").write[Boolean] and
+                  (JsPath \ "ctc").write[Boolean]
     )(unlift(HouseholdElements.unapply))
 }
 

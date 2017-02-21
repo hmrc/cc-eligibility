@@ -70,16 +70,17 @@ trait TCEligibility extends CCEligibility {
       sorted.distinct
     }
 
-    def determineHouseholdEligibilityForPeriod(ty: TaxYear, periodStart: LocalDate) : models.output.tc.HouseholdElements = {
-      val householdElements = models.output.tc.HouseholdElements(
+    def determineHouseholdEligibilityForPeriod(ty: TaxYear, periodStart: LocalDate): models.output.tc.HouseholdElements = {
+      models.output.tc.HouseholdElements(
         basic = ty.getBasicElement(periodStart),
         hours30 = ty.gets30HoursElement(periodStart),
         childcare = ty.householdGetsChildcareElement(periodStart),
         loneParent = ty.getsLoneParentElement(periodStart),
         secondParent = ty.gets2ndAdultElement(periodStart),
-        family = ty.getsFamilyElement(periodStart)
+        family = ty.getsFamilyElement(periodStart),
+        wtc = ty.isHouseholdQualifyingForWTC(periodStart),
+        ctc = ty.isHouseholdQualifyingForCTC(periodStart)
       )
-      householdElements
     }
 
     def determineClaimantsEligibilityForPeriod(ty : models.input.tc.TaxYear) : List[models.output.tc.OutputClaimant] = {
@@ -213,22 +214,20 @@ trait TCEligibility extends CCEligibility {
     }
 
     //TODO maybe to check for this at the controller level before all element check?
-    def isEligibleForTC(listOfTaxYears : List[models.input.tc.TaxYear]) : Boolean = {
-      //if the function "exists" finds a TY where a household does not qualify, it will return TRUE
-      //TRUE means that a non qualifying family exists, so we need to return FALSE as method is checking if isEligibleForTC
-      val eligibleForTC = !listOfTaxYears.exists((ty: TaxYear) => !ty.isCoupleQualifyingForTC)
-      eligibleForTC
+    def isEligibleForTC(listOfTaxYears : List[models.output.tc.TaxYear]) : Boolean = {
+      listOfTaxYears.exists(_.periods.exists(period => period.householdElements.wtc && period.householdElements.ctc))
     }
 
     override def eligibility(request : models.input.BaseRequest) : Future[Eligibility] = {
       request match {
         case request : models.input.tc.Request =>
+          val ty = constructTaxYearsWithPeriods(request)
           Future {
             Eligibility(
               tc = Some(
                 TCEligibilityModel(
-                  eligible = isEligibleForTC(request.payload.taxYears),
-                  taxYears = constructTaxYearsWithPeriods(request)
+                  eligible = isEligibleForTC(ty),
+                  taxYears = ty
                 )
               )
             )

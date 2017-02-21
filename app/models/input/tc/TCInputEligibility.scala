@@ -152,25 +152,26 @@ case class TaxYear(
     }
   }
 
-  def getBasicElement(periodStart: LocalDate) : Boolean = {
-    isCouple match {
-      case true =>
-        val householdQualifies : Boolean = isCoupleQualifyingForTC && householdHasChildOrYoungPerson(periodStart)
-        doesHouseHoldQualify(periodStart, householdQualifies)
-
-      case false =>
-        val claimant = claimants.head
-        val claimantRules = claimant.isQualifyingForTC && (claimant.isWorkingAtLeast16HoursPerWeek(periodStart) && !claimant.isIncapacitated)
-        val childrenRules = householdHasChildOrYoungPerson(periodStart)
-        claimantRules && childrenRules
+  def isHouseholdQualifyingForWTC(periodStart: LocalDate): Boolean = {
+    if(isCouple) {
+      doesHouseHoldQualify(periodStart, isCoupleQualifyingForTC)
+    }
+    else {
+      val claimant = claimants.head
+      claimant.isQualifyingForTC && claimant.isWorkingAtLeast16HoursPerWeek(periodStart) && !claimant.isIncapacitated
     }
   }
 
-  def householdGetsChildcareElement(periodStart : LocalDate) : Boolean = {
-    val childrenGetChildcareCount = children.foldLeft(0)((acc, child) => if(child.getsChildcareElement(periodStart)) acc + 1 else acc)
-    val childrenGetChildcareElement : Boolean = childrenGetChildcareCount > 0
+  def isHouseholdQualifyingForCTC(periodStart: LocalDate): Boolean = {
+    children.exists(_.isChild(periodStart))
+  }
 
-    isCoupleQualifyingForTC && claimantsGetChildcareElement(periodStart) && childrenGetChildcareElement
+  def getBasicElement(periodStart: LocalDate): Boolean = {
+    isHouseholdQualifyingForWTC(periodStart) && householdHasChildOrYoungPerson(periodStart)
+  }
+
+  def householdGetsChildcareElement(periodStart : LocalDate) : Boolean = {
+    isCoupleQualifyingForTC && claimantsGetChildcareElement(periodStart) && children.exists(_.getsChildcareElement(periodStart))
   }
 
   def gets2ndAdultElement(now : LocalDate = LocalDate.now) : Boolean = isCouple && isCoupleQualifyingForTC && getBasicElement(now)
