@@ -17,7 +17,9 @@
                 "childcare": false,
                 "loneParent": true,
                 "secondParent": false,
-                "family": true
+                "family": true,
+                "wtc": true,
+                "ctc": true
               },
               "claimants": [
                 {
@@ -66,7 +68,9 @@
                 "childcare": false,
                 "loneParent": true,
                 "secondParent": false,
-                "family": true
+                "family": true,
+                "wtc": true,
+                "ctc": true
               },
               "claimants": [
                 {
@@ -108,7 +112,9 @@
                 "childcare": false,
                 "loneParent": false,
                 "secondParent": false,
-                "family": false
+                "family": false,
+                "wtc": true,
+                "ctc": false
               },
               "claimants": [
                 {

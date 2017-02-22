@@ -30,7 +30,8 @@ import org.scalatest.mock.MockitoSugar
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import spec.CCSpecConfig
 import utils.Periods
-
+import org.scalatest.prop.TableDrivenPropertyChecks._
+import org.scalatest.prop.Tables.Table
 import scala.concurrent.Future
 
 class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar {
@@ -1138,7 +1139,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 30, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
       val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1), children = List(child1))
 
-      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = true, childcare = true, loneParent = true, secondParent = false, family = true)
+      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = true, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
 
       val result = TCEligibility.eligibility.determineHouseholdEligibilityForPeriod(ty, periodStartDate)
       result shouldBe outputHousehold
@@ -1154,7 +1155,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
       val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1), children = List(child1))
 
-      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true)
+      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
 
       val result = TCEligibility.eligibility.determineHouseholdEligibilityForPeriod(ty, periodStartDate)
       result shouldBe outputHousehold
@@ -1170,7 +1171,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 1, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
       val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1), children = List(child1))
 
-      val outputHousehold = models.output.tc.HouseholdElements(basic = false, hours30 = false, childcare = false, loneParent = true, secondParent = false, family = true)
+      val outputHousehold = models.output.tc.HouseholdElements(basic = false, hours30 = false, childcare = false, loneParent = true, secondParent = false, family = true, wtc = false, ctc = true)
 
       val result = TCEligibility.eligibility.determineHouseholdEligibilityForPeriod(ty, periodStartDate)
       result shouldBe outputHousehold
@@ -1186,7 +1187,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 1, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
       val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1), children = List(child1))
 
-      val outputHousehold = models.output.tc.HouseholdElements(basic = false, hours30 = false, childcare = false, loneParent = false, secondParent = false, family = false)
+      val outputHousehold = models.output.tc.HouseholdElements(basic = false, hours30 = false, childcare = false, loneParent = false, secondParent = false, family = false, wtc = false, ctc = false)
 
       val result = TCEligibility.eligibility.determineHouseholdEligibilityForPeriod(ty, periodStartDate)
       result shouldBe outputHousehold
@@ -1203,7 +1204,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
       val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1), children = List(child1))
 
-      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = false, loneParent = true, secondParent = false, family = true)
+      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = false, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
 
       val result = TCEligibility.eligibility.determineHouseholdEligibilityForPeriod(ty, periodStartDate)
       result shouldBe outputHousehold
@@ -1219,7 +1220,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
       val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1), children = List(child1))
 
-      val outputHousehold = models.output.tc.HouseholdElements(basic = false, hours30 = false, childcare = false, loneParent = false, secondParent = false, family = false)
+      val outputHousehold = models.output.tc.HouseholdElements(basic = false, hours30 = false, childcare = false, loneParent = false, secondParent = false, family = false, wtc = true, ctc = false)
 
       val result = TCEligibility.eligibility.determineHouseholdEligibilityForPeriod(ty, periodStartDate)
       result shouldBe outputHousehold
@@ -1237,7 +1238,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
       val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1), children = List(child1, child2))
 
-      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true)
+      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
 
       val result = TCEligibility.eligibility.determineHouseholdEligibilityForPeriod(ty, periodStartDate)
       result shouldBe outputHousehold
@@ -1254,7 +1255,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 8, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
       val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1, claimant2), children = List(child1))
 
-      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = false, loneParent = false, secondParent = true, family = true)
+      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = false, loneParent = false, secondParent = true, family = true, wtc = true, ctc = true)
 
       val result = TCEligibility.eligibility.determineHouseholdEligibilityForPeriod(ty, periodStartDate)
       result shouldBe outputHousehold
@@ -1271,7 +1272,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
       val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1, claimant2), children = List(child1))
 
-      val outputHousehold = models.output.tc.HouseholdElements(basic = false, hours30 = false, childcare = false, loneParent = false, secondParent = false, family = true)
+      val outputHousehold = models.output.tc.HouseholdElements(basic = false, hours30 = false, childcare = false, loneParent = false, secondParent = false, family = true, wtc = false, ctc = true)
 
       val result = TCEligibility.eligibility.determineHouseholdEligibilityForPeriod(ty, periodStartDate)
       result shouldBe outputHousehold
@@ -1288,7 +1289,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
       val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1, claimant2), children = List(child1))
 
-      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = true, childcare = true, loneParent = false, secondParent = true, family = true)
+      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = true, childcare = true, loneParent = false, secondParent = true, family = true, wtc = true, ctc = true)
 
       val result = TCEligibility.eligibility.determineHouseholdEligibilityForPeriod(ty, periodStartDate)
       result shouldBe outputHousehold
@@ -1305,7 +1306,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
       val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1, claimant2), children = List(child1))
 
-      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = false, loneParent = false, secondParent = true, family = true)
+      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = false, loneParent = false, secondParent = true, family = true, wtc = true, ctc = true)
 
       val result = TCEligibility.eligibility.determineHouseholdEligibilityForPeriod(ty, periodStartDate)
       result shouldBe outputHousehold
@@ -1322,7 +1323,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0, disability = Disability(disabled = true, severelyDisabled = true, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
       val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1, claimant2), children = List(child1))
 
-      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = false, secondParent = true, family = true)
+      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = false, secondParent = true, family = true, wtc = true, ctc = true)
 
       val result = TCEligibility.eligibility.determineHouseholdEligibilityForPeriod(ty, periodStartDate)
       result shouldBe outputHousehold
@@ -1339,96 +1340,69 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
       val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1, claimant2), children = List(child1))
 
-      val outputHousehold = models.output.tc.HouseholdElements(basic = false, hours30 = false, childcare = false, loneParent = false, secondParent = false, family = true)
+      val outputHousehold = models.output.tc.HouseholdElements(basic = false, hours30 = false, childcare = false, loneParent = false, secondParent = false, family = true, wtc = false, ctc = true)
 
       val result = TCEligibility.eligibility.determineHouseholdEligibilityForPeriod(ty, periodStartDate)
       result shouldBe outputHousehold
     }
 
-    "determine if the household is eligible for the Tax Credits (single claimant - lives and works in UK)" in {
+    def buildTaxYear(wtcCTCEligibility: List[(Boolean, Boolean)]) = {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val periodStartDate = LocalDate.parse("2016-09-01", formatter)
       val periodEndDate = LocalDate.parse("2016-12-01", formatter)
 
-      val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 0, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-      val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1), children = List())
-
-      val result = TCEligibility.eligibility.isEligibleForTC(List(ty))
-
-      result shouldBe true
+      models.output.tc.TaxYear(
+        from = periodStartDate,
+        until = periodEndDate,
+        houseHoldIncome = BigDecimal(0),
+        periods = for((wtcEligibility, ctcEligibility) <- wtcCTCEligibility) yield models.output.tc.TCPeriod(
+          from = periodStartDate,
+          until = periodEndDate,
+          householdElements = models.output.tc.HouseholdElements(
+            basic = false,
+            hours30 = false,
+            childcare = false,
+            loneParent = false,
+            secondParent = false,
+            family = false,
+            wtc = wtcEligibility,
+            ctc = ctcEligibility
+          ),
+          claimants = List.empty,
+          children = List.empty
+        )
+      )
     }
 
-    "determine if the household is eligible for the Tax Credits (single claimant - doesn't live and work in UK)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val periodStartDate = LocalDate.parse("2016-09-01", formatter)
-      val periodEndDate = LocalDate.parse("2016-12-01", formatter)
+    val eligibilityTest = Table(
+      ("WTC Eligibility, CTC Eligibility for period", "Is eligible"),
+      (List((true, true)), true),
+      (List((true, false)), false),
+      (List((false, true)), false),
+      (List((false, false)), false),
+      (List((true, true), (true, true)), true),
+      (List((true, true), (true, false)), true),
+      (List((true, true), (false, true)), true),
+      (List((true, true), (false, false)), true),
+      (List((true, false), (true, true)), true),
+      (List((true, false), (true, false)), false),
+      (List((true, false), (false, true)), false),
+      (List((true, false), (false, false)), false),
+      (List((false, true), (true, true)), true),
+      (List((false, true), (true, false)), false),
+      (List((false, true), (false, true)), false),
+      (List((false, true), (false, false)), false),
+      (List((false, false), (true, true)), true),
+      (List((false, false), (true, false)), false),
+      (List((false, false), (false, true)), false),
+      (List((false, false), (false, false)), false)
+    )
 
-      val claimant1 = Claimant(liveOrWork = false, isPartner = false, hours = 0, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-      val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1), children = List())
-
-      val result = TCEligibility.eligibility.isEligibleForTC(List(ty))
-
-      result shouldBe false
-    }
-
-    "determine if the household is eligible for the Tax Credits (single claimant - lives and works in UK in first ty, doesn't in the second)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val periodStartDate = LocalDate.parse("2016-09-01", formatter)
-      val periodEndDate = LocalDate.parse("2016-12-01", formatter)
-
-      val periodStartDate2 = LocalDate.parse("2017-09-01", formatter)
-      val periodEndDate2 = LocalDate.parse("2099-12-01", formatter)
-
-      val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 0, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-      val claimant2ndTY = Claimant(liveOrWork = false, isPartner = false, hours = 0, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-      val ty1 = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1), children = List())
-      val ty2 = models.input.tc.TaxYear(from = periodStartDate2, until = periodEndDate2, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant2ndTY), children = List())
-
-      val result = TCEligibility.eligibility.isEligibleForTC(List(ty1, ty2))
-
-      result shouldBe false
-    }
-
-    "determine if the household is eligible for the Tax Credits (couple - one doesn't live and work in UK, another does)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val periodStartDate = LocalDate.parse("2016-09-01", formatter)
-      val periodEndDate = LocalDate.parse("2016-12-01", formatter)
-
-      val claimant1 = Claimant(liveOrWork = false, isPartner = false, hours = 0, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-      val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-      val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1, claimant2), children = List())
-
-      val result = TCEligibility.eligibility.isEligibleForTC(List(ty))
-
-      result shouldBe false
-    }
-
-    "determine if the household is eligible for the Tax Credits (couple - both live or work in UK)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val periodStartDate = LocalDate.parse("2016-09-01", formatter)
-      val periodEndDate = LocalDate.parse("2016-12-01", formatter)
-
-      val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 0, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-      val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-      val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1, claimant2), children = List())
-
-      val result = TCEligibility.eligibility.isEligibleForTC(List(ty))
-
-      result shouldBe true
-    }
-
-    "determine if the household is eligible for the Tax Credits (couple - both don't live or work in UK)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val periodStartDate = LocalDate.parse("2016-09-01", formatter)
-      val periodEndDate = LocalDate.parse("2016-12-01", formatter)
-
-      val claimant1 = Claimant(liveOrWork = false, isPartner = false, hours = 0, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-      val claimant2 = Claimant(liveOrWork = false, isPartner = true, hours = 0, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-      val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1, claimant2), children = List())
-
-      val result = TCEligibility.eligibility.isEligibleForTC(List(ty))
-
-      result shouldBe false
+    forAll(eligibilityTest) { case (wtcCtcEligibilityForPeriods, result) =>
+        s"determine TC eligibility corectly if there are ${wtcCtcEligibilityForPeriods.length} periods with WTC and CTC: ${wtcCtcEligibilityForPeriods}" in {
+          val ty = buildTaxYear(wtcCtcEligibilityForPeriods)
+          TCEligibility.eligibility.isEligibleForTC(List(ty)) shouldBe result
+        }
     }
 
     "calculate and populate TC Eligibility model (one tax year, one period)" in {
@@ -1443,7 +1417,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
       val outputClaimant = models.output.tc.OutputClaimant(qualifying = true, isPartner = false, claimantDisability = ClaimantDisability(disability = false, severeDisability = false), failures = List())
       val outputChild = models.output.tc.OutputChild(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
-      val outputHhElements = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true)
+      val outputHhElements = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
       val outputPeriod = models.output.tc.TCPeriod(from = periodStartDate, until = periodEndDate, householdElements = outputHhElements, claimants = List(outputClaimant), children = List(outputChild))
       val outputTaxYear = models.output.tc.TaxYear(from = periodStartDate, until = periodEndDate, houseHoldIncome = BigDecimal(23500.00), periods = List(outputPeriod))
       val tcEligibilityModel = TCEligibilityModel(eligible = true, taxYears = List(outputTaxYear))
@@ -1467,7 +1441,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
       val outputClaimant = models.output.tc.OutputClaimant(qualifying = true, isPartner = false, claimantDisability = ClaimantDisability(disability = false, severeDisability = false), failures = List())
       val outputChild = models.output.tc.OutputChild(id = 0, name =Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true), failures = List())
-      val outputHhElements = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true)
+      val outputHhElements = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
       val outputPeriod = models.output.tc.TCPeriod(from = periodStartDate, until = periodEndDate, householdElements = outputHhElements, claimants = List(outputClaimant), children = List(outputChild))
       val outputTaxYear = models.output.tc.TaxYear(from = periodStartDate, until = periodEndDate, houseHoldIncome = BigDecimal(0.00), periods = List(outputPeriod))
       val tcEligibilityModel = TCEligibilityModel(eligible = true, taxYears = List(outputTaxYear))

@@ -1,7 +1,7 @@
   {
   "eligibility": {
       "tc": {
-        "eligible": true,
+        "eligible": false,
         "taxYears": [
           {
             "from": "2016-08-27",
@@ -17,7 +17,9 @@
                   "childcare": false,
                   "loneParent": false,
                   "secondParent": false,
-                  "family": false
+                  "family": false,
+                  "wtc": true,
+                  "ctc": false
                 },
                 "claimants": [
                   {
