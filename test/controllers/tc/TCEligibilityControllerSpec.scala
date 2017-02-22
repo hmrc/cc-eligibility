@@ -189,7 +189,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
           {
             "eligibility": {
               "tc": {
-                "eligible": true,
+                "eligible": false,
                 "taxYears": [
                   {
                     "from": "${periodStartDate.toString("yyyy-MM-dd")}",
@@ -206,7 +206,9 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
                           "childcare": false,
                           "loneParent": false,
                           "secondParent": false,
-                          "family": false
+                          "family": false,
+                          "wtc": true,
+                          "ctc": false
                         },
                         "claimants": [
                           {

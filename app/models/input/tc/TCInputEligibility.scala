@@ -163,7 +163,7 @@ case class TaxYear(
   }
 
   def isHouseholdQualifyingForCTC(periodStart: LocalDate): Boolean = {
-    children.exists(_.isChild(periodStart))
+    children.exists(child => child.isChild(periodStart) || child.getsYoungAdultElement(periodStart))
   }
 
   def getBasicElement(periodStart: LocalDate): Boolean = {
