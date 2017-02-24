@@ -25,6 +25,8 @@ import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import spec.CCSpecConfig
 import utils.Periods
+import org.scalatest.prop.TableDrivenPropertyChecks._
+import org.scalatest.prop.Tables.Table
 
 class TCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
@@ -1033,6 +1035,68 @@ class TCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplicat
         val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1))
 
         taxYear.isCouple shouldBe false
+      }
+
+      "claimantsGetChildcareElement for single claimant" should {
+
+        val testSingleParent = Table(
+          ("liveOrWork", "hours", "isDisabled", "isSeverelyDisables", "isCarer", "result"),
+          (true, 16, true, true, true, true),
+          (true, 16, true, true, false, true),
+          (true, 16, true, false, true, true),
+          (true, 16, true, false, false, true),
+          (true, 16, false, true, true, true),
+          (true, 16, false, true, false, true),
+          (true, 16, false, false, true, true),
+          (true, 16, false, false, false, true),
+
+          (true, 15, true, true, true, false),
+          (true, 15, true, true, false, false),
+          (true, 15, true, false, true, false),
+          (true, 15, true, false, false, false),
+          (true, 15, false, true, true, false),
+          (true, 15, false, true, false, false),
+          (true, 15, false, false, true, false),
+          (true, 15, false, false, false, false),
+
+          (false, 16, true, true, true, false),
+          (false, 16, true, true, false, false),
+          (false, 16, true, false, true, false),
+          (false, 16, true, false, false, false),
+          (false, 16, false, true, true, false),
+          (false, 16, false, true, false, false),
+          (false, 16, false, false, true, false),
+          (false, 16, false, false, false, false)
+        )
+
+        forAll(testSingleParent) { case (liveOrWork, hours, isDisabled, isSeverelyDisables, isCarer, result) =>
+            s"return ${result} if liveOrWork = ${liveOrWork}, hours = ${hours}, isDisabled = ${isDisabled}, isSeverelyDisables = ${isSeverelyDisables}, isCarer = ${isCarer}" in {
+
+              val claimant1 = Claimant(
+                liveOrWork = liveOrWork,
+                isPartner = false,
+                hours = hours,
+                disability = Disability(
+                  disabled = isDisabled,
+                  severelyDisabled = isSeverelyDisables
+                ),
+                schemesClaiming = SchemesClaiming(),
+                otherSupport = OtherSupport(isCarer)
+              )
+              val taxYear = TaxYear(
+                from = LocalDate.now,
+                until = LocalDate.now,
+                totalIncome = BigDecimal(0),
+                previousTotalIncome = BigDecimal(0),
+                children = List(),
+                claimants = List(claimant1)
+              )
+
+              taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe result
+            }
+
+        }
+
       }
 
       "(single claimant, < 16 hours, disabled)(non qualifying) determine if household claimants qualify for childcare element" in {

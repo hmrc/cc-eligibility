@@ -98,22 +98,20 @@ case class TaxYear(
 
   def claimantsGetChildcareElement(periodStart : LocalDate) : Boolean = {
     val parent = claimants.head
-    val partner = claimants.last
     isCouple match {
       case true =>
-        val numberOfClaimants16Hours = claimants.foldLeft(0)((acc, claimant) => if(claimant.isWorkingAtLeast16HoursPerWeek(periodStart)) acc + 1 else acc)
-//        val numberOfClaimantsIncapacitated = claimants.foldLeft(0)((acc, claimant) => if (claimant.isIncapacitated) acc + 1 else acc)
-//        val resultTuple = (numberOfClaimants16Hours, numberOfClaimantsIncapacitated)
-        numberOfClaimants16Hours match {
-          case 0 => false
-          case 1 => isCoupleQualifyingForTC
-          case 2 => isCoupleQualifyingForTC
-        }
-        claimants.head.isQualifyingForTC && claimants.head.isWorkingAtLeast16HoursPerWeek(periodStart) &&
-          claimants.last.isQualifyingForTC && claimants.last.isWorkingAtLeast16HoursPerWeek(periodStart)
-//            getChildCareElementBasedOnWorkingHoursAndIncapacitation(numberOfClaimants16Hours, periodStart)
+        val partner = claimants.last
+        isCoupleQualifyingForTC && (
+          (
+            parent.isWorkingAtLeast16HoursPerWeek(periodStart) &&
+            (partner.isWorkingAtLeast16HoursPerWeek(periodStart) || determineClaimantDisabled(partner) || determineCarer(partner))
+          ) || (
+              partner.isWorkingAtLeast16HoursPerWeek(periodStart) &&
+                (determineClaimantDisabled(parent) || determineCarer(parent))
+            )
+          )
       case false =>
-        claimants.head.isQualifyingForTC && claimants.head.isWorkingAtLeast16HoursPerWeek(periodStart) //&& !claimant.isIncapacitated)
+        parent.isQualifyingForTC && parent.isWorkingAtLeast16HoursPerWeek(periodStart)
     }
   }
 
@@ -134,6 +132,8 @@ case class TaxYear(
     claimant.isQualifyingForTC && (claimant.disability.disabled || claimant.disability.severelyDisabled)
   }
 
+  private def determineCarer(person: Claimant): Boolean = person.isQualifyingForTC && person.otherSupport.carersAllowance
+
   private def doesHouseHoldQualify(periodStart: LocalDate, householdQualifies : Boolean) : Boolean = {
 
     // TODO: Remove conditions for incapacitated
@@ -142,8 +142,6 @@ case class TaxYear(
     // claimant can't work and being incapacitated
     def determineWorking16hours(person: Claimant): Boolean =
       person.isQualifyingForTC && person.isWorkingAtLeast16HoursPerWeek(periodStart) && !person.isIncapacitated
-
-    def determineCarer(person: Claimant): Boolean = person.isQualifyingForTC && person.otherSupport.carersAllowance
 
     val minimumHours: Double = TCConfig.getConfig(periodStart).minimumHoursWorkedIfCouple
 
