@@ -2458,7 +2458,7 @@ class TCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplicat
         claimant.isWorkingAtLeast16HoursPerWeek(periodStart) shouldBe true
       }
 
-      "(> 24 hours) determine if working at least 24 hours per week" in {
+      /*"(> 24 hours) determine if working at least 24 hours per week" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val periodStart = LocalDate.parse("2017-08-31", formatter)
         val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 25.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
@@ -2477,7 +2477,7 @@ class TCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplicat
         val periodStart = LocalDate.parse("2017-08-31", formatter)
         val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 24.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.isWorkingAtLeast24HoursPerWeek(periodStart) shouldBe true
-      }
+      }*/
 
       "(is incapacitated) determine if a claimant is incapacitated" in {
         val claimant = Claimant(liveOrWork = true, isPartner = false, disability = Disability(disabled = false, severelyDisabled = true, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
