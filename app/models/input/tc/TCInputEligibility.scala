@@ -104,10 +104,10 @@ case class TaxYear(
         isCoupleQualifyingForTC && (
           (
             parent.isWorkingAtLeast16HoursPerWeek(periodStart) &&
-            (partner.isWorkingAtLeast16HoursPerWeek(periodStart) || determineClaimantDisabled(partner) || determineCarer(partner))
+            (partner.isWorkingAtLeast16HoursPerWeek(periodStart) || determineClaimantDisabilityAndSeverity(partner) || determineCarer(partner))
           ) || (
               partner.isWorkingAtLeast16HoursPerWeek(periodStart) &&
-                (determineClaimantDisabled(parent) || determineCarer(parent))
+                (determineClaimantDisabilityAndSeverity(parent) || determineCarer(parent))
             )
           )
       case false =>
@@ -128,7 +128,7 @@ case class TaxYear(
                             || (!isFamily && (child.isChild(now) || child.getsYoungAdultElement(now))))
   }
 
-  private def determineClaimantDisabled(claimant : Claimant) : Boolean = {
+  private def determineClaimantDisabilityAndSeverity(claimant : Claimant) : Boolean = {
     claimant.isQualifyingForTC && (claimant.disability.disabled || claimant.disability.severelyDisabled)
   }
 
@@ -149,7 +149,7 @@ case class TaxYear(
       claimants.head.isQualifyingForTC && claimants.last.isQualifyingForTC && (getTotalHouseholdWorkingHours >= minimumHours)
 
     val isOneOfCoupleWorking16h = determineWorking16hours(claimants.head) || determineWorking16hours(claimants.last)
-    val isOneOfCoupleDisabled = determineClaimantDisabled(claimants.head) || determineClaimantDisabled(claimants.last)
+    val isOneOfCoupleDisabled = determineClaimantDisabilityAndSeverity(claimants.head) || determineClaimantDisabilityAndSeverity(claimants.last)
     val isOneOfCoupleCarer = determineCarer(claimants.head) || determineCarer(claimants.last)
     val isOneOfCoupeIncapacitated = determineIncapacitated(claimants.head) || determineIncapacitated(claimants.last)
 
