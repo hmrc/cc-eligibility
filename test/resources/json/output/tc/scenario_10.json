@@ -14,7 +14,7 @@
                 "householdElements": {
                   "basic": true,
                   "hours30": false,
-                  "childcare": false,
+                  "childcare": true,
                   "loneParent": false,
                   "secondParent": true,
                   "family": true,

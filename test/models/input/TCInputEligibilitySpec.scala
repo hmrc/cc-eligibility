@@ -25,6 +25,8 @@ import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import spec.CCSpecConfig
 import utils.Periods
+import org.scalatest.prop.TableDrivenPropertyChecks._
+import org.scalatest.prop.Tables.Table
 
 class TCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
@@ -1035,199 +1037,155 @@ class TCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplicat
         taxYear.isCouple shouldBe false
       }
 
-      "(single claimant, < 16 hours, disabled)(non qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 10.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1))
+      "claimantsGetChildcareElement for single claimant" should {
 
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
+        val testSingleParent = Table(
+          ("liveOrWork", "hours", "isDisabled", "isSeverelyDisables", "isCarer", "result"),
+          (true, 16, true, true, true, true),
+          (true, 16, true, true, false, true),
+          (true, 16, true, false, true, true),
+          (true, 16, true, false, false, true),
+          (true, 16, false, true, true, true),
+          (true, 16, false, true, false, true),
+          (true, 16, false, false, true, true),
+          (true, 16, false, false, false, true),
+
+          (true, 15, true, true, true, false),
+          (true, 15, true, true, false, false),
+          (true, 15, true, false, true, false),
+          (true, 15, true, false, false, false),
+          (true, 15, false, true, true, false),
+          (true, 15, false, true, false, false),
+          (true, 15, false, false, true, false),
+          (true, 15, false, false, false, false),
+
+          (false, 16, true, true, true, false),
+          (false, 16, true, true, false, false),
+          (false, 16, true, false, true, false),
+          (false, 16, true, false, false, false),
+          (false, 16, false, true, true, false),
+          (false, 16, false, true, false, false),
+          (false, 16, false, false, true, false),
+          (false, 16, false, false, false, false)
+        )
+
+        forAll(testSingleParent) { case (liveOrWork, hours, isDisabled, isSeverelyDisables, isCarer, result) =>
+            s"return ${result} if liveOrWork = ${liveOrWork}, hours = ${hours}, isDisabled = ${isDisabled}, isSeverelyDisables = ${isSeverelyDisables}, isCarer = ${isCarer}" in {
+
+              val claimant1 = Claimant(
+                liveOrWork = liveOrWork,
+                isPartner = false,
+                hours = hours,
+                disability = Disability(
+                  disabled = isDisabled,
+                  severelyDisabled = isSeverelyDisables
+                ),
+                schemesClaiming = SchemesClaiming(),
+                otherSupport = OtherSupport(isCarer)
+              )
+              val taxYear = TaxYear(
+                from = LocalDate.now,
+                until = LocalDate.now,
+                totalIncome = BigDecimal(0),
+                previousTotalIncome = BigDecimal(0),
+                children = List(),
+                claimants = List(claimant1)
+              )
+
+              taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe result
+            }
+
+        }
+
       }
 
-      "(single claimant, < 16 hours, non disabled)(non qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 10.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1))
+      "claimantsGetChildcareElement for joint claim" should {
 
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
+        val testParents = Table(
+          ("Parent liveOrWork", "Parent hours", "Parent isDisabled", "Parent isSeverelyDisables", "Parent isCarer", "Partner liveOrWork", "Partner hours", "Partner isDisabled", "Partner isSeverelyDisables", "Partner isCarer", "result"),
+          (true, 16, false, false, false, true, 16, true, true, true, true),
+          (true, 16, false, false, false, true, 16, true, true, false, true),
+          (true, 16, false, false, false, true, 16, true, false, true, true),
+          (true, 16, false, false, false, true, 16, true, false, false, true),
+          (true, 16, false, false, false, true, 16, false, true, true, true),
+          (true, 16, false, false, false, true, 16, false, true, false, true),
+          (true, 16, false, false, false, true, 16, false, false, true, true),
+          (true, 16, false, false, false, true, 16, false, false, false, true),
+
+          (true, 16, false, false, false, true, 15, true, true, true, true),
+          (true, 16, false, false, false, true, 15, true, true, false, true),
+          (true, 16, false, false, false, true, 15, true, false, true, true),
+          (true, 16, false, false, false, true, 15, true, false, false, true),
+          (true, 16, false, false, false, true, 15, false, true, true, true),
+          (true, 16, false, false, false, true, 15, false, true, false, true),
+          (true, 16, false, false, false, true, 15, false, false, true, true),
+          (true, 16, false, false, false, true, 15, false, false, false, false),
+
+          (true, 16, false, false, false, false, 15, true, true, true, false),
+          (true, 16, false, false, false, false, 15, true, true, false, false),
+          (true, 16, false, false, false, false, 15, true, false, true, false),
+          (true, 16, false, false, false, false, 15, true, false, false, false),
+          (true, 16, false, false, false, false, 15, false, true, true, false),
+          (true, 16, false, false, false, false, 15, false, true, false, false),
+          (true, 16, false, false, false, false, 15, false, false, true, false),
+          (true, 16, false, false, false, false, 15, false, false, false, false),
+
+          (true, 15, false, false, false, true, 16, true, true, true, false),
+          (true, 15, false, false, false, true, 16, true, true, false, false),
+          (true, 15, false, false, false, true, 16, true, false, true, false),
+          (true, 15, false, false, false, true, 16, true, false, false, false),
+          (true, 15, false, false, false, true, 16, false, true, true, false),
+          (true, 15, false, false, false, true, 16, false, true, false, false),
+          (true, 15, false, false, false, true, 16, false, false, true, false),
+          (true, 15, false, false, false, true, 16, false, false, false, false)
+
+        )
+
+        forAll(testParents) { case (parentLiveOrWork, parentHours, parentIsDisabled, parentIsSeverelyDisables, parentIsCarer, partnerLiveOrWork, partnerHours, partnerIsDisabled, partnerIsSeverelyDisables, partnerIsCarer, result) =>
+          s"return ${result} if " +
+            s"Parent: liveOrWork = ${parentLiveOrWork}, hours = ${parentHours}, isDisabled = ${parentIsDisabled}, isSeverelyDisables = ${parentIsSeverelyDisables}, isCarer = ${parentIsCarer} and " +
+            s"Partner: liveOrWork = ${partnerLiveOrWork}, hours = ${partnerHours}, isDisabled = ${partnerIsDisabled}, isSeverelyDisables = ${partnerIsSeverelyDisables}, isCarer = ${partnerIsCarer}" in {
+
+            val claimant1 = Claimant(
+              liveOrWork = parentLiveOrWork,
+              isPartner = false,
+              hours = parentHours,
+              disability = Disability(
+                disabled = parentIsDisabled,
+                severelyDisabled = parentIsSeverelyDisables
+              ),
+              schemesClaiming = SchemesClaiming(),
+              otherSupport = OtherSupport(parentIsCarer)
+            )
+
+            val claimant2 = Claimant(
+              liveOrWork = partnerLiveOrWork,
+              isPartner = false,
+              hours = partnerHours,
+              disability = Disability(
+                disabled = partnerIsDisabled,
+                severelyDisabled = partnerIsSeverelyDisables
+              ),
+              schemesClaiming = SchemesClaiming(),
+              otherSupport = OtherSupport(partnerIsCarer)
+            )
+
+            val taxYear = TaxYear(
+              from = LocalDate.now,
+              until = LocalDate.now,
+              totalIncome = BigDecimal(0),
+              previousTotalIncome = BigDecimal(0),
+              children = List(),
+              claimants = List(claimant1, claimant2)
+            )
+
+            taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe result
+          }
+
+        }
+
       }
 
-      "(single claimant, < 16 hours, incapacitated)(non qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 10.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
-      }
-
-      "(single claimant, > 16 hours, disabled)(qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 50.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe true
-      }
-
-      "(single claimant, > 16 hours, non disabled)(qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 50.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe true
-      }
-
-      "(single claimant, > 16 hours, incapacitated)(non qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 50.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
-      }
-
-      "(two claimants, (> 16 hours, < 16 hours)(disabled, non disabled))(both qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 18.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 14.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
-      }
-
-      "(two claimants, (< 16 hours, < 16 hours)(disabled, disabled))(both non - qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 14.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 1.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
-      }
-
-      "(two claimants, (< 16 hours, < 16 hours)(incapacitated, incapacitated))(both non - qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
-      }
-
-      "(two claimants, (< 16 hours, < 16 hours)(non disabled, non disabled))(both non qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 14.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 14.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
-      }
-
-      "(two claimants, (16 hours, < 16 hours)(incapaciated, disabled))(both non - qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
-      }
-
-      "(two claimants, (< 16 hours, > 16 hours)(non disabled, non disabled))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 0.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
-      }
-
-      "(two claimants, (< 16 hours, > 16 hours)(incapacitated, non disabled))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 0.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe true
-      }
-
-      "(two claimants, (< 16 hours, > 16 hours)(disabled, incapacitated))(both non qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 0.00, disability = Disability(disabled = true, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
-      }
-
-      "(two claimants, (> 16 hours, > 16 hours)(non disabled, disabled))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe true
-      }
-
-      "(two claimants, (> 16 hours, > 16 hours)(non disabled, incapacitated))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe true
-      }
-
-      "(two claimants, (> 16 hours, > 16 hours)(disabled, incapacitated))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe true
-      }
-
-      "(two claimants, (> 16 hours, > 16 hours)(disabled, disabled))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe true
-      }
-
-      "(two claimants, (> 16 hours, > 16 hours)(incapacitated, incapacitated))(none qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
-      }
-
-      "(two claimants, (> 16 hours, > 16 hours)(non disabled, non disabled))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe true
-      }
-
-      "(two claimants, (< 16 hours, < 16 hours)(disabled, disabled))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 15.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
-      }
-
-      "(two claimants, (< 16 hours, < 16 hours)(disabled, incapacitated))(none qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 15.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
-      }
-
-      "(two claimants, (> 16 hours, non live or work)(non disabled, non disabled))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = false, isPartner = true, hours = 20.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
-      }
-
-      "(two claimants, (> 16 hours, non live or work)(non disabled, incapacitated))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = false, isPartner = true, hours = 20.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
-      }
-
-      "(two claimants, (> 16 hours, non live or work)(incapacitated, non disabled))(one qualifying) determine if household claimants qualify for childcare element" in {
-        val claimant1 = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val claimant2 = Claimant(liveOrWork = false, isPartner = true, hours = 20.00, disability = Disability(disabled = false, severelyDisabled = false, incapacitated = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(), claimants = List(claimant1, claimant2))
-
-        taxYear.claimantsGetChildcareElement(taxYear.from) shouldBe false
-      }
 
       "(qualifying claimant and qualifying child) determine if household gets childcare element" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
@@ -1284,102 +1242,6 @@ class TCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplicat
         val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 1.00, disability = Disability(disabled = true, severelyDisabled = false), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         val taxYear = TaxYear(from = LocalDate.now, until = LocalDate.now, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), children = List(child), claimants = List(claimant))
         taxYear.householdGetsChildcareElement(periodStart) shouldBe false
-      }
-
-      "(Scenario 25 - C1 Incapacitated, C2 Working > 16 hours) determine if household gets childcare element" in {
-        val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_25.json")
-        val json: JsValue = Json.parse(resource.toString)
-        val result = json.validate[Request]
-
-        result match {
-          case JsSuccess(x, _) =>
-            x shouldBe a[Request]
-
-            val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-            val today = LocalDate.parse("2016-09-10", formatter)
-
-            x.payload.taxYears.head.householdGetsChildcareElement(today) shouldBe true
-
-          case JsError(e) =>
-            throw new RuntimeException(e.toList.toString())
-        }
-      }
-
-      "(Scenario 26 - C1 Incapacitated, C2 Incapacitated) determine if household gets childcare element" in {
-        val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_26.json")
-        val json: JsValue = Json.parse(resource.toString)
-        val result = json.validate[Request]
-
-        result match {
-          case JsSuccess(x, _) =>
-            x shouldBe a[Request]
-
-            val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-            val today = LocalDate.parse("2016-09-10", formatter)
-
-            x.payload.taxYears.head.householdGetsChildcareElement(today) shouldBe false
-
-          case JsError(e) =>
-            throw new RuntimeException(e.toList.toString())
-        }
-      }
-
-      "(Scenario 27 - C1 working < 16 hours, C2 Incapacitated) determine if household gets childcare element" in {
-        val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_27.json")
-        val json: JsValue = Json.parse(resource.toString)
-        val result = json.validate[Request]
-
-        result match {
-          case JsSuccess(x, _) =>
-            x shouldBe a[Request]
-
-            val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-            val today = LocalDate.parse("2016-09-10", formatter)
-
-            x.payload.taxYears.head.householdGetsChildcareElement(today) shouldBe false
-
-          case JsError(e) =>
-            throw new RuntimeException(e.toList.toString())
-        }
-      }
-
-      "(Scenario 28 - C1 working < 16 hours, C2 Incapacitated + working > 16 hours) determine if household gets childcare element" in {
-        val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_28.json")
-        val json: JsValue = Json.parse(resource.toString)
-        val result = json.validate[Request]
-
-        result match {
-          case JsSuccess(x, _) =>
-            x shouldBe a[Request]
-
-            val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-            val today = LocalDate.parse("2016-09-10", formatter)
-
-            x.payload.taxYears.head.householdGetsChildcareElement(today) shouldBe false
-
-          case JsError(e) =>
-            throw new RuntimeException(e.toList.toString())
-        }
-      }
-
-      "(Scenario 29 - (TY 1 - C1 working > 16 hours)(TY 2 - C1 Incapacitated) determine if household gets childcare element" in {
-        val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_29.json")
-        val json: JsValue = Json.parse(resource.toString)
-        val result = json.validate[Request]
-
-        result match {
-          case JsSuccess(x, _) =>
-            x shouldBe a[Request]
-
-            val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-            val today = LocalDate.parse("2016-09-10", formatter)
-
-            x.payload.taxYears.head.householdGetsChildcareElement(today) shouldBe true
-            x.payload.taxYears.tail.head.householdGetsChildcareElement(today) shouldBe false
-
-          case JsError(e) =>
-            throw new RuntimeException(e.toList.toString())
-        }
       }
 
       ///////////////////////////////////BASIC ELEMENT///////////////////////////////////////////////////////////////////
@@ -2456,27 +2318,6 @@ class TCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplicat
         val periodStart = LocalDate.parse("2017-08-31", formatter)
         val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 16.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
         claimant.isWorkingAtLeast16HoursPerWeek(periodStart) shouldBe true
-      }
-
-      "(> 24 hours) determine if working at least 24 hours per week" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-        val periodStart = LocalDate.parse("2017-08-31", formatter)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 25.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        claimant.isWorkingAtLeast24HoursPerWeek(periodStart) shouldBe true
-      }
-
-      "(< 24 hours) determine if working at least 24 hours per week" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-        val periodStart = LocalDate.parse("2017-08-31", formatter)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 15.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        claimant.isWorkingAtLeast24HoursPerWeek(periodStart) shouldBe false
-      }
-
-      "(is 24 hours) determine if working at least 24 hours per week" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-        val periodStart = LocalDate.parse("2017-08-31", formatter)
-        val claimant = Claimant(liveOrWork = true, isPartner = false, hours = 24.00, disability = Disability(disabled = false, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
-        claimant.isWorkingAtLeast24HoursPerWeek(periodStart) shouldBe true
       }
 
       "(is incapacitated) determine if a claimant is incapacitated" in {

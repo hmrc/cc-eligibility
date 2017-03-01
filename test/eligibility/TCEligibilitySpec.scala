@@ -1306,13 +1306,13 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val claimant2 = Claimant(liveOrWork = true, isPartner = true, hours = 0, disability = Disability(disabled = true, severelyDisabled = true), schemesClaiming = SchemesClaiming(), otherSupport = OtherSupport(false))
       val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant1, claimant2), children = List(child1))
 
-      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = false, loneParent = false, secondParent = true, family = true, wtc = true, ctc = true)
+      val outputHousehold = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = false, secondParent = true, family = true, wtc = true, ctc = true)
 
       val result = TCEligibility.eligibility.determineHouseholdEligibilityForPeriod(ty, periodStartDate)
       result shouldBe outputHousehold
     }
 
-    "populate the household elements model for a period (couple, 1st claimant > 16h, non disabled, 2nd claimant 0h incapacitated, 1 qualifying child)" in {
+    "populate the household elements model for a period (couple, 1st claimant > 16h, non disabled, 2nd claimant 0h disabled, 1 qualifying child)" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth1 = LocalDate.parse("2003-08-31", formatter)
       val periodStartDate = LocalDate.parse("2016-09-01", formatter)

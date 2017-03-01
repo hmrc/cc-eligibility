@@ -172,7 +172,6 @@ trait TCEligibility extends CCEligibility {
 
     private def constructTaxYearsWithPeriods(request : models.input.tc.Request) : List[models.output.tc.TaxYear] = {
       val taxYears : List[models.input.tc.TaxYear] = request.payload.taxYears
-
       val constructedTaxYears : List[models.output.tc.TaxYear] = for (ty <- taxYears) yield {
         val incomeWithDisregard = calculateIncomeDisregard(ty.totalIncome, ty.previousTotalIncome, ty.from)
           models.output.tc.TaxYear(
