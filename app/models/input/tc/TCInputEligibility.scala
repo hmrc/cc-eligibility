@@ -67,35 +67,6 @@ case class TaxYear(
     }
   }
 
-  /*private def getChildCareElementWhen1ClaimantWorks16hrsAnd1IsIncapacitated(periodStart : LocalDate) = {
-    if(claimants.head.isWorkingAtLeast16HoursPerWeek(periodStart) && claimants.head.isIncapacitated) {
-      false //claimant cannot work and be incapacitated at the same time
-    }
-    else {
-      if (claimants.tail.head.isWorkingAtLeast16HoursPerWeek(periodStart) && claimants.tail.head.isIncapacitated) {
-        false //partner cannot work and be incapacitated at the same time
-      }
-      else {
-        isCoupleQualifyingForTC // one claimant is working, another one is incapacitated (don't care about disability)
-      }
-    }
-  }*/
-
-  /*private def getChildCareElementBasedOnWorkingHoursAndIncapacitation(numberOfClaimants16Hours: Int, periodStart : LocalDate) : Boolean = {
-    numberOfClaimants16Hours match {
-      case 0 => false
-      case 1 => isCoupleQualifyingForTC
-      case 2 => isCoupleQualifyingForTC
-
-//      case (2, 1) => isCoupleQualifyingForTC// one claimant cannot be incapacitated and both working
-//      case (2, 0) => isCoupleQualifyingForTC // both claimants are working, none incapacitated (don't care about disability)
-//      case (1, 1) => getChildCareElementWhen1ClaimantWorks16hrsAnd1IsIncapacitated(periodStart)
-//      case (_, 2) => false // both claimants cannot be working and incapacitated
-//      case (1, 0) => false // one partner is working, another does not qualify
-//      case (0, _) => false // no claimants working at least 16 hours (don't care about incapacitated and disability)
-    }
-  }*/
-
   def claimantsGetChildcareElement(periodStart : LocalDate) : Boolean = {
     val parent = claimants.head
     isCouple match {
@@ -276,12 +247,6 @@ case class Claimant(
     val minimum : Double = taxYearConfig.minimumHoursWorked
     hours >= minimum
   }
-
-//  def isWorkingAtLeast24HoursPerWeek(periodStart : LocalDate)  : Boolean = {
-//    val taxYearConfig = TCConfig.getConfig(periodStart)
-//    val minimum : Double = taxYearConfig.minimumHoursWorkedIfCouple
-//    hours >= minimum
-//  }
 
   def isIncapacitated : Boolean = {
     disability.incapacitated
