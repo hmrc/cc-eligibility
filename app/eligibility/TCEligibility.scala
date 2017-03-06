@@ -153,21 +153,20 @@ trait TCEligibility extends CCEligibility {
       val datesOfChanges = determineStartDatesOfPeriodsInTaxYear(ty)
       // multiple periods have been identified
       val periods = for ((date, i) <- datesOfChanges.zipWithIndex) yield {
-          val fromAndUntil = fromAndUntilDateForPeriod(date, i, datesOfChanges, ty)
+        val fromAndUntil = fromAndUntilDateForPeriod(date, i, datesOfChanges, ty)
+        val claimantsEligibility = determineClaimantsEligibilityForPeriod(ty)
+        val childrenEligibility = determineChildrenEligibilityForPeriod(ty.children, periodStart = fromAndUntil._1)
+        val householdEligibility = determineHouseholdEligibilityForPeriod(ty, periodStart = fromAndUntil._1)
 
-          val claimantsEligibility = determineClaimantsEligibilityForPeriod(ty)
-          val childrenEligibility = determineChildrenEligibilityForPeriod(ty.children, periodStart = fromAndUntil._1)
-          val householdEligibility = determineHouseholdEligibilityForPeriod(ty, periodStart = fromAndUntil._1)
-
-          models.output.tc.TCPeriod(
-            from = fromAndUntil._1,
-            until = fromAndUntil._2,
-            householdElements = householdEligibility,
-            claimants = claimantsEligibility,
-            children = childrenEligibility
-          )
-        }
-        periods
+        models.output.tc.TCPeriod(
+          from = fromAndUntil._1,
+          until = fromAndUntil._2,
+          householdElements = householdEligibility,
+          claimants = claimantsEligibility,
+          children = childrenEligibility
+        )
+      }
+      periods
     }
 
     private def constructTaxYearsWithPeriods(request : models.input.tc.Request) : List[models.output.tc.TaxYear] = {
@@ -186,8 +185,8 @@ trait TCEligibility extends CCEligibility {
 
     def calculateIncomeDisregard(currentIncome : BigDecimal, previousTotalIncome : BigDecimal,periodStart : LocalDate) : BigDecimal = {
       val taxYearConfig = TCConfig.getConfig(periodStart)
-      val incomeDisregard = if(currentIncome < previousTotalIncome){ // if current income falls
-      val incomeDifferenceComparison: BigDecimal = taxYearConfig.currentIncomeFallDifferenceAmount
+      val incomeDisregard = if(currentIncome < previousTotalIncome) { // if current income falls
+        val incomeDifferenceComparison: BigDecimal = taxYearConfig.currentIncomeFallDifferenceAmount
         val incomeDifference: BigDecimal = previousTotalIncome - currentIncome
 
         if (incomeDifference > incomeDifferenceComparison){

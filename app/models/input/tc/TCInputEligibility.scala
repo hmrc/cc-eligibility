@@ -393,12 +393,12 @@ case class Child(
     val disabledAgeRule = childAge > -1 && childAge <= threshold16
 
     val birthdayRule = periodStart.toDate.before(september1stFollowing15thBirthday.toDate)
-    val ageRule = childAge > -1 && childAge <= threshold15
+    val abledAgeRule = childAge > -1 && childAge <= threshold15
 
     if (isDisabled) {
       disabledAgeRule && childcareRule && disabledBirthdayRule
     } else {
-      ageRule && childcareRule && birthdayRule
+      abledAgeRule && childcareRule && birthdayRule
     }
   }
 }
