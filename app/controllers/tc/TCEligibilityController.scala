@@ -41,7 +41,7 @@ trait TCEligibilityController extends EligibilityController {
     implicit request =>
       request.body.validate[Request].fold(
         error => {
-          Logger.warn(s"\n\nTC Validation JsError ******\n\n")
+          Logger.warn(s"TC Validation JsError ******\n")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
@@ -52,7 +52,7 @@ trait TCEligibilityController extends EligibilityController {
               Ok(utils.JSONFactory.generateResultJson(response))
           } recover {
             case e: Exception =>
-              Logger.warn(s"\n\nTax Credits Eligibility Exception: ${e.getMessage}\n\n")
+              Logger.warn(s"Tax Credits Eligibility Exception: ${e.getMessage}\n")
               InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
           }
         }
