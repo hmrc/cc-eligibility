@@ -31,7 +31,6 @@ object TCEligibilityController extends TCEligibilityController with TCEligibilit
   override val auditEvent = AuditEvents
 }
 
-
 trait TCEligibilityController extends EligibilityController {
   this: TCEligibility =>
 

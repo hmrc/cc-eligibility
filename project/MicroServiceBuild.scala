@@ -10,11 +10,11 @@ object MicroServiceBuild extends Build with MicroService {
 
 private object AppDependencies {
 
-  private val microserviceBootstrapVersion = "5.8.0"
-  private val playHealthVersion = "2.0.0"
+  private val microserviceBootstrapVersion = "5.13.0"
+  private val playHealthVersion = "2.1.0"
   private val jsonSchemaValidator = "2.2.6"
-  private val playConfigVersion = "3.0.0"
-  private val playAuthorisationVersion = "4.2.0"
+  private val playConfigVersion = "4.3.0"
+  private val playAuthorisationVersion = "4.3.0"
   private val logbackJsonLoggerVersion = "3.1.0"
   private val scalaTestVersion = "2.2.6"
   private val scalaTestPlusVersion = "1.5.1"
