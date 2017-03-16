@@ -20,11 +20,8 @@ import models.input.tc.{Child, TaxYear}
 import models.output.OutputAPIModel.Eligibility
 import models.output.tc.{ChildElements, ClaimantDisability, TCEligibilityModel}
 import org.joda.time.LocalDate
-import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 import play.api.Logger
 import play.api.i18n.Messages
-import play.api.libs.json.Format
-import play.data.format.Formats.DateFormatter
 import utils.TCConfig
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
