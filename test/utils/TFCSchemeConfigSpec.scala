@@ -16,7 +16,6 @@
 
 package utils
 
-
 import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
@@ -52,7 +51,12 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
         childAgeLimitDisabled = defaultConfig.getInt("child-age-limit-disabled").get,
         minimumHoursWorked = defaultConfig.getDouble("minimum-hours-worked-per-week").get,
         maxIncomePerClaimant = defaultConfig.getDouble("maximum-income-per-claimant").get,
-        personalAllowancePerClaimant = defaultConfig.getDouble("personal-allowance").get
+        personalAllowancePerClaimant = defaultConfig.getDouble("personal-allowance").get,
+        nmwApprentice = defaultConfig.getInt("nmw.apprentice").get,
+        nmwUnder18 = defaultConfig.getInt("nmw.apprentice").get,
+        nmw18To20 = defaultConfig.getInt("nmw.apprentice").get,
+        nmw21To24 = defaultConfig.getInt("nmw.apprentice").get,
+        nmw25Over = defaultConfig.getInt("nmw.apprentice").get
       )
 
       resultTaxYearConfig.childAgeLimit shouldBe 11
@@ -60,6 +64,11 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
       resultTaxYearConfig.minimumHoursWorked shouldBe 16.00
       resultTaxYearConfig.maxIncomePerClaimant shouldBe 100000.00
       resultTaxYearConfig.personalAllowancePerClaimant shouldBe 11500.00
+      resultTaxYearConfig.nmwApprentice shouldBe 56
+      resultTaxYearConfig.nmwUnder18 shouldBe 64
+      resultTaxYearConfig.nmw18To20 shouldBe 89
+      resultTaxYearConfig.nmw21To24 shouldBe 112
+      resultTaxYearConfig.nmw25Over shouldBe 120
     }
 
     val testCases = Table(
