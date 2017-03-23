@@ -28,8 +28,9 @@
           },
           "minimumEarnings": {
             "selection": false,
-            "amount": 1000
-          }
+            "amount": 114
+          },
+          "age": "21-24"
         }
       ],
       "children": [

@@ -28,8 +28,9 @@
           },
           "minimumEarnings": {
             "selection": false,
-            "amount": 1000
-          }
+            "amount": 90
+          },
+          "age": "18-20"
         },
         {
           "hoursPerWeek": 28.00,
@@ -55,8 +56,9 @@
           },
           "minimumEarnings": {
             "selection": false,
-            "amount": 1000
-          }
+            "amount": 54
+          },
+          "age": "apprentice"
         }
       ],
       "children": [

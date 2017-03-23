@@ -27,8 +27,7 @@
             "carersAllowance":false
           },
           "minimumEarnings": {
-            "selection": false,
-            "amount": 1000
+            "selection": true
           }
         },
         {
@@ -55,8 +54,9 @@
           },
           "minimumEarnings": {
             "selection": false,
-            "amount": 1000
-          }
+            "amount": 70
+          },
+          "age": "under-18"
         }
       ],
       "children": [

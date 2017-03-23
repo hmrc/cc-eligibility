@@ -126,8 +126,7 @@ case class Claimant(
         case Some("under-18") => taxYearConfig.nmwUnder18
         case Some("18-20") => taxYearConfig.nmw18To20
         case Some("21-24") => taxYearConfig.nmw21To24
-        case Some("over-25") => taxYearConfig.nmw25Over
-        case _ => taxYearConfig.nmw25Over
+        case _ => taxYearConfig.nmw25Over //25 or over
       }
       (minimumEarnings.amount >= nmw)
     }

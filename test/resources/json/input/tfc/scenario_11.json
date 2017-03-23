@@ -28,8 +28,9 @@
           },
           "minimumEarnings": {
             "selection": false,
-            "amount": 1000
-          }
+            "amount": 64
+          },
+          "age": "under-18"
         }
       ],
       "children": [
