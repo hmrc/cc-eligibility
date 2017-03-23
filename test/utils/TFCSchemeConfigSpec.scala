@@ -53,10 +53,10 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
         maxIncomePerClaimant = defaultConfig.getDouble("maximum-income-per-claimant").get,
         personalAllowancePerClaimant = defaultConfig.getDouble("personal-allowance").get,
         nmwApprentice = defaultConfig.getInt("nmw.apprentice").get,
-        nmwUnder18 = defaultConfig.getInt("nmw.apprentice").get,
-        nmw18To20 = defaultConfig.getInt("nmw.apprentice").get,
-        nmw21To24 = defaultConfig.getInt("nmw.apprentice").get,
-        nmw25Over = defaultConfig.getInt("nmw.apprentice").get
+        nmwUnder18 = defaultConfig.getInt("nmw.under-18").get,
+        nmw18To20 = defaultConfig.getInt("nmw.18-20").get,
+        nmw21To24 = defaultConfig.getInt("nmw.21-24").get,
+        nmw25Over = defaultConfig.getInt("nmw.over-25").get
       )
 
       resultTaxYearConfig.childAgeLimit shouldBe 11
