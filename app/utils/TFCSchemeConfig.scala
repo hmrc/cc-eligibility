@@ -28,7 +28,12 @@ case class TFCTaxYearConfig(
                              childAgeLimitDisabled: Int,
                              minimumHoursWorked: Double,
                              maxIncomePerClaimant: Double,
-                             personalAllowancePerClaimant: Double
+                             personalAllowancePerClaimant: Double,
+                             nmwApprentice: Int,
+                             nmwUnder18: Int,
+                             nmw18To20: Int,
+                             nmw21To24: Int,
+                             nmw25Over: Int
                              )
 
 object TFCConfig extends CCConfig {
@@ -71,7 +76,12 @@ object TFCConfig extends CCConfig {
       childAgeLimitDisabled = configuration.getInt("child-age-limit-disabled").get,
       minimumHoursWorked = configuration.getDouble("minimum-hours-worked-per-week").get,
       maxIncomePerClaimant = configuration.getDouble("maximum-income-per-claimant").get,
-      personalAllowancePerClaimant = configuration.getDouble("personal-allowance").get
+      personalAllowancePerClaimant = configuration.getDouble("personal-allowance").get,
+      nmwApprentice = configuration.getInt("nmw.apprentice").get,
+      nmwUnder18 = configuration.getInt("nmw.under-18").get,
+      nmw18To20 = configuration.getInt("nmw.18-20").get,
+      nmw21To24 = configuration.getInt("nmw.21-24").get,
+      nmw25Over = configuration.getInt("nmw.over-25").get
     )
   }
 

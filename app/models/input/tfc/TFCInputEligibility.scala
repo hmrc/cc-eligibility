@@ -55,19 +55,19 @@ case class TFC(
                 children: List[Child]
                 ) {
 
-  def validHouseholdHours  : Boolean = {
+  /*def validHouseholdHours  : Boolean = {
     if(claimants.length > 1) {
       ((claimants.head.isWorkingAtLeast16HoursPerWeek(from)), (claimants.last.isWorkingAtLeast16HoursPerWeek(from))) match {
         case (true,true) => true
         case (true, false) => claimants.last.otherSupport.carersAllowance
-        case (false, true) =>   claimants.head.otherSupport.carersAllowance
+        case (false, true) => claimants.head.otherSupport.carersAllowance
         case _ =>   false
       }
     }
     else {
       (claimants.head.isWorkingAtLeast16HoursPerWeek(from))
     }
-  }
+  }*/
 }
 
 object TFC extends CCFormat {
@@ -95,7 +95,9 @@ case class Claimant(
                      isPartner: Boolean = false,
                      disability: Disability,
                      schemesClaiming: SchemesClaiming,
-                     otherSupport: OtherSupport
+                     otherSupport: OtherSupport,
+//                     minimumEarnings: MinimumEarnings,
+                     age: String
                      ) extends models.input.BaseClaimant {
 
   def isWorkingAtLeast16HoursPerWeek (periodStart:LocalDate) : Boolean = {
@@ -111,8 +113,15 @@ case class Claimant(
   }
 
   def isQualifyingForTFC(periodStart : LocalDate) : Boolean = {
-      liveOrWork && isTotalIncomeLessThan100000(periodStart)
+      liveOrWork && isTotalIncomeLessThan100000(periodStart) && satisfyMinimumEarnings(periodStart)
   }
+
+  private def satisfyMinimumEarnings(periodStart: LocalDate): Boolean = {
+    val taxYearConfig = TFCConfig.getConfig(periodStart)
+//    val minEarnings =
+    true
+  }
+
 
 }
 

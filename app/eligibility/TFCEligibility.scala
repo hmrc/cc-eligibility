@@ -142,7 +142,7 @@ val eligibility = new TFCEligibilityService
 
     override def eligibility(request : models.input.tfc.Request) : Future[Eligibility] = {
       val outputPeriods = determineTFCPeriods(request.payload.tfc)
-      val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && request.payload.tfc.validHouseholdHours
+      val householdEligibility = outputPeriods.exists(period => period.periodEligibility)
 
       Future {
         Eligibility(
