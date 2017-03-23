@@ -55,19 +55,19 @@ case class TFC(
                 children: List[Child]
                 ) {
 
-  /*def validHouseholdHours  : Boolean = {
+  def validHouseholdMinimumEarnings: Boolean = {
     if(claimants.length > 1) {
-      ((claimants.head.isWorkingAtLeast16HoursPerWeek(from)), (claimants.last.isWorkingAtLeast16HoursPerWeek(from))) match {
-        case (true,true) => true
+      (claimants.head.satisfyMinimumEarnings(from), claimants.last.satisfyMinimumEarnings(from)) match {
+        case (true, true) => true
         case (true, false) => claimants.last.otherSupport.carersAllowance
         case (false, true) => claimants.head.otherSupport.carersAllowance
         case _ =>   false
       }
     }
     else {
-      (claimants.head.isWorkingAtLeast16HoursPerWeek(from))
+      (claimants.head.satisfyMinimumEarnings(from))
     }
-  }*/
+  }
 }
 
 object TFC extends CCFormat {
@@ -96,8 +96,8 @@ case class Claimant(
                      disability: Disability,
                      schemesClaiming: SchemesClaiming,
                      otherSupport: OtherSupport,
-//                     minimumEarnings: MinimumEarnings,
-                     age: String
+                     minimumEarnings: MinimumEarnings,
+                     age: Option[String]
                      ) extends models.input.BaseClaimant {
 
   def isWorkingAtLeast16HoursPerWeek (periodStart:LocalDate) : Boolean = {
@@ -113,15 +113,25 @@ case class Claimant(
   }
 
   def isQualifyingForTFC(periodStart : LocalDate) : Boolean = {
-      liveOrWork && isTotalIncomeLessThan100000(periodStart) && satisfyMinimumEarnings(periodStart)
+      liveOrWork && isTotalIncomeLessThan100000(periodStart)
   }
 
-  private def satisfyMinimumEarnings(periodStart: LocalDate): Boolean = {
+  def satisfyMinimumEarnings(periodStart: LocalDate): Boolean = {
     val taxYearConfig = TFCConfig.getConfig(periodStart)
-//    val minEarnings =
-    true
+    if(minimumEarnings.selection) {
+      true
+    } else {
+      val nmw = age match {
+        case Some("apprentice") => taxYearConfig.nmwApprentice
+        case Some("under-18") => taxYearConfig.nmwUnder18
+        case Some("18-20") => taxYearConfig.nmw18To20
+        case Some("21-24") => taxYearConfig.nmw21To24
+        case Some("over-25") => taxYearConfig.nmw25Over
+        case _ => taxYearConfig.nmw25Over
+      }
+      (minimumEarnings.amount >= nmw)
+    }
   }
-
 
 }
 
@@ -138,8 +148,22 @@ object Claimant extends CCFormat {
           (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
             (JsPath \ "disability").read[Disability] and
               (JsPath \ "schemesClaiming").read[SchemesClaiming] and
-                (JsPath \ "otherSupport").read[OtherSupport]
+                (JsPath \ "otherSupport").read[OtherSupport] and
+                  (JsPath \ "minimumEarnings").read[MinimumEarnings] and
+                    (JsPath \ "age").readNullable[String]
     )(Claimant.apply _)
+}
+
+case class MinimumEarnings(
+                          selection: Boolean = true,
+                          amount: BigDecimal = 0.00
+                          )
+
+object MinimumEarnings {
+  implicit val minEarningsRead: Reads[MinimumEarnings] = (
+    (JsPath \ "selection").read[Boolean].orElse(Reads.pure(true)) and
+      (JsPath \ "amount").read[BigDecimal].orElse(Reads.pure(0.00))
+  )(MinimumEarnings.apply _)
 }
 
 case class Disability(
