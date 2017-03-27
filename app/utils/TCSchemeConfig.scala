@@ -22,7 +22,6 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.Play._
 import play.api.{Configuration, Play}
-import sun.reflect.generics.reflectiveObjects.NotImplementedException
 
 case class TCTaxYearConfig(
                              childAgeLimit: Int,
