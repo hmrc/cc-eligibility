@@ -38,6 +38,8 @@ case class TFCTaxYearConfig(
 
 object TFCConfig extends CCConfig {
 
+  val minimumEarningsEnabled: Boolean = Play.application.configuration.getBoolean("tfc.min.earnings.enabled").get
+
   def getTFCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
     configs.filter(x => {
       x.getString("rule-date").equals(Some("default"))

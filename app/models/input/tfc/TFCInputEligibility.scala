@@ -68,6 +68,20 @@ case class TFC(
       (claimants.head.satisfyMinimumEarnings(from))
     }
   }
+
+  def validHouseholdHours  : Boolean = {
+    if(claimants.length > 1) {
+      ((claimants.head.isWorkingAtLeast16HoursPerWeek(from)), (claimants.last.isWorkingAtLeast16HoursPerWeek(from))) match {
+        case (true,true) => true
+        case (true, false) => claimants.last.otherSupport.carersAllowance
+        case (false, true) =>   claimants.head.otherSupport.carersAllowance
+        case _ =>   false
+      }
+    }
+    else {
+      (claimants.head.isWorkingAtLeast16HoursPerWeek(from))
+    }
+  }
 }
 
 object TFC extends CCFormat {

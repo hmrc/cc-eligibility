@@ -22,6 +22,7 @@ import models.input.tfc.{Child, Claimant, TFC}
 import models.output.OutputAPIModel.Eligibility
 import models.output.tfc._
 import org.joda.time.LocalDate
+import utils.TFCConfig
 
 import scala.concurrent.Future
 
@@ -142,7 +143,12 @@ val eligibility = new TFCEligibilityService
 
     override def eligibility(request : models.input.tfc.Request) : Future[Eligibility] = {
       val outputPeriods = determineTFCPeriods(request.payload.tfc)
-      val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && request.payload.tfc.validHouseholdMinimumEarnings
+      val householdEligibility = if(TFCConfig.minimumEarningsEnabled) {
+        outputPeriods.exists(period => period.periodEligibility) && request.payload.tfc.validHouseholdMinimumEarnings
+      }
+      else {
+        outputPeriods.exists(period => period.periodEligibility) && request.payload.tfc.validHouseholdHours
+      }
 
       Future {
         Eligibility(
