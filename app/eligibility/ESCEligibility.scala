@@ -22,23 +22,17 @@ import models.output.OutputAPIModel.Eligibility
 import models.output.esc.ESCEligibilityModel
 import org.joda.time.LocalDate
 import play.api.Logger
-import play.api.i18n.Messages
-import utils.ESCConfig
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
+import utils.{MessagesObject, ESCConfig}
 import scala.annotation.tailrec
 import scala.concurrent.Future
 
-/**
-* Created by adamconder on 21/09/15.
-*/
 object ESCEligibility extends ESCEligibility
 
 trait ESCEligibility extends CCEligibility {
 
   val eligibility = new ESCEligibilityService
 
-  class ESCEligibilityService extends CCEligibilityService {
+  class ESCEligibilityService extends CCEligibilityService with MessagesObject {
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -222,7 +216,7 @@ trait ESCEligibility extends CCEligibility {
           }
         case _ =>
           Logger.warn(s"ESCEligibilityService.eligibility - Exception *****")
-          throw new IllegalArgumentException(Messages("cc.elig.wrong.type"))
+          throw new IllegalArgumentException(messages("cc.elig.wrong.type"))
       }
     }
 

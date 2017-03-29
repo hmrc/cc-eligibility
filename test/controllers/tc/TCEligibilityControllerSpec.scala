@@ -36,11 +36,6 @@ import scala.concurrent.Future
 
 class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApplication with MockitoSugar {
 
-  val mockTCEligibilityController = new TCEligibilityController with TCEligibility {
-    override val eligibility = mock[TCEligibilityService]
-    override val auditEvent = mock[AuditEvents]
-  }
-
   implicit val request = FakeRequest()
 
   "TCEligibilityController" should {
@@ -52,7 +47,12 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept valid json and should return Json body" in {
-      val controller = mockTCEligibilityController
+
+      val controller = new TCEligibilityController with TCEligibility {
+        override val eligibility = mock[TCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/scenario_1.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
@@ -62,7 +62,11 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Empty tax year should return Bad request" in {
-      val controller = mockTCEligibilityController
+      val controller = new TCEligibilityController with TCEligibility {
+        override val eligibility = mock[TCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/empty_tax_year.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
@@ -72,7 +76,11 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept invalid json schema and should return Bad request" in {
-      val controller = mockTCEligibilityController
+      val controller = new TCEligibilityController with TCEligibility {
+        override val eligibility = mock[TCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/invalid_tax_year.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
@@ -82,7 +90,11 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept invalid json with incorrect until date format json and return a Bad request" in {
-      val controller = mockTCEligibilityController
+      val controller = new TCEligibilityController with TCEligibility {
+        override val eligibility = mock[TCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/incorrect_date_format.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
@@ -92,7 +104,11 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept invalid json if total income is less than 0 and return Bad request" in {
-      val controller = mockTCEligibilityController
+      val controller = new TCEligibilityController with TCEligibility {
+        override val eligibility = mock[TCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/negative_income.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
@@ -102,7 +118,11 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept invalid json if total previous income is less than 0 and return Bad request" in {
-      val controller = mockTCEligibilityController
+      val controller = new TCEligibilityController with TCEligibility {
+        override val eligibility = mock[TCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/negative_previous_income.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
@@ -112,7 +132,11 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept invalid json if child id has negative value should return 400" in {
-      val controller = mockTCEligibilityController
+      val controller = new TCEligibilityController with TCEligibility {
+        override val eligibility = mock[TCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/negative_child_id.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
@@ -122,7 +146,11 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept invalid json if child name exceeding 25 characters should return 400" in {
-      val controller = mockTCEligibilityController
+      val controller = new TCEligibilityController with TCEligibility {
+        override val eligibility = mock[TCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/invalid_child_name.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
@@ -132,7 +160,11 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept a valid json if there is negative childcare cost should return 400" in {
-      val controller = mockTCEligibilityController
+      val controller = new TCEligibilityController with TCEligibility {
+        override val eligibility = mock[TCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/negative_childcare_cost.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
@@ -142,7 +174,11 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept a valid json if number of claimants more than 2 should return Bad request" in {
-      val controller = mockTCEligibilityController
+      val controller = new TCEligibilityController with TCEligibility {
+        override val eligibility = mock[TCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/invalid_claimants_3.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
@@ -152,7 +188,11 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept a valid json if number of claimant/s less than 1 should return Bad request" in {
-      val controller = mockTCEligibilityController
+      val controller = new TCEligibilityController with TCEligibility {
+        override val eligibility = mock[TCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/no_claimants.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
@@ -162,7 +202,11 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept a valid json if number of children more than 25 should return Bad request" in {
-      val controller = mockTCEligibilityController
+      val controller = new TCEligibilityController with TCEligibility {
+        override val eligibility = mock[TCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/invalid_no_of_children.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
@@ -172,7 +216,11 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept json for scenario 1 and return a valid response" in {
-      val controller = mockTCEligibilityController
+      val controller = new TCEligibilityController with TCEligibility {
+        override val eligibility = mock[TCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/scenario_1.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
@@ -254,7 +302,11 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Return Internal Server Error with error message if an exception is thrown during eligibility" in {
-      val controller = mockTCEligibilityController
+      val controller = new TCEligibilityController with TCEligibility {
+        override val eligibility = mock[TCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
+
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/scenario_1.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]

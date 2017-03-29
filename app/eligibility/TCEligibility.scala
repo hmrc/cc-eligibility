@@ -21,23 +21,17 @@ import models.output.OutputAPIModel.Eligibility
 import models.output.tc.{ChildElements, ClaimantDisability, TCEligibilityModel}
 import org.joda.time.LocalDate
 import play.api.Logger
-import play.api.i18n.Messages
-import utils.TCConfig
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
+import utils.{MessagesObject, TCConfig}
 import scala.concurrent.Future
 import models.output.tc.OutputChild
 
-/**
- * Created by adamconder on 24/07/15.
- */
 object TCEligibility extends TCEligibility
 
 trait TCEligibility extends CCEligibility {
 
   val eligibility = new TCEligibilityService
 
-  class TCEligibilityService extends CCEligibilityService {
+  class TCEligibilityService extends CCEligibilityService with MessagesObject {
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -229,7 +223,7 @@ trait TCEligibility extends CCEligibility {
           }
         case _ =>
           Logger.warn(s"TCEligibilityService.eligibility - Exception ******")
-          throw new IllegalArgumentException(Messages("cc.elig.wrong.type"))
+          throw new IllegalArgumentException(messages("cc.elig.wrong.type"))
       }
     }
 

@@ -17,15 +17,11 @@
 package models.input.tc
 
 import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
 import play.api.data.validation.ValidationError
-import play.api.i18n.Messages
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
-import utils.{CCFormat, Periods, TCConfig}
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
+import utils.{MessagesObject, CCFormat, Periods, TCConfig}
 
 case class Request(
                     payload: Payload
@@ -40,13 +36,13 @@ case class Payload(
                     taxYears: List[TaxYear]
                     ) extends models.input.BasePayload
 
-object Payload {
+object Payload extends MessagesObject {
   def validateTaxYear(taxYears: List[TaxYear]): Boolean = {
     taxYears.length >= 1
   }
 
   implicit val payloadReads: Reads[Payload] =
-    (JsPath \ "taxYears").read[List[TaxYear]].filter(ValidationError(Messages("cc.elig.tax.year.min")))(x => validateTaxYear(x)).map { ty => Payload(ty)}
+    (JsPath \ "taxYears").read[List[TaxYear]].filter(ValidationError(messages("cc.elig.tax.year.min")))(x => validateTaxYear(x)).map { ty => Payload(ty)}
 }
 
 case class TaxYear(
@@ -189,7 +185,7 @@ case class TaxYear(
 
 }
 
-object TaxYear extends CCFormat {
+object TaxYear extends CCFormat with MessagesObject {
 
   def maxChildValidation(noOfChild: List[Child]): Boolean = {
     noOfChild.length <= 25
@@ -206,10 +202,10 @@ object TaxYear extends CCFormat {
   implicit val taxYearReads: Reads[TaxYear] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
-        (JsPath \ "totalIncome").read[BigDecimal].filter(ValidationError(Messages("cc.elig.income.less.than.0")))(validateIncome(_)) and
-          (JsPath \ "previousTotalIncome").read[BigDecimal].filter(ValidationError(Messages("cc.elig.income.less.than.0")))(validateIncome(_)) and
-            (JsPath \ "claimants").read[List[Claimant]].filter(ValidationError(Messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
-              (JsPath \ "children").read[List[Child]].filter(ValidationError(Messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
+        (JsPath \ "totalIncome").read[BigDecimal].filter(ValidationError(messages("cc.elig.income.less.than.0")))(validateIncome(_)) and
+          (JsPath \ "previousTotalIncome").read[BigDecimal].filter(ValidationError(messages("cc.elig.income.less.than.0")))(validateIncome(_)) and
+            (JsPath \ "claimants").read[List[Claimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
+              (JsPath \ "children").read[List[Child]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
     )(TaxYear.apply _)
 }
 
@@ -403,7 +399,7 @@ case class Child(
   }
 }
 
-object Child extends CCFormat {
+object Child extends CCFormat with MessagesObject {
   val nameLength = 25
   def validID(id: Short): Boolean = {
     id >= 0
@@ -414,9 +410,9 @@ object Child extends CCFormat {
   }
 
   implicit val childReads: Reads[Child] = (
-    (JsPath \ "id").read[Short].filter(ValidationError(Messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
+    (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
       (JsPath \ "name").readNullable[String](maxLength[String](nameLength)) and
-        (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(Messages("cc.elig.childcare.spend.too.low")))(x => childSpendValidation(x)) and
+        (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(messages("cc.elig.childcare.spend.too.low")))(x => childSpendValidation(x)) and
           (JsPath \ "childcareCostPeriod").read[Periods.Period] and
             (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
               (JsPath \ "disability").read[Disability] and

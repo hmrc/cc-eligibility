@@ -18,7 +18,7 @@ package config
 
 import com.typesafe.config.Config
 import net.ceedubs.ficus.Ficus._
-import play.api.{Application, Configuration, Play}
+import play.api.{Application, Configuration}
 import uk.gov.hmrc.play.audit.filters.AuditFilter
 import uk.gov.hmrc.play.audit.http.config.LoadAuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
@@ -30,6 +30,7 @@ import uk.gov.hmrc.play.http.logging.filters.LoggingFilter
 import uk.gov.hmrc.play.http.ws._
 import uk.gov.hmrc.play.microservice.bootstrap.DefaultMicroserviceGlobal
 import uk.gov.hmrc.play.filters.MicroserviceFilterSupport
+import utils.LoadConfig
 
 object WSHttp extends WSGet with WSPut with WSPost with WSDelete with WSPatch {
   override val hooks = NoneRequired
@@ -43,8 +44,8 @@ object MicroserviceAuthConnector extends AuthConnector with ServicesConfig {
   override val authBaseUrl = baseUrl("auth")
 }
 
-object ControllerConfiguration extends ControllerConfig {
-  lazy val controllerConfigs = Play.current.configuration.underlying.as[Config]("controllers")
+object ControllerConfiguration extends ControllerConfig with LoadConfig {
+  lazy val controllerConfigs = conf.underlying.as[Config]("controllers")
 }
 
 object AuthParamsControllerConfiguration extends AuthParamsControllerConfig {

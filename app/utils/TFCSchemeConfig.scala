@@ -17,10 +17,8 @@
 package utils
 
 import java.text.SimpleDateFormat
-
 import org.joda.time.LocalDate
-import play.api.Play._
-import play.api.{Configuration, Play}
+import play.api.Configuration
 
 
 case class TFCTaxYearConfig(
@@ -31,7 +29,7 @@ case class TFCTaxYearConfig(
                              personalAllowancePerClaimant: Double
                              )
 
-object TFCConfig extends CCConfig {
+object TFCConfig extends CCConfig with LoadConfig {
 
   def getTFCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
     configs.filter(x => {
@@ -76,7 +74,7 @@ object TFCConfig extends CCConfig {
   }
 
   def getConfig(currentDate: LocalDate): TFCTaxYearConfig = {
-    val configs : Seq[play.api.Configuration] = Play.application.configuration.getConfigSeq("tfc.rule-change").get
+    val configs : Seq[play.api.Configuration] = conf.getConfigSeq("tfc.rule-change").get
     val configsExcludingDefault = getTFCConfigExcludingDefault(configs)
     val defaultConfig = getTFCConfigDefault(configs)
     // ensure the latest date is in the head position
