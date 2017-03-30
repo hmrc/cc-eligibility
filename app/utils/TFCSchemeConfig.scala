@@ -17,21 +17,26 @@
 package utils
 
 import java.text.SimpleDateFormat
-
 import org.joda.time.LocalDate
 import play.api.Play._
 import play.api.{Configuration, Play}
-
 
 case class TFCTaxYearConfig(
                              childAgeLimit: Int,
                              childAgeLimitDisabled: Int,
                              minimumHoursWorked: Double,
                              maxIncomePerClaimant: Double,
-                             personalAllowancePerClaimant: Double
+                             personalAllowancePerClaimant: Double,
+                             nmwApprentice: Int,
+                             nmwUnder18: Int,
+                             nmw18To20: Int,
+                             nmw21To24: Int,
+                             nmw25Over: Int
                              )
 
 object TFCConfig extends CCConfig {
+
+  val minimumEarningsEnabled: Boolean = application.configuration.getBoolean("tfc-min-earnings").get
 
   def getTFCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
     configs.filter(x => {
@@ -71,12 +76,17 @@ object TFCConfig extends CCConfig {
       childAgeLimitDisabled = configuration.getInt("child-age-limit-disabled").get,
       minimumHoursWorked = configuration.getDouble("minimum-hours-worked-per-week").get,
       maxIncomePerClaimant = configuration.getDouble("maximum-income-per-claimant").get,
-      personalAllowancePerClaimant = configuration.getDouble("personal-allowance").get
+      personalAllowancePerClaimant = configuration.getDouble("personal-allowance").get,
+      nmwApprentice = configuration.getInt("nmw.apprentice").get,
+      nmwUnder18 = configuration.getInt("nmw.under-18").get,
+      nmw18To20 = configuration.getInt("nmw.18-20").get,
+      nmw21To24 = configuration.getInt("nmw.21-24").get,
+      nmw25Over = configuration.getInt("nmw.over-25").get
     )
   }
 
   def getConfig(currentDate: LocalDate): TFCTaxYearConfig = {
-    val configs : Seq[play.api.Configuration] = Play.application.configuration.getConfigSeq("tfc.rule-change").get
+    val configs : Seq[play.api.Configuration] = application.configuration.getConfigSeq("tfc.rule-change").get
     val configsExcludingDefault = getTFCConfigExcludingDefault(configs)
     val defaultConfig = getTFCConfigDefault(configs)
     // ensure the latest date is in the head position

@@ -25,7 +25,12 @@
             "severeDisabilityBenefitsOrAllowances":false,
             "incomeBenefitsOrAllowances":false,
             "carersAllowance":false
-          }
+          },
+          "minimumEarnings": {
+            "selection": false,
+            "amount": 64
+          },
+          "age": "under-18"
         }
       ],
       "children": [

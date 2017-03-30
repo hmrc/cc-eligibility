@@ -16,7 +16,6 @@
 
 package utils
 
-
 import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
@@ -52,7 +51,12 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
         childAgeLimitDisabled = defaultConfig.getInt("child-age-limit-disabled").get,
         minimumHoursWorked = defaultConfig.getDouble("minimum-hours-worked-per-week").get,
         maxIncomePerClaimant = defaultConfig.getDouble("maximum-income-per-claimant").get,
-        personalAllowancePerClaimant = defaultConfig.getDouble("personal-allowance").get
+        personalAllowancePerClaimant = defaultConfig.getDouble("personal-allowance").get,
+        nmwApprentice = defaultConfig.getInt("nmw.apprentice").get,
+        nmwUnder18 = defaultConfig.getInt("nmw.under-18").get,
+        nmw18To20 = defaultConfig.getInt("nmw.18-20").get,
+        nmw21To24 = defaultConfig.getInt("nmw.21-24").get,
+        nmw25Over = defaultConfig.getInt("nmw.over-25").get
       )
 
       resultTaxYearConfig.childAgeLimit shouldBe 11
@@ -60,22 +64,31 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
       resultTaxYearConfig.minimumHoursWorked shouldBe 16.00
       resultTaxYearConfig.maxIncomePerClaimant shouldBe 100000.00
       resultTaxYearConfig.personalAllowancePerClaimant shouldBe 11500.00
+      resultTaxYearConfig.nmwApprentice shouldBe 56
+      resultTaxYearConfig.nmwUnder18 shouldBe 64
+      resultTaxYearConfig.nmw18To20 shouldBe 89
+      resultTaxYearConfig.nmw21To24 shouldBe 112
+      resultTaxYearConfig.nmw25Over shouldBe 120
     }
 
     val testCases = Table(
-      ("test", "date", "childAgeLimit", "childAgeLimitDisabled", "minimumHoursWorked", "maxIncomePerClaimant", "personalAllowancePerClaimant"),
-      ("default tax year rule", "01-01-2015", 11, 16, 16.00, 100000.00, 11500.00),
-      ("2019 tax year rule as 2018", "01-01-2019", 11, 16, 16.00, 100000.00, 11500.00),
-      ("2018 tax year rule", "01-08-2018", 11, 16, 16.00, 100000.00, 11500.00),
-      ("2018 tax year rule on the date of change", "06-04-2018", 11, 16, 16.00, 100000.00, 11500.00),
-      ("2017 tax year rule", "01-08-2017", 11, 16, 16.00, 100000.00, 11500.00),
-      ("2017 tax year rule on the date of change", "06-04-2017", 11, 16, 16.00, 100000.00, 11500.00),
-      ("2016 tax year rule", "01-08-2016", 11, 16, 16.00, 100000.00, 11000.00),
-      ("2016 tax year rule on the date of change", "06-04-2016", 11, 16, 16.00, 100000.00, 11000.00)
+      ("test", "date", "childAgeLimit", "childAgeLimitDisabled", "minimumHoursWorked", "maxIncomePerClaimant", "personalAllowancePerClaimant",
+      "nmwApprentice", "nmwUnder18", "nmw18To20", "nmw21To24", "nmwOver25"),
+      ("default tax year rule", "01-01-2015", 11, 16, 16.00, 100000.00, 11500.00, 56, 64, 89, 112, 120),
+      ("2019 tax year rule as 2018", "01-01-2019", 11, 16, 16.00, 100000.00, 11500.00, 56, 64, 89, 112, 120),
+      ("2018 tax year rule", "01-08-2018", 11, 16, 16.00, 100000.00, 11500.00, 56, 64, 89, 112, 120),
+      ("2018 tax year rule on the date of change", "06-04-2018", 11, 16, 16.00, 100000.00, 11500.00, 56, 64, 89, 112, 120),
+      ("2017 tax year rule", "01-08-2017", 11, 16, 16.00, 100000.00, 11500.00, 56, 64, 89, 112, 120),
+      ("2017 tax year rule on the date of change", "06-04-2017", 11, 16, 16.00, 100000.00, 11500.00, 56, 64, 89, 112, 120),
+      ("2016 tax year rule", "01-08-2016", 11, 16, 16.00, 100000.00, 11000.00, 54, 64, 88, 111, 115),
+      ("2016 tax year rule on the date of change", "06-04-2016", 11, 16, 16.00, 100000.00, 11000.00, 54, 64, 88, 111, 115)
     )
 
-    forAll(testCases) { case (test, date, childAgeLimit, childAgeLimitDisabled, minimumHoursWorked, maxIncomePerClaimant, personalAllowancePerClaimant) =>
-      s"return ${test} (date: ${date} childAgeLimit: ${childAgeLimit} childAgeLimitDisabled: ${childAgeLimitDisabled} minimumHoursWorked: ${minimumHoursWorked} maxIncomePerClaimant: ${maxIncomePerClaimant} personalAllowancePerClaimant: ${personalAllowancePerClaimant})" in {
+    forAll(testCases) { case (test, date, childAgeLimit, childAgeLimitDisabled, minimumHoursWorked, maxIncomePerClaimant, personalAllowancePerClaimant,
+      nmwApprentice, nmwUnder18, nmw18To20, nmw21To24, nmwOver25) =>
+      s"return ${test} (date: ${date} childAgeLimit: ${childAgeLimit} childAgeLimitDisabled: ${childAgeLimitDisabled} minimumHoursWorked: " +
+        s"${minimumHoursWorked} maxIncomePerClaimant: ${maxIncomePerClaimant} personalAllowancePerClaimant: ${personalAllowancePerClaimant} " +
+        s"nmwApprentice: ${nmwApprentice} nmwUnder18: ${nmwUnder18} nmw18To20: ${nmw18To20} nmw21To24: ${nmw21To24} nmwOver25: ${nmwOver25})" in {
         val pattern = "dd-MM-yyyy"
         val formatter = DateTimeFormat.forPattern(pattern)
         val current = LocalDate.parse(date, formatter)
@@ -86,6 +99,11 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
         result.minimumHoursWorked shouldBe minimumHoursWorked
         result.maxIncomePerClaimant shouldBe maxIncomePerClaimant
         result.personalAllowancePerClaimant shouldBe personalAllowancePerClaimant
+        result.nmwApprentice shouldBe nmwApprentice
+        result.nmwUnder18 shouldBe nmwUnder18
+        result.nmw18To20 shouldBe nmw18To20
+        result.nmw21To24 shouldBe nmw21To24
+        result.nmw25Over shouldBe nmwOver25
       }
     }
   }

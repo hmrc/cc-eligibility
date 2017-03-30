@@ -25,7 +25,12 @@
             "severeDisabilityBenefitsOrAllowances":false,
             "incomeBenefitsOrAllowances":false,
             "carersAllowance":false
-          }
+          },
+          "minimumEarnings": {
+            "selection": false,
+            "amount": 90
+          },
+          "age": "18-20"
         },
         {
           "hoursPerWeek": 28.00,
@@ -48,7 +53,12 @@
             "severeDisabilityBenefitsOrAllowances":false,
             "incomeBenefitsOrAllowances":false,
             "carersAllowance":false
-          }
+          },
+          "minimumEarnings": {
+            "selection": false,
+            "amount": 54
+          },
+          "age": "apprentice"
         }
       ],
       "children": [
