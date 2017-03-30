@@ -17,11 +17,9 @@
 package utils
 
 import java.text.SimpleDateFormat
-
 import org.joda.time.LocalDate
 import play.api.Play._
 import play.api.{Configuration, Play}
-
 
 case class TFCTaxYearConfig(
                              childAgeLimit: Int,
@@ -38,7 +36,7 @@ case class TFCTaxYearConfig(
 
 object TFCConfig extends CCConfig {
 
-  val minimumEarningsEnabled: Boolean = Play.application.configuration.getBoolean("tfc.min.earnings.enabled").get
+  val minimumEarningsEnabled: Boolean = application.configuration.getBoolean("tfc-min-earnings").get
 
   def getTFCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
     configs.filter(x => {
@@ -88,7 +86,7 @@ object TFCConfig extends CCConfig {
   }
 
   def getConfig(currentDate: LocalDate): TFCTaxYearConfig = {
-    val configs : Seq[play.api.Configuration] = Play.application.configuration.getConfigSeq("tfc.rule-change").get
+    val configs : Seq[play.api.Configuration] = application.configuration.getConfigSeq("tfc.rule-change").get
     val configsExcludingDefault = getTFCConfigExcludingDefault(configs)
     val defaultConfig = getTFCConfigDefault(configs)
     // ensure the latest date is in the head position
