@@ -21,6 +21,8 @@ import org.joda.time.LocalDate
 import play.api.Play._
 import play.api.{Configuration, Play}
 
+import scala.util.Try
+
 case class TFCTaxYearConfig(
                              childAgeLimit: Int,
                              childAgeLimitDisabled: Int,
@@ -36,7 +38,7 @@ case class TFCTaxYearConfig(
 
 object TFCConfig extends CCConfig {
 
-  val minimumEarningsEnabled: Boolean = application.configuration.getBoolean("tfc-min-earnings").get
+  val minimumEarningsEnabled: Boolean = Try(application.configuration.getString("tfc-min-earnings").get.toBoolean).getOrElse(false)
 
   def getTFCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
     configs.filter(x => {
