@@ -28,7 +28,9 @@
           },
           "minimumEarnings": {
             "selection": false,
-            "amount": 1
+            "amount": 1,
+            "employmentStatus": "selfEmployed",
+            "selfEmployedSelection": false
           }
         },
         {

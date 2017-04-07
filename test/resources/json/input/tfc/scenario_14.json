@@ -28,9 +28,11 @@
           },
           "minimumEarnings": {
             "selection": false,
-            "amount": 90
+            "amount": 1
           },
-          "age": "18-20"
+          "age": "18-20",
+          "employmentStatus": "selfEmployed",
+          "selfEmployedSelection": true
         },
         {
           "hoursPerWeek": 28.00,
@@ -58,7 +60,8 @@
             "selection": false,
             "amount": 54
           },
-          "age": "apprentice"
+          "age": "18-20",
+          "employmentStatus": "apprentice"
         }
       ],
       "children": [
