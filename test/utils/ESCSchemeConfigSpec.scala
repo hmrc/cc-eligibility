@@ -19,7 +19,6 @@ package utils
 import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import play.api.Play
 import spec.CCSpecConfig
 
 class ESCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication {
@@ -55,7 +54,7 @@ class ESCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
     }
 
     "get default Tax Year Config" in {
-      val configs : Seq[play.api.Configuration] = Play.application.configuration.getConfigSeq("esc.rule-change").get
+      val configs : Seq[play.api.Configuration] = app.configuration.getConfigSeq("esc.rule-change").get
       val defaultConfig = ESCConfig.getESCConfigDefault(configs)
 
       val resultTaxYearConfig = ESCTaxYearConfig(

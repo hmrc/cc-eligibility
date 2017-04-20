@@ -64,6 +64,10 @@ case class TaxYear(
   }
 
   def claimantsGetChildcareElement(periodStart : LocalDate) : Boolean = {
+    def isClaimantDisabledOrCarer(person: Claimant) = {
+      determineClaimantDisabilityAndSeverity(person) || determineCarer(person)
+    }
+
     val parent = claimants.head
     isCouple match {
       case true =>
@@ -71,10 +75,10 @@ case class TaxYear(
         isCoupleQualifyingForTC && (
           (
             parent.isWorkingAtLeast16HoursPerWeek(periodStart) &&
-            (partner.isWorkingAtLeast16HoursPerWeek(periodStart) || determineClaimantDisabilityAndSeverity(partner) || determineCarer(partner))
+            (partner.isWorkingAtLeast16HoursPerWeek(periodStart) || isClaimantDisabledOrCarer(partner))
           ) || (
               partner.isWorkingAtLeast16HoursPerWeek(periodStart) &&
-                (determineClaimantDisabilityAndSeverity(parent) || determineCarer(parent))
+                isClaimantDisabledOrCarer(parent)
             )
           )
       case false =>
@@ -112,13 +116,15 @@ case class TaxYear(
 
     val minimumHours: Double = TCConfig.getConfig(periodStart).minimumHoursWorkedIfCouple
 
-    val isCoupleWorking24Hours: Boolean =
-      claimants.head.isQualifyingForTC && claimants.last.isQualifyingForTC && (getTotalHouseholdWorkingHours >= minimumHours)
+    val parent = claimants.head
+    val partner = claimants.last
+    def isCoupleWorking24Hours: Boolean =
+      parent.isQualifyingForTC && partner.isQualifyingForTC && (getTotalHouseholdWorkingHours >= minimumHours)
 
-    val isOneOfCoupleWorking16h = determineWorking16hours(claimants.head) || determineWorking16hours(claimants.last)
-    val isOneOfCoupleDisabled = determineClaimantDisabilityAndSeverity(claimants.head) || determineClaimantDisabilityAndSeverity(claimants.last)
-    val isOneOfCoupleCarer = determineCarer(claimants.head) || determineCarer(claimants.last)
-    val isOneOfCoupeIncapacitated = determineIncapacitated(claimants.head) || determineIncapacitated(claimants.last)
+    def isOneOfCoupleWorking16h = determineWorking16hours(parent) || determineWorking16hours(partner)
+    def isOneOfCoupleDisabled = determineClaimantDisabilityAndSeverity(parent) || determineClaimantDisabilityAndSeverity(partner)
+    def isOneOfCoupleCarer = determineCarer(parent) || determineCarer(partner)
+    def isOneOfCoupeIncapacitated = determineIncapacitated(parent) || determineIncapacitated(partner)
 
     if(isOneOfCoupleWorking16h && (isOneOfCoupleDisabled || isOneOfCoupleCarer || isCoupleWorking24Hours || isOneOfCoupeIncapacitated)) {
       householdQualifies

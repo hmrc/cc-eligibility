@@ -20,7 +20,6 @@ import controllers.FakeCCEligibilityApplication
 import models.input.tc.TaxYear
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import play.api.Play
 import spec.CCSpecConfig
 
 class TCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication {
@@ -95,7 +94,7 @@ class TCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication 
     }
 
     "get default Tax Year Config" in {
-      val configs : Seq[play.api.Configuration] = Play.application.configuration.getConfigSeq("tc.rule-change").get
+      val configs : Seq[play.api.Configuration] = app.configuration.getConfigSeq("tc.rule-change").get
       val defaultTaxYearConfig = TCConfig.getTCConfigDefault(configs)
 
       val tcTaxYearConfig = TCConfig.getTCTaxYearConfig(defaultTaxYearConfig)

@@ -19,7 +19,6 @@ package utils
 import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import play.api.Play
 import spec.CCSpecConfig
 import org.scalatest.prop.TableDrivenPropertyChecks.forAll
 import org.scalatest.prop.Tables.Table
@@ -43,7 +42,7 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
     }
 
     "get default Tax Year Config" in {
-      val configs : Seq[play.api.Configuration] = Play.application.configuration.getConfigSeq("tfc.rule-change").get
+      val configs : Seq[play.api.Configuration] = app.configuration.getConfigSeq("tfc.rule-change").get
       val defaultConfig = TFCConfig.getTFCConfigDefault(configs)
 
       val resultTaxYearConfig = TFCTaxYearConfig(

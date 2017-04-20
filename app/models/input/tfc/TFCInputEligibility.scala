@@ -24,7 +24,7 @@ import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
-import utils.{MessagesObject, CCFormat, Periods, TFCConfig}
+import utils._
 
 case class Request (
                      payload: Payload
@@ -129,16 +129,18 @@ case class Claimant(
   }
 
   def satisfyMinimumEarnings(periodStart: LocalDate): Boolean = {
+    def getNWMPerAge(taxYearConfig: TFCTaxYearConfig) = age match {
+      case Some("under-18") => taxYearConfig.nmwUnder18
+      case Some("18-20") => taxYearConfig.nmw18To20
+      case Some("21-24") => taxYearConfig.nmw21To24
+      case _ => taxYearConfig.nmw25Over //25 or over
+    }
+
     val taxYearConfig = TFCConfig.getConfig(periodStart)
     if(minimumEarnings.selection) {
       true
     } else {
-      val nmw = age match {
-        case Some("under-18") => taxYearConfig.nmwUnder18
-        case Some("18-20") => taxYearConfig.nmw18To20
-        case Some("21-24") => taxYearConfig.nmw21To24
-        case _ => taxYearConfig.nmw25Over //25 or over
-      }
+      val nmw = getNWMPerAge(taxYearConfig)
       if(minimumEarnings.amount >= nmw) {
         true
       }
