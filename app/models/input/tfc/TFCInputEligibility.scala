@@ -51,6 +51,20 @@ case class TFC(
                 children: List[Child]
                 ) {
 
+  def validHouseholdMinimumEarnings: Boolean = {
+    if(claimants.length > 1) {
+      (claimants.head.satisfyMinimumEarnings(from), claimants.last.satisfyMinimumEarnings(from)) match {
+        case (true, true) => true
+        case (true, false) => claimants.last.otherSupport.carersAllowance
+        case (false, true) => claimants.head.otherSupport.carersAllowance
+        case _ =>   false
+      }
+    }
+    else {
+      (claimants.head.satisfyMinimumEarnings(from))
+    }
+  }
+
   def validHouseholdHours  : Boolean = {
     if(claimants.length > 1) {
       ((claimants.head.isWorkingAtLeast16HoursPerWeek(from)), (claimants.last.isWorkingAtLeast16HoursPerWeek(from))) match {
@@ -91,7 +105,11 @@ case class Claimant(
                      isPartner: Boolean = false,
                      disability: Disability,
                      schemesClaiming: SchemesClaiming,
-                     otherSupport: OtherSupport
+                     otherSupport: OtherSupport,
+                     minimumEarnings: MinimumEarnings,
+                     age: Option[String],
+                     employmentStatus: Option[String] = None,
+                     selfEmployedSelection: Option[Boolean] = None
                      ) extends models.input.BaseClaimant {
 
   def isWorkingAtLeast16HoursPerWeek (periodStart:LocalDate) : Boolean = {
@@ -110,6 +128,30 @@ case class Claimant(
       liveOrWork && isTotalIncomeLessThan100000(periodStart)
   }
 
+  def satisfyMinimumEarnings(periodStart: LocalDate): Boolean = {
+    val taxYearConfig = TFCConfig.getConfig(periodStart)
+    if(minimumEarnings.selection) {
+      true
+    } else {
+      val nmw = age match {
+        case Some("under-18") => taxYearConfig.nmwUnder18
+        case Some("18-20") => taxYearConfig.nmw18To20
+        case Some("21-24") => taxYearConfig.nmw21To24
+        case _ => taxYearConfig.nmw25Over //25 or over
+      }
+      if(minimumEarnings.amount >= nmw) {
+        true
+      }
+      else {
+        employmentStatus match {
+          case Some("selfEmployed") if selfEmployedSelection.getOrElse(false) => true
+          case Some("apprentice") => minimumEarnings.amount >= taxYearConfig.nmwApprentice
+          case _ => false
+        }
+      }
+    }
+  }
+
 }
 
 object Claimant extends CCFormat with MessagesObject {
@@ -125,8 +167,24 @@ object Claimant extends CCFormat with MessagesObject {
           (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
             (JsPath \ "disability").read[Disability] and
               (JsPath \ "schemesClaiming").read[SchemesClaiming] and
-                (JsPath \ "otherSupport").read[OtherSupport]
+                (JsPath \ "otherSupport").read[OtherSupport] and
+                  (JsPath \ "minimumEarnings").read[MinimumEarnings] and
+                    (JsPath \ "age").readNullable[String] and
+                      (JsPath \ "employmentStatus").readNullable[String] and
+                        (JsPath \ "selfEmployedSelection").readNullable[Boolean]
     )(Claimant.apply _)
+}
+
+case class MinimumEarnings(
+                          selection: Boolean = true,
+                          amount: BigDecimal = 0.00
+                          )
+
+object MinimumEarnings {
+  implicit val minEarningsRead: Reads[MinimumEarnings] = (
+    (JsPath \ "selection").read[Boolean].orElse(Reads.pure(true)) and
+      (JsPath \ "amount").read[BigDecimal].orElse(Reads.pure(0.00))
+  )(MinimumEarnings.apply _)
 }
 
 case class Disability(

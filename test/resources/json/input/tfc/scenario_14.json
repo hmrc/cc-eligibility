@@ -25,7 +25,14 @@
             "severeDisabilityBenefitsOrAllowances":false,
             "incomeBenefitsOrAllowances":false,
             "carersAllowance":false
-          }
+          },
+          "minimumEarnings": {
+            "selection": false,
+            "amount": 1
+          },
+          "age": "18-20",
+          "employmentStatus": "selfEmployed",
+          "selfEmployedSelection": true
         },
         {
           "hoursPerWeek": 28.00,
@@ -48,7 +55,13 @@
             "severeDisabilityBenefitsOrAllowances":false,
             "incomeBenefitsOrAllowances":false,
             "carersAllowance":false
-          }
+          },
+          "minimumEarnings": {
+            "selection": false,
+            "amount": 54
+          },
+          "age": "18-20",
+          "employmentStatus": "apprentice"
         }
       ],
       "children": [

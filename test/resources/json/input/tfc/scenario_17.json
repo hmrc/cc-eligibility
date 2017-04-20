@@ -25,6 +25,12 @@
             "severeDisabilityBenefitsOrAllowances":false,
             "incomeBenefitsOrAllowances":false,
             "carersAllowance":false
+          },
+          "minimumEarnings": {
+            "selection": false,
+            "amount": 1,
+            "employmentStatus": "selfEmployed",
+            "selfEmployedSelection": false
           }
         },
         {
@@ -48,6 +54,10 @@
             "severeDisabilityBenefitsOrAllowances":false,
             "incomeBenefitsOrAllowances":false,
             "carersAllowance":false
+          },
+          "minimumEarnings": {
+            "selection": false,
+            "amount": 1000
           }
         }
       ],
