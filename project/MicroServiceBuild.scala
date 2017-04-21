@@ -10,7 +10,7 @@ object MicroServiceBuild extends Build with MicroService {
 
 private object AppDependencies {
 
-  private val microserviceBootstrapVersion = "5.13.0"
+  private val microserviceBootstrapVersion = "5.15.0"
   private val playHealthVersion = "2.1.0"
   private val jsonSchemaValidator = "2.2.6"
   private val playConfigVersion = "4.3.0"
@@ -19,7 +19,7 @@ private object AppDependencies {
   private val scalaTestVersion = "2.2.6"
   private val scalaTestPlusVersion = "1.5.1"
   private val pegDownVersion = "1.6.0"
-  private val hmrcTestVersion = "2.2.0"
+  private val hmrcTestVersion = "2.3.0"
   private val mockitoVersion = "1.10.19"
 
   val compile = Seq(
