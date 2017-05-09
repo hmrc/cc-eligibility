@@ -17,11 +17,9 @@
 package utils
 
 import java.text.SimpleDateFormat
-
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import play.api.Play._
-import play.api.{Configuration, Play}
+import play.api.Configuration
 
 case class TCTaxYearConfig(
                              childAgeLimit: Int,
@@ -36,10 +34,10 @@ case class TCTaxYearConfig(
                              )
 
 
-object TCConfig extends CCConfig {
+object TCConfig extends CCConfig with LoadConfig {
 
-  val childElementLimit = configuration.getInt("tc.child-element-limit").get
-  val childDate6thApril2017 = DateTimeFormat.forPattern("dd-MM-yyyy").parseLocalDate(configuration.getString("tc.child-element-date-constraint").get)
+  val childElementLimit = conf.getInt("tc.child-element-limit").get
+  val childDate6thApril2017 = DateTimeFormat.forPattern("dd-MM-yyyy").parseLocalDate(conf.getString("tc.child-element-date-constraint").get)
 
   def getTCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
     configs.filter(x => {
@@ -104,7 +102,7 @@ object TCConfig extends CCConfig {
   }
 
   def getConfig(currentDate: LocalDate): TCTaxYearConfig = {
-    val configs : Seq[play.api.Configuration] = Play.application.configuration.getConfigSeq("tc.rule-change").get
+    val configs : Seq[play.api.Configuration] = conf.getConfigSeq("tc.rule-change").get
     val configsExcludingDefault = getTCConfigExcludingDefault(configs)
     val defaultConfig = getTCConfigDefault(configs)
     // ensure the latest date is in the head position

@@ -19,16 +19,12 @@ package models.input.tfc
 
 import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
-
 import org.joda.time.LocalDate
 import play.api.data.validation.ValidationError
-import play.api.i18n.Messages
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
-import utils.{CCFormat, Periods, TFCConfig}
-import play.api.i18n.Messages.Implicits._
-import play.api.Play.current
+import utils._
 
 case class Request (
                      payload: Payload
@@ -84,7 +80,7 @@ case class TFC(
   }
 }
 
-object TFC extends CCFormat {
+object TFC extends CCFormat with MessagesObject {
 
   def maxChildValidation(noOfChild: List[Child]): Boolean = {
     noOfChild.length <= 25
@@ -97,8 +93,8 @@ object TFC extends CCFormat {
   implicit val tfcReads: Reads[TFC] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "numberOfPeriods").read[Short].orElse(Reads.pure(1)) and
-        (JsPath \ "claimants").read[List[Claimant]].filter(ValidationError(Messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
-          (JsPath \ "children").read[List[Child]].filter(ValidationError(Messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
+        (JsPath \ "claimants").read[List[Claimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
+          (JsPath \ "children").read[List[Child]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
     )(TFC.apply _)
 }
 
@@ -133,16 +129,18 @@ case class Claimant(
   }
 
   def satisfyMinimumEarnings(periodStart: LocalDate): Boolean = {
+    def getNWMPerAge(taxYearConfig: TFCTaxYearConfig) = age match {
+      case Some("under-18") => taxYearConfig.nmwUnder18
+      case Some("18-20") => taxYearConfig.nmw18To20
+      case Some("21-24") => taxYearConfig.nmw21To24
+      case _ => taxYearConfig.nmw25Over //25 or over
+    }
+
     val taxYearConfig = TFCConfig.getConfig(periodStart)
     if(minimumEarnings.selection) {
       true
     } else {
-      val nmw = age match {
-        case Some("under-18") => taxYearConfig.nmwUnder18
-        case Some("18-20") => taxYearConfig.nmw18To20
-        case Some("21-24") => taxYearConfig.nmw21To24
-        case _ => taxYearConfig.nmw25Over //25 or over
-      }
+      val nmw = getNWMPerAge(taxYearConfig)
       if(minimumEarnings.amount >= nmw) {
         true
       }
@@ -158,7 +156,7 @@ case class Claimant(
 
 }
 
-object Claimant extends CCFormat {
+object Claimant extends CCFormat with MessagesObject {
 
   def validateIncome(income: BigDecimal): Boolean = {
     income >= BigDecimal(0.00)
@@ -166,7 +164,7 @@ object Claimant extends CCFormat {
 
   implicit val claimantReads: Reads[Claimant] = (
     (JsPath \ "liveOrWork").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "totalIncome").read[BigDecimal].filter(ValidationError(Messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
+      (JsPath \ "totalIncome").read[BigDecimal].filter(ValidationError(messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
         (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
           (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
             (JsPath \ "disability").read[Disability] and
@@ -303,7 +301,7 @@ case class Child  (
 }
 
 
-object Child extends CCFormat {
+object Child extends CCFormat with MessagesObject {
   val nameLength = 25
   def validID(id: Short): Boolean = {
     id >= 0
@@ -314,9 +312,9 @@ object Child extends CCFormat {
   }
 
   implicit val childReads: Reads[Child] = (
-    (JsPath \ "id").read[Short].filter(ValidationError(Messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
+    (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
       (JsPath \ "name").readNullable[String](maxLength[String](nameLength)) and
-        (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(Messages("cc.elig.childcare.spend.too.low")))(x => childSpendValidation(x)) and
+        (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(messages("cc.elig.childcare.spend.too.low")))(x => childSpendValidation(x)) and
           (JsPath \ "childcareCostPeriod").read[Periods.Period] and
             (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
               (JsPath \ "disability").read[Disability]

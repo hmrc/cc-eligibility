@@ -19,15 +19,14 @@ package utils
 import java.text.SimpleDateFormat
 
 import org.joda.time.LocalDate
-import play.api.Play._
-import play.api.{Configuration, Play}
+import play.api.Configuration
 
 case class ESCTaxYearConfig(
                              childAgeLimit: Int,
                              childAgeLimitDisabled: Int
                              )
 
-object ESCConfig extends CCConfig {
+object ESCConfig extends CCConfig with LoadConfig {
 
     def getESCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
     configs.filter(x => {
@@ -71,7 +70,7 @@ object ESCConfig extends CCConfig {
   }
 
   def getConfig(currentDate: LocalDate): ESCTaxYearConfig = {
-    val configs : Seq[play.api.Configuration] = Play.application.configuration.getConfigSeq("esc.rule-change").get
+    val configs : Seq[play.api.Configuration] = conf.getConfigSeq("esc.rule-change").get
     val configsExcludingDefault = getESCConfigExcludingDefault(configs)
     val defaultConfig = getESCConfigDefault(configs)
     // ensure the latest date is in the head position

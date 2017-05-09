@@ -16,10 +16,7 @@
 
 package utils
 
-import play.api.i18n.Messages
-import play.api.i18n.Messages.Implicits._
 import play.api.libs.json._
-import play.api.Play.current
 
 object EnumUtils {
   def enumReads[E <: Enumeration](enum: E): Reads[E#Value] =
@@ -47,7 +44,7 @@ object EnumUtils {
   }
 }
 
-object Periods extends Enumeration {
+object Periods extends Enumeration with MessagesObject {
   type Period = Value
 
   val Weekly = Value(0, "Week")
@@ -63,12 +60,12 @@ object Periods extends Enumeration {
 
   def toString(period: Value): String = {
     period match {
-      case Weekly => Messages("cc.period.weekly")
-      case Fortnightly => Messages("cc.period.fortnightly")
-      case Monthly => Messages("cc.period.monthly")
-      case Quarterly => Messages("cc.period.3monthly")
-      case Yearly => Messages("cc.period.yearly")
-      case _ => Messages("cc.period.invalid")
+      case Weekly => messages("cc.period.weekly")
+      case Fortnightly => messages("cc.period.fortnightly")
+      case Monthly => messages("cc.period.monthly")
+      case Quarterly => messages("cc.period.3monthly")
+      case Yearly => messages("cc.period.yearly")
+      case _ => messages("cc.period.invalid")
     }
   }
 
