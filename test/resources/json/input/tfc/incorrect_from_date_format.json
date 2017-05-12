@@ -9,6 +9,7 @@
             "hoursPerWeek": 30.00,
             "liveOrWork": true,
             "isPartner": false,
+            "location": "england",
             "totalIncome": 0.00,
             "earnedIncome": 0.00,
             "disability": {
