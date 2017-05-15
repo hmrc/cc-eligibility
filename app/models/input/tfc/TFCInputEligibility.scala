@@ -16,7 +16,6 @@
 
 package models.input.tfc
 
-
 import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
 import org.joda.time.LocalDate
@@ -24,6 +23,7 @@ import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
+import service.AuditEvents
 import utils._
 
 case class Request (
@@ -52,30 +52,38 @@ case class TFC(
                 ) {
 
   def validHouseholdMinimumEarnings: Boolean = {
+    val parent = claimants.head
     if(claimants.length > 1) {
-      (claimants.head.satisfyMinimumEarnings(from), claimants.last.satisfyMinimumEarnings(from)) match {
+      val partner = claimants.last
+      val minEarningsParent = parent.satisfyMinimumEarnings(from)
+      val minEarningsPartner = partner.satisfyMinimumEarnings(from)
+      val householdMinEarns = minEarningsParent && minEarningsPartner
+      println(s"**********householdMinEarns >>>$householdMinEarns")
+      AuditEvents.auditMinEarnings(householdMinEarns)
+      (minEarningsParent, minEarningsPartner) match {
         case (true, true) => true
-        case (true, false) => claimants.last.otherSupport.carersAllowance
-        case (false, true) => claimants.head.otherSupport.carersAllowance
-        case _ =>   false
+        case (true, false) => partner.otherSupport.carersAllowance
+        case (false, true) => parent.otherSupport.carersAllowance
+        case _ => false
       }
     }
     else {
-      (claimants.head.satisfyMinimumEarnings(from))
+      parent.satisfyMinimumEarnings(from)
     }
   }
 
   def validHouseholdHours  : Boolean = {
+    val parent = claimants.head
     if(claimants.length > 1) {
-      ((claimants.head.isWorkingAtLeast16HoursPerWeek(from)), (claimants.last.isWorkingAtLeast16HoursPerWeek(from))) match {
+      val partner = claimants.last
+      (parent.isWorkingAtLeast16HoursPerWeek(from), partner.isWorkingAtLeast16HoursPerWeek(from)) match {
         case (true,true) => true
-        case (true, false) => claimants.last.otherSupport.carersAllowance
-        case (false, true) =>   claimants.head.otherSupport.carersAllowance
+        case (true, false) => partner.otherSupport.carersAllowance
+        case (false, true) => parent.otherSupport.carersAllowance
         case _ =>   false
       }
-    }
-    else {
-      (claimants.head.isWorkingAtLeast16HoursPerWeek(from))
+    } else {
+      (parent.isWorkingAtLeast16HoursPerWeek(from))
     }
   }
 }
@@ -143,10 +151,18 @@ case class Claimant(
       val nmw = getNWMPerAge(taxYearConfig)
       if(minimumEarnings.amount >= nmw) {
         true
-      }
-      else {
+      } else {
+        println(s"****FAIlures of age group>>>>$nmw")
+        AuditEvents.auditAgeGroup(nmw)
         employmentStatus match {
-          case Some("selfEmployed") if selfEmployedSelection.getOrElse(false) => true
+          case Some("selfEmployed") =>
+            println(s"******Employment status>>>${employmentStatus.get}")
+            AuditEvents.auditSelfEmploymentStatus(employmentStatus.get)
+            if (selfEmployedSelection.get) {
+              println(s"******Self employed in 1st year of trading>>>true")
+              AuditEvents.auditSelfEmployedin1st(true)
+            }
+            true
           case Some("apprentice") => minimumEarnings.amount >= taxYearConfig.nmwApprentice
           case _ => false
         }

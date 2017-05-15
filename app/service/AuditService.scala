@@ -22,9 +22,8 @@ import play.api.mvc.Request
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.{DataEvent, DeviceId}
 import uk.gov.hmrc.play.http.HeaderCarrier
-
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-
 
 object AuditService extends AuditService {
   override lazy val auditSource = "cc-eligibility"
@@ -34,18 +33,17 @@ object AuditService extends AuditService {
 trait AuditService {
 
   def auditSource : String
-
   def auditConnector: AuditConnector
 
-  import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
+//  import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
   def sendEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)
-               (implicit request: Request[_], hc: HeaderCarrier) : Future[AuditResult] = {
+               (implicit request: Request[_], hc: HeaderCarrier): Future[AuditResult] = {
     auditConnector.sendEvent(buildEvent(auditType, details, sessionId))
   }
 
   def buildEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)
-                (implicit request: Request[_], hc: HeaderCarrier) : DataEvent = {
+                (implicit request: Request[_], hc: HeaderCarrier): DataEvent = {
     DataEvent(
       auditSource =  auditSource,
       auditType = auditType,

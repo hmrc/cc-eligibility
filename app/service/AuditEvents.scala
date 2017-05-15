@@ -19,45 +19,59 @@ package service
 import play.api.mvc.Request
 import uk.gov.hmrc.play.http.HeaderCarrier
 
-
 /**
  * Created by user on 25/04/16.
  */
 object AuditEvents extends AuditEvents {
 
-  override def auditService: AuditService = AuditService
+  override val auditService: AuditService = AuditService
 }
 
 trait AuditEvents {
 
-  def auditService : AuditService
+  val auditService : AuditService
 
   def auditTFCRequest(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
-    auditEvent("TFCRequest", data)
+    auditEvent("TFCRequest", Map("TFCRequest" -> data.toString))
   }
 
   def auditTFCResponse(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
-    auditEvent("TFCResponse", data)
+    auditEvent("TFCResponse", Map("TFCResponse" -> data.toString))
   }
 
   def auditTCRequest(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
-    auditEvent("TCRequest", data)
+    auditEvent("TCRequest", Map("TCRequest" -> data.toString))
   }
 
   def auditTCResponse(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
-    auditEvent("TCResponse", data)
+    auditEvent("TCResponse", Map("TCResponse" -> data.toString))
   }
 
   def auditESCRequest(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
-    auditEvent("ESCRequest", data)
+    auditEvent("ESCRequest", Map("ESCRequest" -> data.toString))
   }
 
   def auditESCResponse(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
-    auditEvent("ESCResponse", data)
+    auditEvent("ESCResponse", Map("ESCResponse" -> data.toString))
   }
 
-  private def auditEvent(auditEventType : String, data: String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
-    auditService.sendEvent(auditEventType, Map("data" -> data))
+  def auditMinEarnings(data : Boolean) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+    auditEvent("HouseholdMinimumEarnings", Map("SelfEmployed" -> data.toString))
+  }
+
+  def auditAgeGroup(data : Int) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+    auditEvent("AgeGroup", Map("SelfEmployed" -> data.toString))
+  }
+
+  def auditSelfEmploymentStatus(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+    auditEvent("SelfEmploymentStatus", Map("SelfEmployed" -> data.toString))
+  }
+
+  def auditSelfEmployedin1st(data : Boolean) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+    auditEvent("SelfEmployed", Map("SelfEmployed" -> data.toString))
+  }
+  private def auditEvent(auditEventType : String, data: Map[String, String]) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+    auditService.sendEvent(auditEventType, data)
   }
 
 }

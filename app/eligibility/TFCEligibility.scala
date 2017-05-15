@@ -112,7 +112,7 @@ val eligibility = new TFCEligibilityService
     }
 
     def determineChildrenEligibility(children: List[Child], periodFrom: LocalDate, periodUntil: LocalDate) : List[OutputChild] = {
-      val outputChildren = for(child <- children) yield {
+      for(child <- children) yield {
         val qualifyStartDate = determineChildStartDateInTFCPeriod(child, periodFrom, periodUntil)
         val qualifyEndDate = determineChildEndDateInTFCPeriod(child, periodFrom, periodUntil)
         val childEligibility = !(qualifyStartDate == null) && !(qualifyEndDate == null)
@@ -127,7 +127,6 @@ val eligibility = new TFCEligibilityService
           failures = List()
         )
       }
-      outputChildren
     }
 
     def determineClaimantsEligibility(claimants: List[Claimant], periodStart : LocalDate) : List[OutputClaimant] = {
@@ -145,8 +144,7 @@ val eligibility = new TFCEligibilityService
       val outputPeriods = determineTFCPeriods(request.payload.tfc)
       val householdEligibility = if(TFCConfig.minimumEarningsEnabled) {
         outputPeriods.exists(period => period.periodEligibility) && request.payload.tfc.validHouseholdMinimumEarnings
-      }
-      else {
+      } else {
         outputPeriods.exists(period => period.periodEligibility) && request.payload.tfc.validHouseholdHours
       }
 

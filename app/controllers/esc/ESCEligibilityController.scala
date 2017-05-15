@@ -27,10 +27,9 @@ import service.AuditEvents
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object ESCEligibilityController extends ESCEligibilityController with ESCEligibility{
+object ESCEligibilityController extends ESCEligibilityController with ESCEligibility {
   override val auditEvent = AuditEvents
 }
-
 
 trait ESCEligibilityController extends EligibilityController {
   this: ESCEligibility =>
