@@ -52,6 +52,6 @@ trait CCTFCEligibility {
   val eligibility : CCTFCEligibilityService
 
   trait CCTFCEligibilityService {
-    def eligibility(request : Request): Future[Eligibility]
+    def eligibility(request : Request)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[Eligibility]
   }
 }
