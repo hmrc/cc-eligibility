@@ -8,6 +8,7 @@
           "hoursPerWeek": 16.50,
           "liveOrWork": true,
           "isPartner": false,
+          "location": "england",
           "totalIncome": 111500.00,
           "earnedIncome": 0.00,
           "disability": {

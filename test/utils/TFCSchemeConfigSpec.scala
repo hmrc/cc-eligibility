@@ -50,7 +50,7 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
         childAgeLimitDisabled = defaultConfig.getInt("child-age-limit-disabled").get,
         minimumHoursWorked = defaultConfig.getDouble("minimum-hours-worked-per-week").get,
         maxIncomePerClaimant = defaultConfig.getDouble("maximum-income-per-claimant").get,
-        personalAllowancePerClaimant = defaultConfig.getDouble("personal-allowance").get,
+        personalAllowancePerClaimant = defaultConfig.getDouble("default.personal-allowance").get,
         nmwApprentice = defaultConfig.getInt("nmw.apprentice").get,
         nmwUnder18 = defaultConfig.getInt("nmw.under-18").get,
         nmw18To20 = defaultConfig.getInt("nmw.18-20").get,
@@ -92,7 +92,7 @@ class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
         val formatter = DateTimeFormat.forPattern(pattern)
         val current = LocalDate.parse(date, formatter)
 
-        val result = TFCConfig.getConfig(current)
+        val result = TFCConfig.getConfig(current, "england")
         result.childAgeLimit shouldBe childAgeLimit
         result.childAgeLimitDisabled shouldBe childAgeLimitDisabled
         result.minimumHoursWorked shouldBe minimumHoursWorked
