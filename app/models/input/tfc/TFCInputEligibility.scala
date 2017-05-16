@@ -117,6 +117,7 @@ case class Claimant(
                      totalIncome: BigDecimal = BigDecimal(0.00),
                      hoursPerWeek: Double = 0.00,
                      isPartner: Boolean = false,
+                     location: String,
                      disability: Disability,
                      schemesClaiming: SchemesClaiming,
                      otherSupport: OtherSupport,
@@ -127,13 +128,13 @@ case class Claimant(
                      ) extends models.input.BaseClaimant {
 
   def isWorkingAtLeast16HoursPerWeek (periodStart:LocalDate) : Boolean = {
-    val taxYearConfig = TFCConfig.getConfig(periodStart)
+    val taxYearConfig = TFCConfig.getConfig(periodStart, location)
     val minimum : Double = taxYearConfig.minimumHoursWorked
     hoursPerWeek >= minimum
   }
 
   def isTotalIncomeLessThan100000(periodStart:LocalDate) : Boolean = {
-    val taxYearConfig = TFCConfig.getConfig(periodStart)
+    val taxYearConfig = TFCConfig.getConfig(periodStart, location)
     val maximumTotalIncome : Double = taxYearConfig.maxIncomePerClaimant
     (totalIncome - taxYearConfig.personalAllowancePerClaimant) <= maximumTotalIncome
   }
@@ -150,7 +151,7 @@ case class Claimant(
       case _ => (taxYearConfig.nmw25Over, "25 or over") //25 or over
     }
 
-    val taxYearConfig = TFCConfig.getConfig(periodStart)
+    val taxYearConfig = TFCConfig.getConfig(periodStart, location)
     if(minimumEarnings.selection) {
       true
     } else {
@@ -188,13 +189,14 @@ object Claimant extends CCFormat with MessagesObject {
       (JsPath \ "totalIncome").read[BigDecimal].filter(ValidationError(messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
         (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
           (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-            (JsPath \ "disability").read[Disability] and
-              (JsPath \ "schemesClaiming").read[SchemesClaiming] and
-                (JsPath \ "otherSupport").read[OtherSupport] and
-                  (JsPath \ "minimumEarnings").read[MinimumEarnings] and
-                    (JsPath \ "age").readNullable[String] and
-                      (JsPath \ "employmentStatus").readNullable[String] and
-                        (JsPath \ "selfEmployedSelection").readNullable[Boolean]
+            (JsPath \ "location").read[String] and
+              (JsPath \ "disability").read[Disability] and
+                (JsPath \ "schemesClaiming").read[SchemesClaiming] and
+                  (JsPath \ "otherSupport").read[OtherSupport] and
+                    (JsPath \ "minimumEarnings").read[MinimumEarnings] and
+                      (JsPath \ "age").readNullable[String] and
+                        (JsPath \ "employmentStatus").readNullable[String] and
+                          (JsPath \ "selfEmployedSelection").readNullable[Boolean]
     )(Claimant.apply _)
 }
 
@@ -267,21 +269,21 @@ case class Child  (
     disability.severelyDisabled || disability.disabled
   }
 
-  def getChildBirthday(periodStart : LocalDate) : Date = {
+  def getChildBirthday(periodStart : LocalDate, location: String) : Date = {
     isDisabled match {
-      case true => getChild16Birthday(periodStart)
-      case _ => getChild11Birthday(periodStart)
+      case true => getChild16Birthday(periodStart, location)
+      case _ => getChild11Birthday(periodStart, location)
     }
   }
 
-  def getChild16Birthday(periodStart : LocalDate) : Date = {
-    val taxYearConfig = TFCConfig.getConfig(periodStart)
+  def getChild16Birthday(periodStart : LocalDate, location: String) : Date = {
+    val taxYearConfig = TFCConfig.getConfig(periodStart, location)
     val ageIncrease = taxYearConfig.childAgeLimitDisabled
     childsBirthdayDateForAge(ageIncrease)
   }
 
-  def getChild11Birthday(periodStart : LocalDate) : Date = {
-    val taxYearConfig = TFCConfig.getConfig(periodStart)
+  def getChild11Birthday(periodStart : LocalDate, location: String) : Date = {
+    val taxYearConfig = TFCConfig.getConfig(periodStart, location)
     val ageIncrease = taxYearConfig.childAgeLimit
     childsBirthdayDateForAge(ageIncrease)
   }
@@ -303,8 +305,8 @@ case class Child  (
 
   }
 
-  def endWeek1stOfSeptemberDate(periodStart : LocalDate) : Date = {
-    val childBirthday = getChildBirthday(periodStart)  //child's 11th or 16th Birthday
+  def endWeek1stOfSeptemberDate(periodStart : LocalDate, location: String) : Date = {
+    val childBirthday = getChildBirthday(periodStart, location)  //child's 11th or 16th Birthday
     val childBirthdayCalendar : Calendar = Calendar.getInstance()  // todays date
     childBirthdayCalendar.setTime(childBirthday) // childs date of birth
     val septemberCalendar = Calendar.getInstance()

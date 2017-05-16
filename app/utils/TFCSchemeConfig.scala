@@ -70,13 +70,14 @@ object TFCConfig extends CCConfig with LoadConfig {
     }
   }
 
-  def getTFCTaxYearConfig(configuration : play.api.Configuration) : TFCTaxYearConfig = {
+  def getTFCTaxYearConfig(configuration : play.api.Configuration, location: String) : TFCTaxYearConfig = {
     TFCTaxYearConfig(
       childAgeLimit = configuration.getInt("child-age-limit").get,
       childAgeLimitDisabled = configuration.getInt("child-age-limit-disabled").get,
       minimumHoursWorked = configuration.getDouble("minimum-hours-worked-per-week").get,
       maxIncomePerClaimant = configuration.getDouble("maximum-income-per-claimant").get,
-      personalAllowancePerClaimant = configuration.getDouble("personal-allowance").get,
+      personalAllowancePerClaimant = configuration.getDouble({location} + ".personal-allowance").
+        getOrElse(configuration.getDouble("default.personal-allowance").get),
       nmwApprentice = configuration.getInt("nmw.apprentice").get,
       nmwUnder18 = configuration.getInt("nmw.under-18").get,
       nmw18To20 = configuration.getInt("nmw.18-20").get,
@@ -85,7 +86,7 @@ object TFCConfig extends CCConfig with LoadConfig {
     )
   }
 
-  def getConfig(currentDate: LocalDate): TFCTaxYearConfig = {
+  def getConfig(currentDate: LocalDate, location: String): TFCTaxYearConfig = {
     val configs: Seq[play.api.Configuration] = conf.getConfigSeq("tfc.rule-change").get
     val configsExcludingDefault = getTFCConfigExcludingDefault(configs)
     val defaultConfig = getTFCConfigDefault(configs)
@@ -94,12 +95,6 @@ object TFCConfig extends CCConfig with LoadConfig {
 
     val result = getConfigHelper(currentDate, sorted.toList, None, 0)
 
-    val config : TFCTaxYearConfig = result match {
-      case Some(x) =>
-        getTFCTaxYearConfig(x)
-      case _ =>
-        getTFCTaxYearConfig(defaultConfig)
-    }
-    config
+    getTFCTaxYearConfig(result.getOrElse(defaultConfig), location)
   }
 }
