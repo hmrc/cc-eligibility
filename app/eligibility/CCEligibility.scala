@@ -21,8 +21,8 @@ import models.input.{BaseRequest, BaseTaxYear}
 import models.output.OutputAPIModel.Eligibility
 import org.joda.time.LocalDate
 import uk.gov.hmrc.play.http.HeaderCarrier
-
 import scala.concurrent.Future
+
 /**
  * Created by adamconder on 24/07/15.
  */
@@ -52,6 +52,6 @@ trait CCTFCEligibility {
   val eligibility : CCTFCEligibilityService
 
   trait CCTFCEligibilityService {
-    def eligibility(request : Request)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[Eligibility]
+    def eligibility(request : Request): Future[Eligibility]
   }
 }

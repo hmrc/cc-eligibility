@@ -143,7 +143,7 @@ val eligibility = new TFCEligibilityService
       }
     }
 
-    override def eligibility(request : models.input.tfc.Request)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[Eligibility] = {
+    override def eligibility(request : models.input.tfc.Request): Future[Eligibility] = {
       val outputPeriods = determineTFCPeriods(request.payload.tfc)
       val householdEligibility = if(TFCConfig.minimumEarningsEnabled) {
         outputPeriods.exists(period => period.periodEligibility) && request.payload.tfc.validHouseholdMinimumEarnings
