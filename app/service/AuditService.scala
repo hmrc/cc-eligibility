@@ -16,7 +16,6 @@
 
 package service
 
-
 import config.MicroserviceAuditConnector
 import play.api.mvc.Request
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
@@ -34,8 +33,6 @@ trait AuditService {
 
   def auditSource : String
   def auditConnector: AuditConnector
-
-//  import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
   def sendEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)
                (implicit request: Request[_], hc: HeaderCarrier): Future[AuditResult] = {

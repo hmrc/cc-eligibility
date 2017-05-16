@@ -22,6 +22,8 @@ import models.input.tfc.{Child, Claimant, TFC}
 import models.output.OutputAPIModel.Eligibility
 import models.output.tfc._
 import org.joda.time.LocalDate
+import service.AuditEvents
+import uk.gov.hmrc.play.http.HeaderCarrier
 import utils.TFCConfig
 
 import scala.concurrent.Future
@@ -35,6 +37,7 @@ val eligibility = new TFCEligibilityService
   class TFCEligibilityService extends CCTFCEligibilityService {
 
     import scala.concurrent.ExecutionContext.Implicits.global
+    val auditEvents: AuditEvents = AuditEvents
 
     def determineChildStartDateInTFCPeriod(child: models.input.tfc.Child, periodFrom : LocalDate, periodUntil: LocalDate) : LocalDate = {
       val childDob : java.util.Date = child.dob.toDate
@@ -140,7 +143,7 @@ val eligibility = new TFCEligibilityService
       }
     }
 
-    override def eligibility(request : models.input.tfc.Request) : Future[Eligibility] = {
+    override def eligibility(request : models.input.tfc.Request)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[Eligibility] = {
       val outputPeriods = determineTFCPeriods(request.payload.tfc)
       val householdEligibility = if(TFCConfig.minimumEarningsEnabled) {
         outputPeriods.exists(period => period.periodEligibility) && request.payload.tfc.validHouseholdMinimumEarnings

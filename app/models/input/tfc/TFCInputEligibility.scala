@@ -18,12 +18,14 @@ package models.input.tfc
 
 import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
+
 import org.joda.time.LocalDate
 import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 import service.AuditEvents
+import uk.gov.hmrc.play.http.HeaderCarrier
 import utils._
 
 case class Request (
@@ -51,24 +53,28 @@ case class TFC(
                 children: List[Child]
                 ) {
 
-  def validHouseholdMinimumEarnings: Boolean = {
+  def validHouseholdMinimumEarnings(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): (Boolean) = {
     val parent = claimants.head
     if(claimants.length > 1) {
       val partner = claimants.last
       val minEarningsParent = parent.satisfyMinimumEarnings(from)
       val minEarningsPartner = partner.satisfyMinimumEarnings(from)
-      val householdMinEarns = minEarningsParent && minEarningsPartner
-      println(s"**********householdMinEarns >>>$householdMinEarns")
-      AuditEvents.auditMinEarnings(householdMinEarns)
+      val auditMinEarns = minEarningsParent && minEarningsPartner
+      if(auditMinEarns == false) {
+        AuditEvents.auditMinEarnings(auditMinEarns)
+      }
       (minEarningsParent, minEarningsPartner) match {
         case (true, true) => true
         case (true, false) => partner.otherSupport.carersAllowance
         case (false, true) => parent.otherSupport.carersAllowance
         case _ => false
       }
-    }
-    else {
-      parent.satisfyMinimumEarnings(from)
+    } else {
+      val parentSatisfy = parent.satisfyMinimumEarnings(from)
+      if(parentSatisfy == false) {
+        AuditEvents.auditMinEarnings(parentSatisfy)
+      }
+      parentSatisfy
     }
   }
 
@@ -136,12 +142,12 @@ case class Claimant(
       liveOrWork && isTotalIncomeLessThan100000(periodStart)
   }
 
-  def satisfyMinimumEarnings(periodStart: LocalDate): Boolean = {
-    def getNWMPerAge(taxYearConfig: TFCTaxYearConfig) = age match {
-      case Some("under-18") => taxYearConfig.nmwUnder18
-      case Some("18-20") => taxYearConfig.nmw18To20
-      case Some("21-24") => taxYearConfig.nmw21To24
-      case _ => taxYearConfig.nmw25Over //25 or over
+  def satisfyMinimumEarnings(periodStart: LocalDate)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
+    def getNWMPerAge(taxYearConfig: TFCTaxYearConfig): (Int, String) = age match {
+      case Some("under-18") => (taxYearConfig.nmwUnder18, "under-18")
+      case Some("18-20") => (taxYearConfig.nmw18To20, "18-20")
+      case Some("21-24") => (taxYearConfig.nmw21To24, "21-24")
+      case _ => (taxYearConfig.nmw25Over, "25 or over") //25 or over
     }
 
     val taxYearConfig = TFCConfig.getConfig(periodStart)
@@ -149,20 +155,19 @@ case class Claimant(
       true
     } else {
       val nmw = getNWMPerAge(taxYearConfig)
-      if(minimumEarnings.amount >= nmw) {
+      if(minimumEarnings.amount >= nmw._1) {
         true
       } else {
-        println(s"****FAIlures of age group>>>>$nmw")
-        AuditEvents.auditAgeGroup(nmw)
+        AuditEvents.auditAgeGroup(nmw._2)
         employmentStatus match {
           case Some("selfEmployed") =>
-            println(s"******Employment status>>>${employmentStatus.get}")
             AuditEvents.auditSelfEmploymentStatus(employmentStatus.get)
             if (selfEmployedSelection.get) {
-              println(s"******Self employed in 1st year of trading>>>true")
-              AuditEvents.auditSelfEmployedin1st(true)
+              AuditEvents.auditSelfEmployedin1st(selfEmployedSelection.get)
+              true
+            } else {
+              false
             }
-            true
           case Some("apprentice") => minimumEarnings.amount >= taxYearConfig.nmwApprentice
           case _ => false
         }
