@@ -60,7 +60,7 @@ class AuditEventsTest extends CCSpecConfig with FakeCCEligibilityApplication wit
     }
 
     new AuditEvents {
-      override def auditService : AuditService = testAuditService
+      override val auditService : AuditService = testAuditService
     }
   }
 

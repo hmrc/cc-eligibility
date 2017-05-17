@@ -23,8 +23,10 @@ import models.output.OutputAPIModel.Eligibility
 import models.output.tfc.{OutputChild, OutputClaimant, TFCEligibilityModel, TFCPeriod}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import org.mockito.Matchers.any
 import org.scalatest.mock.MockitoSugar
 import spec.CCSpecConfig
+import uk.gov.hmrc.play.http.HeaderCarrier
 import utils.Periods
 
 import scala.concurrent.Future
@@ -43,7 +45,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val today = LocalDate.parse("2016-08-27", formatter)
       val untilDate = LocalDate.parse("2017-06-01", formatter)
       val tfc = TFC(from = today, numberOfPeriods = 3, claimants = List(), children = List())
-      val result = TFCEligibility.eligibility.eligibility(Request(payload = Payload(tfc)))
+      val result = TFCEligibility.eligibility.eligibility(Request(payload = Payload(tfc)))(any[play.api.mvc.Request[_]], any[HeaderCarrier])
       result.isInstanceOf[Future[Eligibility]] shouldBe true
     }
 
@@ -1690,7 +1692,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfc = TFC(from = from, numberOfPeriods = 1, List(claimant), List(child))
-      val result : Future[Eligibility] = TFCEligibility.eligibility.eligibility(Request(payload = Payload(tfc)))
+      val result : Future[Eligibility] = TFCEligibility.eligibility.eligibility(Request(payload = Payload(tfc)))(any[play.api.mvc.Request[_]], any[HeaderCarrier])
 
       val outputClaimant = OutputClaimant(qualifying = false, isPartner = false, failures = List())
       val startPeriod = LocalDate.parse("2016-03-30", formatter)
@@ -1711,7 +1713,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfc = TFC(from = from, numberOfPeriods = 2, List(claimant), List(child))
-      val result : Future[Eligibility] = TFCEligibility.eligibility.eligibility(Request(payload = Payload(tfc)))
+      val result : Future[Eligibility] = TFCEligibility.eligibility.eligibility(Request(payload = Payload(tfc)))(any[play.api.mvc.Request[_]], any[HeaderCarrier])
 
       val outputClaimant = OutputClaimant(qualifying = true, isPartner = false, failures = List())
       val outputClaimant1 = OutputClaimant(qualifying = true, isPartner = false, failures = List())
@@ -1750,7 +1752,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfc = TFC(from = from, numberOfPeriods = 2, List(claimant), List(child))
-      val result : Future[Eligibility] = TFCEligibility.eligibility.eligibility(Request(payload = Payload(tfc)))
+      val result : Future[Eligibility] = TFCEligibility.eligibility.eligibility(Request(payload = Payload(tfc)))(any[play.api.mvc.Request[_]], any[HeaderCarrier])
 
       val outputClaimant = OutputClaimant(qualifying = true, isPartner = false, failures = List())
       val outputClaimant1 = OutputClaimant(qualifying = true, isPartner = false, failures = List())
@@ -1788,7 +1790,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfc = TFC(from = from, numberOfPeriods = 3, List(claimant), List(child))
-      val result : Future[Eligibility] = TFCEligibility.eligibility.eligibility(Request(payload = Payload(tfc)))
+      val result : Future[Eligibility] = TFCEligibility.eligibility.eligibility(Request(payload = Payload(tfc)))(any[play.api.mvc.Request[_]], any[HeaderCarrier])
 
       val outputClaimant = OutputClaimant(qualifying = true, isPartner = false, failures = List())
       val startPeriod = LocalDate.parse("2016-06-30", formatter)
