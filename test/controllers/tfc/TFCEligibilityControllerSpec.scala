@@ -41,10 +41,9 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
     override val auditEvent = mock[AuditEvents]
   }
 
-  implicit val request = FakeRequest()
-  implicit val hc = HeaderCarrier
-
   "TFCEligibilityController" should {
+    implicit val req = FakeRequest()
+    implicit val hc = new HeaderCarrier()
 
     "not return NOT_FOUND endpoint" in {
       val result = route(app, FakeRequest(POST, "/cc-eligibility/tax-free-childcare/eligibility"))
@@ -67,7 +66,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/eligibility_input_test.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
-      val eligibilityResult = TFCEligibility.eligibility.eligibility(JsonResult.get)(any[play.api.mvc.Request[_]], any[HeaderCarrier])
+      val eligibilityResult = TFCEligibility.eligibility.eligibility(JsonResult.get)
 
       when(controller.eligibility.eligibility(mockEq(JsonResult.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligibilityResult))
       val result = await(controller.eligible(request))
@@ -234,7 +233,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_parent.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
-      val eligibilityResult = TFCEligibility.eligibility.eligibility(JsonResult.get)(any[play.api.mvc.Request[_]], any[HeaderCarrier])
+      val eligibilityResult = TFCEligibility.eligibility.eligibility(JsonResult.get)
 
       when(controller.eligibility.eligibility(mockEq(JsonResult.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligibilityResult))
       val result = await(controller.eligible(request))
@@ -346,7 +345,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_partner.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
-      val eligibilityResult = TFCEligibility.eligibility.eligibility(JsonResult.get)(any[play.api.mvc.Request[_]], any[HeaderCarrier])
+      val eligibilityResult = TFCEligibility.eligibility.eligibility(JsonResult.get)
 
       when(controller.eligibility.eligibility(mockEq(JsonResult.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligibilityResult))
       val result = await(controller.eligible(request))
@@ -458,7 +457,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_both.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
-      val eligibilityResult = TFCEligibility.eligibility.eligibility(JsonResult.get)(any[play.api.mvc.Request[_]], any[HeaderCarrier])
+      val eligibilityResult = TFCEligibility.eligibility.eligibility(JsonResult.get)
 
       when(controller.eligibility.eligibility(mockEq(JsonResult.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligibilityResult))
       val result = await(controller.eligible(request))
@@ -570,7 +569,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_hours_both.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
-      val eligibilityResult = TFCEligibility.eligibility.eligibility(JsonResult.get)(any[play.api.mvc.Request[_]], any[HeaderCarrier])
+      val eligibilityResult = TFCEligibility.eligibility.eligibility(JsonResult.get)
 
       when(controller.eligibility.eligibility(mockEq(JsonResult.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligibilityResult))
       val result = await(controller.eligible(request))
