@@ -59,16 +59,16 @@ trait AuditEvents {
     auditEvent("HouseholdMinimumEarnings", Map("failedHouseholdMinimumEarnings" -> data.toString))
   }
 
-  def auditAgeGroup(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
-    auditEvent("HouseholdMinimumEarnings", Map("failedAgeGroup" -> data.toString))
+  def auditAgeGroup(user: String, data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+    auditEvent("HouseholdMinimumEarnings", Map(s"$user-failedAgeGroup" -> data.toString))
   }
 
-  def auditSelfEmploymentStatus(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
-    auditEvent("HouseholdMinimumEarnings", Map("selfEmployedUsers" -> data.toString))
+  def auditSelfEmploymentStatus(user: String, data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+    auditEvent("HouseholdMinimumEarnings", Map(s"$user-selfEmployedUsers" -> data.toString))
   }
 
-  def auditSelfEmployedin1st(data : Boolean) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
-    auditEvent("HouseholdMinimumEarnings", Map("selfEmployedin1stYear" -> data.toString))
+  def auditSelfEmployedin1st(user: String, data : Boolean) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+    auditEvent("HouseholdMinimumEarnings", Map(s"$user-selfEmployedin1stYear" -> data.toString))
   }
   private def auditEvent(auditEventType : String, data: Map[String, String]) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
     auditService.sendEvent(auditEventType, data)

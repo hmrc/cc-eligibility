@@ -57,8 +57,8 @@ case class TFC(
     val parent = claimants.head
     if(claimants.length > 1) {
       val partner = claimants.last
-      val minEarningsParent = parent.satisfyMinimumEarnings(from)
-      val minEarningsPartner = partner.satisfyMinimumEarnings(from)
+      val minEarningsParent = parent.satisfyMinimumEarnings(from, parent = true)
+      val minEarningsPartner = partner.satisfyMinimumEarnings(from, parent = false)
       val auditMinEarns = minEarningsParent && minEarningsPartner
       if(auditMinEarns == false) {
         AuditEvents.auditMinEarnings(auditMinEarns)
@@ -70,7 +70,7 @@ case class TFC(
         case _ => false
       }
     } else {
-      val parentSatisfy = parent.satisfyMinimumEarnings(from)
+      val parentSatisfy = parent.satisfyMinimumEarnings(from, parent = true)
       if(parentSatisfy == false) {
         AuditEvents.auditMinEarnings(parentSatisfy)
       }
@@ -143,7 +143,12 @@ case class Claimant(
       liveOrWork && isTotalIncomeLessThan100000(periodStart)
   }
 
-  def satisfyMinimumEarnings(periodStart: LocalDate)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
+  def satisfyMinimumEarnings(periodStart: LocalDate, parent: Boolean)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
+    val user = if(parent) {
+      "Parent"
+    } else {
+      "Partner"
+    }
     def getNWMPerAge(taxYearConfig: TFCTaxYearConfig): (Int, String) = age match {
       case Some("under-18") => (taxYearConfig.nmwUnder18, "under-18")
       case Some("18-20") => (taxYearConfig.nmw18To20, "18-20")
@@ -159,12 +164,12 @@ case class Claimant(
       if(minimumEarnings.amount >= nmw._1) {
         true
       } else {
-        AuditEvents.auditAgeGroup(nmw._2)
+        AuditEvents.auditAgeGroup(user, nmw._2)
         employmentStatus match {
           case Some("selfEmployed") =>
-            AuditEvents.auditSelfEmploymentStatus(employmentStatus.get)
+            AuditEvents.auditSelfEmploymentStatus(user, employmentStatus.get)
             if (selfEmployedSelection.get) {
-              AuditEvents.auditSelfEmployedin1st(selfEmployedSelection.get)
+              AuditEvents.auditSelfEmployedin1st(user, selfEmployedSelection.get)
               true
             } else {
               false
