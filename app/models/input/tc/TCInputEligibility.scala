@@ -107,12 +107,8 @@ case class TaxYear(
 
   private def doesHouseHoldQualify(periodStart: LocalDate, householdQualifies : Boolean) : Boolean = {
 
-    // TODO: Remove conditions for incapacitated
-    def determineIncapacitated(person: Claimant): Boolean = person.isQualifyingForTC && person.isIncapacitated
-
-    // claimant can't work and being incapacitated
     def determineWorking16hours(person: Claimant): Boolean =
-      person.isQualifyingForTC && person.isWorkingAtLeast16HoursPerWeek(periodStart) && !person.isIncapacitated
+      person.isQualifyingForTC && person.isWorkingAtLeast16HoursPerWeek(periodStart)
 
     val minimumHours: Double = TCConfig.getConfig(periodStart).minimumHoursWorkedIfCouple
 
@@ -124,12 +120,10 @@ case class TaxYear(
     def isOneOfCoupleWorking16h = determineWorking16hours(parent) || determineWorking16hours(partner)
     def isOneOfCoupleDisabled = determineClaimantDisabilityAndSeverity(parent) || determineClaimantDisabilityAndSeverity(partner)
     def isOneOfCoupleCarer = determineCarer(parent) || determineCarer(partner)
-    def isOneOfCoupeIncapacitated = determineIncapacitated(parent) || determineIncapacitated(partner)
 
-    if(isOneOfCoupleWorking16h && (isOneOfCoupleDisabled || isOneOfCoupleCarer || isCoupleWorking24Hours || isOneOfCoupeIncapacitated)) {
+    if(isOneOfCoupleWorking16h && (isOneOfCoupleDisabled || isOneOfCoupleCarer || isCoupleWorking24Hours)) {
       householdQualifies
-    }
-    else {
+    } else {
       false
     }
   }
@@ -137,10 +131,9 @@ case class TaxYear(
   def isHouseholdQualifyingForWTC(periodStart: LocalDate): Boolean = {
     if(isCouple) {
       doesHouseHoldQualify(periodStart, isCoupleQualifyingForTC)
-    }
-    else {
+    } else {
       val claimant = claimants.head
-      claimant.isQualifyingForTC && claimant.isWorkingAtLeast16HoursPerWeek(periodStart) && !claimant.isIncapacitated
+      claimant.isQualifyingForTC && claimant.isWorkingAtLeast16HoursPerWeek(periodStart)
     }
   }
 
@@ -250,10 +243,6 @@ case class Claimant(
     hours >= minimum
   }
 
-  def isIncapacitated : Boolean = {
-    disability.incapacitated
-  }
-
 }
 
 object Claimant extends CCFormat {
@@ -270,15 +259,13 @@ object Claimant extends CCFormat {
 
 case class Disability(
                        disabled: Boolean = false,
-                       severelyDisabled: Boolean = false,
-                       incapacitated : Boolean = false
+                       severelyDisabled: Boolean = false
                        )
 
 object Disability {
   implicit val disabilityReads: Reads[Disability] = (
     (JsPath \ "disabled").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false)) and
-        (JsPath \ "incapacitated").read[Boolean].orElse(Reads.pure(false))
+      (JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false))
     )(Disability.apply _)
 }
 

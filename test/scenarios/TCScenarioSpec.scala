@@ -309,7 +309,7 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
       jsonBodyOf(result) shouldBe outputJson
     }
 
-    "(Scenario 11)(Basic Element, 30 hours, 1 claimant incapacitated)(Single Tax Year) determine what elements the scenario receives" in {
+    "(Scenario 11)(Basic Element, 30 hours, 1 claimant)(Single Tax Year) determine what elements the scenario receives" in {
       // mock out the eligibility service
       val controller = new TCEligibilityController with TCEligibility {
         override val eligibility : TCEligibilityService = mock[TCEligibilityService]

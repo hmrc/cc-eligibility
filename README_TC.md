@@ -23,8 +23,7 @@ The TC Eligibility micro-service will accept the parent details and children det
               previousTotalIncome : [BigDecimal] = 0.00,
               disability : {
                 disabled: [Boolean] = false,
-                severelyDisabled: [Boolean] = false,
-                incapacitated : [Boolean] = false
+                severelyDisabled: [Boolean] = false
               },
               schemesClaiming : {
                 tfc: [Boolean] = false,
@@ -49,8 +48,7 @@ The TC Eligibility micro-service will accept the parent details and children det
               dob : [LocalDate],
               disability : {
                 disabled: [Boolean] = false,
-                severelyDisabled: [Boolean] = false,
-                incapacitated : [Boolean] = false
+                severelyDisabled: [Boolean] = false
               },
               education : Option {
                 inEducation: [Boolean] = false,
@@ -258,8 +256,7 @@ The TC Eligibility micro-service will accept the parent details and children det
              "previousTotalIncome": 0.00,
              "disability": {
                "disabled": false,
-               "severelyDisabled": false,
-               "incapacitated": false
+               "severelyDisabled": false
              },
              "schemesClaiming": {
                "tfc": false,

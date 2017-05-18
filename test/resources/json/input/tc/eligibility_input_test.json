@@ -13,8 +13,7 @@
             "isPartner": false,
             "disability": {
               "disabled": false,
-              "severelyDisabled": false,
-              "incapacitated": false
+              "severelyDisabled": false
             },
             "schemesClaiming": {
               "tfc": false,
