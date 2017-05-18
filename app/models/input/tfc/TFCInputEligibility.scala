@@ -28,6 +28,10 @@ import service.AuditEvents
 import uk.gov.hmrc.play.http.HeaderCarrier
 import utils._
 
+/*
+This is the Payload input class from cc-frontend to cc-eligibility
+ */
+
 case class Request (
                      payload: Payload
                      )

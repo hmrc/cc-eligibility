@@ -54,16 +54,16 @@ case class TaxYear(
                     children: List[Child]
                     ) extends models.input.BaseTaxYear {
 
-  def isCouple : Boolean = claimants.length > 1 && claimants.length < 3
+  def isCouple: Boolean = claimants.length > 1 && claimants.length < 3
 
-  def isCoupleQualifyingForTC : Boolean = {
+  def isCoupleQualifyingForTC: Boolean = {
     isCouple match {
       case true => claimants.head.isQualifyingForTC && claimants.tail.head.isQualifyingForTC
       case false => claimants.head.isQualifyingForTC
     }
   }
 
-  def claimantsGetChildcareElement(periodStart : LocalDate) : Boolean = {
+  def claimantsGetChildcareElement(periodStart: LocalDate) : Boolean = {
     def isClaimantDisabledOrCarer(person: Claimant) = {
       determineClaimantDisabilityAndSeverity(person) || determineCarer(person)
     }
@@ -86,7 +86,7 @@ case class TaxYear(
     }
   }
 
-  def getTotalHouseholdWorkingHours : Double = {
+  def getTotalHouseholdWorkingHours: Double = {
     isCouple match {
       case true => claimants.head.hours + claimants.tail.head.hours
       case false => claimants.head.hours
@@ -105,7 +105,7 @@ case class TaxYear(
 
   private def determineCarer(person: Claimant): Boolean = person.isQualifyingForTC && person.otherSupport.carersAllowance
 
-  private def doesHouseHoldQualify(periodStart: LocalDate, householdQualifies : Boolean) : Boolean = {
+  private def doesHouseHoldQualify(periodStart: LocalDate, householdQualifies: Boolean) : Boolean = {
 
     def determineWorking16hours(person: Claimant): Boolean =
       person.isQualifyingForTC && person.isWorkingAtLeast16HoursPerWeek(periodStart)
@@ -132,8 +132,7 @@ case class TaxYear(
     if(isCouple) {
       doesHouseHoldQualify(periodStart, isCoupleQualifyingForTC)
     } else {
-      val claimant = claimants.head
-      claimant.isQualifyingForTC && claimant.isWorkingAtLeast16HoursPerWeek(periodStart)
+      claimants.head.isQualifyingForTC && claimants.head.isWorkingAtLeast16HoursPerWeek(periodStart)
     }
   }
 

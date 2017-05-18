@@ -74,13 +74,8 @@ case class Claimant(
                      liveOrWork:  Boolean = false,
                      isPartner: Boolean = false,
                      employerProvidesESC : Boolean = false,
-                     elements: ClaimantsElements,
-                     schemesClaiming: SchemesClaiming
+                     elements: ClaimantsElements
                    ) extends models.input.BaseClaimant {
-
-  def isClaimingESC : Boolean = {
-    schemesClaiming.esc
-  }
 
   def isClaimantQualifyingForESC : Boolean = {
      elements.vouchers && employerProvidesESC && liveOrWork
@@ -93,8 +88,7 @@ object Claimant extends CCFormat {
     (JsPath \ "liveOrWork").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
         (JsPath \ "employerProvidesESC").read[Boolean].orElse(Reads.pure(false)) and
-          (JsPath \ "elements").read[ClaimantsElements] and
-            (JsPath \ "schemesClaiming").read[SchemesClaiming]
+          (JsPath \ "elements").read[ClaimantsElements]
     )(Claimant.apply _)
 }
 
@@ -109,20 +103,6 @@ object ClaimantsElements {
     (JsPath \ "vouchers").read[Boolean].orElse(Reads.pure(false)).map {
       vouchers => ClaimantsElements(vouchers)
     }
-}
-
-case class SchemesClaiming(
-                            tfc: Boolean = false,
-                            esc: Boolean = false,
-                            tc: Boolean = false
-                          )
-
-object SchemesClaiming{
-  implicit val disabilityReads: Reads[SchemesClaiming] = (
-    (JsPath \ "tfc").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "esc").read[Boolean].orElse(Reads.pure(false)) and
-        (JsPath \ "tc").read[Boolean].orElse(Reads.pure(false))
-    )(SchemesClaiming.apply _)
 }
 
 case class Child (
@@ -148,7 +128,6 @@ case class Child (
     disability.severelyDisabled || disability.disabled
   }
 
-  // TODO CLARIFY WITH PAUL WHETHER THIS IS UP UNTIL 15/16 OR THEY GET IT WHEN THEY'RE 15/16
   def qualifiesForESC(now : LocalDate = LocalDate.now) : Boolean = {
     val escTaxYearConfig = ESCConfig.getConfig(now)
     val threshold15 = escTaxYearConfig.childAgeLimit

@@ -23,12 +23,6 @@ The TFC Eligibility micro-service will accept the parent details and children de
                 disability: [Boolean] = false,
                 severeDisability: [Boolean] = false
               },
-              schemesClaiming : {
-                uc: [Boolean] = false,
-                esc: [Boolean] = false,
-                cg: [Boolean] = false,
-                tc: [Boolean] = false
-              },
               otherSupport: OtherSupport {
                 disabilityBenefitsOrAllowances: [Boolean] = false,
                 severeDisabilityBenefitsOrAllowances: [Boolean] = false,
@@ -110,12 +104,6 @@ The TFC Eligibility micro-service will accept the parent details and children de
               "disabled": false,
               "severelyDisabled": false
             },
-            "schemesClaiming": {
-              "esc": false,
-              "tc": false,
-              "uc": false,
-              "cg": false
-            },
             "otherSupport": {
               "disabilityBenefitsOrAllowances":false,
               "severeDisabilityBenefitsOrAllowances":false,
@@ -196,12 +184,6 @@ The TFC Eligibility micro-service will accept the parent details and children de
              "disability": {
                "disabled": false,
                "severelyDisabled": false
-             },
-             "schemesClaiming": {
-               "esc": false,
-               "tc": false,
-               "uc": false,
-               "cg": false
              },
              "otherSupport": {
                "disabilityBenefitsOrAllowances":false,

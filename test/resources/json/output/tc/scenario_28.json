@@ -17,7 +17,7 @@
                 "hours30": true,
                 "childcare": false,
                 "loneParent": false,
-                "secondParent": false,
+                "secondParent": true,
                 "family": true,
                 "wtc": false,
                 "ctc": true

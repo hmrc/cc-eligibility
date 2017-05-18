@@ -24,11 +24,6 @@ The TC Eligibility micro-service will accept the parent details and children det
               disability : {
                 disabled: [Boolean] = false,
                 severelyDisabled: [Boolean] = false
-              },
-              schemesClaiming : {
-                tfc: [Boolean] = false,
-                esc: [Boolean] = false,
-                tc: [Boolean] = false
               }
             }
           ],
@@ -257,11 +252,6 @@ The TC Eligibility micro-service will accept the parent details and children det
              "disability": {
                "disabled": false,
                "severelyDisabled": false
-             },
-             "schemesClaiming": {
-               "tfc": false,
-               "esc" : false,
-               "tc": false
              }
            }
          ],
