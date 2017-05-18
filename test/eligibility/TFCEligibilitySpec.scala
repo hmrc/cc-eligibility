@@ -23,13 +23,19 @@ import models.output.OutputAPIModel.Eligibility
 import models.output.tfc.{OutputChild, OutputClaimant, TFCEligibilityModel, TFCPeriod}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import org.mockito.Matchers.any
 import org.scalatest.mock.MockitoSugar
+import play.api.test.FakeRequest
 import spec.CCSpecConfig
+import uk.gov.hmrc.play.http.HeaderCarrier
 import utils.Periods
 
 import scala.concurrent.Future
 
 class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar {
+
+  implicit val req = FakeRequest()
+  implicit val hc = new HeaderCarrier()
 
   "TFCEligibilityService" should {
 

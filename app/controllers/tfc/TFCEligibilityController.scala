@@ -23,7 +23,6 @@ import play.api.Logger
 import play.api.libs.json.JsValue
 import play.api.mvc.Action
 import service.AuditEvents
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -34,7 +33,6 @@ object TFCEligibilityController extends TFCEligibilityController with TFCEligibi
 trait TFCEligibilityController extends EligibilityController {
 
   this : TFCEligibility =>
-
   val auditEvent : AuditEvents
 
   override def eligible : Action[JsValue] = Action.async(parse.json) {

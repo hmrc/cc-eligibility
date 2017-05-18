@@ -22,13 +22,14 @@ import controllers.FakeCCEligibilityApplication
 import controllers.tfc.TFCEligibilityController
 import eligibility.TFCEligibility
 import models.input.tfc.Request
-import org.mockito.Matchers.{eq => mockEq}
+import org.mockito.Matchers.{any, eq => mockEq}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import service.AuditEvents
+import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future
@@ -41,17 +42,17 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
   }
 
   "TFC Scenarios" should {
+    implicit val req = FakeRequest()
+    implicit val hc = new HeaderCarrier()
 
     "(Scenario 1) single parent with failed eligibility and qualifying child" in {
       val controller = mockTFCEligibilityController
-
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_1.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
       val request = inputJson.validate[Request]
-
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_1.json")
@@ -70,7 +71,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_2.json")
@@ -89,7 +90,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_3.json")
@@ -108,7 +109,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_4.json")
@@ -127,7 +128,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_5.json")
@@ -146,7 +147,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_6.json")
@@ -165,7 +166,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_7.json")
@@ -184,7 +185,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_8.json")
@@ -203,7 +204,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_9.json")
@@ -222,7 +223,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_10.json")
@@ -241,7 +242,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_11.json")
@@ -260,7 +261,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_12.json")
@@ -279,7 +280,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_13.json")
@@ -298,7 +299,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_14.json")
@@ -317,7 +318,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_15.json")
@@ -336,7 +337,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_16.json")
@@ -355,7 +356,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_17.json")
@@ -375,7 +376,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_18.json")
@@ -395,7 +396,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_19.json")
@@ -414,7 +415,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_20.json")
@@ -434,7 +435,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_21.json")
@@ -454,7 +455,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_22.json")
@@ -474,7 +475,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_23.json")
@@ -494,7 +495,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_24.json")
@@ -514,7 +515,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_25.json")
@@ -534,7 +535,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_26.json")
@@ -554,7 +555,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_27.json")
@@ -574,7 +575,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_28.json")
@@ -594,7 +595,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_29.json")
@@ -614,7 +615,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_30.json")
@@ -634,7 +635,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_31.json")
@@ -653,7 +654,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_32.json")
@@ -672,7 +673,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_33.json")
@@ -691,7 +692,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_34.json")
@@ -710,7 +711,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_35.json")
@@ -729,7 +730,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_36.json")
@@ -747,7 +748,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_37.json")
@@ -765,7 +766,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_38.json")
@@ -783,7 +784,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_39.json")
@@ -801,7 +802,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_40.json")
@@ -819,7 +820,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_41.json")
@@ -838,7 +839,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_42.json")
@@ -857,7 +858,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_43.json")
@@ -875,7 +876,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tfc/scenario_44.json")

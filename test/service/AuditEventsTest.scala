@@ -31,8 +31,6 @@ import scala.concurrent.{ExecutionContext, Future}
  * Created by user on 25/04/16.
  */
 class AuditEventsTest extends CCSpecConfig with FakeCCEligibilityApplication with MockitoSugar {
-  implicit val request = FakeRequest()
-  implicit var hc = new HeaderCarrier()
 
   trait ObservableAuditConnector extends AuditConnector {
     var events : ListBuffer[DataEvent] = new ListBuffer[DataEvent]
@@ -60,14 +58,15 @@ class AuditEventsTest extends CCSpecConfig with FakeCCEligibilityApplication wit
     }
 
     new AuditEvents {
-      override def auditService : AuditService = testAuditService
+      override val auditService : AuditService = testAuditService
     }
   }
 
   "Audit Events" should {
+    implicit val request = FakeRequest()
+    implicit var hc = new HeaderCarrier()
 
     "audit request received for TFC - success " in {
-
       val observableAuditConnector = createObservableAuditConnector
       val auditor = createAuditor(observableAuditConnector)
 
@@ -76,7 +75,7 @@ class AuditEventsTest extends CCSpecConfig with FakeCCEligibilityApplication wit
       val event =  observableAuditConnector.events.head
 
       event.auditType should equal("TFCRequest")
-      event.detail("data") should startWith("Data")
+      event.detail("TFCRequest") should startWith("Data")
 
     }
 
@@ -90,7 +89,7 @@ class AuditEventsTest extends CCSpecConfig with FakeCCEligibilityApplication wit
       val event =  observableAuditConnector.events.head
 
       event.auditType should equal("TFCResponse")
-      event.detail("data") should startWith("Data")
+      event.detail("TFCResponse") should startWith("Data")
 
     }
 
@@ -104,7 +103,7 @@ class AuditEventsTest extends CCSpecConfig with FakeCCEligibilityApplication wit
       val event =  observableAuditConnector.events.head
 
       event.auditType should equal("TCRequest")
-      event.detail("data") should startWith("Data")
+      event.detail("TCRequest") should startWith("Data")
 
     }
 
@@ -118,7 +117,7 @@ class AuditEventsTest extends CCSpecConfig with FakeCCEligibilityApplication wit
       val event =  observableAuditConnector.events.head
 
       event.auditType should equal("TCResponse")
-      event.detail("data") should startWith("Data")
+      event.detail("TCResponse") should startWith("Data")
 
     }
 
@@ -132,7 +131,7 @@ class AuditEventsTest extends CCSpecConfig with FakeCCEligibilityApplication wit
       val event =  observableAuditConnector.events.head
 
       event.auditType should equal("ESCRequest")
-      event.detail("data") should startWith("Data")
+      event.detail("ESCRequest") should startWith("Data")
 
     }
 
@@ -146,7 +145,7 @@ class AuditEventsTest extends CCSpecConfig with FakeCCEligibilityApplication wit
       val event =  observableAuditConnector.events.head
 
       event.auditType should equal("ESCResponse")
-      event.detail("data") should startWith("Data")
+      event.detail("ESCResponse") should startWith("Data")
 
     }
   }
