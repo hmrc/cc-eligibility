@@ -76,13 +76,12 @@ trait TCEligibility extends CCEligibility {
 
     def determineClaimantsEligibilityForPeriod(ty : models.input.tc.TaxYear) : List[models.output.tc.OutputClaimant] = {
       for (claimant <- ty.claimants) yield {
-        val claimantIsQualifying = claimant.isQualifyingForTC
         val claimantIsPartner = claimant.isPartner
         val claimantIsDisabled = claimant.getDisabilityElement(ty.from)
-        val claimantIsSeverelyDisabled = ty.isOneOfClaimantsWorking16h(ty.from) && claimant.isClaimantQualifyingForSevereDisabilityElement
+        val claimantIsSeverelyDisabled = ty.isOneOfClaimantsWorking16h(ty.from) && claimant.disability.severelyDisabled
 
        val outputClaimant =  models.output.tc.OutputClaimant(
-          qualifying = claimantIsQualifying,
+          qualifying = true, //TODO - do we need this, verify in frontend
           isPartner = claimantIsPartner,
           claimantDisability = ClaimantDisability(
             disability = claimantIsDisabled,
