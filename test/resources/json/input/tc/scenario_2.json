@@ -9,7 +9,6 @@
                   "claimants": [
                       {
                           "hoursPerWeek": 30,
-                          "liveOrWork": true,
                           "isPartner": false,
                           "disability": {
                               "disabled": false,
