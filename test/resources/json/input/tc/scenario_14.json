@@ -15,11 +15,6 @@
                 "disabled": true,
                 "severelyDisabled": true
               },
-              "schemesClaiming": {
-                "tfc": false,
-                "esc" : false,
-                "tc": false
-              },
               "otherSupport": {
                 "carersAllowance": false
               }
@@ -29,11 +24,6 @@
               "liveOrWork": true,
               "isPartner": true,
               "disability": 0.00,
-              "schemesClaiming": {
-                "tfc": false,
-                "esc" : false,
-                "tc": false
-              },
               "otherSupport": {
                 "carersAllowance": false
               }

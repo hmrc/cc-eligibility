@@ -219,7 +219,6 @@ case class Claimant(
                      liveOrWork:  Boolean = false,
                      isPartner: Boolean = false,
                      disability: Disability,
-                     schemesClaiming: SchemesClaiming,
                      otherSupport: OtherSupport
                      ) extends models.input.BaseClaimant {
 
@@ -251,8 +250,7 @@ object Claimant extends CCFormat {
       (JsPath \ "liveOrWork").read[Boolean].orElse(Reads.pure(false)) and
         (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
            (JsPath \ "disability").read[Disability] and
-              (JsPath \ "schemesClaiming").read[SchemesClaiming] and
-                (JsPath \ "otherSupport").read[OtherSupport]
+              (JsPath \ "otherSupport").read[OtherSupport]
     )(Claimant.apply _)
 }
 
@@ -268,19 +266,6 @@ object Disability {
     )(Disability.apply _)
 }
 
-case class SchemesClaiming(
-                            tfc: Boolean = false,
-                            esc: Boolean = false,
-                            tc: Boolean = false
-                            )
-
-object SchemesClaiming{
-  implicit val disabilityReads: Reads[SchemesClaiming] = (
-    (JsPath \ "tfc").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "esc").read[Boolean].orElse(Reads.pure(false)) and
-        (JsPath \ "tc").read[Boolean].orElse(Reads.pure(false))
-    )(SchemesClaiming.apply _)
-}
 
 case class Child(
                   id: Short,
