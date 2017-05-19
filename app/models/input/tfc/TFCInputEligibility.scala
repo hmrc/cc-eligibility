@@ -117,7 +117,6 @@ object TFC extends CCFormat with MessagesObject {
 }
 
 case class Claimant(
-                     liveOrWork:  Boolean = false,
                      totalIncome: BigDecimal = BigDecimal(0.00),
                      hoursPerWeek: Double = 0.00,
                      isPartner: Boolean = false,
@@ -143,7 +142,7 @@ case class Claimant(
   }
 
   def isQualifyingForTFC(periodStart : LocalDate) : Boolean = {
-      liveOrWork && isTotalIncomeLessThan100000(periodStart)
+      isTotalIncomeLessThan100000(periodStart)
   }
 
   def satisfyMinimumEarnings(periodStart: LocalDate, parent: Boolean)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
@@ -193,17 +192,16 @@ object Claimant extends CCFormat with MessagesObject {
   }
 
   implicit val claimantReads: Reads[Claimant] = (
-    (JsPath \ "liveOrWork").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "totalIncome").read[BigDecimal].filter(ValidationError(messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
-        (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
-          (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-            (JsPath \ "location").read[String] and
-              (JsPath \ "disability").read[Disability] and
-                (JsPath \ "otherSupport").read[OtherSupport] and
-                  (JsPath \ "minimumEarnings").read[MinimumEarnings] and
-                    (JsPath \ "age").readNullable[String] and
-                      (JsPath \ "employmentStatus").readNullable[String] and
-                        (JsPath \ "selfEmployedSelection").readNullable[Boolean]
+    (JsPath \ "totalIncome").read[BigDecimal].filter(ValidationError(messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
+      (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
+        (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
+          (JsPath \ "location").read[String] and
+            (JsPath \ "disability").read[Disability] and
+              (JsPath \ "otherSupport").read[OtherSupport] and
+                (JsPath \ "minimumEarnings").read[MinimumEarnings] and
+                  (JsPath \ "age").readNullable[String] and
+                    (JsPath \ "employmentStatus").readNullable[String] and
+                      (JsPath \ "selfEmployedSelection").readNullable[Boolean]
     )(Claimant.apply _)
 }
 

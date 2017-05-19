@@ -71,24 +71,22 @@ object TaxYear extends CCFormat with MessagesObject {
 }
 
 case class Claimant(
-                     liveOrWork:  Boolean = false,
                      isPartner: Boolean = false,
                      employerProvidesESC : Boolean = false,
                      elements: ClaimantsElements
                    ) extends models.input.BaseClaimant {
 
   def isClaimantQualifyingForESC : Boolean = {
-     elements.vouchers && employerProvidesESC && liveOrWork
+     elements.vouchers && employerProvidesESC
   }
 
 }
 
 object Claimant extends CCFormat {
   implicit val claimantReads: Reads[Claimant] = (
-    (JsPath \ "liveOrWork").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-        (JsPath \ "employerProvidesESC").read[Boolean].orElse(Reads.pure(false)) and
-          (JsPath \ "elements").read[ClaimantsElements]
+    (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
+      (JsPath \ "employerProvidesESC").read[Boolean].orElse(Reads.pure(false)) and
+        (JsPath \ "elements").read[ClaimantsElements]
     )(Claimant.apply _)
 }
 

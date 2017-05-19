@@ -17,7 +17,6 @@ The TC Eligibility micro-service will accept the parent details and children det
           claimants : [
             {
               hours : [Double] = 0.00,
-              liveOrWork : [Boolean] = false,
               isPartner : [Boolean] = false,
               totalIncome : [BigDecimal] = 0.00,
               previousTotalIncome : [BigDecimal] = 0.00,
@@ -245,7 +244,6 @@ The TC Eligibility micro-service will accept the parent details and children det
          "claimants": [
            {
              "hours": 30.00,
-             "liveOrWork": true,
              "isPartner": false,
              "totalIncome": 0.00,
              "previousTotalIncome": 0.00,

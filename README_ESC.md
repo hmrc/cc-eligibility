@@ -16,7 +16,6 @@ The ESC Eligibility micro-service will accept the parent details and children de
           until : [LocalDate],
           claimants: [
             {
-              liveOrWork : [Boolean] = false,
               isPartner : [Boolean] = false,
               employerProvidesESC: [Boolean] = false
               elements: {
@@ -181,7 +180,6 @@ The ESC Eligibility micro-service will accept the parent details and children de
             "until": "2016-04-06T00:00:00",
             "claimants": [
               {
-                "liveOrWork": true,
                 "isPartner": false,
                 "employerProvidesESC": true,
                 "elements": {

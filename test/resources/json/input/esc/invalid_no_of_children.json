@@ -6,7 +6,6 @@
                   "until": "2017-04-06",
                   "claimants": [
                       {
-                          "liveOrWork": true,
                           "isPartner": false,
                           "disability": {
                               "disabled": true,

@@ -53,33 +53,12 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       result.isInstanceOf[Future[Eligibility]] shouldBe true
     }
 
-    "determine claimant's eligibility if claimant fails live or work" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val dateOfBirth = LocalDate.parse("2016-08-27", formatter)
-
-      val current = LocalDate.parse("2017-08-01", formatter)
-      val claimant = Claimant(liveOrWork = false, hoursPerWeek = 16.50, totalIncome = 99000, isPartner = false, location = "england",
-        disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
-
-      val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = Disability(disabled = false, severelyDisabled = false))
-
-      val result = TFCEligibility.eligibility.determineClaimantsEligibility(List(claimant),current)
-      result shouldBe List(
-        OutputClaimant(
-          qualifying = false,
-          isPartner = false,
-          failures = List()
-        )
-      )
-    }
-
     "determine claimant's eligibility if qualifies all rules" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2016-08-27", formatter)
 
       val current = LocalDate.parse("2017-08-01", formatter)
-      val claimant = Claimant(liveOrWork = true, hoursPerWeek = 3.50, totalIncome = 99000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 3.50, totalIncome = 99000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
 
       val result = TFCEligibility.eligibility.determineClaimantsEligibility(List(claimant), current)
@@ -96,9 +75,9 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val current = LocalDate.parse("2017-08-01", formatter)
 
-      val claimant = Claimant(liveOrWork = true, hoursPerWeek = 16.99, totalIncome = 99000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.99, totalIncome = 99000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
-      val partner = Claimant(liveOrWork = true, hoursPerWeek = 7.99, totalIncome = 99000, isPartner = true, location = "england",
+      val partner = Claimant(hoursPerWeek = 7.99, totalIncome = 99000, isPartner = true, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
 
       val result = TFCEligibility.eligibility.determineClaimantsEligibility(List(claimant, partner), current)
@@ -119,7 +98,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
     "determine claimant's eligibility if claimant fails maximum earnings rule" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2016-08-27", formatter)
-      val claimant = Claimant(liveOrWork = true, hoursPerWeek = 9.50, totalIncome = 182000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 9.50, totalIncome = 182000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val current = LocalDate.parse("2017-08-01", formatter)
 
@@ -137,9 +116,9 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2003-08-27", formatter)
       val current = LocalDate.parse("2017-08-01", formatter)
-      val claimant = Claimant(liveOrWork = true, hoursPerWeek = 5.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 5.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
-      val claimant2 = Claimant(liveOrWork = true, hoursPerWeek = 16.50, totalIncome = 151000, isPartner = true, location = "england",
+      val claimant2 = Claimant(hoursPerWeek = 16.50, totalIncome = 151000, isPartner = true, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
 
       val result = TFCEligibility.eligibility.determineClaimantsEligibility(List(claimant, claimant2), current)
@@ -162,7 +141,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val dateOfBirth = LocalDate.parse("2013-08-27", formatter)
       val from = LocalDate.parse("2016-10-15", formatter)
       val until = LocalDate.parse("2017-08-31", formatter)
-      val claimant = Claimant(liveOrWork = true, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = Disability(disabled = false, severelyDisabled = false))
@@ -221,7 +200,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
       val from = LocalDate.parse("2016-08-31", formatter)
-      val claimant = Claimant(liveOrWork = true, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = Disability(disabled = false, severelyDisabled = false))
@@ -262,7 +241,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val dateOfBirth = LocalDate.parse("2003-08-27", formatter)
       val from = LocalDate.parse("2016-08-27", formatter)
       val until = LocalDate.parse("2017-08-27", formatter)
-      val claimant = Claimant(liveOrWork = false, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = Disability(disabled = true, severelyDisabled = false))
@@ -291,9 +270,9 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val dateOfBirth = LocalDate.parse("2003-08-27", formatter)
       val from = LocalDate.parse("2016-08-27", formatter)
       val until = LocalDate.parse("2017-08-27", formatter)
-      val claimant = Claimant(liveOrWork = true, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
-      val partner = Claimant(liveOrWork = true, hoursPerWeek = 5.50, totalIncome = 12000, isPartner = true, location = "england",
+      val partner = Claimant(hoursPerWeek = 5.50, totalIncome = 12000, isPartner = true, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = Disability(disabled = false, severelyDisabled = false))
@@ -520,7 +499,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2003-08-27", formatter)
       val from = LocalDate.parse("2016-08-27", formatter)
-      val claimant = Claimant(liveOrWork = false, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = Disability(disabled = false, severelyDisabled = false))
@@ -568,7 +547,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val dateOfBirthChild1 = LocalDate.parse("2003-07-27", formatter)
       val dateOfBirthChild2 = LocalDate.parse("2005-08-21", formatter)
       val from = LocalDate.parse("2016-09-27", formatter)
-      val claimant = Claimant(liveOrWork = true, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child1 = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
         disability = Disability(disabled = true, severelyDisabled = false))
@@ -601,7 +580,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val dateOfBirthChild2 = LocalDate.parse("2016-12-21", formatter)
       val dateOfBirthChild3 = LocalDate.parse("2005-08-21", formatter)
       val from = LocalDate.parse("2016-08-01", formatter)
-      val claimant = Claimant(liveOrWork = true, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child1 = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
         disability = Disability(disabled = false, severelyDisabled = false))
@@ -650,7 +629,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val dateOfBirthChild2 = LocalDate.parse("2001-05-10", formatter)
       val dateOfBirthChild3 = LocalDate.parse("2018-02-15", formatter)
       val from = LocalDate.parse("2016-07-31", formatter)
-      val claimant = Claimant(liveOrWork = true, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child1 = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
         disability = Disability(disabled = false, severelyDisabled = false))
@@ -780,7 +759,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val dateOfBirthChild2 = LocalDate.parse("2001-05-10", formatter)
 
       val from = LocalDate.parse("2016-05-30", formatter)
-      val claimant = Claimant(liveOrWork = false, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child1 = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
         disability = Disability(disabled = false, severelyDisabled = false))
@@ -849,7 +828,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val dateOfBirthChild2 = LocalDate.parse("2003-09-17", formatter)
       val dateOfBirthChild3 = LocalDate.parse("2011-03-18", formatter)
       val from = LocalDate.parse("2016-10-31", formatter)
-      val claimant = Claimant(liveOrWork = true, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child1 = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
         disability = Disability(disabled = false, severelyDisabled = false))
@@ -950,9 +929,9 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val dateOfBirthChild2 = LocalDate.parse("2003-05-10", formatter)
 
       val from = LocalDate.parse("2017-06-30", formatter)
-      val claimant = Claimant(liveOrWork = false, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
-      val claimant1 = Claimant(liveOrWork = true, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant1 = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
 
       val child1 = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
@@ -1013,9 +992,9 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val dateOfBirthChild3 = LocalDate.parse("2018-03-18", formatter)
       val from = LocalDate.parse("2017-08-31", formatter)
 
-      val claimant = Claimant(liveOrWork = true, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
-      val claimant1 = Claimant(liveOrWork = true, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant1 = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
 
       val child1 = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
@@ -1106,7 +1085,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val dateOfBirthChild1 = LocalDate.parse("2007-06-15", formatter)
       val dateOfBirthChild2 = LocalDate.parse("2009-01-01", formatter)
       val from = LocalDate.parse("2016-01-15", formatter)
-      val claimant = Claimant(liveOrWork = false, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child1 = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
         disability = Disability(disabled = true, severelyDisabled = false))
@@ -1203,7 +1182,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val dateOfBirthChild1 = LocalDate.parse("2005-07-01", formatter)
       val dateOfBirthChild2 = LocalDate.parse("2000-12-10", formatter)
       val from = LocalDate.parse("2016-07-31", formatter)
-      val claimant = Claimant(liveOrWork = false, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child1 = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
         disability = Disability(disabled = true, severelyDisabled = false))
@@ -1314,7 +1293,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val dateOfBirthChild2 = LocalDate.parse("2017-06-01", formatter)
 
       val from = LocalDate.parse("2016-05-23", formatter)
-      val claimant = Claimant(liveOrWork = false, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child1 = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
         disability = Disability(disabled = false, severelyDisabled = false))
@@ -1380,7 +1359,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val dateOfBirthChild2 = LocalDate.parse("1994-06-01", formatter)
 
       val from = LocalDate.parse("2016-05-30", formatter)
-      val claimant = Claimant(liveOrWork = false, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child1 = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
         disability = Disability(disabled = true, severelyDisabled = false))
@@ -1691,7 +1670,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
       val from = LocalDate.parse("2016-03-30", formatter)
-      val claimant = Claimant(liveOrWork = false, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = Disability(disabled = false, severelyDisabled = false))
@@ -1712,7 +1691,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
       val from = LocalDate.parse("2016-06-30", formatter)
-      val claimant = Claimant(liveOrWork = true, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = Disability(disabled = false, severelyDisabled = false))
@@ -1751,7 +1730,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2006-08-27", formatter)
       val from = LocalDate.parse("2016-06-30", formatter)
-      val claimant = Claimant(liveOrWork = true, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = Disability(disabled = false, severelyDisabled = false))
@@ -1789,7 +1768,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2002-08-27", formatter)
       val from = LocalDate.parse("2016-06-30", formatter)
-      val claimant = Claimant(liveOrWork = true, hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
+      val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",
         disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
       val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = Disability(disabled = false, severelyDisabled = false))

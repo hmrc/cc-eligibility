@@ -6,7 +6,6 @@
       "claimants": [
         {
           "hoursPerWeek": 6.50,
-          "liveOrWork": true,
           "isPartner": false,
           "location": "england",
           "totalIncome": 99000.00,

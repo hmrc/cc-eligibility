@@ -43,7 +43,6 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
             x.payload.taxYears.head.children.isInstanceOf[List[Child]] shouldBe true
 
             //Claimant model
-            x.payload.taxYears.head.claimants.head.liveOrWork.isInstanceOf[Boolean] shouldBe true
             x.payload.taxYears.head.claimants.head.isPartner.isInstanceOf[Boolean] shouldBe true
             x.payload.taxYears.head.claimants.head.employerProvidesESC.isInstanceOf[Boolean] shouldBe true
             x.payload.taxYears.head.claimants.head.elements shouldBe a[ClaimantsElements]
@@ -167,32 +166,32 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
     "Claimant" should {
   
       "(Employer providing vouchers, claimant receiving vouchers) determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(liveOrWork = true, isPartner = false, elements = ClaimantsElements(vouchers = true), employerProvidesESC = true)
+        val claimant = Claimant(isPartner = false, elements = ClaimantsElements(vouchers = true), employerProvidesESC = true)
         claimant.isClaimantQualifyingForESC shouldBe true
       }
   
       "(Employer providing vouchers, claimant receiving vouchers, but does not live/work in UK) determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(liveOrWork = false, isPartner = false, elements = ClaimantsElements(vouchers = true), employerProvidesESC = true)
+        val claimant = Claimant(isPartner = false, elements = ClaimantsElements(vouchers = true), employerProvidesESC = true)
         claimant.isClaimantQualifyingForESC shouldBe false
       }
   
       "(Employer not providing vouchers, claimant not receiving vouchers) determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(liveOrWork = true, isPartner = false, elements = ClaimantsElements(vouchers = false), employerProvidesESC = false)
+        val claimant = Claimant(isPartner = false, elements = ClaimantsElements(vouchers = false), employerProvidesESC = false)
         claimant.isClaimantQualifyingForESC shouldBe false
       }
   
       "(Employer not providing vouchers, claimant not receiving vouchers, claimant not working in UK) determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(liveOrWork = false, isPartner = false, elements = ClaimantsElements(vouchers = false), employerProvidesESC = false)
+        val claimant = Claimant(isPartner = false, elements = ClaimantsElements(vouchers = false), employerProvidesESC = false)
         claimant.isClaimantQualifyingForESC shouldBe false
       }
   
       "(Employer providing vouchers, claimant not receiving vouchers) determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(liveOrWork = true, isPartner = false, elements = ClaimantsElements(vouchers = false), employerProvidesESC = true)
+        val claimant = Claimant(isPartner = false, elements = ClaimantsElements(vouchers = false), employerProvidesESC = true)
         claimant.isClaimantQualifyingForESC shouldBe false
       }
   
       "(Employer not providing vouchers - ClaimantsElements() case) determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(liveOrWork = true, isPartner = false, elements = ClaimantsElements())
+        val claimant = Claimant(isPartner = false, elements = ClaimantsElements())
         claimant.isClaimantQualifyingForESC shouldBe false
       }
 
