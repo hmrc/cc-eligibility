@@ -123,7 +123,6 @@ case class Claimant(
                      isPartner: Boolean = false,
                      location: String,
                      disability: Disability,
-                     schemesClaiming: SchemesClaiming,
                      otherSupport: OtherSupport,
                      minimumEarnings: MinimumEarnings,
                      age: Option[String],
@@ -200,12 +199,11 @@ object Claimant extends CCFormat with MessagesObject {
           (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
             (JsPath \ "location").read[String] and
               (JsPath \ "disability").read[Disability] and
-                (JsPath \ "schemesClaiming").read[SchemesClaiming] and
-                  (JsPath \ "otherSupport").read[OtherSupport] and
-                    (JsPath \ "minimumEarnings").read[MinimumEarnings] and
-                      (JsPath \ "age").readNullable[String] and
-                        (JsPath \ "employmentStatus").readNullable[String] and
-                          (JsPath \ "selfEmployedSelection").readNullable[Boolean]
+                (JsPath \ "otherSupport").read[OtherSupport] and
+                  (JsPath \ "minimumEarnings").read[MinimumEarnings] and
+                    (JsPath \ "age").readNullable[String] and
+                      (JsPath \ "employmentStatus").readNullable[String] and
+                        (JsPath \ "selfEmployedSelection").readNullable[Boolean]
     )(Claimant.apply _)
 }
 
@@ -231,22 +229,6 @@ object Disability {
     (JsPath \ "disabled").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false))
     )(Disability.apply _)
-}
-
-case class SchemesClaiming(
-                            esc: Boolean = false,
-                            tc: Boolean = false,
-                            uc: Boolean = false,
-                            cg: Boolean = false
-                            )
-
-object SchemesClaiming{
-  implicit val schemesClaimingReads: Reads[SchemesClaiming] = (
-    (JsPath \ "esc").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "tc").read[Boolean].orElse(Reads.pure(false)) and
-        (JsPath \ "uc").read[Boolean].orElse(Reads.pure(false)) and
-          (JsPath \ "cg").read[Boolean].orElse(Reads.pure(false))
-    )(SchemesClaiming.apply _)
 }
 
 case class OtherSupport(
