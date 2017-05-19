@@ -1,7 +1,7 @@
 {
 "eligibility": {
     "tc":{
-      "eligible": false,
+      "eligible": true,
       "taxYears": [
         {
           "from": "2016-09-10",
@@ -13,13 +13,13 @@
               "until": "2017-04-06",
               "householdElements":
               {
-                "basic": false,
+                "basic": true,
                 "hours30": true,
                 "childcare": false,
                 "loneParent": false,
                 "secondParent": true,
                 "family": true,
-                "wtc": false,
+                "wtc": true,
                 "ctc": true
               },
               "claimants": [
