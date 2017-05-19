@@ -6,7 +6,6 @@
       "claimants": [
         {
           "hoursPerWeek": 18.00,
-          "liveOrWork": true,
           "isPartner": false,
           "location": "scotland",
           "totalIncome": 15000.00,
@@ -14,12 +13,6 @@
           "disability": {
             "disabled": false,
             "severelyDisabled": false
-          },
-          "schemesClaiming": {
-            "esc": false,
-            "tc": false,
-            "uc": false,
-            "cg": false
           },
           "otherSupport": {
             "disabilityBenefitsOrAllowances":false,

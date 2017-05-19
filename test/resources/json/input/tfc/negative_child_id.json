@@ -6,7 +6,6 @@
       "claimants": [
         {
           "hoursPerWeek": 30.00,
-          "liveOrWork": true,
           "isPartner": false,
           "location": "england",
           "totalIncome": 0.00,
@@ -14,12 +13,6 @@
           "disability": {
             "disabled": false,
             "severelyDisabled": false
-          },
-          "schemesClaiming": {
-            "esc": false,
-            "tc": false,
-            "uc": false,
-            "cg": false
           },
           "otherSupport": {
             "disabilityBenefitsOrAllowances":false,

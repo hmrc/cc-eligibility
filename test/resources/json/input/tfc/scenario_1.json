@@ -15,12 +15,6 @@
             "disabled": false,
             "severelyDisabled": false
           },
-          "schemesClaiming": {
-            "esc": false,
-            "tc": false,
-            "uc": false,
-            "cg": false
-          },
           "otherSupport": {
             "disabilityBenefitsOrAllowances":false,
             "severeDisabilityBenefitsOrAllowances":false,
