@@ -58,7 +58,7 @@ case class TaxYear(
 
   def claimantsGetChildcareElement(periodStart: LocalDate) : Boolean = {
     def isClaimantDisabledOrCarer(person: Claimant) = {
-      determineClaimantDisabilityOrSeverity(person) || determineCarer(person)
+      determineClaimantDisabilityOrSeverity(person) || person.carersAllowance
     }
 
     val parent = claimants.head
@@ -91,8 +91,6 @@ case class TaxYear(
     claimant.disability.disabled || claimant.disability.severelyDisabled
   }
 
-  private def determineCarer(person: Claimant): Boolean = person.otherSupport.carersAllowance
-
   private def doesHouseHoldQualify(periodStart: LocalDate): Boolean = {
 
     def determineWorking16hours(person: Claimant): Boolean =
@@ -106,7 +104,7 @@ case class TaxYear(
 
     def isOneOfCoupleWorking16h = determineWorking16hours(parent) || determineWorking16hours(partner)
     def isOneOfCoupleDisabled = determineClaimantDisabilityOrSeverity(parent) || determineClaimantDisabilityOrSeverity(partner)
-    def isOneOfCoupleCarer = determineCarer(parent) || determineCarer(partner)
+    def isOneOfCoupleCarer = parent.carersAllowance || partner.carersAllowance
 
     isOneOfCoupleWorking16h && (isOneOfCoupleDisabled || isOneOfCoupleCarer || isCoupleWorking24Hours)
   }
@@ -186,18 +184,11 @@ object TaxYear extends CCFormat with MessagesObject {
     )(TaxYear.apply _)
 }
 
-case class OtherSupport(
-                         carersAllowance: Boolean = false
-                         )
-object OtherSupport {
-  implicit val otherSupportFormat = Json.format[OtherSupport]
-}
-
 case class Claimant(
                      hours: Double = 0.00,
                      isPartner: Boolean = false,
                      disability: Disability,
-                     otherSupport: OtherSupport
+                     carersAllowance: Boolean = false
                      ) extends models.input.BaseClaimant {
 
   def getDisabilityElement(periodStart : LocalDate) : Boolean = {
@@ -222,7 +213,7 @@ object Claimant extends CCFormat {
     (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
       (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
          (JsPath \ "disability").read[Disability] and
-            (JsPath \ "otherSupport").read[OtherSupport]
+            (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false))
     )(Claimant.apply _)
 }
 

@@ -69,8 +69,8 @@ case class TFC(
       }
       (minEarningsParent, minEarningsPartner) match {
         case (true, true) => true
-        case (true, false) => partner.otherSupport.carersAllowance
-        case (false, true) => parent.otherSupport.carersAllowance
+        case (true, false) => partner.carersAllowance
+        case (false, true) => parent.carersAllowance
         case _ => false
       }
     } else {
@@ -88,8 +88,8 @@ case class TFC(
       val partner = claimants.last
       (parent.isWorkingAtLeast16HoursPerWeek(from), partner.isWorkingAtLeast16HoursPerWeek(from)) match {
         case (true,true) => true
-        case (true, false) => partner.otherSupport.carersAllowance
-        case (false, true) => parent.otherSupport.carersAllowance
+        case (true, false) => partner.carersAllowance
+        case (false, true) => parent.carersAllowance
         case _ =>   false
       }
     } else {
@@ -122,7 +122,7 @@ case class Claimant(
                      isPartner: Boolean = false,
                      location: String,
                      disability: Disability,
-                     otherSupport: OtherSupport,
+                     carersAllowance: Boolean = false,
                      minimumEarnings: MinimumEarnings,
                      age: Option[String],
                      employmentStatus: Option[String] = None,
@@ -197,7 +197,7 @@ object Claimant extends CCFormat with MessagesObject {
         (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
           (JsPath \ "location").read[String] and
             (JsPath \ "disability").read[Disability] and
-              (JsPath \ "otherSupport").read[OtherSupport] and
+              (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false)) and
                 (JsPath \ "minimumEarnings").read[MinimumEarnings] and
                   (JsPath \ "age").readNullable[String] and
                     (JsPath \ "employmentStatus").readNullable[String] and
@@ -227,22 +227,6 @@ object Disability {
     (JsPath \ "disabled").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false))
     )(Disability.apply _)
-}
-
-case class OtherSupport(
-                         disabilityBenefitsOrAllowances: Boolean = false,
-                         severeDisabilityBenefitsOrAllowances: Boolean = false,
-                         incomeBenefitsOrAllowances: Boolean = false,
-                         carersAllowance: Boolean = false
-                         )
-
-object OtherSupport {
-  implicit val otherSupportReads: Reads[OtherSupport] = (
-    (JsPath \ "disabilityBenefitsOrAllowances").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "severeDisabilityBenefitsOrAllowances").read[Boolean].orElse(Reads.pure(false)) and
-        (JsPath \ "incomeBenefitsOrAllowances").read[Boolean].orElse(Reads.pure(false)) and
-          (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false))
-    )(OtherSupport.apply _)
 }
 
 case class Child  (
