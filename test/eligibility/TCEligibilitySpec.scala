@@ -971,19 +971,6 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       result shouldBe List(outputChild1, outputChild2, outputChild3, outputChild4)
     }
 
-    "populate the claimant's elements model for a period (1 claimant, non-disabled, non - qualifying)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val periodStartDate = LocalDate.parse("2017-08-31", formatter)
-
-      val claimant = Claimant(isPartner = false, hours = 16, disability = Disability(disabled = false, severelyDisabled = false), otherSupport = OtherSupport(false))
-      val ty = TaxYear(from = periodStartDate, until = periodStartDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant), children = List())
-
-      val outputClaimant = models.output.tc.OutputClaimant(qualifying = false, isPartner = false, claimantDisability = ClaimantDisability(disability = false, severeDisability = false), failures = List())
-
-      val result = TCEligibility.eligibility.determineClaimantsEligibilityForPeriod(ty)
-      result shouldBe List(outputClaimant)
-    }
-
     "populate the claimant's elements model for a period (1 claimant, non-disabled, qualifying)" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val periodStartDate = LocalDate.parse("2017-08-31", formatter)
@@ -1108,22 +1095,6 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
       val outputClaimant = models.output.tc.OutputClaimant(qualifying = true, isPartner = false, claimantDisability = ClaimantDisability(disability = false, severeDisability = true), failures = List())
       val outputClaimant1 = models.output.tc.OutputClaimant(qualifying = true, isPartner = true, claimantDisability = ClaimantDisability(disability = true, severeDisability = true), failures = List())
-
-      val result = TCEligibility.eligibility.determineClaimantsEligibilityForPeriod(ty)
-      result shouldBe List(outputClaimant, outputClaimant1)
-    }
-
-    "populate the claimant's elements model for a period (couple, 1 severely disabled, 2nd non-disabled, non-qualifying)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val periodStartDate = LocalDate.parse("2017-08-31", formatter)
-
-      val claimant = Claimant(isPartner = false, hours = 16, disability = Disability(disabled = false, severelyDisabled = false), otherSupport = OtherSupport(false))
-      val claimant1 = Claimant(isPartner = true, hours = 16, disability = Disability(disabled = true, severelyDisabled = true), otherSupport = OtherSupport(false))
-
-      val ty = TaxYear(from = periodStartDate, until = periodStartDate, totalIncome = BigDecimal(0), previousTotalIncome = BigDecimal(0), claimants = List(claimant, claimant1), children = List())
-
-      val outputClaimant = models.output.tc.OutputClaimant(qualifying = true, isPartner = false, claimantDisability = ClaimantDisability(disability = false, severeDisability = false), failures = List())
-      val outputClaimant1 = models.output.tc.OutputClaimant(qualifying = false, isPartner = true, claimantDisability = ClaimantDisability(disability = false, severeDisability = false), failures = List())
 
       val result = TCEligibility.eligibility.determineClaimantsEligibilityForPeriod(ty)
       result shouldBe List(outputClaimant, outputClaimant1)

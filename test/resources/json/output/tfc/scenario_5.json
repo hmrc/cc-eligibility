@@ -5,15 +5,15 @@
     "tfc": {
       "from": "2016-08-27",
       "until": "2016-11-27",
-      "householdEligibility": false,
+      "householdEligibility": true,
       "periods": [
         {
           "from" : "2016-08-27",
           "until" : "2016-11-27",
-          "periodEligibility" : false,
+          "periodEligibility" : true,
           "claimants" : [
             {
-              "qualifying" : false,
+              "qualifying" : true,
               "isPartner" : false,
               "failures" : []
             }

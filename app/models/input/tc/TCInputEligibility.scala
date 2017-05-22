@@ -139,11 +139,12 @@ case class TaxYear(
     val taxYearConfig = TCConfig.getConfig(periodStart)
     val hours30 : Double = taxYearConfig.hours30Worked
 
-    (householdHasChildOrYoungPerson(periodStart) && getTotalHouseholdWorkingHours >= hours30) &&
-    isCouple match {
-      case true => claimants.head.isWorkingAtLeast16HoursPerWeek(periodStart) || claimants.tail.head.isWorkingAtLeast16HoursPerWeek(periodStart)
-      case false => true
-    }
+    (householdHasChildOrYoungPerson(periodStart) && getTotalHouseholdWorkingHours >= hours30) && (
+      isCouple match {
+        case true => claimants.head.isWorkingAtLeast16HoursPerWeek(periodStart) || claimants.tail.head.isWorkingAtLeast16HoursPerWeek(periodStart)
+        case false => true
+      }
+      )
   }
 
   def getsFamilyElement(now: LocalDate = LocalDate.now) : Boolean = {
