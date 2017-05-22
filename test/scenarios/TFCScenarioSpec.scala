@@ -119,7 +119,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       jsonBodyOf(result) shouldBe outputJson
     }
 
-    "(Scenario 5) single parent earns below 100000 works over 16 hrs but fails eligibility and qualifying disabled child" in {
+    "(Scenario 5) single parent earns below 100000 works over 16 hrs with qualifying disabled child" in {
       val controller = mockTFCEligibilityController
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_5.json")
