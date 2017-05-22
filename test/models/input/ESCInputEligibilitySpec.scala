@@ -169,12 +169,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val claimant = Claimant(isPartner = false, elements = ClaimantsElements(vouchers = true), employerProvidesESC = true)
         claimant.isClaimantQualifyingForESC shouldBe true
       }
-  
-      "(Employer providing vouchers, claimant receiving vouchers, but does not live/work in UK) determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(isPartner = false, elements = ClaimantsElements(vouchers = true), employerProvidesESC = true)
-        claimant.isClaimantQualifyingForESC shouldBe false
-      }
-  
+
       "(Employer not providing vouchers, claimant not receiving vouchers) determine if claimants qualifies for esc (receives vouchers)" in {
         val claimant = Claimant(isPartner = false, elements = ClaimantsElements(vouchers = false), employerProvidesESC = false)
         claimant.isClaimantQualifyingForESC shouldBe false
