@@ -242,8 +242,8 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         tfc.claimants.last.isQualifyingForTFC(fromDate) shouldBe false
       }
 
-      "claimant not qualify and partner qualify (claimant fails live or work)" in {
-        val claimant = Claimant(hoursPerWeek = 9.50, totalIncome = 12000, isPartner = false, location = "england",  disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
+      "claimant not qualify and partner qualify (claimant fails totalIncome)" in {
+        val claimant = Claimant(hoursPerWeek = 9.50, totalIncome = 1200000, isPartner = false, location = "england",  disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
         val partner = Claimant(hoursPerWeek = 16.50, totalIncome = 59000, isPartner = true, location = "england",  disability = Disability(), otherSupport = OtherSupport(), minimumEarnings = MinimumEarnings(), age = None)
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
