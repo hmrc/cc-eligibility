@@ -28,7 +28,6 @@ import play.api.test.FakeRequest
 import spec.CCSpecConfig
 import uk.gov.hmrc.play.http.HeaderCarrier
 import utils.Periods
-
 import scala.concurrent.Future
 
 class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar {
