@@ -14,12 +14,7 @@
             "disabled": false,
             "severelyDisabled": false
           },
-          "otherSupport": {
-            "disabilityBenefitsOrAllowances":false,
-            "severeDisabilityBenefitsOrAllowances":false,
-            "incomeBenefitsOrAllowances":false,
-            "carersAllowance":false
-          },
+          "carersAllowance":false,
           "minimumEarnings": {
             "selection": false,
             "amount": 1000
@@ -35,12 +30,7 @@
             "disabled": false,
             "severelyDisabled": false
           },
-          "otherSupport": {
-            "disabilityBenefitsOrAllowances":false,
-            "severeDisabilityBenefitsOrAllowances":false,
-            "incomeBenefitsOrAllowances":false,
-            "carersAllowance":false
-          },
+          "carersAllowance":false,
           "minimumEarnings": {
             "selection": false,
             "amount": 1000
@@ -70,7 +60,6 @@
             "severelyDisabled": false
           }
         },
-
         {
           "id": 0,
           "name": "Child 3",

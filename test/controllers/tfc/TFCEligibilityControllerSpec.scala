@@ -529,19 +529,19 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                     },
                     {
                       "from" : "2017-02-27",
-                      "until" : "2017-05-27",
-                      "periodEligibility" : true,
-                      "claimants" : [
+                       "until" : "2017-05-27",
+                       "periodEligibility" : true,
+                       "claimants" : [
                        {
-                        "qualifying" : true,
-                        "isPartner" : false,
-                        "failures" : []
-                       },
-                       {
-                        "qualifying" : true,
-                        "isPartner" : true,
-                        "failures" : []
-                       }
+                          "qualifying" : true,
+                          "isPartner" : false,
+                          "failures" : []
+                        },
+                        {
+                          "qualifying" : true,
+                          "isPartner" : true,
+                          "failures" : []
+                        }
                       ],
                       "children" : [
                        {

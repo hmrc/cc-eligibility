@@ -14,9 +14,7 @@
                               "disabled": false,
                               "severelyDisabled": false
                           },
-                          "otherSupport": {
-                            "carersAllowance": false
-                          }
+                        "carersAllowance": false
                       },
                       {
                           "hoursPerWeek": 0.00,
@@ -26,9 +24,7 @@
                               "disabled": true,
                               "severelyDisabled": false
                           },
-                          "otherSupport": {
-                            "carersAllowance": false
-                          }
+                        "carersAllowance": false
                       }
                   ],
                   "children": [

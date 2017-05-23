@@ -14,9 +14,7 @@
                               "disabled": true,
                               "severelyDisabled": true
                           },
-                          "otherSupport": {
-                            "carersAllowance": false
-                          }
+                        "carersAllowance": false
                       }
                   ],
                   "children": [

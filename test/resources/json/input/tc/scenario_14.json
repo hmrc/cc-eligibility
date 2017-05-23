@@ -14,17 +14,13 @@
                 "disabled": true,
                 "severelyDisabled": true
               },
-              "otherSupport": {
-                "carersAllowance": false
-              }
+              "carersAllowance": false
             },
             {
               "hoursPerWeek": 30,
               "isPartner": true,
               "disability": 0.00,
-              "otherSupport": {
-                "carersAllowance": false
-              }
+              "carersAllowance": false
             }
           ],
           "children": [

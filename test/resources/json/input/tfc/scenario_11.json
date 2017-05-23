@@ -14,12 +14,7 @@
             "disabled": false,
             "severelyDisabled": false
           },
-          "otherSupport": {
-            "disabilityBenefitsOrAllowances":false,
-            "severeDisabilityBenefitsOrAllowances":false,
-            "incomeBenefitsOrAllowances":false,
-            "carersAllowance":false
-          },
+          "carersAllowance":false,
           "minimumEarnings": {
             "selection": false,
             "amount": 64

@@ -6,7 +6,6 @@
       "claimants": [
         {
           "hoursPerWeek": 6.00,
-          "liveOrWork": false,
           "isPartner": false,
           "location": "england",
           "totalIncome": 1500000.00,
@@ -15,12 +14,7 @@
             "disabled": false,
             "severelyDisabled": false
           },
-          "otherSupport": {
-            "disabilityBenefitsOrAllowances":false,
-            "severeDisabilityBenefitsOrAllowances":false,
-            "incomeBenefitsOrAllowances":false,
-            "carersAllowance":false
-          },
+          "carersAllowance":false,
           "minimumEarnings": {
             "selection": false,
             "amount": 1
@@ -28,7 +22,6 @@
         },
         {
           "hoursPerWeek": 5.00,
-          "liveOrWork": false,
           "isPartner": true,
           "location": "england",
           "totalIncome": 1500000.00,
@@ -37,12 +30,7 @@
             "disabled": false,
             "severelyDisabled": false
           },
-          "otherSupport": {
-            "disabilityBenefitsOrAllowances":false,
-            "severeDisabilityBenefitsOrAllowances":false,
-            "incomeBenefitsOrAllowances":false,
-            "carersAllowance":false
-          },
+          "carersAllowance":false,
           "minimumEarnings": {
             "selection": false,
             "amount": 1
