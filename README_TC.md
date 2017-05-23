@@ -87,8 +87,7 @@ The TC Eligibility micro-service will accept the parent details and children det
                    claimantElements: {
                      disability: [Boolean] = false,
                      severeDisability: [Boolean] = false
-                   },
-                   failures: [List of String]
+                   }
                  }
                ],
                children: [
@@ -112,8 +111,7 @@ The TC Eligibility micro-service will accept the parent details and children det
                      disability: [Boolean] = false,
                      severeDisability: [Boolean] = false,
                      childcare: [Boolean] = false,
-                    },
-                   failures: [List of String]
+                    }
                  }
                ]
              }
@@ -160,9 +158,7 @@ The TC Eligibility micro-service will accept the parent details and children det
                          "claimantElements": {
                            "disability": false,
                            "severeDisability": false
-                         },
-                         "failures": [
-                         ]
+                         }
                        }
                      ],
                      "children": [
@@ -179,8 +175,7 @@ The TC Eligibility micro-service will accept the parent details and children det
                            "disability": false,
                            "severeDisability": false,
                            "childcare": false
-                         },
-                         "failures": []
+                         }
                        }
                      ]
                    }
@@ -307,8 +302,7 @@ The TC Eligibility micro-service will accept the parent details and children det
                    "claimantElements": {
                      "disability": false,
                      "severeDisability": false
-                   },
-                   "failures": []
+                   }
                  }
                ],
                "children": [
@@ -325,8 +319,7 @@ The TC Eligibility micro-service will accept the parent details and children det
                      "disability": false,
                      "severeDisability": false,
                      "childcare": false
-                   },
-                   "failures": []
+                   }
                  }
                ]
              }

@@ -81,7 +81,7 @@ trait TCEligibility extends CCEligibility {
         val claimantIsSeverelyDisabled = ty.isOneOfClaimantsWorking16h(ty.from) && claimant.disability.severelyDisabled
 
        val outputClaimant =  models.output.tc.OutputClaimant(
-          qualifying = true, //TODO - do we need this, verify in frontend
+          qualifying = true, //TODO - do we need this, verify in frontend and calculator
           isPartner = claimantIsPartner,
           claimantDisability = ClaimantDisability(
             disability = claimantIsDisabled,

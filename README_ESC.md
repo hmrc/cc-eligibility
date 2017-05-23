@@ -61,16 +61,14 @@ The ESC Eligibility micro-service will accept the parent details and children de
                     eligibleMonthsInPeriod: [Int],
                     elements: {
                     vouchers: [Boolean] = false,
-                    },
-                    failures: List[String]
+                    }
                   }
                 ],
                 children: [
                   {
                     id: [short],
                     name: Option[String],
-                    qualifying: [Boolean] = false,
-                    failures: List[String]
+                    qualifying: [Boolean] = false
                   }
                 ]
               }
@@ -108,16 +106,13 @@ The ESC Eligibility micro-service will accept the parent details and children de
                     "eligibleMonthsInPeriod": 0,
                     "elements": {
                       "vouchers": false
-                    },
-                    "failures": []
+                    }
                   }
                 ],
                 "children": [
                   {
                     "id": 0,
                     "name": "Adam",
-                    "qualifying": false,
-                    "failures": []
                   }
                 ]
               }
@@ -225,16 +220,13 @@ The ESC Eligibility micro-service will accept the parent details and children de
                       "eligibleMonthsInPeriod": 0,
                       "elements": {
                         "vouchers": false
-                      },
-                      "failures": []
+                      }
                     }
                   ],
                   "children": [
                     {
                       "id": 0,
                       "name": "Adam",
-                      "qualifying": false,
-                      "failures": []
                     }
                   ]
                 }

@@ -62,8 +62,7 @@ The TFC Eligibility micro-service will accept the parent details and children de
            claimants: [
                   {
                     qualifying: [Boolean] = false,
-                    isPartner: [Boolean] = false,
-                    failures: List[String]
+                    isPartner: [Boolean] = false
                   }
                 ],
            children: [
@@ -72,8 +71,7 @@ The TFC Eligibility micro-service will accept the parent details and children de
                     name: Option[String],
                     qualifying: [Boolean] = false,
                     from: [LocalDate],
-                    until: [LocalDate],
-                    failures: List[String]
+                    until: [LocalDate]
                   }
                 ]
               }
@@ -222,8 +220,7 @@ The TFC Eligibility micro-service will accept the parent details and children de
             "claimants" : [
               {
                 "qualifying" : false,
-                "isPartner" : false,
-                "failures" : []
+                "isPartner" : false
               }
             ],
             "children" : [
@@ -232,8 +229,7 @@ The TFC Eligibility micro-service will accept the parent details and children de
                 "name" : "Venky",
                 "qualifying" : true,
                 "from" : "2016-08-27",
-                "until" : "2016-11-27",
-                "failures" : []
+                "until" : "2016-11-27"
               }
             ]
           }
