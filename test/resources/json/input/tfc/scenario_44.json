@@ -9,7 +9,6 @@
           "isPartner": false,
           "location": "england",
           "totalIncome": 111500.01,
-          "earnedIncome": 0.00,
           "disability": {
             "disabled": false,
             "severelyDisabled": false
@@ -25,7 +24,6 @@
           "isPartner": true,
           "location": "england",
           "totalIncome": 111500.01,
-          "earnedIncome": 0.00,
           "disability": {
             "disabled": false,
             "severelyDisabled": false

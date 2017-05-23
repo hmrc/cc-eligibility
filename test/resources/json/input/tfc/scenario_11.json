@@ -9,7 +9,6 @@
           "isPartner": false,
           "location": "scotland",
           "totalIncome": 15000.00,
-          "earnedIncome": 0.00,
           "disability": {
             "disabled": false,
             "severelyDisabled": false

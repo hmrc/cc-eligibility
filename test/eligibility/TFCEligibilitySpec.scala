@@ -54,7 +54,6 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
     "determine claimant's eligibility if qualifies all rules" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2016-08-27", formatter)
-
       val current = LocalDate.parse("2017-08-01", formatter)
       val claimant = Claimant(hoursPerWeek = 3.50, totalIncome = 99000, isPartner = false, location = "england",
         disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)

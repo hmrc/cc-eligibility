@@ -15,7 +15,6 @@ The TFC Eligibility micro-service will accept the parent details and children de
           claimants: [
             {
               totalIncome: [BigDecimal] = 0.00,
-              earnedIncome: [BigDecimal] = 0.00,
               hoursPerWeek: [Double] = 0.00,
               isPartner : [Boolean] = false,
               disability:{
@@ -97,7 +96,6 @@ The TFC Eligibility micro-service will accept the parent details and children de
             "hoursPerWeek": 30.00,
             "isPartner": false,
             "totalIncome": 0.00,
-            "earnedIncome": 0.00,
             "disability": {
               "disabled": false,
               "severelyDisabled": false
@@ -177,7 +175,6 @@ The TFC Eligibility micro-service will accept the parent details and children de
              "hoursPerWeek": 6.50,
              "isPartner": false,
              "totalIncome": 151000.00,
-             "earnedIncome": 0.00,
              "disability": {
                "disabled": false,
                "severelyDisabled": false
