@@ -2684,7 +2684,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val child5 = Child(id = 4, name = Some("Child 5"),  dob = dateOfBirth5, disability = Disability(disabled = false, severelyDisabled = false))
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = false)
-      val claimant2 = Claimant(isPartner = true, employerProvidesESC = false)
+      val claimant2 = Claimant(isPartner = true, employerProvidesESC = true)
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(

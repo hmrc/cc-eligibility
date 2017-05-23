@@ -7,12 +7,7 @@
         "claimants": [
           {
             "isPartner": false,
-            "schemesClaiming": {
-            },
-            "employerProvidesESC": true,
-            "elements": {
-              "vouchers": false
-            }
+            "employerProvidesESC": false
           }
         ],
         "children": [
