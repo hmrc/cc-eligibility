@@ -72,12 +72,11 @@ object TaxYear extends CCFormat with MessagesObject {
 
 case class Claimant(
                      isPartner: Boolean = false,
-                     employerProvidesESC : Boolean = false,
-                     elements: ClaimantsElements
+                     employerProvidesESC : Boolean = false
                    ) extends models.input.BaseClaimant {
 
   def isClaimantQualifyingForESC : Boolean = {
-     elements.vouchers && employerProvidesESC
+     employerProvidesESC
   }
 
 }
@@ -85,22 +84,8 @@ case class Claimant(
 object Claimant extends CCFormat {
   implicit val claimantReads: Reads[Claimant] = (
     (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "employerProvidesESC").read[Boolean].orElse(Reads.pure(false)) and
-        (JsPath \ "elements").read[ClaimantsElements]
+      (JsPath \ "employerProvidesESC").read[Boolean].orElse(Reads.pure(false))
     )(Claimant.apply _)
-}
-
-case class ClaimantsElements(
-                             // claimants qualification is determined by employer providing esc and
-                             // children's qualification (if there is at least 1 qualifying child)
-                             vouchers : Boolean = false
-                             )
-
-object ClaimantsElements {
-  implicit val claimantReads : Reads[ClaimantsElements] =
-    (JsPath \ "vouchers").read[Boolean].orElse(Reads.pure(false)).map {
-      vouchers => ClaimantsElements(vouchers)
-    }
 }
 
 case class Child (

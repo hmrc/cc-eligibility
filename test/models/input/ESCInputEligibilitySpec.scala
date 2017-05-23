@@ -45,7 +45,6 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
             //Claimant model
             x.payload.taxYears.head.claimants.head.isPartner.isInstanceOf[Boolean] shouldBe true
             x.payload.taxYears.head.claimants.head.employerProvidesESC.isInstanceOf[Boolean] shouldBe true
-            x.payload.taxYears.head.claimants.head.elements shouldBe a[ClaimantsElements]
 
             //Children model
             x.payload.taxYears.head.children.head.id.isInstanceOf[Short] shouldBe true
@@ -165,23 +164,13 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
 
     "Claimant" should {
   
-      "(Employer providing vouchers, claimant receiving vouchers) determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(isPartner = false, elements = ClaimantsElements(vouchers = true), employerProvidesESC = true)
+      "Employer providing vouchers determine if claimants qualifies for esc (receives vouchers)" in {
+        val claimant = Claimant(isPartner = false, employerProvidesESC = true)
         claimant.isClaimantQualifyingForESC shouldBe true
       }
 
-      "(Employer not providing vouchers, claimant not receiving vouchers) determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(isPartner = false, elements = ClaimantsElements(vouchers = false), employerProvidesESC = false)
-        claimant.isClaimantQualifyingForESC shouldBe false
-      }
-
-      "(Employer providing vouchers, claimant not receiving vouchers) determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(isPartner = false, elements = ClaimantsElements(vouchers = false), employerProvidesESC = true)
-        claimant.isClaimantQualifyingForESC shouldBe false
-      }
-  
-      "(Employer not providing vouchers - ClaimantsElements() case) determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(isPartner = false, elements = ClaimantsElements())
+      "Employer not providing vouchers determine if claimants qualifies for esc (receives vouchers)" in {
+        val claimant = Claimant(isPartner = false, employerProvidesESC = false)
         claimant.isClaimantQualifyingForESC shouldBe false
       }
 
