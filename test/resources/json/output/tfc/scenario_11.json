@@ -14,8 +14,7 @@
           "claimants" : [
             {
               "qualifying" : true,
-              "isPartner" : false,
-              "failures" : []
+              "isPartner" : false
             }
           ],
           "children" : [
@@ -24,8 +23,7 @@
               "name" : "Child 1",
               "qualifying" : false,
               "from" : null,
-              "until" : null,
-              "failures" : []
+              "until" : null
             }
           ]
         }

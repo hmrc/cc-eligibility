@@ -95,18 +95,15 @@ object HouseholdElements {
 case class OutputClaimant(
                          qualifying: Boolean = false,
                          isPartner: Boolean = false,
-                         claimantDisability: ClaimantDisability,
-                         failures: List[String]
+                         claimantDisability: ClaimantDisability
                          )
 
 object OutputClaimant {
   implicit val claimantWrites : Writes[OutputClaimant] = (
       (JsPath \ "qualifying").write[Boolean] and
         (JsPath \ "isPartner").write[Boolean] and
-          (JsPath \ "claimantDisability").write[ClaimantDisability] and
-            (JsPath \ "failures").write[List[String]]
+          (JsPath \ "claimantDisability").write[ClaimantDisability]
     )(unlift(OutputClaimant.unapply))
-
 }
 
 case class ClaimantDisability(
@@ -127,8 +124,7 @@ case class OutputChild(
                       childcareCost: BigDecimal = BigDecimal(0.00),
                       childcareCostPeriod: Periods.Period,
                       qualifying: Boolean = false,
-                      childElements: ChildElements,
-                      failures: List[String]
+                      childElements: ChildElements
                       )
 
 object OutputChild {
@@ -138,8 +134,7 @@ object OutputChild {
         (JsPath \ "childcareCost").write[BigDecimal] and
           (JsPath \ "childcareCostPeriod").write[Periods.Period] and
             (JsPath \ "qualifying").write[Boolean] and
-              (JsPath \ "childElements").write[ChildElements] and
-                (JsPath \ "failures").write[List[String]]
+              (JsPath \ "childElements").write[ChildElements]
     )(unlift(OutputChild.unapply))
 }
 

@@ -86,9 +86,7 @@ trait TCEligibility extends CCEligibility {
           claimantDisability = ClaimantDisability(
             disability = claimantIsDisabled,
             severeDisability = claimantIsSeverelyDisabled
-          ),
-          //TODO Implement failures
-          failures = List()
+          )
         )
         outputClaimant
       }
@@ -128,8 +126,7 @@ trait TCEligibility extends CCEligibility {
               disability = child.getsDisabilityElement(periodStart),
               severeDisability = child.getsSevereDisabilityElement(periodStart),
               childcare = child.getsChildcareElement(periodStart)
-            ),
-            failures = List()
+            )
           )
           helper(children.tail, outputChildren :+ outputChild, modifiedChildrenWithChildElement)
         }

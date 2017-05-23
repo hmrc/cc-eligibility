@@ -29,8 +29,7 @@
                   {
                     "disability": false,
                     "severeDisability": false
-                  },
-                  "failures": []
+                  }
                 }
               ],
               "children": [
@@ -47,8 +46,7 @@
                     "disability": false,
                     "severeDisability": false,
                     "childcare": true
-                  },
-                  "failures": []
+                  }
                 }
               ]
             },
@@ -73,8 +71,7 @@
                   {
                     "disability": false,
                     "severeDisability": false
-                  },
-                  "failures": []
+                  }
                 }
               ],
               "children": [
@@ -91,8 +88,7 @@
                     "disability": false,
                     "severeDisability": false,
                     "childcare": false
-                  },
-                  "failures": []
+                  }
                 }
               ]
             }
@@ -124,8 +120,7 @@
                   {
                     "disability": false,
                     "severeDisability": false
-                  },
-                  "failures": []
+                  }
                 }
               ],
               "children": [
@@ -142,8 +137,7 @@
                     "disability": false,
                     "severeDisability": false,
                     "childcare": false
-                  },
-                  "failures": []
+                  }
                 }
               ]
             },
@@ -168,8 +162,7 @@
                   {
                     "disability": false,
                     "severeDisability": false
-                  },
-                  "failures": []
+                  }
                 }
               ],
               "children": [
@@ -186,8 +179,7 @@
                     "disability": false,
                     "severeDisability": false,
                     "childcare": false
-                  },
-                  "failures": []
+                  }
                 }
               ]
             }

@@ -265,8 +265,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
                             "claimantDisability": {
                               "disability": false,
                               "severeDisability": false
-                            },
-                            "failures": []
+                            }
                           }
                         ],
                         "children": [
@@ -282,8 +281,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
                               "disability": false,
                               "severeDisability": false,
                               "childcare": false
-                            },
-                            "failures": []
+                            }
                           }
                         ]
                       }

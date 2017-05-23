@@ -173,14 +173,12 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 1,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -190,8 +188,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -225,14 +222,12 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 1,
         name = Some("Child 2"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -241,8 +236,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         eligibleMonthsInPeriod = 0,
         elements = models.output.esc.ClaimantElements(
           vouchers = false
-        ),
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -276,14 +270,12 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -292,9 +284,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         eligibleMonthsInPeriod = 10,
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -328,14 +318,12 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -344,8 +332,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         eligibleMonthsInPeriod = 10,
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -380,14 +367,12 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 1,
         name = Some("Child 2"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -396,21 +381,18 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         eligibleMonthsInPeriod = 3,
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       val outputChild3 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
       val outputChild4 = models.output.esc.OutputChild(
         id = 1,
         name = Some("Child 2"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant2 = models.output.esc.OutputClaimant(
@@ -419,21 +401,18 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         eligibleMonthsInPeriod = 0,
         elements = models.output.esc.ClaimantElements(
           vouchers = false
-        ),
-        failures = List()
+        )
       )
 
       val outputChild5 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
       val outputChild6 = models.output.esc.OutputChild(
         id = 1,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputClaimant3 = models.output.esc.OutputClaimant(
@@ -442,8 +421,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         eligibleMonthsInPeriod = 5,
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -501,14 +479,12 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 1,
         name = Some("Child 2"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -517,21 +493,18 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         eligibleMonthsInPeriod = 0,
         elements = models.output.esc.ClaimantElements(
           vouchers = false
-        ),
-        failures = List()
+        )
       )
 
       val outputChild3 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild4 = models.output.esc.OutputChild(
         id = 1,
         name = Some("Child 2"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant2 = models.output.esc.OutputClaimant(
@@ -540,8 +513,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         eligibleMonthsInPeriod = 7,
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -585,8 +557,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -595,15 +566,13 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         eligibleMonthsInPeriod = 0,
         elements = models.output.esc.ClaimantElements(
           vouchers = false
-        ),
-        failures = List()
+        )
       )
 
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputClaimant2 = models.output.esc.OutputClaimant(
@@ -612,8 +581,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         eligibleMonthsInPeriod = 7,
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -638,8 +606,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       )
     }
 
-
-
     "(no split)(1child turning 16, 1 child eligible ) determine the periods for a tax year" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth1 = LocalDate.parse("2000-06-27", formatter)
@@ -657,14 +623,12 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -673,8 +637,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         eligibleMonthsInPeriod = 10,
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -708,14 +671,12 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -724,21 +685,18 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         eligibleMonthsInPeriod = 3,
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       val outputChild3 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
       val outputChild4 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputClaimant2 = models.output.esc.OutputClaimant(
@@ -747,8 +705,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         eligibleMonthsInPeriod = 7,
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -796,21 +753,18 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputChild3 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 3"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -819,8 +773,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         eligibleMonthsInPeriod = 10,
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -859,35 +812,27 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputChild3 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 3"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
-
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-
-
-
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -932,21 +877,18 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputChild3 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 3"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -956,11 +898,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-
-
-
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -1005,21 +943,18 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputChild3 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 3"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -1029,11 +964,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = false
-        ),
-
-
-
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -1080,21 +1011,18 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputChild3 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 3"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -1104,8 +1032,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -1152,21 +1079,18 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputChild3 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 3"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -1176,8 +1100,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -1224,21 +1147,18 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputChild3 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 3"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -1248,8 +1168,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -1296,21 +1215,18 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputChild3 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 3"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -1320,8 +1236,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -1368,21 +1283,18 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputChild3 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 3"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -1392,8 +1304,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -1434,8 +1345,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -1445,14 +1355,12 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = false
-        ),
-        failures = List()
+        )
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputClaimant2 = models.output.esc.OutputClaimant(
@@ -1462,8 +1370,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -1524,21 +1431,18 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 1,
         name = Some("Child 2"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputChild3 = models.output.esc.OutputChild(
         id = 2,
         name = Some("Child 3"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -1548,28 +1452,24 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       val outputChild4 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
       val outputChild5 = models.output.esc.OutputChild(
         id = 1,
         name = Some("Child 2"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputChild6 = models.output.esc.OutputChild(
         id = 2,
         name = Some("Child 3"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant2 = models.output.esc.OutputClaimant(
@@ -1579,29 +1479,25 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = false
-        ),
-        failures = List()
+        )
       )
 
 
       val outputChild7 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
       val outputChild8 = models.output.esc.OutputChild(
         id = 1,
         name = Some("Child 2"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputChild9 = models.output.esc.OutputChild(
         id = 2,
         name = Some("Child 3"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant3 = models.output.esc.OutputClaimant(
@@ -1611,28 +1507,24 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = false
-        ),
-        failures = List()
+        )
       )
 
       val outputChild10 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
       val outputChild11 = models.output.esc.OutputChild(
         id = 1,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputChild12 = models.output.esc.OutputChild(
         id = 2,
         name = Some("Child 3"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant4 = models.output.esc.OutputClaimant(
@@ -1642,10 +1534,8 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
-
 
       result shouldBe List(
         models.output.esc.TaxYear(
@@ -1731,21 +1621,18 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputChild3 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 3"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -1755,29 +1642,24 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-
-        failures = List()
+        )
       )
 
       val outputChild4 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild5 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputChild6 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 3"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant2 = models.output.esc.OutputClaimant(
@@ -1787,8 +1669,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       result shouldBe List(
@@ -1853,21 +1734,18 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputChild3 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 3"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -1877,28 +1755,24 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       val outputChild4 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild5 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputChild6 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 3"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant2 = models.output.esc.OutputClaimant(
@@ -1908,8 +1782,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
@@ -1974,14 +1847,12 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -1991,22 +1862,19 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       val outputChild3 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputChild4 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant2 = models.output.esc.OutputClaimant(
@@ -2016,22 +1884,19 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
 
       val outputChild5 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
       val outputChild6 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputClaimant3 = models.output.esc.OutputClaimant(
@@ -2041,8 +1906,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
@@ -2119,21 +1983,18 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputChild3 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 3"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputClaimant1 = models.output.esc.OutputClaimant(
@@ -2143,28 +2004,24 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       val outputChild4 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
       val outputChild5 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 2"),
-        qualifying = false,
-        failures = List()
+        qualifying = false
       )
 
       val outputChild6 = models.output.esc.OutputChild(
         id = 0,
         name = Some("Child 3"),
-        qualifying = true,
-        failures = List()
+        qualifying = true
       )
 
       val outputClaimant2 = models.output.esc.OutputClaimant(
@@ -2174,8 +2031,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
         elements = models.output.esc.ClaimantElements(
           vouchers = true
-        ),
-        failures = List()
+        )
       )
 
       val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
@@ -2234,30 +2090,24 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         models.output.esc.OutputChild(
           id = 0,
         name = Some("Child 1"),
-        qualifying = true,
-        failures = List()),
+        qualifying = true),
         models.output.esc.OutputChild(
           id = 1,
           name = Some("Child 2"),
-          qualifying = false,
-          failures = List()),
+          qualifying = false),
         models.output.esc.OutputChild(
           id = 2,
           name = Some("Child 3"),
-          qualifying = false,
-          failures = List())
+          qualifying = false)
       )
     }
-
 
     "determine children's eligibility for a period 2" in {
 
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-
       val dateOfBirth1 = LocalDate.parse("2000-06-18", formatter)
       val dateOfBirth2 = LocalDate.parse("2017-06-27", formatter)
       val dateOfBirth3 = LocalDate.parse("2016-08-19", formatter)
-
       val ty1periodStart = LocalDate.parse("2016-09-20", formatter)
 
       val child1 = Child(id = 0, name = Some("Child 1"),  dob = dateOfBirth1, disability = Disability(disabled = true, severelyDisabled = false))
@@ -2269,18 +2119,15 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         models.output.esc.OutputChild(
           id = 0,
           name = Some("Child 1"),
-          qualifying = false,
-          failures = List()),
+          qualifying = false),
         models.output.esc.OutputChild(
           id = 1,
           name = Some("Child 2"),
-          qualifying = false,
-          failures = List()),
+          qualifying = false),
         models.output.esc.OutputChild(
           id = 2,
           name = Some("Child 3"),
-          qualifying = true,
-          failures = List())
+          qualifying = true)
       )
     }
 
@@ -2304,18 +2151,15 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         models.output.esc.OutputChild(
           id = 0,
           name = Some("Child 1"),
-          qualifying = false,
-          failures = List()),
+          qualifying = false),
         models.output.esc.OutputChild(
           id = 1,
           name = Some("Child 2"),
-          qualifying = false,
-          failures = List()),
+          qualifying = false),
         models.output.esc.OutputChild(
           id = 2,
           name = Some("Child 3"),
-          qualifying = true,
-          failures = List())
+          qualifying = true)
       )
     }
 
@@ -2339,26 +2183,21 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         models.output.esc.OutputChild(
           id = 0,
           name = Some("Child 1"),
-          qualifying = false,
-          failures = List()),
+          qualifying = false),
         models.output.esc.OutputChild(
           id = 1,
           name = Some("Child 2"),
-          qualifying = true,
-          failures = List()),
+          qualifying = true),
         models.output.esc.OutputChild(
           id = 2,
           name = Some("Child 3"),
-          qualifying = true,
-          failures = List())
+          qualifying = true)
       )
     }
-
 
     "determine children's eligibility for a period 5" in {
 
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-
       val dateOfBirth1 = LocalDate.parse("1998-06-18", formatter)
       val dateOfBirth2 = LocalDate.parse("2017-12-27", formatter)
       val dateOfBirth3 = LocalDate.parse("2017-01-19", formatter)
@@ -2374,18 +2213,15 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         models.output.esc.OutputChild(
           id = 0,
           name = Some("Child 1"),
-          qualifying = false,
-          failures = List()),
+          qualifying = false),
         models.output.esc.OutputChild(
           id = 1,
           name = Some("Child 2"),
-          qualifying = false,
-          failures = List()),
+          qualifying = false),
         models.output.esc.OutputChild(
           id = 2,
           name = Some("Child 3"),
-          qualifying = false,
-          failures = List())
+          qualifying = false)
       )
     }
 
@@ -2412,28 +2248,23 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         models.output.esc.OutputChild(
           id = 0,
           name = Some("Child 1"),
-          qualifying = false,
-          failures = List()),
+          qualifying = false),
         models.output.esc.OutputChild(
           id = 1,
           name = Some("Child 2"),
-          qualifying = true,
-          failures = List()),
+          qualifying = true),
         models.output.esc.OutputChild(
           id = 2,
           name = Some("Child 3"),
-          qualifying = false,
-          failures = List()),
+          qualifying = false),
         models.output.esc.OutputChild(
           id = 3,
           name = Some("Child 4"),
-          qualifying = false,
-          failures = List()),
+          qualifying = false),
         models.output.esc.OutputChild(
           id = 4,
           name = Some("Child 5"),
-          qualifying = false,
-          failures = List())
+          qualifying = false)
       )
     }
 
@@ -2496,11 +2327,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-
-
-
-          failures = List()
+          )
         )
       )
     }
@@ -2523,8 +2350,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         ),
         models.output.esc.OutputClaimant(
           qualifying = true,
@@ -2533,8 +2359,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         )
       )
     }
@@ -2557,8 +2382,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         ),
         models.output.esc.OutputClaimant(
           qualifying = true,
@@ -2567,8 +2391,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         )
       )
     }
@@ -2590,8 +2413,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         )
       )
     }
@@ -2614,8 +2436,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         ),
         models.output.esc.OutputClaimant(
           qualifying = false,
@@ -2624,8 +2445,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         )
       )
     }
@@ -2659,8 +2479,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
           elements = models.output.esc.ClaimantElements(
             vouchers = true
-          ),
-          failures = List()
+          )
         )
       )
     }
@@ -2695,8 +2514,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         ),
         models.output.esc.OutputClaimant(
           qualifying = true,
@@ -2705,8 +2523,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
           elements = models.output.esc.ClaimantElements(
             vouchers = true
-          ),
-          failures = List()
+          )
         )
       )
     }
@@ -2740,8 +2557,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           eligibleMonthsInPeriod = 5,
           elements = models.output.esc.ClaimantElements(
             vouchers = true
-          ),
-          failures = List()
+          )
         ),
         models.output.esc.OutputClaimant(
           qualifying = false,
@@ -2749,8 +2565,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           eligibleMonthsInPeriod = 0,
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         )
       )
     }
@@ -2783,8 +2598,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           eligibleMonthsInPeriod = 0,
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         )
       )
     }
@@ -2818,8 +2632,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           eligibleMonthsInPeriod = 0,
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         ),
         models.output.esc.OutputClaimant(
           qualifying = false,
@@ -2827,8 +2640,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           eligibleMonthsInPeriod = 0,
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         )
       )
     }
@@ -2861,8 +2673,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           eligibleMonthsInPeriod = 0,
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         )
       )
     }
@@ -2896,8 +2707,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           eligibleMonthsInPeriod = 0,
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         ),
         models.output.esc.OutputClaimant(
           qualifying = true,
@@ -2905,8 +2715,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           eligibleMonthsInPeriod = 0,
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         )
       )
     }
@@ -2940,8 +2749,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           eligibleMonthsInPeriod = 0,
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         ),
         models.output.esc.OutputClaimant(
           qualifying = false,
@@ -2949,8 +2757,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           eligibleMonthsInPeriod = 0,
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         )
       )
     }
@@ -2983,8 +2790,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           eligibleMonthsInPeriod = 0,
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         )
       )
     }
@@ -3018,8 +2824,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           eligibleMonthsInPeriod = 0,
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         ),
         models.output.esc.OutputClaimant(
           qualifying = false,
@@ -3027,8 +2832,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           eligibleMonthsInPeriod = 0,
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         )
       )
     }
@@ -3061,8 +2865,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           eligibleMonthsInPeriod = 0,
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         )
       )
     }
@@ -3095,8 +2898,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           eligibleMonthsInPeriod = 0,
           elements = models.output.esc.ClaimantElements(
             vouchers = false
-          ),
-          failures = List()
+          )
         )
       )
     }

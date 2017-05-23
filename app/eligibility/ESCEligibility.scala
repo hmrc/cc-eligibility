@@ -140,9 +140,7 @@ trait ESCEligibility extends CCEligibility {
           eligibleMonthsInPeriod = months,
           elements = models.output.esc.ClaimantElements(
             vouchers = vouchers
-          ),
-          // TODO Implement failures
-          failures = List()
+          )
         )
       }
       outputClaimants
@@ -154,9 +152,7 @@ trait ESCEligibility extends CCEligibility {
         models.output.esc.OutputChild(
           id = child.id,
           name = child.name,
-          qualifying = eligible,
-          //TODO Implement failures
-          failures = List()
+          qualifying = eligible
         )
       }
       outputChildren

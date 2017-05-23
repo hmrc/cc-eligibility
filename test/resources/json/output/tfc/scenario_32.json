@@ -14,13 +14,11 @@
           "claimants" : [
             {
               "qualifying" : true,
-              "isPartner" : true,
-              "failures" : []
+              "isPartner" : true
             },
             {
               "qualifying" : true,
-              "isPartner" : false,
-              "failures" : []
+              "isPartner" : false
             }
           ],
           "children" : [
@@ -29,16 +27,14 @@
               "name" : "Child 1",
               "qualifying" : false,
               "from" : null,
-              "until" :null,
-              "failures" : []
+              "until" :null
             },
             {
               "id" : 0,
               "name" : "Child 2",
               "qualifying" : false,
               "from" :  null,
-              "until" : null,
-              "failures" : []
+              "until" : null
             }
           ]
         },
@@ -49,13 +45,11 @@
           "claimants" : [
             {
               "qualifying" : true,
-              "isPartner" : true,
-              "failures" : []
+              "isPartner" : true
             },
             {
               "qualifying" : true,
-              "isPartner" : false,
-              "failures" : []
+              "isPartner" : false
             }
           ],
           "children" : [
@@ -64,16 +58,14 @@
               "name" : "Child 1",
               "qualifying" : false,
               "from" : null,
-              "until" :null,
-              "failures" : []
+              "until" :null
             },
             {
               "id" : 0,
               "name" : "Child 2",
               "qualifying" : false,
               "from" : null,
-              "until" : null,
-              "failures" : []
+              "until" : null
             }
           ]
         },
@@ -84,13 +76,11 @@
           "claimants" : [
             {
               "qualifying" : true,
-              "isPartner" : true,
-              "failures" : []
+              "isPartner" : true
             },
             {
               "qualifying" : true,
-              "isPartner" : false,
-              "failures" : []
+              "isPartner" : false
             }
           ],
           "children" : [
@@ -99,16 +89,14 @@
               "name" : "Child 1",
               "qualifying" : false,
               "from" : null,
-              "until" :null,
-              "failures" : []
+              "until" :null
             },
             {
               "id" : 0,
               "name" : "Child 2",
               "qualifying" : false,
               "from" : null,
-              "until" : null,
-              "failures" : []
+              "until" : null
             }
           ]
         },
@@ -119,13 +107,11 @@
           "claimants" : [
             {
               "qualifying" : true,
-              "isPartner" : true,
-              "failures" : []
+              "isPartner" : true
             },
             {
               "qualifying" : true,
-              "isPartner" : false,
-              "failures" : []
+              "isPartner" : false
             }
           ],
           "children" : [
@@ -134,16 +120,14 @@
               "name" : "Child 1",
               "qualifying" : false,
               "from" : null,
-              "until" : null,
-              "failures" : []
+              "until" : null
             },
             {
               "id" : 0,
               "name" : "Child 2",
               "qualifying" : true,
               "from" : "2016-10-15",
-              "until" : "2017-01-10",
-              "failures" : []
+              "until" : "2017-01-10"
             }
           ]
         }

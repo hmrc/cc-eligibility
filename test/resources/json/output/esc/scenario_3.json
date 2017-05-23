@@ -16,16 +16,14 @@
                     "eligibleMonthsInPeriod": 8,
                     "elements": {
                       "vouchers": true
-                    },
-                    "failures": []
+                    }
                   }
                 ],
                 "children": [
                   {
                     "id": 0,
                     "name": "Child 1",
-                    "qualifying": true,
-                    "failures": []
+                    "qualifying": true
                   }
                 ]
               }

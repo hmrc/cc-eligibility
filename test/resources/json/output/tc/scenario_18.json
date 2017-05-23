@@ -30,8 +30,7 @@
                   {
                     "disability": false,
                     "severeDisability": false
-                  },
-                  "failures": []
+                  }
                 }
               ],
               "children": [
@@ -48,8 +47,7 @@
                     "disability": false,
                     "severeDisability": false,
                     "childcare": false
-                  },
-                  "failures": []
+                  }
                 },
                 {
                   "id": 1,
@@ -64,8 +62,7 @@
                     "disability": true,
                     "severeDisability": true,
                     "childcare": true
-                  },
-                  "failures": []
+                  }
                 }
               ]
             }
@@ -98,8 +95,7 @@
                   {
                     "disability": false,
                     "severeDisability": false
-                  },
-                  "failures": []
+                  }
                 }
               ],
               "children": [
@@ -116,8 +112,7 @@
                     "disability": false,
                     "severeDisability": false,
                     "childcare": false
-                  },
-                  "failures": []
+                  }
                 },
                 {
                   "id": 1,
@@ -132,8 +127,7 @@
                     "disability": true,
                     "severeDisability": true,
                     "childcare": true
-                  },
-                  "failures": []
+                  }
                 }
               ]
             },
@@ -159,8 +153,7 @@
                   {
                     "disability": false,
                     "severeDisability": false
-                  },
-                  "failures": []
+                  }
                 }
               ],
               "children": [
@@ -177,8 +170,7 @@
                     "disability": false,
                     "severeDisability": false,
                     "childcare": false
-                  },
-                  "failures": []
+                  }
                 },
                 {
                   "id": 1,
@@ -193,8 +185,7 @@
                     "disability": true,
                     "severeDisability": true,
                     "childcare": true
-                  },
-                  "failures": []
+                  }
                 }
               ]
             },
@@ -218,10 +209,7 @@
                     "claimantDisability":{
                        "disability":false,
                        "severeDisability":false
-                    },
-                    "failures":[
-
-                    ]
+                    }
                  }
               ],
               "children":[
@@ -237,10 +225,7 @@
                        "disability":false,
                        "severeDisability":false,
                        "childcare":false
-                    },
-                    "failures":[
-
-                    ]
+                    }
                  },
                  {
                     "id":1,
@@ -254,10 +239,7 @@
                        "disability":true,
                        "severeDisability":true,
                        "childcare":true
-                    },
-                    "failures":[
-
-                    ]
+                    }
                  }
               ]
            }

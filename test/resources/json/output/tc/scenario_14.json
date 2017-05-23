@@ -28,8 +28,7 @@
                   "claimantDisability": {
                     "disability": true,
                     "severeDisability": true
-                  },
-                  "failures": []
+                  }
                 },
                 {
                   "qualifying": true,
@@ -37,8 +36,7 @@
                   "claimantDisability": {
                     "disability": false,
                     "severeDisability": false
-                  },
-                  "failures": []
+                  }
                 }
               ],
               "children": [
@@ -54,8 +52,7 @@
                     "disability": true,
                     "severeDisability": true,
                     "childcare": true
-                  },
-                  "failures": []
+                  }
                 },
                 {
                   "id": 0,
@@ -69,8 +66,7 @@
                     "disability": false,
                     "severeDisability": false,
                     "childcare": true
-                  },
-                  "failures": []
+                  }
                 }
               ]
             }

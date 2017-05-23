@@ -183,16 +183,14 @@ class ESCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                                             "eligibleMonthsInPeriod": 0,
                                             "elements": {
                                                 "vouchers": false
-                                            },
-                                            "failures": []
+                                            }
                                         }
                                     ],
                                     "children": [
                                         {
                                             "id": 0,
                                             "name": "Child 1",
-                                            "qualifying": true,
-                                            "failures": []
+                                            "qualifying": true
                                         }
                                     ]
                                 }

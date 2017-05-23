@@ -30,8 +30,7 @@
                   {
                     "disability": false,
                     "severeDisability": false
-                  },
-                  "failures": []
+                  }
                 },
                 {
                   "qualifying": true,
@@ -40,8 +39,7 @@
                   {
                     "disability": false,
                     "severeDisability": false
-                  },
-                  "failures": []
+                  }
                 }
               ],
               "children": [
@@ -58,8 +56,7 @@
                     "disability": false,
                     "severeDisability": false,
                     "childcare": false
-                  },
-                  "failures": []
+                  }
                 },
                 {
                   "id": 1,
@@ -74,8 +71,7 @@
                     "disability": false,
                     "severeDisability": false,
                     "childcare": false
-                  },
-                  "failures": []
+                  }
                 }
               ]
             }

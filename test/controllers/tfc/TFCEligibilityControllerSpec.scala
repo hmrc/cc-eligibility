@@ -89,8 +89,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "claimants" : [
                        {
                         "qualifying" : true,
-                        "isPartner" : false,
-                        "failures" : []
+                        "isPartner" : false
                        }
                       ],
                       "children" : [
@@ -99,8 +98,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-08-27",
-                        "until" : "2016-11-27",
-                        "failures" : []
+                        "until" : "2016-11-27"
                        }
                       ]
                     },
@@ -111,8 +109,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "claimants" : [
                        {
                         "qualifying" : true,
-                        "isPartner" : false,
-                        "failures" : []
+                        "isPartner" : false
                        }
                       ],
                       "children" : [
@@ -121,8 +118,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-11-27",
-                        "until" : "2017-02-27",
-                        "failures" : []
+                        "until" : "2017-02-27"
                        }
                       ]
                     },
@@ -133,8 +129,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "claimants" : [
                        {
                         "qualifying" : true,
-                        "isPartner" : false,
-                        "failures" : []
+                        "isPartner" : false
                        }
                       ],
                       "children" : [
@@ -143,8 +138,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2017-02-27",
-                        "until" : "2017-05-27",
-                        "failures" : []
+                        "until" : "2017-05-27"
                        }
                       ]
                     }
@@ -256,13 +250,11 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "claimants" : [
                        {
                         "qualifying" : true,
-                        "isPartner" : false,
-                        "failures" : []
+                        "isPartner" : false
                        },
                        {
                         "qualifying" : true,
-                        "isPartner" : true,
-                        "failures" : []
+                        "isPartner" : true
                        }
                       ],
                       "children" : [
@@ -271,8 +263,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-08-27",
-                        "until" : "2016-11-27",
-                        "failures" : []
+                        "until" : "2016-11-27"
                        }
                       ]
                     },
@@ -283,13 +274,11 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "claimants" : [
                        {
                         "qualifying" : true,
-                        "isPartner" : false,
-                        "failures" : []
+                        "isPartner" : false
                        },
                        {
                         "qualifying" : true,
-                        "isPartner" : true,
-                        "failures" : []
+                        "isPartner" : true
                        }
                       ],
                       "children" : [
@@ -298,8 +287,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-11-27",
-                        "until" : "2017-02-27",
-                        "failures" : []
+                        "until" : "2017-02-27"
                        }
                       ]
                     },
@@ -310,13 +298,11 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "claimants" : [
                        {
                         "qualifying" : true,
-                        "isPartner" : false,
-                        "failures" : []
+                        "isPartner" : false
                        },
                        {
                         "qualifying" : true,
-                        "isPartner" : true,
-                        "failures" : []
+                        "isPartner" : true
                        }
                       ],
                       "children" : [
@@ -325,8 +311,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2017-02-27",
-                        "until" : "2017-05-27",
-                        "failures" : []
+                        "until" : "2017-05-27"
                        }
                       ]
                     }
@@ -368,13 +353,11 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "claimants" : [
                        {
                         "qualifying" : true,
-                        "isPartner" : false,
-                        "failures" : []
+                        "isPartner" : false
                        },
                        {
                         "qualifying" : true,
-                        "isPartner" : true,
-                        "failures" : []
+                        "isPartner" : true
                        }
                       ],
                       "children" : [
@@ -383,8 +366,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-08-27",
-                        "until" : "2016-11-27",
-                        "failures" : []
+                        "until" : "2016-11-27"
                        }
                       ]
                     },
@@ -395,13 +377,11 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "claimants" : [
                        {
                         "qualifying" : true,
-                        "isPartner" : false,
-                        "failures" : []
+                        "isPartner" : false
                        },
                        {
                         "qualifying" : true,
-                        "isPartner" : true,
-                        "failures" : []
+                        "isPartner" : true
                        }
                       ],
                       "children" : [
@@ -410,8 +390,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-11-27",
-                        "until" : "2017-02-27",
-                        "failures" : []
+                        "until" : "2017-02-27"
                        }
                       ]
                     },
@@ -422,13 +401,11 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "claimants" : [
                        {
                         "qualifying" : true,
-                        "isPartner" : false,
-                        "failures" : []
+                        "isPartner" : false
                        },
                        {
                         "qualifying" : true,
-                        "isPartner" : true,
-                        "failures" : []
+                        "isPartner" : true
                        }
                       ],
                       "children" : [
@@ -437,8 +414,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2017-02-27",
-                        "until" : "2017-05-27",
-                        "failures" : []
+                        "until" : "2017-05-27"
                        }
                       ]
                     }
@@ -480,13 +456,11 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "claimants" : [
                        {
                         "qualifying" : true,
-                        "isPartner" : false,
-                        "failures" : []
+                        "isPartner" : false
                        },
                        {
                         "qualifying" : true,
-                        "isPartner" : true,
-                        "failures" : []
+                        "isPartner" : true
                        }
                       ],
                       "children" : [
@@ -495,8 +469,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-08-27",
-                        "until" : "2016-11-27",
-                        "failures" : []
+                        "until" : "2016-11-27"
                        }
                       ]
                     },
@@ -507,13 +480,11 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "claimants" : [
                        {
                         "qualifying" : true,
-                        "isPartner" : false,
-                        "failures" : []
+                        "isPartner" : false
                        },
                        {
                         "qualifying" : true,
-                        "isPartner" : true,
-                        "failures" : []
+                        "isPartner" : true
                        }
                       ],
                       "children" : [
@@ -522,8 +493,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-11-27",
-                        "until" : "2017-02-27",
-                        "failures" : []
+                        "until" : "2017-02-27"
                        }
                       ]
                     },
@@ -534,13 +504,11 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                        "claimants" : [
                        {
                           "qualifying" : true,
-                          "isPartner" : false,
-                          "failures" : []
+                          "isPartner" : false
                         },
                         {
                           "qualifying" : true,
-                          "isPartner" : true,
-                          "failures" : []
+                          "isPartner" : true
                         }
                       ],
                       "children" : [
@@ -549,8 +517,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2017-02-27",
-                        "until" : "2017-05-27",
-                        "failures" : []
+                        "until" : "2017-05-27"
                        }
                       ]
                     }
@@ -592,13 +559,11 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "claimants" : [
                        {
                         "qualifying" : true,
-                        "isPartner" : false,
-                        "failures" : []
+                        "isPartner" : false
                        },
                        {
                         "qualifying" : true,
-                        "isPartner" : true,
-                        "failures" : []
+                        "isPartner" : true
                        }
                       ],
                       "children" : [
@@ -607,8 +572,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-08-27",
-                        "until" : "2016-11-27",
-                        "failures" : []
+                        "until" : "2016-11-27"
                        }
                       ]
                     },
@@ -619,13 +583,11 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "claimants" : [
                        {
                         "qualifying" : true,
-                        "isPartner" : false,
-                        "failures" : []
+                        "isPartner" : false
                        },
                        {
                         "qualifying" : true,
-                        "isPartner" : true,
-                        "failures" : []
+                        "isPartner" : true
                        }
                       ],
                       "children" : [
@@ -634,8 +596,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-11-27",
-                        "until" : "2017-02-27",
-                        "failures" : []
+                        "until" : "2017-02-27"
                        }
                       ]
                     },
@@ -646,13 +607,11 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "claimants" : [
                        {
                         "qualifying" : true,
-                        "isPartner" : false,
-                        "failures" : []
+                        "isPartner" : false
                        },
                        {
                         "qualifying" : true,
-                        "isPartner" : true,
-                        "failures" : []
+                        "isPartner" : true
                        }
                       ],
                       "children" : [
@@ -661,8 +620,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2017-02-27",
-                        "until" : "2017-05-27",
-                        "failures" : []
+                        "until" : "2017-05-27"
                        }
                       ]
                     }
