@@ -18,9 +18,6 @@ The ESC Eligibility micro-service will accept the parent details and children de
             {
               isPartner : [Boolean] = false,
               employerProvidesESC: [Boolean] = false
-              elements: {
-                vouchers: [Boolean] = false
-              }
             }
           ],
           children: [
@@ -176,10 +173,7 @@ The ESC Eligibility micro-service will accept the parent details and children de
             "claimants": [
               {
                 "isPartner": false,
-                "employerProvidesESC": true,
-                "elements": {
-                  "vouchers": true
-                }
+                "employerProvidesESC": true
               }
             ],
             "children": [

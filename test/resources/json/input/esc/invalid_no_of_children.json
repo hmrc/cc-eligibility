@@ -10,11 +10,6 @@
                           "disability": {
                               "disabled": true,
                               "severelyDisabled": true
-                          },
-                          "schemesClaiming": {
-                              "tfc": false,
-                              "esc" : false,
-                              "tc": false
                           }
                       }
                   ],
@@ -253,7 +248,8 @@
                         "disabled": true,
                         "severelyDisabled": false
                       }
-                    }                  ]
+                    }
+                  ]
               }
           ]
     }

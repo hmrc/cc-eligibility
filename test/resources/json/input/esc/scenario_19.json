@@ -7,27 +7,11 @@
         "claimants": [
           {
             "isPartner": false,
-            "schemesClaiming": {
-              "tfc": false,
-              "esc" : false,
-              "tc": false
-            },
-            "employerProvidesESC": true,
-            "elements": {
-              "vouchers": true
-            }
+            "employerProvidesESC": true
           },
           {
             "isPartner": true,
-            "schemesClaiming": {
-              "tfc": false,
-              "esc" : false,
-              "tc": false
-            },
-            "employerProvidesESC": false,
-            "elements": {
-              "vouchers": false
-            }
+            "employerProvidesESC": false
           }
 
         ],
