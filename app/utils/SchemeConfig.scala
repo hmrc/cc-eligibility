@@ -20,10 +20,6 @@ import java.util.Calendar
 
 import org.joda.time.LocalDate
 
-/**
- * Created by adamconder on 03/08/15.
- */
-
 trait CCConfig {
 
   private def calendar(year: Int, month: Int, day: Int): Calendar = {
