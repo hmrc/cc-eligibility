@@ -26,41 +26,46 @@ import org.joda.time.LocalDate
 
 trait CCConfig {
 
+  private def calendar(year: Int, month: Int, day: Int): Calendar = {
+    val calendar  = Calendar.getInstance()
+
+    calendar.clear()
+    calendar.set(Calendar.MONTH, month)
+    calendar.set(Calendar.DAY_OF_MONTH, day)
+    calendar.set(Calendar.YEAR, year)
+
+    calendar
+  }
+
+  private def birthDayCalendar(date: LocalDate): Calendar = {
+    val calendar  = Calendar.getInstance()
+    calendar.clear()
+    calendar.setTime(date.toDate)
+
+    calendar
+  }
+
   def september1stForDate(date: LocalDate) : LocalDate = {
     val currentYear = determineTaxYearFromNow(date)
 
-    val calendar = Calendar.getInstance()
-    calendar.clear()
-    calendar.set(Calendar.MONTH, Calendar.SEPTEMBER)
-    calendar.set(Calendar.DAY_OF_MONTH, 1)
-    calendar.set(Calendar.YEAR, currentYear)
-    val september1 = calendar.getTime
+     val september1 = calendar(currentYear, Calendar.SEPTEMBER, 1).getTime
     LocalDate.fromDateFields(september1)
   }
 
   def previousSeptember1stForDate(date: LocalDate) : LocalDate = {
     val currentYear = determineTaxYearFromNow(date)
 
-    val calendar = Calendar.getInstance()
-    calendar.clear()
-    calendar.set(Calendar.MONTH, Calendar.SEPTEMBER)
-    calendar.set(Calendar.DAY_OF_MONTH, 1)
-    calendar.set(Calendar.YEAR, currentYear -1)
-    val september1 = calendar.getTime
+    val september1 = calendar(currentYear-1, Calendar.SEPTEMBER, 1).getTime
     LocalDate.fromDateFields(september1)
   }
 
   def september1stFollowingChildBirthday(childBirthday: LocalDate) : LocalDate = {
     // plot the child's birthday (e.g. 16th birthday) on the calendar
-    val childBirthdayCalendar = Calendar.getInstance()
-    childBirthdayCalendar.clear()
-    childBirthdayCalendar.setTime(childBirthday.toDate)
+    val childBirthdayCalendar = birthDayCalendar(childBirthday)
 
     // determine 1st september for the child's birthday (current year)
     // if their birthday is after september then we have to go to the following year
-    val septemberCalendar = Calendar.getInstance()
-    septemberCalendar.clear()
-    septemberCalendar.setTime(childBirthday.toDate)
+    val septemberCalendar = birthDayCalendar(childBirthday)
     septemberCalendar.set(Calendar.MONTH, Calendar.SEPTEMBER)
     septemberCalendar.set(Calendar.DAY_OF_MONTH, 1)
 
@@ -75,25 +80,14 @@ trait CCConfig {
 
   def determineTaxYearFromNow(from: LocalDate) : Int = {
 
-    val currentCalendar = Calendar.getInstance()
-    currentCalendar.clear()
-    currentCalendar.setTime(from.toDate)
+    val currentCalendar = birthDayCalendar(from)
+
     val periodYear = currentCalendar.get(Calendar.YEAR)
     val periodStart = from.toDate
 
-    val januaryCalendar = Calendar.getInstance()
-    januaryCalendar.clear()
-    januaryCalendar.set(Calendar.YEAR, periodYear)
-    januaryCalendar.set(Calendar.MONTH, Calendar.JANUARY)
-    januaryCalendar.set(Calendar.DAY_OF_MONTH, 1)
-    val january1st = januaryCalendar.getTime
+    val january1st = calendar(periodYear, Calendar.JANUARY, 1).getTime
 
-    val aprilCalendar = Calendar.getInstance()
-    aprilCalendar.clear()
-    aprilCalendar.set(Calendar.YEAR, periodYear)
-    aprilCalendar.set(Calendar.MONTH, Calendar.APRIL)
-    aprilCalendar.set(Calendar.DAY_OF_MONTH, 5)
-    val april5th = aprilCalendar.getTime
+    val april5th = calendar(periodYear, Calendar.APRIL, 5).getTime
 
     val taxYear = if ((periodStart.compareTo(january1st) == 0 || periodStart.after(january1st))
       && (periodStart.before(april5th) || periodStart.compareTo(april5th) == 0)) {
@@ -105,6 +99,4 @@ trait CCConfig {
   }
 }
 
-object CCConfig extends CCConfig {
-
-}
+object CCConfig extends CCConfig
