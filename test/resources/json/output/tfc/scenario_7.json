@@ -20,7 +20,6 @@
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : false,
               "from" : null,
               "until" : null

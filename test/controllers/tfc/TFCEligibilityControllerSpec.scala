@@ -95,7 +95,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "children" : [
                        {
                         "id" : 0,
-                        "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-08-27",
                         "until" : "2016-11-27"
@@ -115,7 +114,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "children" : [
                        {
                         "id" : 0,
-                        "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-11-27",
                         "until" : "2017-02-27"
@@ -135,7 +133,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "children" : [
                        {
                         "id" : 0,
-                        "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2017-02-27",
                         "until" : "2017-05-27"
@@ -170,16 +167,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
 
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       jsonBodyOf(result) shouldBe outputJSON
-    }
-
-    "accept invalid json if child name exceeding 25 characters should return 400" in {
-      val controller = mockTFCEligibilityController
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/invalid_child_name.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-
-      when(controller.eligibility.eligibility(any[Request]())(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(Eligibility()))
-      val result = await(controller.eligible(request))
-      status(result) shouldBe 400
     }
 
     "accept invalid json with incorrect from date format should return a bad request" in {
@@ -260,7 +247,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "children" : [
                        {
                         "id" : 0,
-                        "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-08-27",
                         "until" : "2016-11-27"
@@ -284,7 +270,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "children" : [
                        {
                         "id" : 0,
-                        "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-11-27",
                         "until" : "2017-02-27"
@@ -308,7 +293,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "children" : [
                        {
                         "id" : 0,
-                        "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2017-02-27",
                         "until" : "2017-05-27"
@@ -363,7 +347,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "children" : [
                        {
                         "id" : 0,
-                        "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-08-27",
                         "until" : "2016-11-27"
@@ -387,7 +370,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "children" : [
                        {
                         "id" : 0,
-                        "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-11-27",
                         "until" : "2017-02-27"
@@ -411,7 +393,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "children" : [
                        {
                         "id" : 0,
-                        "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2017-02-27",
                         "until" : "2017-05-27"
@@ -466,7 +447,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "children" : [
                        {
                         "id" : 0,
-                        "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-08-27",
                         "until" : "2016-11-27"
@@ -490,7 +470,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "children" : [
                        {
                         "id" : 0,
-                        "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-11-27",
                         "until" : "2017-02-27"
@@ -514,7 +493,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "children" : [
                        {
                         "id" : 0,
-                        "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2017-02-27",
                         "until" : "2017-05-27"
@@ -569,7 +547,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "children" : [
                        {
                         "id" : 0,
-                        "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-08-27",
                         "until" : "2016-11-27"
@@ -593,7 +570,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "children" : [
                        {
                         "id" : 0,
-                        "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2016-11-27",
                         "until" : "2017-02-27"
@@ -617,7 +593,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       "children" : [
                        {
                         "id" : 0,
-                        "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2017-02-27",
                         "until" : "2017-05-27"

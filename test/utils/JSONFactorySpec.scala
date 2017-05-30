@@ -102,7 +102,7 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
       val periodEndDate = LocalDate.parse("2015-04-05", formatter)
 
       val outputClaimant = models.output.tc.OutputClaimant(qualifying = true, isPartner = false, claimantDisability = ClaimantDisability(disability = false, severeDisability = false))
-      val outputChild = models.output.tc.OutputChild(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild = models.output.tc.OutputChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
       val outputHhElements = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
       val outputPeriod = models.output.tc.TCPeriod(from = periodStartDate, until = periodEndDate, householdElements = outputHhElements, claimants = List(outputClaimant), children = List(outputChild))
       val outputTaxYear = models.output.tc.TaxYear(from = periodStartDate, until = periodEndDate, houseHoldIncome = BigDecimal(0.00), periods = List(outputPeriod))
@@ -147,9 +147,7 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                         ],
                         "children": [
                           {
-                            "id": 0,
-                            "name": "Child 1",
-                            "childcareCost": 200.0,
+                            "id": 0,                            "childcareCost": 200.0,
                             "childcareCostPeriod": "Month",
                             "qualifying": true,
                             "childElements": {
@@ -186,8 +184,8 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
       val outputUntilPeriod1 = LocalDate.parse("2015-09-30", formatter)
       val outputStartPeriod2 = LocalDate.parse("2015-09-30", formatter)
       val outputUntilPeriod2 = LocalDate.parse("2015-12-30", formatter)
-      val outputPeriodChild1 = models.output.tfc.OutputChild(id = 0, name = Some("Child 1"), qualifying = true, from = outputStartPeriod1, until = outputUntilPeriod1)
-      val outputPeriodChild2 = models.output.tfc.OutputChild(id = 0, name = Some("Child 1"), qualifying = true, from = outputStartPeriod2, until = outputUntilPeriod2)
+      val outputPeriodChild1 = models.output.tfc.OutputChild(id = 0, qualifying = true, from = outputStartPeriod1, until = outputUntilPeriod1)
+      val outputPeriodChild2 = models.output.tfc.OutputChild(id = 0, qualifying = true, from = outputStartPeriod2, until = outputUntilPeriod2)
 
       val tfcPeriods = List(
         TFCPeriod(from = outputStartPeriod1,
@@ -227,7 +225,6 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                       "children" : [
                        {
                         "id" : 0,
-                        "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2015-06-30",
                         "until" : "2015-09-30"
@@ -247,7 +244,6 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                       "children" : [
                        {
                         "id" : 0,
-                        "name" : "Child 1",
                         "qualifying" : true,
                         "from" : "2015-09-30",
                         "until" : "2015-12-30"

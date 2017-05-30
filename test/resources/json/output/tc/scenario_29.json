@@ -35,9 +35,7 @@
               ],
               "children": [
                 {
-                  "id": 0,
-                  "name": "Child 1",
-                  "childcareCost": 3000.00,
+                  "id": 0,                  "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
                   "childElements":
@@ -51,7 +49,7 @@
                 },
                 {
                   "id": 1,
-                  "name": "Child 2",
+
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": false,
@@ -100,9 +98,7 @@
               ],
               "children": [
                 {
-                  "id": 0,
-                  "name": "Child 1",
-                  "childcareCost": 3000.00,
+                  "id": 0,                  "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
                   "childElements":
@@ -116,7 +112,7 @@
                 },
                 {
                   "id": 1,
-                  "name": "Child 2",
+
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": false,
@@ -158,9 +154,7 @@
               ],
               "children": [
                 {
-                  "id": 0,
-                  "name": "Child 1",
-                  "childcareCost": 3000.00,
+                  "id": 0,                  "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
                   "childElements":
@@ -174,7 +168,7 @@
                 },
                 {
                   "id": 1,
-                  "name": "Child 2",
+
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
@@ -217,7 +211,6 @@
               "children": [
                 {
                   "id": 0,
-                  "name": "Child 1",
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
@@ -232,7 +225,6 @@
                 },
                 {
                   "id": 1,
-                  "name": "Child 2",
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,

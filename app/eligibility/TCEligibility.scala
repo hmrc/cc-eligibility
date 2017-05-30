@@ -116,7 +116,6 @@ trait TCEligibility extends CCEligibility {
 
           val outputChild = OutputChild(
             id = child.id,
-            name = child.name,
             childcareCost = child.childcareCost,
             childcareCostPeriod = child.childcareCostPeriod,
             qualifying = isChild || youngAdultElement,

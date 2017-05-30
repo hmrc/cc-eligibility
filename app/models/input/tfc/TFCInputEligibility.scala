@@ -231,7 +231,6 @@ object Disability {
 
 case class Child  (
                     id: Short,
-                    name: Option[String],
                     childcareCost: BigDecimal = BigDecimal(0.00),
                     childcareCostPeriod: Periods.Period,
                     dob: LocalDate,
@@ -298,7 +297,7 @@ case class Child  (
 
 
 object Child extends CCFormat with MessagesObject {
-  val nameLength = 25
+
   def validID(id: Short): Boolean = {
     id >= 0
   }
@@ -309,7 +308,6 @@ object Child extends CCFormat with MessagesObject {
 
   implicit val childReads: Reads[Child] = (
     (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
-      (JsPath \ "name").readNullable[String](maxLength[String](nameLength)) and
         (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(messages("cc.elig.childcare.spend.too.low")))(x => childSpendValidation(x)) and
           (JsPath \ "childcareCostPeriod").read[Periods.Period] and
             (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and

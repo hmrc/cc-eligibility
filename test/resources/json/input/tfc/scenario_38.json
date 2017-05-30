@@ -38,7 +38,6 @@
       "children": [
         {
           "id": 0,
-          "name": "Child 1",
           "childcareCost": 3000.00,
           "childcareCostPeriod": "Month",
           "dob": "2005-08-12",
@@ -49,7 +48,6 @@
         },
         {
           "id": 0,
-          "name": "Child 2",
           "childcareCost": 1000.00,
           "childcareCostPeriod": "Month",
           "dob": "2001-08-12",
@@ -60,7 +58,6 @@
         },
         {
           "id": 0,
-          "name": "Child 3",
           "childcareCost": 3000.00,
           "childcareCostPeriod": "Month",
           "dob": "2018-02-05",

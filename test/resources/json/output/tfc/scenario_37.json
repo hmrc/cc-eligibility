@@ -20,21 +20,18 @@
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : true,
               "from" : "2016-06-01",
               "until" : "2016-09-01"
             },
             {
               "id" : 0,
-              "name" : "Child 2",
               "qualifying" : true,
               "from" : "2016-06-01",
               "until" : "2016-09-01"
             },
             {
               "id" : 0,
-              "name" : "Child 3",
               "qualifying" : false,
               "from" :  null,
               "until" : null
@@ -54,21 +51,18 @@
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : true,
               "from" : "2016-09-01",
               "until" : "2016-09-04"
             },
             {
               "id" : 0,
-              "name" : "Child 2",
               "qualifying" : true,
               "from" : "2016-09-01",
               "until" : "2016-09-04"
             },
             {
               "id" : 0,
-              "name" : "Child 3",
               "qualifying" : false,
               "from" : null,
               "until" : null
@@ -88,21 +82,18 @@
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : false,
               "from" : null,
               "until" : null
             },
             {
               "id" : 0,
-              "name" : "Child 2",
               "qualifying" : false,
               "from" : null,
               "until" : null
             },
             {
               "id" : 0,
-              "name" : "Child 3",
               "qualifying" : false,
               "from" : null,
               "until" : null
@@ -122,21 +113,18 @@
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : false,
               "from" : null,
               "until" : null
             },
             {
               "id" : 0,
-              "name" : "Child 2",
               "qualifying" : false,
               "from" : null,
               "until" : null
             },
             {
               "id" : 0,
-              "name" : "Child 3",
               "qualifying" : false,
               "from" : null,
               "until" : null
@@ -156,21 +144,18 @@
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : false,
               "from" : null,
               "until" : null
             },
             {
               "id" : 0,
-              "name" : "Child 2",
               "qualifying" : false,
               "from" : null,
               "until" : null
             },
             {
               "id" : 0,
-              "name" : "Child 3",
               "qualifying" : true,
               "from" :  "2017-06-15",
               "until" : "2017-09-01"
@@ -190,21 +175,18 @@
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : false,
               "from" : null,
               "until" : null
             },
             {
               "id" : 0,
-              "name" : "Child 2",
               "qualifying" : false,
               "from" : null,
               "until" : null
             },
             {
               "id" : 0,
-              "name" : "Child 3",
               "qualifying" : true,
               "from" :  "2017-09-01",
               "until" : "2017-12-01"

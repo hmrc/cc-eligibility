@@ -145,20 +145,6 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
       status(result) shouldBe 400
     }
 
-    "Accept invalid json if child name exceeding 25 characters should return 400" in {
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility = mock[TCEligibilityService]
-        override val auditEvent = mock[AuditEvents]
-      }
-
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/invalid_child_name.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
-      val result = await(controller.eligible(request))
-      status(result) shouldBe 400
-    }
-
     "Accept a valid json if there is negative childcare cost should return 400" in {
       val controller = new TCEligibilityController with TCEligibility {
         override val eligibility = mock[TCEligibilityService]
@@ -270,9 +256,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
                         ],
                         "children": [
                           {
-                            "id": 0,
-                            "name": "Child 1",
-                            "childcareCost": 3000.00,
+                            "id": 0,                            "childcareCost": 3000.00,
                             "childcareCostPeriod": "Month",
                             "qualifying": false,
                             "childElements": {

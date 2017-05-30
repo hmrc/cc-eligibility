@@ -62,7 +62,6 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
 
             //Child model
             x.payload.tfc.children.head.id.isInstanceOf[Short] shouldBe true
-            x.payload.tfc.children.head.name.isInstanceOf[Option[String]] shouldBe true
             x.payload.tfc.children.head.childcareCost shouldBe a[BigDecimal]
             x.payload.tfc.children.head.childcareCostPeriod shouldBe a[Periods.Period]
             x.payload.tfc.children.head.dob shouldBe a[LocalDate]
@@ -80,47 +79,32 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
 
   "Child" should {
 
-    "return child's name as a Some(String) if name defined" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
-
-      val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
-      child.name shouldBe Some("Child 1")
-    }
-
-    "return child's name as None if name not defined" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
-
-      val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
-      child.name shouldBe None
-    }
 
     "Determine disability status if child is disabled" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
-      val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
+      val child = Child(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
       child.isDisabled shouldBe true
     }
 
     "Determine disability status if child is severely disabled" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
-      val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = true))
+      val child = Child(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = true))
       child.isDisabled shouldBe true
     }
 
     "Determine disability status if child is not disabled and not severely disabled" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
-      val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+      val child = Child(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
       child.isDisabled shouldBe false
     }
 
     "Determine disability status if child is disabled and severely disabled" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
-      val child = Child(id = 0, name = None, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = true))
+      val child = Child(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = true))
       child.isDisabled shouldBe true
     }
 
@@ -128,7 +112,7 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
       val current = LocalDate.parse("2017-08-01", formatter)
-      val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+      val child = Child(id = 0, childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
       val child11Birthday = child.getChildBirthday(current, "england")
       LocalDate.fromDateFields(child11Birthday) shouldBe LocalDate.parse("2016-08-27", formatter)
     }
@@ -137,7 +121,7 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2000-09-27", formatter)
       val current = LocalDate.parse("2017-08-01", formatter)
-      val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
+      val child = Child(id = 0, childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
       val child11Birthday = child.getChildBirthday(current, "england")
       LocalDate.fromDateFields(child11Birthday) shouldBe LocalDate.parse("2016-09-27", formatter)
     }
@@ -146,7 +130,7 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
       val current = LocalDate.parse("2017-08-01", formatter)
-      val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+      val child = Child(id = 0, childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
       val endWeek1stOfSeptemberDate = child.endWeek1stOfSeptemberDate(current, "england")
       LocalDate.fromDateFields(endWeek1stOfSeptemberDate) shouldBe LocalDate.parse("2016-09-04", formatter)
     }
@@ -155,7 +139,7 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-09-12", formatter)
       val current = LocalDate.parse("2017-08-01", formatter)
-      val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+      val child = Child(id = 0, childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
       val endWeek1stOfSeptemberDate = child.endWeek1stOfSeptemberDate(current, "england")
       LocalDate.fromDateFields(endWeek1stOfSeptemberDate) shouldBe LocalDate.parse("2017-09-03", formatter)
     }
@@ -164,7 +148,7 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
       val current = LocalDate.parse("2017-08-01", formatter)
-      val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
+      val child = Child(id = 0, childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
       val endWeek1stOfSeptemberDate = child.endWeek1stOfSeptemberDate(current, "england")
       LocalDate.fromDateFields(endWeek1stOfSeptemberDate) shouldBe LocalDate.parse("2021-09-05", formatter)
     }
@@ -173,7 +157,7 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-09-12", formatter)
       val current = LocalDate.parse("2017-08-01", formatter)
-      val child = Child(id = 0, name = Some("Child 1"), childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
+      val child = Child(id = 0, childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
       val endWeek1stOfSeptemberDate = child.endWeek1stOfSeptemberDate(current, "england")
       LocalDate.fromDateFields(endWeek1stOfSeptemberDate) shouldBe LocalDate.parse("2022-09-04", formatter)
     }

@@ -24,28 +24,24 @@
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : true,
               "from" : "2016-09-10",
               "until" : "2016-12-10"
             },
             {
               "id" : 0,
-              "name" : "Child 2",
               "qualifying" : false,
               "from" :  null,
               "until" : null
             },
             {
               "id" : 0,
-              "name" : "Child 3",
               "qualifying" : false,
               "from" :  null,
               "until" : null
             },
             {
               "id" : 0,
-              "name" : "Child 4",
               "qualifying" : false,
               "from" :  null,
               "until" : null
@@ -69,28 +65,24 @@
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : true,
               "from" : "2016-12-10",
               "until" : "2017-03-10"
             },
             {
               "id" : 0,
-              "name" : "Child 2",
               "qualifying" : false,
               "from" :null,
               "until" : null
             },
             {
               "id" : 0,
-              "name" : "Child 3",
               "qualifying" : false,
               "from" :null,
               "until" : null
             },
             {
               "id" : 0,
-              "name" : "Child 4",
               "qualifying" : false,
               "from" :null,
               "until" : null
@@ -114,28 +106,24 @@
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : true,
               "from" :  "2017-03-10",
               "until" : "2017-06-10"
             },
             {
               "id" : 0,
-              "name" : "Child 2",
               "qualifying" : true,
               "from" :  "2017-03-18",
               "until" : "2017-06-10"
             },
             {
               "id" : 0,
-              "name" : "Child 3",
               "qualifying" : true,
               "from" :  "2017-03-18",
               "until" : "2017-06-10"
             },
             {
               "id" : 0,
-              "name" : "Child 4",
               "qualifying" : false,
               "from" : null,
               "until" : null
@@ -159,28 +147,24 @@
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : true,
               "from" :  "2017-06-10",
               "until" : "2017-09-03"
             },
             {
               "id" : 0,
-              "name" : "Child 2",
               "qualifying" : true,
               "from" :  "2017-06-10",
               "until" : "2017-09-10"
             },
             {
               "id" : 0,
-              "name" : "Child 3",
               "qualifying" : true,
               "from" :  "2017-06-10",
               "until" : "2017-09-10"
             },
             {
               "id" : 0,
-              "name" : "Child 4",
               "qualifying" : false,
               "from" : null,
               "until" : null
@@ -204,28 +188,24 @@
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : false,
               "from" : null,
               "until" : null
             },
             {
               "id" : 0,
-              "name" : "Child 2",
               "qualifying" : true,
               "from" :  "2017-09-10",
               "until" : "2017-12-10"
             },
             {
               "id" : 0,
-              "name" : "Child 3",
               "qualifying" : true,
               "from" :  "2017-09-10",
               "until" : "2017-12-10"
             },
             {
               "id" : 0,
-              "name" : "Child 4",
               "qualifying" : false,
               "from" : null,
               "until" : null
@@ -249,28 +229,24 @@
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : false,
               "from" : null,
               "until" : null
             },
             {
               "id" : 0,
-              "name" : "Child 2",
               "qualifying" : true,
               "from" :  "2017-12-10",
               "until" : "2018-03-10"
             },
             {
               "id" : 0,
-              "name" : "Child 3",
               "qualifying" : true,
               "from" :  "2017-12-10",
               "until" : "2018-03-10"
             },
             {
               "id" : 0,
-              "name" : "Child 4",
               "qualifying" : true,
               "from" :  "2018-01-15",
               "until" : "2018-03-10"
@@ -294,28 +270,24 @@
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : false,
               "from" : null,
               "until" : null
             },
             {
               "id" : 0,
-              "name" : "Child 2",
               "qualifying" : true,
               "from" :  "2018-03-10",
               "until" : "2018-06-10"
             },
             {
               "id" : 0,
-              "name" : "Child 3",
               "qualifying" : true,
               "from" :  "2018-03-10",
               "until" : "2018-06-10"
             },
             {
               "id" : 0,
-              "name" : "Child 4",
               "qualifying" : true,
               "from" :  "2018-03-10",
               "until" : "2018-06-10"
@@ -339,28 +311,24 @@
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : false,
               "from" : null,
               "until" : null
             },
             {
               "id" : 0,
-              "name" : "Child 2",
               "qualifying" : true,
               "from" :  "2018-06-10",
               "until" : "2018-09-10"
             },
             {
               "id" : 0,
-              "name" : "Child 3",
               "qualifying" : true,
               "from" :  "2018-06-10",
               "until" : "2018-09-10"
             },
             {
               "id" : 0,
-              "name" : "Child 4",
               "qualifying" : true,
               "from" :  "2018-06-10",
               "until" : "2018-09-10"

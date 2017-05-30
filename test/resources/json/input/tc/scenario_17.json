@@ -20,7 +20,6 @@
         "children": [
           {
             "id": 0,
-            "name": "Child 1",
             "childcareCost": 3000.00,
             "childcareCostPeriod": "Month",
             "dob": "1999-01-12",

@@ -121,7 +121,6 @@ val eligibility = new TFCEligibilityService
 
         OutputChild(
           id = child.id,
-          name = child.name,
           qualifying = childEligibility,
           from = qualifyStartDate,
           until = qualifyEndDate

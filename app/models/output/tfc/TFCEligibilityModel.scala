@@ -70,7 +70,6 @@ object OutputClaimant extends CCFormat {
 
 case class OutputChild(
                         id: Short,
-                        name: Option[String],
                         qualifying: Boolean = false,
                         from: LocalDate,
                         until: LocalDate
@@ -79,7 +78,6 @@ case class OutputChild(
 object OutputChild extends CCFormat {
   implicit val childWrites : Writes[OutputChild] = (
     (JsPath \ "id").write[Short] and
-      (JsPath \ "name").writeNullable[String] and
         (JsPath \ "qualifying").write[Boolean] and
           (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
             (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern))
