@@ -30,17 +30,14 @@
               "children": [
                 {
                   "id": 0,
-                  "name": "Child 1",
                   "qualifying": false
                 },
                 {
                   "id": 1,
-                  "name": "Child 2",
                   "qualifying": false
                 },
                 {
                   "id": 2,
-                  "name": "Child 3",
                   "qualifying": true
                 }
               ]

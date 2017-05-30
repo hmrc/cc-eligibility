@@ -17,7 +17,6 @@
         "children": [
           {
             "id": 0,
-            "name": "Child 1",
             "dob": "2006-09-12",
             "disability": {
               "disabled": false,
@@ -26,7 +25,6 @@
           },
           {
             "id": 1,
-            "name": "Child 2",
             "dob": "1993-09-12",
             "disability": {
               "disabled": false,

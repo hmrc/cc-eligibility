@@ -13,7 +13,6 @@
         "children": [
           {
             "id": 0,
-            "name": "Child 1",
             "dob": "1999-08-31",
             "disability": {
               "disabled": true,

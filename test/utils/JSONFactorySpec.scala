@@ -274,12 +274,10 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
-        name = Some("Child 1"),
         qualifying = false
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
-        name = Some("Child 2"),
         qualifying = true
       )
 
@@ -340,12 +338,10 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                            "children":[
                               {
                                  "id":0,
-                                 "name":"Child 1",
                                  "qualifying":false
                               },
                               {
                                  "id":0,
-                                 "name":"Child 2",
                                  "qualifying":true
                               }
                            ]

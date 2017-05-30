@@ -30,7 +30,6 @@
               "children": [
                 {
                   "id": 0,
-                  "name": "Child 1",
                   "qualifying": true
                 }
               ]

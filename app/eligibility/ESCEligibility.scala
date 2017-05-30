@@ -147,15 +147,13 @@ trait ESCEligibility extends CCEligibility {
     }
 
     def determineChildrensEligibilityForPeriod(children: List[Child], periodStart: LocalDate) : List[models.output.esc.OutputChild] = {
-      val outputChildren = for(child <- children) yield {
+      for(child <- children) yield {
         val eligible = child.qualifiesForESC(periodStart)
         models.output.esc.OutputChild(
           id = child.id,
-          name = child.name,
           qualifying = eligible
         )
       }
-      outputChildren
     }
 
     def determinePeriodsForTaxYear(ty: TaxYear) : List[models.output.esc.ESCPeriod] = {

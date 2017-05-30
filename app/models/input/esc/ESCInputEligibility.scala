@@ -90,7 +90,6 @@ object Claimant extends CCFormat {
 
 case class Child (
                    id: Short,
-                   name: Option[String],
                    dob: LocalDate,
                    disability: Disability
                   ) extends models.input.BaseChild {
@@ -132,16 +131,14 @@ case class Child (
 }
 
 object Child extends CCFormat with MessagesObject {
-  val nameLength = 25
   def validID(id: Short): Boolean = {
     id >= 0
   }
 
   implicit val childReads: Reads[Child] = (
     (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
-      (JsPath \ "name").readNullable[String](maxLength[String](nameLength)) and
-        (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
-          (JsPath \ "disability").read[Disability]
+      (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
+        (JsPath \ "disability").read[Disability]
     )(Child.apply _)
 }
 

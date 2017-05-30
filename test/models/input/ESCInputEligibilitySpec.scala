@@ -48,7 +48,6 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
 
             //Children model
             x.payload.taxYears.head.children.head.id.isInstanceOf[Short] shouldBe true
-            x.payload.taxYears.head.children.head.name.isInstanceOf[Option[String]] shouldBe true
             x.payload.taxYears.head.children.head.dob shouldBe a[LocalDate]
             x.payload.taxYears.head.children.head.disability shouldBe a[Disability]
 
@@ -67,7 +66,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2016-08-31", formatter)
         val today = LocalDate.parse("2015-09-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe false
       }
   
@@ -76,7 +75,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2004-08-31", formatter)
         val today = LocalDate.parse("2015-09-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe true
       }
   
@@ -85,7 +84,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2001-06-27", formatter)
         val today = LocalDate.parse("2016-08-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe true
       }
   
@@ -94,7 +93,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2000-06-27", formatter)
         val today = LocalDate.parse("2016-09-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe false
       }
   
@@ -103,7 +102,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2001-09-01", formatter)
         val today = LocalDate.parse("2016-09-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe true
       }
   
@@ -112,7 +111,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2000-06-27", formatter)
         val today = LocalDate.parse("2016-08-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe false
       }
   
@@ -121,7 +120,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2000-06-27", formatter)
         val today = LocalDate.parse("2016-08-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe true
       }
   
@@ -130,7 +129,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2000-09-01", formatter)
         val today = LocalDate.parse("2016-09-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe true
       }
   
@@ -139,7 +138,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2000-09-01", formatter)
         val today = LocalDate.parse("2016-09-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe false
       }
   
@@ -148,7 +147,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2000-06-27", formatter)
         val today = LocalDate.parse("2016-09-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe false
       }
   
@@ -157,7 +156,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("1992-08-31", formatter)
         val today = LocalDate.parse("2015-09-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe false
       }
   }

@@ -17,7 +17,6 @@
         "children": [
           {
             "id": 0,
-            "name": "Child 1",
             "dob": "2002-09-12",
             "disability": {
               "disabled": false,
@@ -26,8 +25,6 @@
           },
           {
             "id": 1,
-            "name": "Child 2",
-            "childcareCost": 3000.00,
             "dob": "2002-09-12",
             "disability": {
               "disabled": false,

@@ -30,12 +30,10 @@
               "children": [
                 {
                   "id": 0,
-                  "name": "Child 1",
                   "qualifying": true
                 },
                 {
                   "id": 1,
-                  "name": "Child 2",
                   "qualifying": false
                 }
               ]
@@ -64,12 +62,10 @@
             "children": [
               {
               "id": 0,
-              "name": "Child 1",
               "qualifying": false
               },
               {
                 "id": 1,
-                "name": "Child 2",
                 "qualifying": true
               }
 

@@ -90,14 +90,12 @@ object OutputClaimant extends CCFormat {
 
 case class OutputChild(
                         id: Short,
-                        name: Option[String],
                         qualifying: Boolean = false
                       )
 
 object OutputChild {
   implicit val childWrites : Writes[OutputChild] = (
     (JsPath \ "id").write[Short] and
-      (JsPath \ "name").writeNullable[String] and
-        (JsPath \ "qualifying").write[Boolean]
+      (JsPath \ "qualifying").write[Boolean]
     )(unlift(OutputChild.unapply))
 }

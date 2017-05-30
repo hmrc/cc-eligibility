@@ -109,19 +109,6 @@ class ESCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       status(result) shouldBe 400
     }
 
-    "Accept invalid json if child name exceeding 25 characters should return 400" in {
-      val controller = new ESCEligibilityController with ESCEligibility {
-        override val eligibility = mock[ESCEligibilityService]
-        override val auditEvent = mock[AuditEvents]
-      }
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/esc/invalid_child_name.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
-      val result = await(controller.eligible(request))
-      status(result) shouldBe 400
-    }
-
     "Accept a valid json if number of claimant/s less than 1 should return Bad request" in {
       val controller = new ESCEligibilityController with ESCEligibility {
         override val eligibility = mock[ESCEligibilityService]
@@ -189,7 +176,6 @@ class ESCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                                     "children": [
                                         {
                                             "id": 0,
-                                            "name": "Child 1",
                                             "qualifying": true
                                         }
                                     ]
