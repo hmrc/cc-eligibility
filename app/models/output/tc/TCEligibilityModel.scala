@@ -17,9 +17,7 @@
 package models.output.tc
 
 import org.joda.time.LocalDate
-import play.api.libs.functional.syntax._
-import play.api.libs.json.Writes._
-import play.api.libs.json.{JsPath, Writes}
+import play.api.libs.json.{Writes, Json}
 import utils.{CCFormat, Periods}
 
 case class TCEligibilityModel(
@@ -28,10 +26,7 @@ case class TCEligibilityModel(
                              )
 
 object TCEligibilityModel {
-  implicit val tcEligible: Writes[TCEligibilityModel] = (
-    (JsPath \ "eligible").write[Boolean] and
-      (JsPath \ "taxYears").write[List[TaxYear]]
-    ) (unlift(TCEligibilityModel.unapply))
+  implicit val tcEligible: Writes[TCEligibilityModel] = Json.writes[TCEligibilityModel]
 }
 
 case class TaxYear(
@@ -42,12 +37,7 @@ case class TaxYear(
                   )
 
 object TaxYear extends CCFormat {
-  implicit val taxYearWrites: Writes[TaxYear] = (
-    (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-      (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-      (JsPath \ "houseHoldIncome").write[BigDecimal] and
-      (JsPath \ "periods").write[List[TCPeriod]]
-    ) (unlift(TaxYear.unapply))
+  implicit val taxYearWrites: Writes[TaxYear] = Json.writes[TaxYear]
 }
 
 case class TCPeriod(
@@ -59,13 +49,7 @@ case class TCPeriod(
                    )
 
 object TCPeriod extends CCFormat {
-  implicit val periodWrites: Writes[TCPeriod] = (
-    (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-      (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-      (JsPath \ "householdElements").write[HouseholdElements] and
-      (JsPath \ "claimants").write[List[OutputClaimant]] and
-      (JsPath \ "children").write[List[OutputChild]]
-    ) (unlift(TCPeriod.unapply))
+  implicit val periodWrites: Writes[TCPeriod] = Json.writes[TCPeriod]
 }
 
 case class HouseholdElements(
@@ -80,16 +64,7 @@ case class HouseholdElements(
                             )
 
 object HouseholdElements {
-  implicit val householdWrites: Writes[HouseholdElements] = (
-    (JsPath \ "basic").write[Boolean] and
-      (JsPath \ "hours30").write[Boolean] and
-      (JsPath \ "childcare").write[Boolean] and
-      (JsPath \ "loneParent").write[Boolean] and
-      (JsPath \ "secondParent").write[Boolean] and
-      (JsPath \ "family").write[Boolean] and
-      (JsPath \ "wtc").write[Boolean] and
-      (JsPath \ "ctc").write[Boolean]
-    ) (unlift(HouseholdElements.unapply))
+  implicit val householdWrites: Writes[HouseholdElements] = Json.writes[HouseholdElements]
 }
 
 case class OutputClaimant(
@@ -99,11 +74,7 @@ case class OutputClaimant(
                          )
 
 object OutputClaimant {
-  implicit val claimantWrites: Writes[OutputClaimant] = (
-    (JsPath \ "qualifying").write[Boolean] and
-      (JsPath \ "isPartner").write[Boolean] and
-      (JsPath \ "claimantDisability").write[ClaimantDisability]
-    ) (unlift(OutputClaimant.unapply))
+  implicit val claimantWrites: Writes[OutputClaimant] = Json.writes[OutputClaimant]
 }
 
 case class ClaimantDisability(
@@ -112,10 +83,7 @@ case class ClaimantDisability(
                              )
 
 object ClaimantDisability {
-  implicit val claimantElementWrites: Writes[ClaimantDisability] = (
-    (JsPath \ "disability").write[Boolean] and
-      (JsPath \ "severeDisability").write[Boolean]
-    ) (unlift(ClaimantDisability.unapply))
+  implicit val claimantElementWrites: Writes[ClaimantDisability] = Json.writes[ClaimantDisability]
 }
 
 case class OutputChild(
@@ -127,13 +95,7 @@ case class OutputChild(
                       )
 
 object OutputChild {
-  implicit val childWrites: Writes[OutputChild] = (
-    (JsPath \ "id").write[Short] and
-      (JsPath \ "childcareCost").write[BigDecimal] and
-      (JsPath \ "childcareCostPeriod").write[Periods.Period] and
-      (JsPath \ "qualifying").write[Boolean] and
-      (JsPath \ "childElements").write[ChildElements]
-    ) (unlift(OutputChild.unapply))
+  implicit val childWrites: Writes[OutputChild] = Json.writes[OutputChild]
 }
 
 case class ChildElements(
@@ -145,11 +107,5 @@ case class ChildElements(
                         )
 
 object ChildElements {
-  implicit val childElementsWrites: Writes[ChildElements] = (
-    (JsPath \ "child").write[Boolean] and
-      (JsPath \ "youngAdult").write[Boolean] and
-      (JsPath \ "disability").write[Boolean] and
-      (JsPath \ "severeDisability").write[Boolean] and
-      (JsPath \ "childcare").write[Boolean]
-    ) (unlift(ChildElements.unapply))
+  implicit val childElementsWrites: Writes[ChildElements] =Json.writes[ChildElements]
 }
