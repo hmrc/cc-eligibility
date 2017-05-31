@@ -9,45 +9,26 @@
                   "claimants": [
                       {
                           "hoursPerWeek": 15.00,
-                          "liveOrWork": true,
                           "isPartner": false,
                           "disability": {
                               "disabled": false,
-                              "severelyDisabled": false,
-                              "incapacitated": false
+                              "severelyDisabled": false
                           },
-                          "schemesClaiming": {
-                              "tfc": false,
-                              "esc" : false,
-                              "tc": false
-                          },
-                          "otherSupport": {
-                            "carersAllowance": false
-                          }
+                        "carersAllowance": false
                       },
                       {
                           "hoursPerWeek": 20.00,
-                          "liveOrWork": true,
                           "isPartner": true,
                           "disability": {
                               "disabled": false,
-                              "severelyDisabled": false,
-                              "incapacitated": true
+                              "severelyDisabled": false
                           },
-                          "schemesClaiming": {
-                              "tfc": false,
-                              "esc" : false,
-                              "tc": false
-                          },
-                          "otherSupport": {
-                            "carersAllowance": false
-                          }
+                        "carersAllowance": false
                       }
                   ],
                   "children": [
                       {
                         "id": 0,
-                        "name": "Child 1",
                         "childcareCost": 3000.00,
                         "childcareCostPeriod": "Month",
                         "dob": "2001-07-28",
@@ -59,10 +40,9 @@
                       },
                         {
                           "id": 1,
-                          "name": "Child 2",
                           "childcareCost": 3000.00,
                           "childcareCostPeriod": "Month",
-                          "dob": "2017-05-10",
+                          "dob": "2018-05-17",
                           "disability": {
                             "disabled": false,
                             "severelyDisabled": false

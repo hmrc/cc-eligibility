@@ -6,54 +6,28 @@
       "claimants": [
         {
           "hoursPerWeek": 30.00,
-          "liveOrWork": true,
           "isPartner": false,
           "location": "england",
           "totalIncome": 35000.00,
-          "earnedIncome": 0.00,
           "disability": {
             "disabled": false,
             "severelyDisabled": false
           },
-          "schemesClaiming": {
-            "esc": false,
-            "tc": false,
-            "uc": false,
-            "cg": false
-          },
-          "otherSupport": {
-            "disabilityBenefitsOrAllowances":false,
-            "severeDisabilityBenefitsOrAllowances":false,
-            "incomeBenefitsOrAllowances":false,
-            "carersAllowance":false
-          },
+          "carersAllowance":false,
           "minimumEarnings": {
             "selection": true
           }
         },
         {
           "hoursPerWeek": 28.00,
-          "liveOrWork": true,
           "isPartner": true,
           "location": "england",
           "totalIncome": 22000.00,
-          "earnedIncome": 0.00,
           "disability": {
             "disabled": false,
             "severelyDisabled": false
           },
-          "schemesClaiming": {
-            "esc": false,
-            "tc": false,
-            "uc": false,
-            "cg": false
-          },
-          "otherSupport": {
-            "disabilityBenefitsOrAllowances":false,
-            "severeDisabilityBenefitsOrAllowances":false,
-            "incomeBenefitsOrAllowances":false,
-            "carersAllowance":false
-          },
+          "carersAllowance":false,
           "minimumEarnings": {
             "selection": false,
             "amount": 70
@@ -64,7 +38,6 @@
       "children": [
         {
           "id": 0,
-          "name": "Child 1",
           "childcareCost": 3000.00,
           "childcareCostPeriod": "Month",
           "dob": "2013-10-12",

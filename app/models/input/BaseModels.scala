@@ -37,13 +37,11 @@ trait BaseTaxYear {
 }
 
 trait BaseClaimant {
-  def liveOrWork : Boolean
   def isPartner : Boolean
 }
 
 trait BaseChild {
   def id : Short
-  def name : Option[String]
   def dob : LocalDate
 
   def isBeingBornInTaxYear(taxYear: BaseTaxYear) : (Boolean, LocalDate) = {

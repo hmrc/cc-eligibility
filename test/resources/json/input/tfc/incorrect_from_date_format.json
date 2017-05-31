@@ -7,27 +7,14 @@
         "claimants": [
           {
             "hoursPerWeek": 30.00,
-            "liveOrWork": true,
             "isPartner": false,
             "location": "england",
             "totalIncome": 0.00,
-            "earnedIncome": 0.00,
             "disability": {
               "disabled": false,
               "severelyDisabled": false
             },
-            "schemesClaiming": {
-              "esc": false,
-              "tc": false,
-              "uc": false,
-              "cg": false
-            },
-            "otherSupport": {
-              "disabilityBenefitsOrAllowances":false,
-              "severeDisabilityBenefitsOrAllowances":false,
-              "incomeBenefitsOrAllowances":false,
-              "carersAllowance":false
-            },
+            "carersAllowance":false,
             "minimumEarnings": {
               "selection": false,
               "amount": 1000
@@ -37,7 +24,6 @@
         "children": [
           {
             "id": 0,
-            "name": "Child 1",
             "childcareCost": 3000.00,
             "childcareCostPeriod": "Month",
             "dob": "2014-05-12",

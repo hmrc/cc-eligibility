@@ -6,23 +6,16 @@
               "until": "2017-04-06",
               "claimants": [
                   {
-                      "liveOrWork": true,
                       "isPartner": false,
                       "disability": {
                           "disabled": false,
                           "severelyDisabled": false
-                      },
-                      "schemesClaiming": {
-                          "tfc": false,
-                          "esc" : false,
-                          "tc": false
                       }
                   }
               ],
               "children": [
                   {
                     "id": -3,
-                    "name": "Child 1",
                     "dob": "1999-01-12",
                     "disability": {
                       "disabled": true,

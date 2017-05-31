@@ -16,8 +16,7 @@
                   "eligibleMonthsInPeriod": 1,
                   "elements": {
                     "vouchers": true
-                  },
-                  "failures": []
+                  }
                 },
                 {
                   "qualifying": true,
@@ -25,16 +24,13 @@
                   "eligibleMonthsInPeriod": 1,
                   "elements": {
                     "vouchers": true
-                  },
-                  "failures": []
+                  }
                 }
               ],
               "children": [
                 {
                   "id": 0,
-                  "name": "Child 1",
-                  "qualifying": true,
-                  "failures": []
+                  "qualifying": true
                 }
               ]
             },
@@ -48,8 +44,7 @@
               "eligibleMonthsInPeriod": 0,
               "elements": {
               "vouchers": false
-              },
-              "failures": []
+              }
             },
             {
               "qualifying": true,
@@ -57,16 +52,13 @@
               "eligibleMonthsInPeriod": 0,
               "elements": {
               "vouchers": false
-            },
-            "failures": []
+            }
             }
             ],
             "children": [
             {
               "id": 0,
-              "name": "Child 1",
-              "qualifying": false,
-              "failures": []
+              "qualifying": false
             }
             ]
             }

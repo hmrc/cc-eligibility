@@ -9,27 +9,17 @@
                   "claimants": [
                     {
                       "hoursPerWeek": 30.00,
-                      "liveOrWork": true,
                       "isPartner": false,
                       "disability": {
                         "disabled": false,
-                        "severelyDisabled": false,
-                        "incapacitated": false
+                        "severelyDisabled": false
                       },
-                      "schemesClaiming": {
-                        "tfc": false,
-                        "esc" : false,
-                        "tc": false
-                      },
-                      "otherSupport": {
-                        "carersAllowance": false
-                      }
+                      "carersAllowance": false
                     }
                   ],
                   "children": [
                       {
                         "id": 0,
-                        "name": "Child 1",
                         "childcareCost": 3000.00,
                         "childcareCostPeriod": "Month",
                         "dob": "2014-05-12",
@@ -41,7 +31,6 @@
 
                     {
                       "id": 1,
-                      "name": "Child 2",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -52,7 +41,6 @@
                     },
                     {
                       "id": 2,
-                      "name": "Child 3",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -63,7 +51,6 @@
                     },
                     {
                       "id": 3,
-                      "name": "Child 4",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -74,7 +61,6 @@
                     },
                     {
                       "id": 4,
-                      "name": "Child 5",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -85,7 +71,6 @@
                     },
                     {
                       "id": 5,
-                      "name": "Child 6",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -96,7 +81,6 @@
                     },
                     {
                       "id": 6,
-                      "name": "Child 7",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -107,7 +91,6 @@
                     },
                     {
                       "id": 7,
-                      "name": "Child 8",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -118,7 +101,6 @@
                     },
                     {
                       "id": 8,
-                      "name": "Child 9",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -129,7 +111,6 @@
                     },
                     {
                       "id": 9,
-                      "name": "Child 10",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -140,7 +121,6 @@
                     },
                     {
                       "id": 10,
-                      "name": "Child 11",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -151,7 +131,6 @@
                     },
                     {
                       "id": 11,
-                      "name": "Child 12",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -162,7 +141,6 @@
                     },
                     {
                       "id": 12,
-                      "name": "Child 13",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -173,7 +151,6 @@
                     },
                     {
                       "id": 13,
-                      "name": "Child 14",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -184,7 +161,6 @@
                     },
                     {
                       "id": 14,
-                      "name": "Child 15",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -195,7 +171,6 @@
                     },
                     {
                       "id": 15,
-                      "name": "Child 16",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -206,7 +181,6 @@
                     },
                     {
                       "id": 16,
-                      "name": "Child 17",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -217,7 +191,6 @@
                     },
                     {
                       "id": 17,
-                      "name": "Child 18",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -228,7 +201,6 @@
                     },
                     {
                       "id": 18,
-                      "name": "Child 19",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -239,7 +211,6 @@
                     },
                     {
                       "id": 19,
-                      "name": "Child 20",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -250,7 +221,6 @@
                     },
                     {
                       "id": 20,
-                      "name": "Child 21",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -261,7 +231,6 @@
                     },
                     {
                       "id": 21,
-                      "name": "Child 22",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -272,7 +241,6 @@
                     },
                     {
                       "id": 22,
-                      "name": "Child 23",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -283,7 +251,6 @@
                     },
                     {
                       "id": 23,
-                      "name": "Child 24",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -294,7 +261,6 @@
                     },
                     {
                       "id": 24,
-                      "name": "Child 25",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",
@@ -305,7 +271,6 @@
                     },
                     {
                       "id": 25,
-                      "name": "Child 26",
                       "childcareCost": 3000.00,
                       "childcareCostPeriod": "Month",
                       "dob": "2014-05-12",

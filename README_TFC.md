@@ -14,20 +14,12 @@ The TFC Eligibility micro-service will accept the parent details and children de
           numberOfPeriods : [short],
           claimants: [
             {
-              liveOrWork : [Boolean] = false,
               totalIncome: [BigDecimal] = 0.00,
-              earnedIncome: [BigDecimal] = 0.00,
               hoursPerWeek: [Double] = 0.00,
               isPartner : [Boolean] = false,
               disability:{
                 disability: [Boolean] = false,
                 severeDisability: [Boolean] = false
-              },
-              schemesClaiming : {
-                uc: [Boolean] = false,
-                esc: [Boolean] = false,
-                cg: [Boolean] = false,
-                tc: [Boolean] = false
               },
               otherSupport: OtherSupport {
                 disabilityBenefitsOrAllowances: [Boolean] = false,
@@ -70,8 +62,7 @@ The TFC Eligibility micro-service will accept the parent details and children de
            claimants: [
                   {
                     qualifying: [Boolean] = false,
-                    isPartner: [Boolean] = false,
-                    failures: List[String]
+                    isPartner: [Boolean] = false
                   }
                 ],
            children: [
@@ -80,8 +71,7 @@ The TFC Eligibility micro-service will accept the parent details and children de
                     name: Option[String],
                     qualifying: [Boolean] = false,
                     from: [LocalDate],
-                    until: [LocalDate],
-                    failures: List[String]
+                    until: [LocalDate]
                   }
                 ]
               }
@@ -102,19 +92,11 @@ The TFC Eligibility micro-service will accept the parent details and children de
         "claimants": [
           {
             "hoursPerWeek": 30.00,
-            "liveOrWork": true,
             "isPartner": false,
             "totalIncome": 0.00,
-            "earnedIncome": 0.00,
             "disability": {
               "disabled": false,
               "severelyDisabled": false
-            },
-            "schemesClaiming": {
-              "esc": false,
-              "tc": false,
-              "uc": false,
-              "cg": false
             },
             "otherSupport": {
               "disabilityBenefitsOrAllowances":false,
@@ -189,19 +171,11 @@ The TFC Eligibility micro-service will accept the parent details and children de
          "claimants": [
            {
              "hoursPerWeek": 6.50,
-             "liveOrWork": false,
              "isPartner": false,
              "totalIncome": 151000.00,
-             "earnedIncome": 0.00,
              "disability": {
                "disabled": false,
                "severelyDisabled": false
-             },
-             "schemesClaiming": {
-               "esc": false,
-               "tc": false,
-               "uc": false,
-               "cg": false
              },
              "otherSupport": {
                "disabilityBenefitsOrAllowances":false,
@@ -246,8 +220,7 @@ The TFC Eligibility micro-service will accept the parent details and children de
             "claimants" : [
               {
                 "qualifying" : false,
-                "isPartner" : false,
-                "failures" : []
+                "isPartner" : false
               }
             ],
             "children" : [
@@ -256,8 +229,7 @@ The TFC Eligibility micro-service will accept the parent details and children de
                 "name" : "Venky",
                 "qualifying" : true,
                 "from" : "2016-08-27",
-                "until" : "2016-11-27",
-                "failures" : []
+                "until" : "2016-11-27"
               }
             ]
           }

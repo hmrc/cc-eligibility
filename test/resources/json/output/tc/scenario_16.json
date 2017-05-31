@@ -28,15 +28,12 @@
                   "claimantDisability": {
                     "disability": false,
                     "severeDisability": false
-                  },
-                  "failures": []
+                  }
                 }
               ],
               "children": [
                 {
-                  "id": 0,
-                  "name": "Child 1",
-                  "childcareCost": 3000.00,
+                  "id": 0,                  "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
                   "childElements": {
@@ -45,12 +42,11 @@
                     "disability": false,
                     "severeDisability": false,
                     "childcare": false
-                  },
-                  "failures": []
+                  }
                 },
                 {
                   "id": 1,
-                  "name": "Child 2",
+
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
@@ -60,8 +56,7 @@
                     "disability": true,
                     "severeDisability": true,
                     "childcare": true
-                  },
-                  "failures": []
+                  }
                 }
 
               ]
@@ -93,15 +88,12 @@
                   "claimantDisability": {
                     "disability": false,
                     "severeDisability": false
-                  },
-                  "failures": []
+                  }
                 }
               ],
               "children": [
                 {
-                  "id": 0,
-                  "name": "Child 1",
-                  "childcareCost": 3000.00,
+                  "id": 0,                  "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
                   "childElements": {
@@ -110,12 +102,11 @@
                     "disability": false,
                     "severeDisability": false,
                      "childcare": false
-                  },
-                  "failures": []
+                  }
                 },
                 {
                   "id": 1,
-                  "name": "Child 2",
+
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
@@ -125,8 +116,7 @@
                     "disability": true,
                     "severeDisability": true,
                     "childcare": true
-                  },
-                  "failures": []
+                  }
                 }
               ]
             },
@@ -150,14 +140,12 @@
                   "claimantDisability": {
                     "disability": false,
                     "severeDisability": false
-                  },
-                  "failures": []
+                  }
                 }
               ],
               "children": [
                 {
                   "id": 0,
-                  "name": "Child 1",
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": false,
@@ -167,12 +155,10 @@
                     "disability": false,
                     "severeDisability": false,
                     "childcare": false
-                  },
-                  "failures": []
+                  }
                 },
                 {
                   "id": 1,
-                  "name": "Child 2",
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": false,
@@ -182,8 +168,7 @@
                     "disability": false,
                     "severeDisability": false,
                     "childcare": false
-                  },
-                  "failures": []
+                  }
                 }
               ]
             }

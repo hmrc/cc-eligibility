@@ -28,9 +28,7 @@
                   "claimantDisability": {
                     "disability": true,
                     "severeDisability": true
-                  },
-                  "failures": [
-                  ]
+                  }
                 }
               ],
               "children": [

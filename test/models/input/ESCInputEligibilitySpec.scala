@@ -43,20 +43,11 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
             x.payload.taxYears.head.children.isInstanceOf[List[Child]] shouldBe true
 
             //Claimant model
-            x.payload.taxYears.head.claimants.head.liveOrWork.isInstanceOf[Boolean] shouldBe true
             x.payload.taxYears.head.claimants.head.isPartner.isInstanceOf[Boolean] shouldBe true
-            x.payload.taxYears.head.claimants.head.schemesClaiming shouldBe a[SchemesClaiming]
             x.payload.taxYears.head.claimants.head.employerProvidesESC.isInstanceOf[Boolean] shouldBe true
-            x.payload.taxYears.head.claimants.head.elements shouldBe a[ClaimantsElements]
-
-            //Schemes claiming model
-            x.payload.taxYears.head.claimants.head.schemesClaiming.tc.isInstanceOf[Boolean] shouldBe true
-            x.payload.taxYears.head.claimants.head.schemesClaiming.tfc.isInstanceOf[Boolean] shouldBe true
-            x.payload.taxYears.head.claimants.head.schemesClaiming.esc.isInstanceOf[Boolean] shouldBe true
 
             //Children model
             x.payload.taxYears.head.children.head.id.isInstanceOf[Short] shouldBe true
-            x.payload.taxYears.head.children.head.name.isInstanceOf[Option[String]] shouldBe true
             x.payload.taxYears.head.children.head.dob shouldBe a[LocalDate]
             x.payload.taxYears.head.children.head.disability shouldBe a[Disability]
 
@@ -75,7 +66,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2016-08-31", formatter)
         val today = LocalDate.parse("2015-09-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe false
       }
   
@@ -84,7 +75,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2004-08-31", formatter)
         val today = LocalDate.parse("2015-09-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe true
       }
   
@@ -93,7 +84,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2001-06-27", formatter)
         val today = LocalDate.parse("2016-08-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe true
       }
   
@@ -102,7 +93,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2000-06-27", formatter)
         val today = LocalDate.parse("2016-09-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe false
       }
   
@@ -111,7 +102,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2001-09-01", formatter)
         val today = LocalDate.parse("2016-09-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe true
       }
   
@@ -120,7 +111,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2000-06-27", formatter)
         val today = LocalDate.parse("2016-08-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe false
       }
   
@@ -129,7 +120,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2000-06-27", formatter)
         val today = LocalDate.parse("2016-08-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe true
       }
   
@@ -138,7 +129,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2000-09-01", formatter)
         val today = LocalDate.parse("2016-09-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe true
       }
   
@@ -147,7 +138,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2000-09-01", formatter)
         val today = LocalDate.parse("2016-09-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = false, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe false
       }
   
@@ -156,7 +147,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("2000-06-27", formatter)
         val today = LocalDate.parse("2016-09-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe false
       }
   
@@ -165,45 +156,20 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val dateOfBirth = LocalDate.parse("1992-08-31", formatter)
         val today = LocalDate.parse("2015-09-10", formatter)
   
-        val child = Child(id = 0, name = Some("Child 1"), dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
+        val child = Child(id = 0, dob = dateOfBirth, disability = Disability(disabled = true, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe false
       }
   }
 
     "Claimant" should {
   
-      "(Claimant already claiming ESC scheme) determine if claimant is receiving esc" in {
-        val claimant = Claimant(liveOrWork = true, isPartner = false,  schemesClaiming = SchemesClaiming(esc = true), elements = ClaimantsElements(), employerProvidesESC = false)
-        claimant.isClaimingESC shouldBe true
-      }
-      
-      "(Employer providing vouchers, claimant receiving vouchers) determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(liveOrWork = true, isPartner = false,  schemesClaiming = SchemesClaiming(), elements = ClaimantsElements(vouchers = true), employerProvidesESC = true)
+      "Employer providing vouchers determine if claimants qualifies for esc (receives vouchers)" in {
+        val claimant = Claimant(isPartner = false, employerProvidesESC = true)
         claimant.isClaimantQualifyingForESC shouldBe true
       }
-  
-      "(Employer providing vouchers, claimant receiving vouchers, but does not live/work in UK) determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(liveOrWork = false, isPartner = false,  schemesClaiming = SchemesClaiming(), elements = ClaimantsElements(vouchers = true), employerProvidesESC = true)
-        claimant.isClaimantQualifyingForESC shouldBe false
-      }
-  
-      "(Employer not providing vouchers, claimant not receiving vouchers) determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(liveOrWork = true, isPartner = false,  schemesClaiming = SchemesClaiming(), elements = ClaimantsElements(vouchers = false), employerProvidesESC = false)
-        claimant.isClaimantQualifyingForESC shouldBe false
-      }
-  
-      "(Employer not providing vouchers, claimant not receiving vouchers, claimant not working in UK) determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(liveOrWork = false, isPartner = false,  schemesClaiming = SchemesClaiming(), elements = ClaimantsElements(vouchers = false), employerProvidesESC = false)
-        claimant.isClaimantQualifyingForESC shouldBe false
-      }
-  
-      "(Employer providing vouchers, claimant not receiving vouchers) determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(liveOrWork = true, isPartner = false,  schemesClaiming = SchemesClaiming(), elements = ClaimantsElements(vouchers = false), employerProvidesESC = true)
-        claimant.isClaimantQualifyingForESC shouldBe false
-      }
-  
-      "(Employer not providing vouchers - ClaimantsElements() case) determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(liveOrWork = true, isPartner = false,  schemesClaiming = SchemesClaiming(), elements = ClaimantsElements())
+
+      "Employer not providing vouchers determine if claimants qualifies for esc (receives vouchers)" in {
+        val claimant = Claimant(isPartner = false, employerProvidesESC = false)
         claimant.isClaimantQualifyingForESC shouldBe false
       }
 

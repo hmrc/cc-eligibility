@@ -14,18 +14,15 @@
           "claimants" : [
             {
               "qualifying" : true,
-              "isPartner" : false,
-              "failures" : []
+              "isPartner" : false
             }
           ],
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : true,
               "from" : "2016-03-07",
-              "until" : "2016-06-07",
-              "failures" : []
+              "until" : "2016-06-07"
             }
           ]
         },
@@ -36,18 +33,15 @@
           "claimants" : [
             {
               "qualifying" : true,
-              "isPartner" : false,
-              "failures" : []
+              "isPartner" : false
             }
           ],
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : true,
               "from" : "2016-06-07",
-              "until" : "2016-09-04",
-              "failures" : []
+              "until" : "2016-09-04"
             }
           ]
         },
@@ -58,18 +52,15 @@
           "claimants" : [
             {
               "qualifying" : true,
-              "isPartner" : false,
-              "failures" : []
+              "isPartner" : false
             }
           ],
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : false,
               "from" : null,
-              "until" : null,
-              "failures" : []
+              "until" : null
             }
           ]
         },
@@ -80,18 +71,15 @@
           "claimants" : [
             {
               "qualifying" : true,
-              "isPartner" : false,
-              "failures" : []
+              "isPartner" : false
             }
           ],
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : false,
               "from" : null,
-              "until" : null,
-              "failures" : []
+              "until" : null
             }
           ]
         }

@@ -6,27 +6,14 @@
       "claimants": [
         {
           "hoursPerWeek": 16.50,
-          "liveOrWork": true,
           "isPartner": true,
           "location": "england",
           "totalIncome": 99000.00,
-          "earnedIncome": 0.00,
           "disability": {
             "disabled": false,
             "severelyDisabled": false
           },
-          "schemesClaiming": {
-            "esc": false,
-            "tc": false,
-            "uc": false,
-            "cg": false
-          },
-          "otherSupport": {
-            "disabilityBenefitsOrAllowances":false,
-            "severeDisabilityBenefitsOrAllowances":false,
-            "incomeBenefitsOrAllowances":false,
-            "carersAllowance":false
-          },
+          "carersAllowance":false,
           "minimumEarnings": {
             "selection": false,
             "amount": 1000
@@ -34,27 +21,14 @@
         },
         {
           "hoursPerWeek": 16.50,
-          "liveOrWork": true,
           "isPartner": false,
           "location": "england",
           "totalIncome": 99000.00,
-          "earnedIncome": 0.00,
           "disability": {
             "disabled": false,
             "severelyDisabled": false
           },
-          "schemesClaiming": {
-            "esc": false,
-            "tc": false,
-            "uc": false,
-            "cg": false
-          },
-          "otherSupport": {
-            "disabilityBenefitsOrAllowances":false,
-            "severeDisabilityBenefitsOrAllowances":false,
-            "incomeBenefitsOrAllowances":false,
-            "carersAllowance":false
-          },
+          "carersAllowance":false,
           "minimumEarnings": {
             "selection": false,
             "amount": 1000
@@ -64,7 +38,6 @@
       "children": [
         {
           "id": 0,
-          "name": "Child 1",
           "childcareCost": 3000.00,
           "childcareCostPeriod": "Month",
           "dob": "2005-08-12",
@@ -75,7 +48,6 @@
         },
         {
           "id": 0,
-          "name": "Child 2",
           "childcareCost": 1000.00,
           "childcareCostPeriod": "Month",
           "dob": "2000-08-12",
@@ -86,7 +58,6 @@
         },
         {
           "id": 0,
-          "name": "Child 3",
           "childcareCost": 3000.00,
           "childcareCostPeriod": "Month",
           "dob": "2016-10-15",

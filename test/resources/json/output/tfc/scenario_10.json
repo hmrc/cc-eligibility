@@ -14,26 +14,21 @@
           "claimants" : [
             {
               "qualifying" : true,
-              "isPartner" : false,
-              "failures" : []
+              "isPartner" : false
             }
           ],
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : true,
               "from" : "2016-08-27",
-              "until" : "2016-11-27",
-              "failures" : []
+              "until" : "2016-11-27"
             },
             {
               "id" : 0,
-              "name" : "Child 2",
               "qualifying" : false,
               "from" : null,
-              "until" : null,
-              "failures" : []
+              "until" : null
             }
           ]
         }

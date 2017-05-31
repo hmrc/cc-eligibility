@@ -9,38 +9,22 @@
           "claimants": [
             {
               "hoursPerWeek": 40,
-              "liveOrWork": true,
               "isPartner": false,
               "disability": {
                 "disabled": false,
                 "severelyDisabled": false
               },
-              "schemesClaiming": {
-                "tfc": false,
-                "esc" : false,
-                "tc": false
-              },
-              "otherSupport": {
-                "carersAllowance": false
-              }
+              "carersAllowance": false
             },
             {
               "hoursPerWeek": 30,
-              "liveOrWork": true,
               "isPartner": true,
               "qualifyingAge": true,
               "disability": {
                 "disabled": true,
                 "severelyDisabled": false
               },
-              "schemesClaiming": {
-                "tfc": false,
-                "esc" : false,
-                "tc": false
-              },
-              "otherSupport": {
-                "carersAllowance": false
-              }
+              "carersAllowance": false
             }
           ],
           "children": [

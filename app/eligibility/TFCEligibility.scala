@@ -121,12 +121,9 @@ val eligibility = new TFCEligibilityService
 
         OutputChild(
           id = child.id,
-          name = child.name,
           qualifying = childEligibility,
           from = qualifyStartDate,
-          until = qualifyEndDate,
-          //TODO - Populate children's failure list
-          failures = List()
+          until = qualifyEndDate
         )
       }
     }
@@ -135,9 +132,7 @@ val eligibility = new TFCEligibilityService
       for(claimant <- claimants) yield {
         OutputClaimant(
           qualifying = claimant.isQualifyingForTFC(periodStart),
-          isPartner = claimant.isPartner,
-          //TODO - Populate claimant's failure list
-          failures = List()
+          isPartner = claimant.isPartner
         )
       }
     }

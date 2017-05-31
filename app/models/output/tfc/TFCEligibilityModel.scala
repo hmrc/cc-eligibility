@@ -58,35 +58,28 @@ object TFCPeriod extends CCFormat{
 
 case class OutputClaimant(
                            qualifying: Boolean = false,
-                           isPartner: Boolean = false,
-                           failures: List[String]
+                           isPartner: Boolean = false
                            )
-
 
 object OutputClaimant extends CCFormat {
   implicit val claimantWrites: Writes[OutputClaimant] = (
     (JsPath \ "qualifying").write[Boolean] and
-      (JsPath \ "isPartner").write[Boolean] and
-        (JsPath \ "failures").write[List[String]]
+      (JsPath \ "isPartner").write[Boolean]
     )(unlift(OutputClaimant.unapply))
 }
 
-  case class OutputChild(
-                          id: Short,
-                          name: Option[String],
-                          qualifying: Boolean = false,
-                          from: LocalDate,
-                          until: LocalDate,
-                          failures: List[String]
-                          )
+case class OutputChild(
+                        id: Short,
+                        qualifying: Boolean = false,
+                        from: LocalDate,
+                        until: LocalDate
+                        )
 
-  object OutputChild extends CCFormat {
-    implicit val childWrites : Writes[OutputChild] = (
-      (JsPath \ "id").write[Short] and
-        (JsPath \ "name").writeNullable[String] and
-          (JsPath \ "qualifying").write[Boolean] and
-            (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-              (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-                (JsPath \ "failures").write[List[String]]
-      )(unlift(OutputChild.unapply))
-  }
+object OutputChild extends CCFormat {
+  implicit val childWrites : Writes[OutputChild] = (
+    (JsPath \ "id").write[Short] and
+        (JsPath \ "qualifying").write[Boolean] and
+          (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
+            (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern))
+    )(unlift(OutputChild.unapply))
+}

@@ -75,8 +75,7 @@ case class OutputClaimant(
                            qualifying: Boolean = false,
                            isPartner: Boolean = false,
                            eligibleMonthsInPeriod: Int = 0,
-                           elements: ClaimantElements,
-                           failures: List[String]
+                           elements: ClaimantElements
                           )
 
 //escAmount can be a voucher amount, childcare bursary amount or directly contracted amount
@@ -85,24 +84,18 @@ object OutputClaimant extends CCFormat {
     (JsPath \ "qualifying").write[Boolean] and
       (JsPath \ "isPartner").write[Boolean] and
         (JsPath \ "eligibleMonthsInPeriod").write[Int] and
-          (JsPath \ "elements").write[ClaimantElements] and
-            (JsPath \ "failures").write[List[String]]
+          (JsPath \ "elements").write[ClaimantElements]
     )(unlift(OutputClaimant.unapply))
-
 }
 
 case class OutputChild(
                         id: Short,
-                        name: Option[String],
-                        qualifying: Boolean = false,
-                        failures: List[String]
+                        qualifying: Boolean = false
                       )
 
 object OutputChild {
   implicit val childWrites : Writes[OutputChild] = (
     (JsPath \ "id").write[Short] and
-      (JsPath \ "name").writeNullable[String] and
-        (JsPath \ "qualifying").write[Boolean] and
-          (JsPath \ "failures").write[List[String]]
+      (JsPath \ "qualifying").write[Boolean]
     )(unlift(OutputChild.unapply))
 }

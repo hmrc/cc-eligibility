@@ -76,20 +76,17 @@ trait TCEligibility extends CCEligibility {
 
     def determineClaimantsEligibilityForPeriod(ty : models.input.tc.TaxYear) : List[models.output.tc.OutputClaimant] = {
       for (claimant <- ty.claimants) yield {
-        val claimantIsQualifying = claimant.isQualifyingForTC
         val claimantIsPartner = claimant.isPartner
         val claimantIsDisabled = claimant.getDisabilityElement(ty.from)
-        val claimantIsSeverelyDisabled = ty.isOneOfClaimantsWorking16h(ty.from) && claimant.isClaimantQualifyingForSevereDisabilityElement
+        val claimantIsSeverelyDisabled = ty.isOneOfClaimantsWorking16h(ty.from) && claimant.disability.severelyDisabled
 
        val outputClaimant =  models.output.tc.OutputClaimant(
-          qualifying = claimantIsQualifying,
+          qualifying = true, //TODO - do we need this, verify in frontend and calculator
           isPartner = claimantIsPartner,
           claimantDisability = ClaimantDisability(
             disability = claimantIsDisabled,
             severeDisability = claimantIsSeverelyDisabled
-          ),
-          //TODO Implement failures
-          failures = List()
+          )
         )
         outputClaimant
       }
@@ -119,7 +116,6 @@ trait TCEligibility extends CCEligibility {
 
           val outputChild = OutputChild(
             id = child.id,
-            name = child.name,
             childcareCost = child.childcareCost,
             childcareCostPeriod = child.childcareCostPeriod,
             qualifying = isChild || youngAdultElement,
@@ -129,8 +125,7 @@ trait TCEligibility extends CCEligibility {
               disability = child.getsDisabilityElement(periodStart),
               severeDisability = child.getsSevereDisabilityElement(periodStart),
               childcare = child.getsChildcareElement(periodStart)
-            ),
-            failures = List()
+            )
           )
           helper(children.tail, outputChildren :+ outputChild, modifiedChildrenWithChildElement)
         }

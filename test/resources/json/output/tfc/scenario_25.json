@@ -14,23 +14,19 @@
           "claimants" : [
             {
               "qualifying" : true,
-              "isPartner" : false,
-              "failures" : []
+              "isPartner" : false
             },
             {
               "qualifying" : true,
-              "isPartner" : true,
-              "failures" : []
+              "isPartner" : true
             }
           ],
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : true,
               "from" : "2015-12-09",
-              "until" : "2016-03-09",
-              "failures" : []
+              "until" : "2016-03-09"
             }
           ]
         },
@@ -41,23 +37,19 @@
           "claimants" : [
             {
               "qualifying" : true,
-              "isPartner" : false,
-              "failures" : []
+              "isPartner" : false
             },
             {
               "qualifying" : true,
-              "isPartner" : true,
-              "failures" : []
+              "isPartner" : true
             }
           ],
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : true,
               "from" : "2016-03-09",
-              "until" : "2016-06-09",
-              "failures" : []
+              "until" : "2016-06-09"
             }
           ]
         },
@@ -68,23 +60,19 @@
           "claimants" : [
             {
               "qualifying" : true,
-              "isPartner" : false,
-              "failures" : []
+              "isPartner" : false
             },
             {
               "qualifying" : true,
-              "isPartner" : true,
-              "failures" : []
+              "isPartner" : true
             }
           ],
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : true,
               "from" : "2016-06-09",
-              "until" : "2016-09-04",
-              "failures" : []
+              "until" : "2016-09-04"
             }
           ]
         },
@@ -95,23 +83,19 @@
           "claimants" : [
             {
               "qualifying" : true,
-              "isPartner" : false,
-              "failures" : []
+              "isPartner" : false
             },
             {
               "qualifying" : true,
-              "isPartner" : true,
-              "failures" : []
+              "isPartner" : true
             }
           ],
           "children" : [
             {
               "id" : 0,
-              "name" : "Child 1",
               "qualifying" : false,
               "from" : null,
-              "until" : null,
-              "failures" : []
+              "until" : null
             }
           ]
         }

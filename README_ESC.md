@@ -16,17 +16,8 @@ The ESC Eligibility micro-service will accept the parent details and children de
           until : [LocalDate],
           claimants: [
             {
-              liveOrWork : [Boolean] = false,
               isPartner : [Boolean] = false,
-              schemesClaiming : {
-                tfc: [Boolean] = false,
-                esc: [Boolean] = false,
-                 tc: [Boolean] = false
-              },
               employerProvidesESC: [Boolean] = false
-              elements: {
-                vouchers: [Boolean] = false
-              }
             }
           ],
           children: [
@@ -67,16 +58,14 @@ The ESC Eligibility micro-service will accept the parent details and children de
                     eligibleMonthsInPeriod: [Int],
                     elements: {
                     vouchers: [Boolean] = false,
-                    },
-                    failures: List[String]
+                    }
                   }
                 ],
                 children: [
                   {
                     id: [short],
                     name: Option[String],
-                    qualifying: [Boolean] = false,
-                    failures: List[String]
+                    qualifying: [Boolean] = false
                   }
                 ]
               }
@@ -114,16 +103,13 @@ The ESC Eligibility micro-service will accept the parent details and children de
                     "eligibleMonthsInPeriod": 0,
                     "elements": {
                       "vouchers": false
-                    },
-                    "failures": []
+                    }
                   }
                 ],
                 "children": [
                   {
                     "id": 0,
                     "name": "Adam",
-                    "qualifying": false,
-                    "failures": []
                   }
                 ]
               }
@@ -186,14 +172,8 @@ The ESC Eligibility micro-service will accept the parent details and children de
             "until": "2016-04-06T00:00:00",
             "claimants": [
               {
-                "liveOrWork": true,
                 "isPartner": false,
-                "schemesClaiming": {
-                },
-                "employerProvidesESC": true,
-                "elements": {
-                  "vouchers": true
-                }
+                "employerProvidesESC": true
               }
             ],
             "children": [
@@ -234,16 +214,13 @@ The ESC Eligibility micro-service will accept the parent details and children de
                       "eligibleMonthsInPeriod": 0,
                       "elements": {
                         "vouchers": false
-                      },
-                      "failures": []
+                      }
                     }
                   ],
                   "children": [
                     {
                       "id": 0,
                       "name": "Adam",
-                      "qualifying": false,
-                      "failures": []
                     }
                   ]
                 }

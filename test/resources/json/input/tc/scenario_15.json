@@ -9,26 +9,17 @@
                   "claimants": [
                       {
                           "hoursPerWeek": 31.00,
-                          "liveOrWork": true,
                           "isPartner": false,
                           "disability": {
                               "disabled": false,
                               "severelyDisabled": true
                           },
-                          "schemesClaiming": {
-                              "tfc": false,
-                              "esc" : false,
-                              "tc": false
-                          },
-                          "otherSupport": {
-                            "carersAllowance": false
-                          }
+                        "carersAllowance": false
                       }
                   ],
                   "children": [
                       {
                         "id": 0,
-                        "name": "Child 1",
                         "childcareCost": 3000.00,
                         "childcareCostPeriod": "Month",
                         "dob": "2005-06-05",
@@ -40,7 +31,6 @@
                       },
                       {
                         "id": 1,
-                        "name": "Child 2",
                         "childcareCost": 200.00,
                         "childcareCostPeriod": "Month",
                         "dob": "2000-08-10",
@@ -60,26 +50,17 @@
                   "claimants": [
                       {
                           "hoursPerWeek": 31.00,
-                          "liveOrWork": true,
                           "isPartner": false,
                           "disability": {
                               "disabled": false,
                               "severelyDisabled": true
                           },
-                          "schemesClaiming": {
-                              "tfc": false,
-                              "esc" : false,
-                              "tc": false
-                          },
-                          "otherSupport": {
-                            "carersAllowance": false
-                          }
+                        "carersAllowance": false
                       }
                   ],
                   "children": [
                       {
                         "id": 0,
-                        "name": "Child 1",
                         "childcareCost": 3000.00,
                         "childcareCostPeriod": "Month",
                         "dob": "2005-06-05",
@@ -91,7 +72,6 @@
                       },
                       {
                         "id": 1,
-                        "name": "Child 2",
                         "childcareCost": 200.00,
                         "childcareCostPeriod": "Month",
                         "dob": "2000-08-10",

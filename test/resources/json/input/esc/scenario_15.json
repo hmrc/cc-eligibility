@@ -6,30 +6,17 @@
         "until": "2017-04-06",
         "claimants": [
           {
-            "liveOrWork": true,
             "isPartner": false,
-            "schemesClaiming": {
-            },
-            "employerProvidesESC": true,
-            "elements": {
-              "vouchers": true
-            }
+            "employerProvidesESC": true
           },
           {
-            "liveOrWork": true,
             "isPartner": true,
-            "schemesClaiming": {
-            },
-            "employerProvidesESC": true,
-            "elements": {
-              "vouchers": false
-            }
+            "employerProvidesESC": false
           }
         ],
         "children": [
           {
             "id": 0,
-            "name": "Child 1",
             "dob": "1992-09-12",
             "disability": {
               "disabled": true,
@@ -38,7 +25,6 @@
           },
           {
             "id": 1,
-            "name": "Child 2",
             "dob": "2017-04-06",
             "disability": {
               "disabled": false,
@@ -47,7 +33,6 @@
           },
           {
             "id": 2,
-            "name": "Child 3",
             "dob": "2006-09-12",
             "disability": {
               "disabled": false,

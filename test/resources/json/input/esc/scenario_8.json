@@ -6,20 +6,13 @@
         "until": "2017-04-06",
         "claimants": [
           {
-            "liveOrWork": true,
             "isPartner": false,
-            "schemesClaiming": {
-            },
-            "employerProvidesESC": true,
-            "elements": {
-              "vouchers": true
-            }
+            "employerProvidesESC": true
           }
         ],
         "children": [
           {
             "id": 0,
-            "name": "Child 1",
             "dob": "2002-09-12",
             "disability": {
               "disabled": false,
@@ -28,7 +21,6 @@
           },
           {
             "id": 1,
-            "name": "Child 2",
             "childcareCost": 3000.00,
             "childcareCostPeriod": "Month",
             "dob": "2017-12-12",

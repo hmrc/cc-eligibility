@@ -6,20 +6,13 @@
         "until": "2017-04-06",
         "claimants": [
           {
-            "liveOrWork": false,
             "isPartner": false,
-            "schemesClaiming": {
-            },
-            "employerProvidesESC": true,
-            "elements": {
-              "vouchers": false
-            }
+            "employerProvidesESC": false
           }
         ],
         "children": [
           {
             "id": 0,
-            "name": "Child 1",
             "dob": "2014-05-12",
             "disability": {
               "disabled": false,

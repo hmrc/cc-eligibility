@@ -9,20 +9,12 @@
           "claimants": [
             {
               "hoursPerWeek": 30,
-              "liveOrWork": true,
               "isPartner": false,
               "disability": {
                 "disabled": true,
                 "severelyDisabled": true
               },
-              "schemesClaiming": {
-                "tfc": false,
-                "esc" : false,
-                "tc": false
-              },
-              "otherSupport": {
-                "carersAllowance": false
-              }
+              "carersAllowance": false
             }
           ],
           "children": [

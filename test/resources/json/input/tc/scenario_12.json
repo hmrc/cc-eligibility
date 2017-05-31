@@ -9,26 +9,17 @@
           "claimants": [
             {
               "hoursPerWeek": 30,
-              "liveOrWork": true,
               "isPartner": false,
               "disability": {
                 "disabled": true,
                 "severelyDisabled": true
               },
-              "schemesClaiming": {
-                "tfc": true,
-                "esc" : false,
-                "tc": false
-              },
-              "otherSupport": {
-                "carersAllowance": false
-              }
+              "carersAllowance": false
             }
           ],
           "children": [
             {
               "id": 0,
-              "name": "Child 1",
               "childcareCost": 3000.00,
               "childcareCostPeriod": "Month",
               "dob": "2014-05-12",

@@ -29,14 +29,12 @@
                   {
                     "disability": false,
                     "severeDisability": false
-                  },
-                  "failures": []
+                  }
                 }
               ],
               "children": [
                 {
                   "id": 0,
-                  "name": "Child 1",
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
@@ -47,8 +45,7 @@
                     "disability": false,
                     "severeDisability": false,
                     "childcare": false
-                  },
-                  "failures": []
+                  }
                 }
               ]
             }
@@ -80,14 +77,12 @@
                   {
                     "disability": false,
                     "severeDisability": false
-                  },
-                  "failures": []
+                  }
                 }
               ],
               "children": [
                 {
                   "id": 0,
-                  "name": "Child 1",
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
@@ -98,8 +93,7 @@
                     "disability": false,
                     "severeDisability": false,
                     "childcare": false
-                  },
-                  "failures": []
+                  }
                 }
               ]
             },
@@ -124,14 +118,12 @@
                   {
                     "disability": false,
                     "severeDisability": false
-                  },
-                  "failures": []
+                  }
                 }
               ],
               "children": [
                 {
                   "id": 0,
-                  "name": "Child 1",
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": false,
@@ -141,8 +133,7 @@
                     "disability": false,
                     "severeDisability": false,
                     "childcare": false
-                  },
-                  "failures": []
+                  }
                 }
               ]
             }

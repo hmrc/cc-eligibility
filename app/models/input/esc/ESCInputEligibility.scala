@@ -71,63 +71,25 @@ object TaxYear extends CCFormat with MessagesObject {
 }
 
 case class Claimant(
-                     liveOrWork:  Boolean = false,
                      isPartner: Boolean = false,
-                     employerProvidesESC : Boolean = false,
-                     elements: ClaimantsElements,
-                     schemesClaiming: SchemesClaiming
+                     employerProvidesESC : Boolean = false
                    ) extends models.input.BaseClaimant {
 
-  def isClaimingESC : Boolean = {
-    schemesClaiming.esc
-  }
-
   def isClaimantQualifyingForESC : Boolean = {
-     elements.vouchers && employerProvidesESC && liveOrWork
+     employerProvidesESC
   }
 
 }
 
 object Claimant extends CCFormat {
   implicit val claimantReads: Reads[Claimant] = (
-    (JsPath \ "liveOrWork").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-        (JsPath \ "employerProvidesESC").read[Boolean].orElse(Reads.pure(false)) and
-          (JsPath \ "elements").read[ClaimantsElements] and
-            (JsPath \ "schemesClaiming").read[SchemesClaiming]
+    (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
+      (JsPath \ "employerProvidesESC").read[Boolean].orElse(Reads.pure(false))
     )(Claimant.apply _)
-}
-
-case class ClaimantsElements(
-                             // claimants qualification is determined by employer providing esc and
-                             // children's qualification (if there is at least 1 qualifying child)
-                             vouchers : Boolean = false
-                             )
-
-object ClaimantsElements {
-  implicit val claimantReads : Reads[ClaimantsElements] =
-    (JsPath \ "vouchers").read[Boolean].orElse(Reads.pure(false)).map {
-      vouchers => ClaimantsElements(vouchers)
-    }
-}
-
-case class SchemesClaiming(
-                            tfc: Boolean = false,
-                            esc: Boolean = false,
-                            tc: Boolean = false
-                          )
-
-object SchemesClaiming{
-  implicit val disabilityReads: Reads[SchemesClaiming] = (
-    (JsPath \ "tfc").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "esc").read[Boolean].orElse(Reads.pure(false)) and
-        (JsPath \ "tc").read[Boolean].orElse(Reads.pure(false))
-    )(SchemesClaiming.apply _)
 }
 
 case class Child (
                    id: Short,
-                   name: Option[String],
                    dob: LocalDate,
                    disability: Disability
                   ) extends models.input.BaseChild {
@@ -148,7 +110,6 @@ case class Child (
     disability.severelyDisabled || disability.disabled
   }
 
-  // TODO CLARIFY WITH PAUL WHETHER THIS IS UP UNTIL 15/16 OR THEY GET IT WHEN THEY'RE 15/16
   def qualifiesForESC(now : LocalDate = LocalDate.now) : Boolean = {
     val escTaxYearConfig = ESCConfig.getConfig(now)
     val threshold15 = escTaxYearConfig.childAgeLimit
@@ -170,16 +131,14 @@ case class Child (
 }
 
 object Child extends CCFormat with MessagesObject {
-  val nameLength = 25
   def validID(id: Short): Boolean = {
     id >= 0
   }
 
   implicit val childReads: Reads[Child] = (
     (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
-      (JsPath \ "name").readNullable[String](maxLength[String](nameLength)) and
-        (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
-          (JsPath \ "disability").read[Disability]
+      (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
+        (JsPath \ "disability").read[Disability]
     )(Child.apply _)
 }
 

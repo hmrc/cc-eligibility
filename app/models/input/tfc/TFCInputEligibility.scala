@@ -28,6 +28,10 @@ import service.AuditEvents
 import uk.gov.hmrc.play.http.HeaderCarrier
 import utils._
 
+/*
+This is the Payload input class from cc-frontend to cc-eligibility
+ */
+
 case class Request (
                      payload: Payload
                      )
@@ -65,8 +69,8 @@ case class TFC(
       }
       (minEarningsParent, minEarningsPartner) match {
         case (true, true) => true
-        case (true, false) => partner.otherSupport.carersAllowance
-        case (false, true) => parent.otherSupport.carersAllowance
+        case (true, false) => partner.carersAllowance
+        case (false, true) => parent.carersAllowance
         case _ => false
       }
     } else {
@@ -84,8 +88,8 @@ case class TFC(
       val partner = claimants.last
       (parent.isWorkingAtLeast16HoursPerWeek(from), partner.isWorkingAtLeast16HoursPerWeek(from)) match {
         case (true,true) => true
-        case (true, false) => partner.otherSupport.carersAllowance
-        case (false, true) => parent.otherSupport.carersAllowance
+        case (true, false) => partner.carersAllowance
+        case (false, true) => parent.carersAllowance
         case _ =>   false
       }
     } else {
@@ -113,14 +117,12 @@ object TFC extends CCFormat with MessagesObject {
 }
 
 case class Claimant(
-                     liveOrWork:  Boolean = false,
                      totalIncome: BigDecimal = BigDecimal(0.00),
                      hoursPerWeek: Double = 0.00,
                      isPartner: Boolean = false,
                      location: String,
                      disability: Disability,
-                     schemesClaiming: SchemesClaiming,
-                     otherSupport: OtherSupport,
+                     carersAllowance: Boolean = false,
                      minimumEarnings: MinimumEarnings,
                      age: Option[String],
                      employmentStatus: Option[String] = None,
@@ -140,7 +142,7 @@ case class Claimant(
   }
 
   def isQualifyingForTFC(periodStart : LocalDate) : Boolean = {
-      liveOrWork && isTotalIncomeLessThan100000(periodStart)
+      isTotalIncomeLessThan100000(periodStart)
   }
 
   def satisfyMinimumEarnings(periodStart: LocalDate, parent: Boolean)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
@@ -190,18 +192,16 @@ object Claimant extends CCFormat with MessagesObject {
   }
 
   implicit val claimantReads: Reads[Claimant] = (
-    (JsPath \ "liveOrWork").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "totalIncome").read[BigDecimal].filter(ValidationError(messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
-        (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
-          (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-            (JsPath \ "location").read[String] and
-              (JsPath \ "disability").read[Disability] and
-                (JsPath \ "schemesClaiming").read[SchemesClaiming] and
-                  (JsPath \ "otherSupport").read[OtherSupport] and
-                    (JsPath \ "minimumEarnings").read[MinimumEarnings] and
-                      (JsPath \ "age").readNullable[String] and
-                        (JsPath \ "employmentStatus").readNullable[String] and
-                          (JsPath \ "selfEmployedSelection").readNullable[Boolean]
+    (JsPath \ "totalIncome").read[BigDecimal].filter(ValidationError(messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
+      (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
+        (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
+          (JsPath \ "location").read[String] and
+            (JsPath \ "disability").read[Disability] and
+              (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false)) and
+                (JsPath \ "minimumEarnings").read[MinimumEarnings] and
+                  (JsPath \ "age").readNullable[String] and
+                    (JsPath \ "employmentStatus").readNullable[String] and
+                      (JsPath \ "selfEmployedSelection").readNullable[Boolean]
     )(Claimant.apply _)
 }
 
@@ -229,41 +229,8 @@ object Disability {
     )(Disability.apply _)
 }
 
-case class SchemesClaiming(
-                            esc: Boolean = false,
-                            tc: Boolean = false,
-                            uc: Boolean = false,
-                            cg: Boolean = false
-                            )
-
-object SchemesClaiming{
-  implicit val schemesClaimingReads: Reads[SchemesClaiming] = (
-    (JsPath \ "esc").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "tc").read[Boolean].orElse(Reads.pure(false)) and
-        (JsPath \ "uc").read[Boolean].orElse(Reads.pure(false)) and
-          (JsPath \ "cg").read[Boolean].orElse(Reads.pure(false))
-    )(SchemesClaiming.apply _)
-}
-
-case class OtherSupport(
-                         disabilityBenefitsOrAllowances: Boolean = false,
-                         severeDisabilityBenefitsOrAllowances: Boolean = false,
-                         incomeBenefitsOrAllowances: Boolean = false,
-                         carersAllowance: Boolean = false
-                         )
-
-object OtherSupport {
-  implicit val otherSupportReads: Reads[OtherSupport] = (
-    (JsPath \ "disabilityBenefitsOrAllowances").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "severeDisabilityBenefitsOrAllowances").read[Boolean].orElse(Reads.pure(false)) and
-        (JsPath \ "incomeBenefitsOrAllowances").read[Boolean].orElse(Reads.pure(false)) and
-          (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false))
-    )(OtherSupport.apply _)
-}
-
 case class Child  (
                     id: Short,
-                    name: Option[String],
                     childcareCost: BigDecimal = BigDecimal(0.00),
                     childcareCostPeriod: Periods.Period,
                     dob: LocalDate,
@@ -330,7 +297,7 @@ case class Child  (
 
 
 object Child extends CCFormat with MessagesObject {
-  val nameLength = 25
+
   def validID(id: Short): Boolean = {
     id >= 0
   }
@@ -341,7 +308,6 @@ object Child extends CCFormat with MessagesObject {
 
   implicit val childReads: Reads[Child] = (
     (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
-      (JsPath \ "name").readNullable[String](maxLength[String](nameLength)) and
         (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(messages("cc.elig.childcare.spend.too.low")))(x => childSpendValidation(x)) and
           (JsPath \ "childcareCostPeriod").read[Periods.Period] and
             (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and

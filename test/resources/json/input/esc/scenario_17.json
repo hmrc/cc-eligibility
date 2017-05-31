@@ -6,30 +6,17 @@
         "until": "2017-04-06",
         "claimants": [
           {
-            "liveOrWork": true,
             "isPartner": false,
-            "schemesClaiming": {
-            },
-            "employerProvidesESC": true,
-            "elements": {
-              "vouchers": true
-            }
+            "employerProvidesESC": true
           },
           {
-            "liveOrWork": true,
             "isPartner": true,
-            "schemesClaiming": {
-            },
-            "employerProvidesESC": true,
-            "elements": {
-              "vouchers": true
-            }
+            "employerProvidesESC": true
           }
         ],
         "children": [
           {
             "id": 0,
-            "name": "Child 1",
             "dob": "2001-08-30",
             "disability": {
               "disabled": false,
