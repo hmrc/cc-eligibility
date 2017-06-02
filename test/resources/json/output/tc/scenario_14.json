@@ -70,8 +70,10 @@
             }
           ]
         }
-      ]
-    },
+      ],
+       "wtc":true,
+       "ctc":true
+     },
     "esc": null,
     "tfc": null
   }

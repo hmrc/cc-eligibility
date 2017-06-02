@@ -202,16 +202,25 @@ trait TCEligibility extends CCEligibility {
       listOfTaxYears.exists(_.periods.exists(period => period.householdElements.wtc && period.householdElements.ctc))
     }
 
+    def determineWTCEligibility(taxYears: List[models.output.tc.TaxYear]): Boolean =
+      taxYears.exists(_.periods.exists(_.householdElements.wtc))
+
+    def determineCTCEligibility(taxYears: List[models.output.tc.TaxYear]): Boolean =
+      taxYears.exists(_.periods.exists(_.householdElements.ctc))
+
+
     override def eligibility(request : models.input.BaseRequest) : Future[Eligibility] = {
       request match {
         case request : models.input.tc.Request =>
-          val ty = constructTaxYearsWithPeriods(request)
+          val taxyears = constructTaxYearsWithPeriods(request)
           Future {
             Eligibility(
               tc = Some(
                 TCEligibilityModel(
-                  eligible = isEligibleForTC(ty),
-                  taxYears = ty
+                  isEligibleForTC(taxyears),
+                  taxyears,
+                  determineWTCEligibility(taxyears),
+                  determineCTCEligibility(taxyears)
                 )
               )
             )

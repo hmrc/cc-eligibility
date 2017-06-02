@@ -41,7 +41,8 @@
                 ],
                 "children": [
                   {
-                    "id": 0,                    "childcareCost": 3000,
+                    "id": 0,
+                    "childcareCost": 3000,
                     "childcareCostPeriod": "Month",
                     "qualifying": true,
                     "childElements": {
@@ -56,9 +57,11 @@
               }
             ]
           }
-        ]
-      },
-      "esc": null,
+        ],
+       "wtc":true,
+       "ctc":true
+     },
+    "esc": null,
       "tfc": null
       }
   }
