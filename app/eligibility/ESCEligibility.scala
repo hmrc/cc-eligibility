@@ -196,18 +196,46 @@ trait ESCEligibility extends CCEligibility {
       generateTaxYearsHelper(taxYears, List(), 0)
     }
 
+    def determineESCEligibility(taxYears: List[models.output.esc.TaxYear]): (Boolean, Boolean, Boolean) = {
+
+      def getClaimantEligibility(isPartner: Boolean) = taxYears.exists(taxYear => taxYear.periods.exists(
+          periods => periods.claimants.exists(
+            claimant => if(claimant.isPartner == isPartner && claimant.qualifying) {true}
+            else {false})))
+
+        val escClaimantEligibilityResult: (Boolean, Boolean) =  (getClaimantEligibility(isPartner = false),
+          getClaimantEligibility(isPartner = true))
+
+        val escChildrenEligibilityResult: Boolean = taxYears.exists(
+          _.periods.exists(_.children.exists(_.qualifying)))
+
+        val eligibility = (escClaimantEligibilityResult._1 || escClaimantEligibilityResult._2) && escChildrenEligibilityResult
+        val parentEligibility = escClaimantEligibilityResult._1
+        val partnerEligibility = escClaimantEligibilityResult._2
+      (eligibility, parentEligibility, partnerEligibility)
+    }
+
+
+
+
     override def eligibility(request : BaseRequest) : Future[Eligibility] = {
       request match {
-        case request : models.input.esc.Request =>
+        case request : models.input.esc.Request => {
+          val constructTaxYears = constructTaxYearsWithPeriods(request)
+          val (eligibility,parentEligibility,partnerEligibility) = determineESCEligibility(constructTaxYears)
           Future {
             Eligibility(
               esc = Some(
                 ESCEligibilityModel(
-                  taxYears = constructTaxYearsWithPeriods(request)
+                  constructTaxYears,
+                  eligibility,
+                  parentEligibility,
+                  partnerEligibility
                 )
               )
             )
           }
+        }
         case _ =>
           Logger.warn(s"ESCEligibilityService.eligibility - Exception *****")
           throw new IllegalArgumentException(messages("cc.elig.wrong.type"))
