@@ -182,7 +182,10 @@ class ESCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                                 }
                             ]
                         }
-                    ]
+                    ],
+                    "eligibility":false,
+                    "parentEligibility":false,
+                    "partnerEligibility":false
                 }
             }
         }

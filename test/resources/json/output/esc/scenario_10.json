@@ -36,9 +36,12 @@
             }
           ]
         }
-      ]
-    },
-    "tc": null,
-    "tfc": null
+      ],
+         "eligibility":true,
+         "parentEligibility":true,
+         "partnerEligibility":true
+       },
+       "tc": null,
+       "tfc": null
   }
 }

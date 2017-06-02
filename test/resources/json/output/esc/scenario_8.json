@@ -32,7 +32,10 @@
               }
             ]
           }
-        ]
+        ],
+        "eligibility":true,
+        "parentEligibility":true,
+        "partnerEligibility":false
       },
       "tc": null,
       "tfc": null

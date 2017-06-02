@@ -344,7 +344,10 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                         }
                      ]
                   }
-               ]
+               ],
+                "eligibility":false,
+                "parentEligibility":false,
+                "partnerEligibility":false
             }
          }
       }

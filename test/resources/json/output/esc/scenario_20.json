@@ -133,7 +133,10 @@
             }
           ]
         }
-      ]
+      ],
+      "eligibility":true,
+      "parentEligibility":true,
+      "partnerEligibility":true
     }
 
   }

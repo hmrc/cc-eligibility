@@ -28,7 +28,10 @@
               }
             ]
           }
-        ]
+        ],
+        "eligibility":false,
+        "parentEligibility":true,
+        "partnerEligibility":false
       },
       "tc": null,
       "tfc": null
