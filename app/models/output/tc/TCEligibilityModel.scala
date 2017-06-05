@@ -22,7 +22,9 @@ import utils.{CCFormat, Periods}
 
 case class TCEligibilityModel(
                                eligible: Boolean = false,
-                               taxYears: List[TaxYear]
+                               taxYears: List[TaxYear],
+                               wtc: Boolean = false,
+                               ctc: Boolean = false
                              )
 
 object TCEligibilityModel {
@@ -107,5 +109,5 @@ case class ChildElements(
                         )
 
 object ChildElements {
-  implicit val childElementsWrites: Writes[ChildElements] =Json.writes[ChildElements]
+  implicit val childElementsWrites: Writes[ChildElements] = Json.writes[ChildElements]
 }

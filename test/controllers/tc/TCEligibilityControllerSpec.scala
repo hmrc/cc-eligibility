@@ -271,7 +271,9 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
                       }
                     ]
                   }
-                ]
+                ],
+                "wtc": true,
+                "ctc": false
               },
               "tfc": null,
               "esc": null

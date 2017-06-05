@@ -1391,7 +1391,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val outputHhElements = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
       val outputPeriod = models.output.tc.TCPeriod(from = periodStartDate, until = periodEndDate, householdElements = outputHhElements, claimants = List(outputClaimant), children = List(outputChild))
       val outputTaxYear = models.output.tc.TaxYear(from = periodStartDate, until = periodEndDate, houseHoldIncome = BigDecimal(23500.00), periods = List(outputPeriod))
-      val tcEligibilityModel = TCEligibilityModel(eligible = true, taxYears = List(outputTaxYear))
+      val tcEligibilityModel = TCEligibilityModel(eligible = true, taxYears = List(outputTaxYear), wtc = true, ctc = true)
 
       val eligibilityOutputModel = Eligibility(tc = Some(tcEligibilityModel))
 
@@ -1415,7 +1415,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val outputHhElements = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
       val outputPeriod = models.output.tc.TCPeriod(from = periodStartDate, until = periodEndDate, householdElements = outputHhElements, claimants = List(outputClaimant), children = List(outputChild))
       val outputTaxYear = models.output.tc.TaxYear(from = periodStartDate, until = periodEndDate, houseHoldIncome = BigDecimal(0.00), periods = List(outputPeriod))
-      val tcEligibilityModel = TCEligibilityModel(eligible = true, taxYears = List(outputTaxYear))
+      val tcEligibilityModel = TCEligibilityModel(eligible = true, taxYears = List(outputTaxYear), wtc = true, ctc = true)
 
       val eligibilityOutputModel = Eligibility(tc = Some(tcEligibilityModel))
       val result : Future[Eligibility] = TCEligibility.eligibility.eligibility(Request(payload = Payload(taxYears = List(ty))))

@@ -134,9 +134,11 @@
             }
           ]
         }
-      ]
-    },
-    "tfc": null,
+      ],
+       "wtc":true,
+       "ctc":true
+     },
+     "tfc": null,
     "esc": null
   }
 }
