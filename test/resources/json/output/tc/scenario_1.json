@@ -50,7 +50,9 @@
             }
           ]
         }
-      ]
+      ],
+      "wtc":true,
+      "ctc":false
     },
     "tfc": null,
     "esc": null

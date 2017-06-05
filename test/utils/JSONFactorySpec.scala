@@ -162,7 +162,9 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                       }
                     ]
                   }
-                ]
+                ],
+                "wtc": false,
+                "ctc": false
               },
               "tfc": null,
               "esc": null
