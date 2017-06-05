@@ -6,8 +6,8 @@
       "from": "2015-12-09",
       "until": "2016-12-09",
       "householdEligibility": true,
-      "dobWithinRollout": false,
-      "eligibleForRollout": false,
+      "freeRollout": false,
+      "tfcRollout": false,
       "periods": [
         {
           "from" : "2015-12-09",
@@ -29,8 +29,8 @@
               "qualifying" : true,
               "from" : "2015-12-09",
               "until" : "2016-03-09",
-              "dobWithinRollout": false,
-              "eligibleForRollout": false
+              "freeRollout": false,
+              "tfcRollout": false
             }
           ]
         },
@@ -54,8 +54,8 @@
               "qualifying" : true,
               "from" : "2016-03-09",
               "until" : "2016-06-09",
-              "dobWithinRollout": false,
-              "eligibleForRollout": false
+              "freeRollout": false,
+              "tfcRollout": false
             }
           ]
         },
@@ -79,8 +79,8 @@
               "qualifying" : true,
               "from" : "2016-06-09",
               "until" : "2016-09-04",
-              "dobWithinRollout": false,
-              "eligibleForRollout": false
+              "freeRollout": false,
+              "tfcRollout": false
             }
           ]
         },
@@ -104,8 +104,8 @@
               "qualifying" : false,
               "from" : null,
               "until" : null,
-              "dobWithinRollout": false,
-              "eligibleForRollout": false
+              "freeRollout": false,
+              "tfcRollout": false
             }
           ]
         }

@@ -6,8 +6,8 @@
       "from": "2016-03-07",
       "until": "2017-03-07",
       "householdEligibility": true,
-      "dobWithinRollout": true,
-      "eligibleForRollout": true,
+      "freeRollout": true,
+      "tfcRollout": true,
       "periods": [
         {
           "from" : "2016-03-07",
@@ -29,16 +29,16 @@
               "qualifying" : true,
               "from" : "2016-03-07",
               "until" : "2016-06-07",
-              "dobWithinRollout": false,
-              "eligibleForRollout": false
+              "freeRollout": false,
+              "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
               "from" : null,
               "until" : null,
-              "dobWithinRollout": true,
-              "eligibleForRollout": false
+              "freeRollout": true,
+              "tfcRollout": false
             }
           ]
         },
@@ -62,16 +62,16 @@
               "qualifying" : true,
               "from" : "2016-06-07",
               "until" : "2016-09-07",
-              "dobWithinRollout": false,
-              "eligibleForRollout": false
+              "freeRollout": false,
+              "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
               "from" : null,
               "until" : null,
-              "dobWithinRollout": true,
-              "eligibleForRollout": false
+              "freeRollout": true,
+              "tfcRollout": false
             }
           ]
         },
@@ -95,16 +95,16 @@
               "qualifying" : true,
               "from" : "2016-09-07",
               "until" : "2016-12-07",
-              "dobWithinRollout": false,
-              "eligibleForRollout": false
+              "freeRollout": false,
+              "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : true,
               "from" : "2016-10-12",
               "until" : "2016-12-07",
-              "dobWithinRollout": true,
-              "eligibleForRollout": true
+              "freeRollout": true,
+              "tfcRollout": true
             }
           ]
         },
@@ -128,16 +128,16 @@
               "qualifying" : true,
               "from" : "2016-12-07",
               "until" : "2017-03-07",
-              "dobWithinRollout": false,
-              "eligibleForRollout": false
+              "freeRollout": false,
+              "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : true,
               "from" : "2016-12-07",
               "until" : "2017-03-07",
-              "dobWithinRollout": true,
-              "eligibleForRollout": true
+              "freeRollout": true,
+              "tfcRollout": true
             }
           ]
         }

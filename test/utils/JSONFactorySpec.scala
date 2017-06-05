@@ -186,8 +186,8 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
       val outputUntilPeriod1 = LocalDate.parse("2015-09-30", formatter)
       val outputStartPeriod2 = LocalDate.parse("2015-09-30", formatter)
       val outputUntilPeriod2 = LocalDate.parse("2015-12-30", formatter)
-      val outputPeriodChild1 = models.output.tfc.OutputChild(id = 0, qualifying = true, from = outputStartPeriod1, until = outputUntilPeriod1)
-      val outputPeriodChild2 = models.output.tfc.OutputChild(id = 0, qualifying = true, from = outputStartPeriod2, until = outputUntilPeriod2)
+      val outputPeriodChild1 = models.output.tfc.OutputChild(id = 0, qualifying = true, from = outputStartPeriod1, until = outputUntilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputPeriodChild2 = models.output.tfc.OutputChild(id = 0, qualifying = true, from = outputStartPeriod2, until = outputUntilPeriod2, freeRollout = false, tfcRollout = false)
 
       val tfcPeriods = List(
         TFCPeriod(from = outputStartPeriod1,
@@ -201,7 +201,7 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
           claimants = List(outputClaimant),
           children = List(outputPeriodChild2))
       )
-      val tfcEligibilityModel = TFCEligibilityModel(from = from, until = tfcPeriods.last.until, householdEligibility = true, periods = tfcPeriods)
+      val tfcEligibilityModel = TFCEligibilityModel(from = from, until = tfcPeriods.last.until, householdEligibility = true, periods = tfcPeriods, freeRollout = false, tfcRollout = false)
       val eligibilityOutputModel = Eligibility(tfc = Some(tfcEligibilityModel))
 
       val outputJson = Json.parse(
@@ -232,8 +232,8 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                         "qualifying" : true,
                         "from" : "2015-06-30",
                         "until" : "2015-09-30",
-                        "dobWithinRollout":false,
-                        "eligibleForRollout":false
+                        "freeRollout":false,
+                        "tfcRollout":false
                        }
                       ]
                     },
@@ -253,8 +253,8 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                         "qualifying" : true,
                         "from" : "2015-09-30",
                         "until" : "2015-12-30",
-                        "dobWithinRollout":false,
-                        "eligibleForRollout":false
+                        "freeRollout":false,
+                        "tfcRollout":false
                        }
                       ]
                     }

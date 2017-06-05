@@ -6,8 +6,8 @@
       "from": "2017-08-27",
       "until": "2017-11-27",
       "householdEligibility": false,
-      "dobWithinRollout": true,
-      "eligibleForRollout": true,
+      "freeRollout": true,
+      "tfcRollout": true,
       "periods": [
         {
           "from" : "2017-08-27",
@@ -25,8 +25,8 @@
               "qualifying" : true,
               "from" : "2017-08-27",
               "until" : "2017-11-27",
-              "dobWithinRollout": true,
-              "eligibleForRollout": true
+              "freeRollout": true,
+              "tfcRollout": true
             }
           ]
         }

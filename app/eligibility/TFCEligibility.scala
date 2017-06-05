@@ -124,8 +124,8 @@ val eligibility = new TFCEligibilityService
           qualifying = childEligibility,
           from = qualifyStartDate,
           until = qualifyEndDate,
-          dobWithinRollout = isChildDOBWithinRollout(child),
-          eligibleForRollout = isChildEligibleForTFCRollout(child, childEligibility)
+          freeRollout = isChildDOBWithinRollout(child),
+          tfcRollout = isChildEligibleForTFCRollout(child, childEligibility)
         )
       }
     }
@@ -155,8 +155,8 @@ val eligibility = new TFCEligibilityService
               until = outputPeriods.last.until,
               householdEligibility = householdEligibility,
               periods = outputPeriods,
-              dobWithinRollout = outputPeriods.exists(_.children.exists(_.dobWithinRollout)),
-              eligibleForRollout = outputPeriods.exists(_.children.exists(_.eligibleForRollout))
+              freeRollout = outputPeriods.exists(_.children.exists(_.freeRollout)),
+              tfcRollout = outputPeriods.exists(_.children.exists(_.tfcRollout))
             )
           )
         )

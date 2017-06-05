@@ -25,9 +25,9 @@ import utils.CCFormat
 case class TFCEligibilityModel(
                                 from: LocalDate,
                                 until: LocalDate,
-                                householdEligibility : Boolean = false,
-                                dobWithinRollout: Boolean = false,
-                                eligibleForRollout: Boolean = false,
+                                householdEligibility: Boolean,
+                                freeRollout: Boolean,
+                                tfcRollout: Boolean,
                                 periods: List[TFCPeriod]
                                 )
 
@@ -38,7 +38,7 @@ object TFCEligibilityModel {
 case class TFCPeriod(
                       from: LocalDate,
                       until: LocalDate,
-                      periodEligibility: Boolean = false,
+                      periodEligibility: Boolean,
                       claimants: List[OutputClaimant],
                       children: List[OutputChild]
                       )
@@ -48,8 +48,8 @@ object TFCPeriod {
 }
 
 case class OutputClaimant(
-                           qualifying: Boolean = false,
-                           isPartner: Boolean = false
+                           qualifying: Boolean,
+                           isPartner: Boolean
                            )
 
 object OutputClaimant {
@@ -58,11 +58,11 @@ object OutputClaimant {
 
 case class OutputChild(
                         id: Short,
-                        qualifying: Boolean = false,
+                        qualifying: Boolean,
                         from: LocalDate,
                         until: LocalDate,
-                        dobWithinRollout: Boolean = false,
-                        eligibleForRollout: Boolean = false
+                        freeRollout: Boolean ,
+                        tfcRollout: Boolean
                         )
 
 object OutputChild extends CCFormat {
@@ -71,7 +71,7 @@ object OutputChild extends CCFormat {
         (JsPath \ "qualifying").write[Boolean] and
           (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
             (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-              (JsPath \ "dobWithinRollout").write[Boolean] and
-                (JsPath \ "eligibleForRollout").write[Boolean]
+              (JsPath \ "freeRollout").write[Boolean] and
+                (JsPath \ "tfcRollout").write[Boolean]
     )(unlift(OutputChild.unapply))
 }

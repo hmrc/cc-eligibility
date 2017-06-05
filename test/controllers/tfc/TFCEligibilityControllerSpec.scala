@@ -82,8 +82,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                   "from": "2016-08-27",
                   "until": "2017-05-27",
                   "householdEligibility": true,
-                  "dobWithinRollout":true,
-                  "eligibleForRollout":true,
+                  "freeRollout":true,
+                  "tfcRollout":true,
                    "periods": [
                     {
                       "from" : "2016-08-27",
@@ -101,8 +101,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "qualifying" : true,
                         "from" : "2016-08-27",
                         "until" : "2016-11-27",
-                        "dobWithinRollout":true,
-                        "eligibleForRollout":true
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -122,8 +122,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "qualifying" : true,
                         "from" : "2016-11-27",
                         "until" : "2017-02-27",
-                        "dobWithinRollout":true,
-                        "eligibleForRollout":true
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -143,8 +143,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "qualifying" : true,
                         "from" : "2017-02-27",
                         "until" : "2017-05-27",
-                        "dobWithinRollout":true,
-                        "eligibleForRollout":true
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     }
@@ -256,8 +256,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                   "from": "2016-08-27",
                   "until": "2017-05-27",
                   "householdEligibility": true,
-                  "dobWithinRollout":true,
-                  "eligibleForRollout":true,
+                  "freeRollout":true,
+                  "tfcRollout":true,
                    "periods": [
                     {
                       "from" : "2016-08-27",
@@ -279,8 +279,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "qualifying" : true,
                         "from" : "2016-08-27",
                         "until" : "2016-11-27",
-                        "dobWithinRollout":true,
-                        "eligibleForRollout":true
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -304,8 +304,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "qualifying" : true,
                         "from" : "2016-11-27",
                         "until" : "2017-02-27",
-                        "dobWithinRollout":true,
-                        "eligibleForRollout":true
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -329,8 +329,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "qualifying" : true,
                         "from" : "2017-02-27",
                         "until" : "2017-05-27",
-                        "dobWithinRollout":true,
-                        "eligibleForRollout":true
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     }
@@ -367,8 +367,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                   "from": "2016-08-27",
                   "until": "2017-05-27",
                   "householdEligibility": true,
-                  "dobWithinRollout":true,
-                  "eligibleForRollout":true,
+                  "freeRollout":true,
+                  "tfcRollout":true,
                    "periods": [
                     {
                       "from" : "2016-08-27",
@@ -390,8 +390,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "qualifying" : true,
                         "from" : "2016-08-27",
                         "until" : "2016-11-27",
-                        "dobWithinRollout":true,
-                        "eligibleForRollout":true
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -415,8 +415,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "qualifying" : true,
                         "from" : "2016-11-27",
                         "until" : "2017-02-27",
-                        "dobWithinRollout":true,
-                        "eligibleForRollout":true
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -440,8 +440,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "qualifying" : true,
                         "from" : "2017-02-27",
                         "until" : "2017-05-27",
-                        "dobWithinRollout":true,
-                        "eligibleForRollout":true
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     }
@@ -478,8 +478,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                   "from": "2016-08-27",
                   "until": "2017-05-27",
                   "householdEligibility": false,
-                  "dobWithinRollout":true,
-                  "eligibleForRollout":true,
+                  "freeRollout":true,
+                  "tfcRollout":true,
                    "periods": [
                     {
                       "from" : "2016-08-27",
@@ -501,8 +501,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "qualifying" : true,
                         "from" : "2016-08-27",
                         "until" : "2016-11-27",
-                        "dobWithinRollout":true,
-                        "eligibleForRollout":true
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -526,8 +526,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "qualifying" : true,
                         "from" : "2016-11-27",
                         "until" : "2017-02-27",
-                        "dobWithinRollout":true,
-                        "eligibleForRollout":true
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -551,8 +551,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "qualifying" : true,
                         "from" : "2017-02-27",
                         "until" : "2017-05-27",
-                        "dobWithinRollout":true,
-                        "eligibleForRollout":true
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     }
@@ -589,8 +589,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                   "from": "2016-08-27",
                   "until": "2017-05-27",
                   "householdEligibility": true,
-                  "dobWithinRollout":true,
-                  "eligibleForRollout":true,
+                  "freeRollout":true,
+                  "tfcRollout":true,
                    "periods": [
                     {
                       "from" : "2016-08-27",
@@ -612,8 +612,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "qualifying" : true,
                         "from" : "2016-08-27",
                         "until" : "2016-11-27",
-                        "dobWithinRollout":true,
-                        "eligibleForRollout":true
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -637,8 +637,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "qualifying" : true,
                         "from" : "2016-11-27",
                         "until" : "2017-02-27",
-                        "dobWithinRollout":true,
-                        "eligibleForRollout":true
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -662,8 +662,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "qualifying" : true,
                         "from" : "2017-02-27",
                         "until" : "2017-05-27",
-                        "dobWithinRollout":true,
-                        "eligibleForRollout":true
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     }
