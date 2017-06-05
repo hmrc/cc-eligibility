@@ -17,18 +17,18 @@
 package models.output.esc
 
 import org.joda.time.LocalDate
-import play.api.libs.functional.syntax._
-import play.api.libs.json.Writes._
-import play.api.libs.json.{JsPath, Writes}
+import play.api.libs.json.{Json, Writes}
 import utils.CCFormat
 
 case class ESCEligibilityModel(
-                                taxYears: List[TaxYear]
-                                )
+                                taxYears: List[TaxYear],
+                                eligibility: Boolean = false,
+                                parentEligibility: Boolean = false,
+                                partnerEligibility: Boolean = false
+                              )
 
 object ESCEligibilityModel {
-  implicit val escEligible : Writes[ESCEligibilityModel] =
-    (JsPath \ "taxYears").write[List[TaxYear]].contramap { (eligibility: ESCEligibilityModel) => eligibility.taxYears}
+  implicit val escEligible: Writes[ESCEligibilityModel] = Json.writes[ESCEligibilityModel]
 }
 
 case class TaxYear(
@@ -37,38 +37,29 @@ case class TaxYear(
                     periods: List[ESCPeriod]
                   )
 
-object TaxYear extends CCFormat{
-  implicit val taxYearWrites: Writes[TaxYear] = (
-    (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-      (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-        (JsPath \ "periods").write[List[ESCPeriod]]
-    )(unlift(TaxYear.unapply))
+object TaxYear extends CCFormat {
+  implicit val taxYearWrites: Writes[TaxYear] = Json.writes[TaxYear]
 }
 
 case class ESCPeriod(
-                     from: LocalDate,
-                     until: LocalDate,
-                     claimants: List[OutputClaimant],
-                     children: List[OutputChild]
+                      from: LocalDate,
+                      until: LocalDate,
+                      claimants: List[OutputClaimant],
+                      children: List[OutputChild]
                     )
 
-object ESCPeriod extends CCFormat{
-  implicit val periodWrites : Writes[ESCPeriod] = (
-    (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-      (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-        (JsPath \ "claimants").write[List[OutputClaimant]] and
-          (JsPath \ "children").write[List[OutputChild]]
-    )(unlift(ESCPeriod.unapply))
+object ESCPeriod extends CCFormat {
+  implicit val periodWrites: Writes[ESCPeriod] = Json.writes[ESCPeriod]
 }
 
 case class ClaimantElements(
                              // claimants qualification is determined by employer providing esc
                              // and children's qualification (if there is at least 1 qualifying child)
-                            vouchers : Boolean = false
+                             vouchers: Boolean = false
                            )
 
 object ClaimantElements {
-  implicit val claimantWrites : Writes[ClaimantElements] = (JsPath \ "vouchers").write[Boolean].contramap { (elements: ClaimantElements) => elements.vouchers }
+  implicit val claimantWrites: Writes[ClaimantElements] = Json.writes[ClaimantElements]
 }
 
 case class OutputClaimant(
@@ -76,16 +67,11 @@ case class OutputClaimant(
                            isPartner: Boolean = false,
                            eligibleMonthsInPeriod: Int = 0,
                            elements: ClaimantElements
-                          )
+                         )
 
 //escAmount can be a voucher amount, childcare bursary amount or directly contracted amount
 object OutputClaimant extends CCFormat {
-  implicit val claimantWrites : Writes[OutputClaimant] = (
-    (JsPath \ "qualifying").write[Boolean] and
-      (JsPath \ "isPartner").write[Boolean] and
-        (JsPath \ "eligibleMonthsInPeriod").write[Int] and
-          (JsPath \ "elements").write[ClaimantElements]
-    )(unlift(OutputClaimant.unapply))
+  implicit val claimantWrites: Writes[OutputClaimant] = Json.writes[OutputClaimant]
 }
 
 case class OutputChild(
@@ -94,8 +80,5 @@ case class OutputChild(
                       )
 
 object OutputChild {
-  implicit val childWrites : Writes[OutputChild] = (
-    (JsPath \ "id").write[Short] and
-      (JsPath \ "qualifying").write[Boolean]
-    )(unlift(OutputChild.unapply))
+  implicit val childWrites: Writes[OutputChild] = Json.writes[OutputChild]
 }
