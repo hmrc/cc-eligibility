@@ -237,7 +237,7 @@ case class Child  (
                     disability: Disability
                     ) extends models.input.BaseChild {
 
-  def isDisabled : Boolean = {
+  def isDisabled: Boolean = {
     disability.severelyDisabled || disability.disabled
   }
 

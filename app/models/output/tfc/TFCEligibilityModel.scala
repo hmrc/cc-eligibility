@@ -17,25 +17,22 @@
 package models.output.tfc
 
 import org.joda.time.LocalDate
+import play.api.libs.json.{JsPath, Json, Writes}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Writes._
-import play.api.libs.json.{JsPath, Writes}
 import utils.CCFormat
 
 case class TFCEligibilityModel(
                                 from: LocalDate,
                                 until: LocalDate,
                                 householdEligibility : Boolean = false,
+                                dobWithinRollout: Boolean = false,
+                                eligibleForRollout: Boolean = false,
                                 periods: List[TFCPeriod]
                                 )
 
-object TFCEligibilityModel extends CCFormat {
-  implicit val tfcEligible : Writes[TFCEligibilityModel] = (
-    (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-      (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-        (JsPath \ "householdEligibility").write[Boolean] and
-          (JsPath \ "periods").write[List[TFCPeriod]]
-    )(unlift(TFCEligibilityModel.unapply))
+object TFCEligibilityModel {
+  implicit val tfcEligible: Writes[TFCEligibilityModel] = Json.writes[TFCEligibilityModel]
 }
 
 case class TFCPeriod(
@@ -46,14 +43,8 @@ case class TFCPeriod(
                       children: List[OutputChild]
                       )
 
-object TFCPeriod extends CCFormat{
-  implicit val periodWrites : Writes[TFCPeriod] = (
-    (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-      (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-        (JsPath \ "periodEligibility").write[Boolean] and
-          (JsPath \ "claimants").write[List[OutputClaimant]] and
-            (JsPath \ "children").write[List[OutputChild]]
-    )(unlift(TFCPeriod.unapply))
+object TFCPeriod {
+  implicit val periodWrites: Writes[TFCPeriod] = Json.writes[TFCPeriod]
 }
 
 case class OutputClaimant(
@@ -61,18 +52,17 @@ case class OutputClaimant(
                            isPartner: Boolean = false
                            )
 
-object OutputClaimant extends CCFormat {
-  implicit val claimantWrites: Writes[OutputClaimant] = (
-    (JsPath \ "qualifying").write[Boolean] and
-      (JsPath \ "isPartner").write[Boolean]
-    )(unlift(OutputClaimant.unapply))
+object OutputClaimant {
+  implicit val claimantWrites: Writes[OutputClaimant] = Json.writes[OutputClaimant]
 }
 
 case class OutputChild(
                         id: Short,
                         qualifying: Boolean = false,
                         from: LocalDate,
-                        until: LocalDate
+                        until: LocalDate,
+                        dobWithinRollout: Boolean = false,
+                        eligibleForRollout: Boolean = false
                         )
 
 object OutputChild extends CCFormat {
@@ -80,6 +70,8 @@ object OutputChild extends CCFormat {
     (JsPath \ "id").write[Short] and
         (JsPath \ "qualifying").write[Boolean] and
           (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-            (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern))
+            (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
+              (JsPath \ "dobWithinRollout").write[Boolean] and
+                (JsPath \ "eligibleForRollout").write[Boolean]
     )(unlift(OutputChild.unapply))
 }

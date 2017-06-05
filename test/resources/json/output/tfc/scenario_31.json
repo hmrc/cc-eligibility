@@ -6,6 +6,8 @@
       "from": "2016-04-10",
       "until": "2017-04-10",
       "householdEligibility": true,
+      "dobWithinRollout": true,
+      "eligibleForRollout": true,
       "periods": [
         {
           "from" : "2016-04-10",
@@ -26,19 +28,25 @@
               "id" : 0,
               "qualifying" : true,
               "from" : "2016-04-10",
-              "until" : "2016-07-10"
+              "until" : "2016-07-10",
+              "dobWithinRollout": false,
+              "eligibleForRollout": false
             },
             {
               "id" : 0,
               "qualifying" : true,
               "from" : "2016-04-10",
-              "until" : "2016-07-10"
+              "until" : "2016-07-10",
+              "dobWithinRollout": false,
+              "eligibleForRollout": true
             },
             {
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "dobWithinRollout": true,
+              "eligibleForRollout": false
             }
           ]
         },
@@ -61,19 +69,25 @@
               "id" : 0,
               "qualifying" : true,
               "from" : "2016-07-10",
-              "until" : "2016-09-04"
+              "until" : "2016-09-04",
+              "dobWithinRollout": false,
+              "eligibleForRollout": false
             },
             {
               "id" : 0,
               "qualifying" : true,
               "from" : "2016-07-10",
-              "until" : "2016-09-04"
+              "until" : "2016-09-04",
+              "dobWithinRollout": false,
+              "eligibleForRollout": true
             },
             {
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "dobWithinRollout": true,
+              "eligibleForRollout": false
             }
           ]
         },
@@ -96,19 +110,25 @@
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "dobWithinRollout": false,
+              "eligibleForRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "dobWithinRollout": false,
+              "eligibleForRollout": false
             },
             {
               "id" : 0,
               "qualifying" : true,
               "from" : "2016-10-15",
-              "until" : "2017-01-10"
+              "until" : "2017-01-10",
+              "dobWithinRollout": true,
+              "eligibleForRollout": true
             }
           ]
         },
@@ -131,19 +151,25 @@
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "dobWithinRollout": false,
+              "eligibleForRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "dobWithinRollout": false,
+              "eligibleForRollout": false
             },
             {
               "id" : 0,
               "qualifying" : true,
               "from" : "2017-01-10",
-              "until" : "2017-04-10"
+              "until" : "2017-04-10",
+              "dobWithinRollout": true,
+              "eligibleForRollout": true
             }
           ]
         }

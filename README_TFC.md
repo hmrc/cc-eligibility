@@ -12,6 +12,8 @@ The TFC Eligibility micro-service will accept the parent details and children de
       tfc: {
           from : [LocalDate],
           numberOfPeriods : [short],
+          dobWithinRollout:[Boolean],
+          eligibleForRollout:[Boolean],
           claimants: [
             {
               totalIncome: [BigDecimal] = 0.00,
@@ -225,11 +227,11 @@ The TFC Eligibility micro-service will accept the parent details and children de
             ],
             "children" : [
               {
-                "id" : 0,
-                "name" : "Venky",
                 "qualifying" : true,
                 "from" : "2016-08-27",
-                "until" : "2016-11-27"
+                "until" : "2016-11-27",
+                "dobWithinRollout": "false",
+                "eligibleForRollout": "false"
               }
             ]
           }

@@ -46,7 +46,7 @@ trait TFCEligibilityController extends EligibilityController {
           auditEvent.auditTFCRequest(result.toString)
           eligibility.eligibility(result).map {
             response =>
-              auditEvent.auditTFCResponse(utils.JSONFactory.generateResultJson(response).toString())
+              //auditEvent.auditTFCResponse(utils.JSONFactory.generateResultJson(response).toString())
               Ok(utils.JSONFactory.generateResultJson(response))
           } recover {
             case e: Exception =>

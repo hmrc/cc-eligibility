@@ -211,6 +211,8 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                   "from": "2015-06-30",
                   "until": "2015-12-30",
                   "householdEligibility": true,
+                  "dobWithinRollout":false,
+                   "eligibleForRollout":false,
                    "periods": [
                     {
                       "from" : "2015-06-30",
@@ -227,7 +229,9 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                         "id" : 0,
                         "qualifying" : true,
                         "from" : "2015-06-30",
-                        "until" : "2015-09-30"
+                        "until" : "2015-09-30",
+                        "dobWithinRollout":false,
+                        "eligibleForRollout":false
                        }
                       ]
                     },
@@ -246,7 +250,9 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                         "id" : 0,
                         "qualifying" : true,
                         "from" : "2015-09-30",
-                        "until" : "2015-12-30"
+                        "until" : "2015-12-30",
+                        "dobWithinRollout":false,
+                        "eligibleForRollout":false
                        }
                       ]
                     }

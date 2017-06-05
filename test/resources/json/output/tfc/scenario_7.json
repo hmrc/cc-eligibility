@@ -6,6 +6,8 @@
       "from": "2016-08-27",
       "until": "2016-11-27",
       "householdEligibility": false,
+      "dobWithinRollout": false,
+      "eligibleForRollout": false,
       "periods": [
         {
           "from" : "2016-08-27",
@@ -22,7 +24,9 @@
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "dobWithinRollout": false,
+              "eligibleForRollout": false
             }
           ]
         }
