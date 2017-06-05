@@ -6,6 +6,8 @@
       "from": "2016-06-01",
       "until": "2017-12-01",
       "householdEligibility": true,
+      "freeRollout": true,
+      "tfcRollout": true,
       "periods": [
         {
           "from" : "2016-06-01",
@@ -22,19 +24,25 @@
               "id" : 0,
               "qualifying" : true,
               "from" : "2016-06-01",
-              "until" : "2016-09-01"
+              "until" : "2016-09-01",
+              "freeRollout": false,
+              "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : true,
               "from" : "2016-06-01",
-              "until" : "2016-09-01"
+              "until" : "2016-09-01",
+              "freeRollout": false,
+              "tfcRollout": true
             },
             {
               "id" : 0,
               "qualifying" : false,
               "from" :  null,
-              "until" : null
+              "until" : null,
+              "freeRollout": true,
+              "tfcRollout": false
             }
           ]
         },
@@ -53,19 +61,25 @@
               "id" : 0,
               "qualifying" : true,
               "from" : "2016-09-01",
-              "until" : "2016-09-04"
+              "until" : "2016-09-04",
+              "freeRollout": false,
+              "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : true,
               "from" : "2016-09-01",
-              "until" : "2016-09-04"
+              "until" : "2016-09-04",
+              "freeRollout": false,
+              "tfcRollout": true
             },
             {
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "freeRollout": true,
+              "tfcRollout": false
             }
           ]
         },
@@ -84,19 +98,25 @@
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "freeRollout": false,
+              "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "freeRollout": false,
+              "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "freeRollout": true,
+              "tfcRollout": false
             }
           ]
         },
@@ -115,19 +135,25 @@
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "freeRollout": false,
+              "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "freeRollout": false,
+              "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "freeRollout": true,
+              "tfcRollout": false
             }
           ]
         },
@@ -146,19 +172,25 @@
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "freeRollout": false,
+              "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "freeRollout": false,
+              "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : true,
               "from" :  "2017-06-15",
-              "until" : "2017-09-01"
+              "until" : "2017-09-01",
+              "freeRollout": true,
+              "tfcRollout": true
             }
           ]
         },
@@ -177,19 +209,25 @@
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "freeRollout": false,
+              "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
               "from" : null,
-              "until" : null
+              "until" : null,
+              "freeRollout": false,
+              "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : true,
               "from" :  "2017-09-01",
-              "until" : "2017-12-01"
+              "until" : "2017-12-01",
+              "freeRollout": true,
+              "tfcRollout": true
             }
           ]
         }

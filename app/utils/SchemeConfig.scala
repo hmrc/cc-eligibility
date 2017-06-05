@@ -16,11 +16,15 @@
 
 package utils
 
+import java.text.SimpleDateFormat
 import java.util.Calendar
 
 import org.joda.time.LocalDate
+import play.api.Configuration
 
-trait CCConfig {
+trait CCConfig extends LoadConfig{
+
+  val dateFormat = new SimpleDateFormat("dd-MM-yyyy")
 
   private def calendar(year: Int, month: Int, day: Int): Calendar = {
     val calendar  = Calendar.getInstance()
@@ -92,6 +96,25 @@ trait CCConfig {
       periodYear
     }
     taxYear
+  }
+
+  def loadConfigByType(configType: String, currentDate: LocalDate = LocalDate.now) = {
+    val configs: Seq[Configuration] = conf.getConfigSeq(configType).get
+    val configExcludingDefault: Seq[Configuration] = getConfigExcludingDefault(configs)
+    configExcludingDefault.find(conf => {
+      val ruleDate = dateFormat.parse(conf.getString("rule-date").get)
+      currentDate.toDate.compareTo(ruleDate) >= 0
+    }).getOrElse(getConfigDefault(configs))
+  }
+
+  private def getConfigDefault(configs: Seq[Configuration]): Configuration = {
+    configs.filter(_.getString("rule-date").equals(Some("default"))).head
+  }
+
+  private def getConfigExcludingDefault(configs: Seq[Configuration]): Seq[Configuration] = {
+    configs.filterNot(_.getString("rule-date").equals(Some("default"))).sortWith(
+      (conf1, conf2) => dateFormat.parse(conf1.getString("rule-date").get).after(dateFormat.parse(conf2.getString("rule-date").get))
+    )
   }
 }
 

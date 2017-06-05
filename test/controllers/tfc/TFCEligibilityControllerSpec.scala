@@ -36,11 +36,6 @@ import scala.concurrent.Future
 
 class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApplication with MockitoSugar {
 
-  val mockTFCEligibilityController = new TFCEligibilityController with TFCEligibility {
-    override val eligibility = mock[TFCEligibilityService]
-    override val auditEvent = mock[AuditEvents]
-  }
-
   "TFCEligibilityController" should {
     implicit val req = FakeRequest()
     implicit val hc = new HeaderCarrier()
@@ -52,7 +47,10 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
     }
 
     "accept valid json should return Json body" in {
-      val controller = mockTFCEligibilityController
+      val controller = new TFCEligibilityController with TFCEligibility {
+        override val eligibility = mock[TFCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/eligibility_input_test.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
@@ -62,7 +60,10 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
     }
 
     "accept valid json scenario and return a valid response (TFC start date provided)" in {
-      val controller = mockTFCEligibilityController
+      val controller = new TFCEligibilityController with TFCEligibility {
+        override val eligibility = mock[TFCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/eligibility_input_test.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
@@ -81,6 +82,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                   "from": "2016-08-27",
                   "until": "2017-05-27",
                   "householdEligibility": true,
+                  "freeRollout":true,
+                  "tfcRollout":true,
                    "periods": [
                     {
                       "from" : "2016-08-27",
@@ -97,7 +100,9 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "id" : 0,
                         "qualifying" : true,
                         "from" : "2016-08-27",
-                        "until" : "2016-11-27"
+                        "until" : "2016-11-27",
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -116,7 +121,9 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "id" : 0,
                         "qualifying" : true,
                         "from" : "2016-11-27",
-                        "until" : "2017-02-27"
+                        "until" : "2017-02-27",
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -135,7 +142,9 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "id" : 0,
                         "qualifying" : true,
                         "from" : "2017-02-27",
-                        "until" : "2017-05-27"
+                        "until" : "2017-05-27",
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     }
@@ -150,7 +159,10 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
     }
 
     "return Internal Server Error with error message if an exception is thrown during eligibility" in {
-      val controller = mockTFCEligibilityController
+      val controller = new TFCEligibilityController with TFCEligibility {
+        override val eligibility = mock[TFCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/eligibility_input_test.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
@@ -170,7 +182,10 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
     }
 
     "accept invalid json with incorrect from date format should return a bad request" in {
-      val controller = mockTFCEligibilityController
+      val controller = new TFCEligibilityController with TFCEligibility {
+        override val eligibility = mock[TFCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/incorrect_from_date_format.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
@@ -180,7 +195,10 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
     }
 
     "accept a valid json if number of claimant/s less than 1 should return 400" in {
-      val controller = mockTFCEligibilityController
+      val controller = new TFCEligibilityController with TFCEligibility {
+        override val eligibility = mock[TFCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/no_claimants.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
@@ -190,7 +208,10 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
     }
 
     "accept invalid json if child id has negative value should return 400" in {
-      val controller = mockTFCEligibilityController
+      val controller = new TFCEligibilityController with TFCEligibility {
+        override val eligibility = mock[TFCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/negative_child_id.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
@@ -200,7 +221,10 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
     }
 
     "accept a valid json if number of children more than 25 should return bad request" in {
-      val controller = mockTFCEligibilityController
+      val controller = new TFCEligibilityController with TFCEligibility {
+        override val eligibility = mock[TFCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/invalid_no_of_children.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
@@ -210,7 +234,10 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
     }
 
     "accept valid json scenario when claimant selected carer's allowance and return a valid response (TFC start date provided)" in {
-      val controller = mockTFCEligibilityController
+      val controller = new TFCEligibilityController with TFCEligibility {
+        override val eligibility = mock[TFCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_parent.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
@@ -229,6 +256,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                   "from": "2016-08-27",
                   "until": "2017-05-27",
                   "householdEligibility": true,
+                  "freeRollout":true,
+                  "tfcRollout":true,
                    "periods": [
                     {
                       "from" : "2016-08-27",
@@ -249,7 +278,9 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "id" : 0,
                         "qualifying" : true,
                         "from" : "2016-08-27",
-                        "until" : "2016-11-27"
+                        "until" : "2016-11-27",
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -272,7 +303,9 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "id" : 0,
                         "qualifying" : true,
                         "from" : "2016-11-27",
-                        "until" : "2017-02-27"
+                        "until" : "2017-02-27",
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -295,7 +328,9 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "id" : 0,
                         "qualifying" : true,
                         "from" : "2017-02-27",
-                        "until" : "2017-05-27"
+                        "until" : "2017-05-27",
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     }
@@ -310,7 +345,10 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
     }
 
     "accept valid json scenario when partner selected carer's allowance and return a valid response (TFC start date provided)" in {
-      val controller = mockTFCEligibilityController
+      val controller = new TFCEligibilityController with TFCEligibility {
+        override val eligibility = mock[TFCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_partner.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
@@ -329,6 +367,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                   "from": "2016-08-27",
                   "until": "2017-05-27",
                   "householdEligibility": true,
+                  "freeRollout":true,
+                  "tfcRollout":true,
                    "periods": [
                     {
                       "from" : "2016-08-27",
@@ -349,7 +389,9 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "id" : 0,
                         "qualifying" : true,
                         "from" : "2016-08-27",
-                        "until" : "2016-11-27"
+                        "until" : "2016-11-27",
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -372,7 +414,9 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "id" : 0,
                         "qualifying" : true,
                         "from" : "2016-11-27",
-                        "until" : "2017-02-27"
+                        "until" : "2017-02-27",
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -395,7 +439,9 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "id" : 0,
                         "qualifying" : true,
                         "from" : "2017-02-27",
-                        "until" : "2017-05-27"
+                        "until" : "2017-05-27",
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     }
@@ -410,7 +456,10 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
     }
 
     "accept valid json scenario when parent and partner selected carer's allowance with parent and partner do not qualify and return a valid response  (TFC start date provided)" in {
-      val controller = mockTFCEligibilityController
+      val controller = new TFCEligibilityController with TFCEligibility {
+        override val eligibility = mock[TFCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_both.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
@@ -429,6 +478,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                   "from": "2016-08-27",
                   "until": "2017-05-27",
                   "householdEligibility": false,
+                  "freeRollout":true,
+                  "tfcRollout":true,
                    "periods": [
                     {
                       "from" : "2016-08-27",
@@ -449,7 +500,9 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "id" : 0,
                         "qualifying" : true,
                         "from" : "2016-08-27",
-                        "until" : "2016-11-27"
+                        "until" : "2016-11-27",
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -472,7 +525,9 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "id" : 0,
                         "qualifying" : true,
                         "from" : "2016-11-27",
-                        "until" : "2017-02-27"
+                        "until" : "2017-02-27",
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -495,7 +550,9 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "id" : 0,
                         "qualifying" : true,
                         "from" : "2017-02-27",
-                        "until" : "2017-05-27"
+                        "until" : "2017-05-27",
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     }
@@ -510,7 +567,10 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
     }
 
     "accept valid json scenario when parent and partner selected carer's allowance with partner hours and return a valid response (TFC start date provided)" in {
-      val controller = mockTFCEligibilityController
+      val controller = new TFCEligibilityController with TFCEligibility {
+        override val eligibility = mock[TFCEligibilityService]
+        override val auditEvent = mock[AuditEvents]
+      }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_hours_both.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Request]
@@ -529,6 +589,8 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                   "from": "2016-08-27",
                   "until": "2017-05-27",
                   "householdEligibility": true,
+                  "freeRollout":true,
+                  "tfcRollout":true,
                    "periods": [
                     {
                       "from" : "2016-08-27",
@@ -549,7 +611,9 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "id" : 0,
                         "qualifying" : true,
                         "from" : "2016-08-27",
-                        "until" : "2016-11-27"
+                        "until" : "2016-11-27",
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -572,7 +636,9 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "id" : 0,
                         "qualifying" : true,
                         "from" : "2016-11-27",
-                        "until" : "2017-02-27"
+                        "until" : "2017-02-27",
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     },
@@ -595,7 +661,9 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                         "id" : 0,
                         "qualifying" : true,
                         "from" : "2017-02-27",
-                        "until" : "2017-05-27"
+                        "until" : "2017-05-27",
+                        "freeRollout":true,
+                        "tfcRollout":true
                        }
                       ]
                     }

@@ -24,13 +24,13 @@ import models.output.tfc._
 import org.joda.time.LocalDate
 import service.AuditEvents
 import uk.gov.hmrc.play.http.HeaderCarrier
-import utils.TFCConfig
+import utils.{TFCRolloutSchemeConfig, TFCConfig}
 
 import scala.concurrent.Future
 
 object TFCEligibility extends TFCEligibility
 
-trait TFCEligibility extends CCTFCEligibility {
+trait TFCEligibility extends CCTFCEligibility with TFCRolloutSchemeConfig {
 
 val eligibility = new TFCEligibilityService
 
@@ -123,7 +123,9 @@ val eligibility = new TFCEligibilityService
           id = child.id,
           qualifying = childEligibility,
           from = qualifyStartDate,
-          until = qualifyEndDate
+          until = qualifyEndDate,
+          freeRollout = isChildDOBWithinRollout(child),
+          tfcRollout = isChildEligibleForTFCRollout(child, childEligibility)
         )
       }
     }
@@ -152,7 +154,9 @@ val eligibility = new TFCEligibilityService
               from = request.payload.tfc.from,
               until = outputPeriods.last.until,
               householdEligibility = householdEligibility,
-              periods = outputPeriods
+              periods = outputPeriods,
+              freeRollout = outputPeriods.exists(_.children.exists(_.freeRollout)),
+              tfcRollout = outputPeriods.exists(_.children.exists(_.tfcRollout))
             )
           )
         )

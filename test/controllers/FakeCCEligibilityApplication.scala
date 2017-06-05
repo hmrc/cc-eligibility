@@ -28,7 +28,10 @@ trait FakeCCEligibilityApplication extends WithFakeApplication {
     "csrf.sign.tokens" -> false,
     "govuk-tax.Test.services.contact-frontend.host" -> "localhost",
     "govuk-tax.Test.services.contact-frontend.port" -> "9250",
-    "tfc-min-earnings" -> "true"
+    "tfc-min-earnings" -> "true",
+    "tfc-rollout.0.rule-date" -> "default",
+    "tfc-rollout.0.all-disabled" -> true,
+    "tfc-rollout.0.born-on-after" -> "01-09-2013"
   )
   override lazy val fakeApplication = FakeApplication(additionalConfiguration = config)
   implicit lazy val mat: Materializer = fakeApplication.materializer
