@@ -213,8 +213,8 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                   "from": "2015-06-30",
                   "until": "2015-12-30",
                   "householdEligibility": true,
-                  "dobWithinRollout":false,
-                   "eligibleForRollout":false,
+                  "freeRollout":false,
+                   "tfcRollout":false,
                    "periods": [
                     {
                       "from" : "2015-06-30",
