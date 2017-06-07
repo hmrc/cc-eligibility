@@ -92,8 +92,7 @@ The TC Eligibility micro-service will accept the parent details and children det
                ],
                children: [
                  {
-                   id: [Short],
-                   name: Option[String],
+                   id: [Short],                   
                    childcareCost: [BigDecimal],
                    childcareCostPeriod: [Enumeration of String] {
                       Week,
@@ -163,8 +162,7 @@ The TC Eligibility micro-service will accept the parent details and children det
                      ],
                      "children": [
                        {
-                         "id": 0,
-                         "name": "Paul",
+                         "id": 0,                         
                          "childcareCost": 3000.00,
                          "childcareCostPeriod": "Month",
                          "qualifying": false,
@@ -251,7 +249,6 @@ The TC Eligibility micro-service will accept the parent details and children det
          "children": [
            {
              "id": 0,
-             "name": "Adam",
              "childcareCost": 3000.00,
              "childcareCostPeriod": "Month",
              "dob": "2013-05-12T18:46:17",
@@ -308,7 +305,6 @@ The TC Eligibility micro-service will accept the parent details and children det
                "children": [
                  {
                    "id": 0,
-                   "name": "Paul",
                    "childcareCost": 3000.00,
                    "childcareCostPeriod": "Month",
                    "qualifying": false,
