@@ -6,7 +6,7 @@
       "from": "2016-09-01",
       "until": "2018-03-01",
       "householdEligibility": true,
-      "freeRollout": false,
+      "freeRollout": true,
       "tfcRollout": true,
       "periods": [
         {
@@ -37,7 +37,7 @@
               "qualifying" : false,
               "from" : null,
               "until" : null,
-              "freeRollout": false,
+              "freeRollout": true,
               "tfcRollout": false
             }
           ]
@@ -70,7 +70,7 @@
               "qualifying" : false,
               "from" : null,
               "until" : null,
-              "freeRollout": false,
+              "freeRollout": true,
               "tfcRollout": false
             }
           ]
@@ -103,7 +103,7 @@
               "qualifying" : false,
               "from" : null,
               "until" : null,
-              "freeRollout": false,
+              "freeRollout": true,
               "tfcRollout": false
             }
           ]
@@ -136,8 +136,8 @@
               "qualifying" : true,
               "from" : "2017-06-20",
               "until" : "2017-09-01",
-              "freeRollout": false,
-              "tfcRollout": false
+              "freeRollout": true,
+              "tfcRollout": true
             }
           ]
         },
@@ -169,8 +169,8 @@
               "qualifying" : true,
               "from" : "2017-09-01",
               "until" : "2017-12-01",
-              "freeRollout": false,
-              "tfcRollout": false
+              "freeRollout": true,
+              "tfcRollout": true
             }
           ]
         },
@@ -202,8 +202,8 @@
               "qualifying" : true,
               "from" : "2017-12-01",
               "until" : "2018-03-01",
-              "freeRollout": false,
-              "tfcRollout": false
+              "freeRollout": true,
+              "tfcRollout": true
             }
           ]
         }
