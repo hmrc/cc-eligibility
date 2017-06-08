@@ -153,7 +153,6 @@ case class Claimant(
     case _ => (None, None, None)
   }
 
-
   private def getIncomeElements(previousIncome: Option[Income], currentIncome: Option[Income] ) = {
 
     val (empPrevious, otherPrevious, pensionPrevious) = determineIncomeElems(previousIncome)
@@ -162,12 +161,9 @@ case class Claimant(
     (if(emp.isDefined) emp else empPrevious,
     if(other.isDefined) other else otherPrevious,
     if(pension.isDefined) pension else pensionPrevious)
-
   }
 
-
-  private def getTotalTFCIncome(
-                                 employmentIncome: BigDecimal,
+  private def getTotalTFCIncome(employmentIncome: BigDecimal,
                                  otherIncome: BigDecimal,
                                  pension: BigDecimal) = {
     employmentIncome + otherIncome - pension * ConfigConstants.noOfMonths
