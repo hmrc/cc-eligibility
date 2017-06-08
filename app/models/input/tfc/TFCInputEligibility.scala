@@ -19,6 +19,7 @@ package models.input.tfc
 import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
 
+import config.ConfigConstants
 import org.joda.time.LocalDate
 import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
@@ -116,8 +117,19 @@ object TFC extends CCFormat with MessagesObject {
     )(TFC.apply _)
 }
 
+case class Income(
+                   employmentIncome : Option[BigDecimal],
+                   pension : Option[BigDecimal],
+                   otherIncome : Option[BigDecimal],
+                   benefits : Option[BigDecimal]
+                 )
+object Income {
+  implicit val formats = Json.format[Income]
+}
+
 case class Claimant(
-                     totalIncome: BigDecimal = BigDecimal(0.00),
+                     previousIncome: Option[Income] = None,
+                     currentIncome: Option[Income] = None,
                      hoursPerWeek: Double = 0.00,
                      isPartner: Boolean = false,
                      location: String,
@@ -128,6 +140,38 @@ case class Claimant(
                      employmentStatus: Option[String] = None,
                      selfEmployedSelection: Option[Boolean] = None
                      ) extends models.input.BaseClaimant {
+
+  def totalIncome: BigDecimal = {
+    val (currentEmployment, currentvOther, currentPension) = getIncomeElements(previousIncome, currentIncome)
+    getTotalTFCIncome(currentEmployment.getOrElse(ConfigConstants.defaultAmount),
+      currentvOther.getOrElse(ConfigConstants.defaultAmount),
+      currentPension.getOrElse(ConfigConstants.defaultAmount))
+  }
+
+  private def determineIncomeElems(income: Option[Income]) = income  match {
+    case Some(x) => (x.employmentIncome, x.otherIncome, x.pension)
+    case _ => (None, None, None)
+  }
+
+
+  private def getIncomeElements(previousIncome: Option[Income], currentIncome: Option[Income] ) = {
+
+    val (empPrevious, otherPrevious, pensionPrevious) = determineIncomeElems(previousIncome)
+    val (emp, other, pension) = determineIncomeElems(currentIncome)
+
+    (if(emp.isDefined) emp else empPrevious,
+    if(other.isDefined) other else otherPrevious,
+    if(pension.isDefined) pension else pensionPrevious)
+
+  }
+
+
+  private def getTotalTFCIncome(
+                                 employmentIncome: BigDecimal,
+                                 otherIncome: BigDecimal,
+                                 pension: BigDecimal) = {
+    employmentIncome + otherIncome - pension * ConfigConstants.noOfMonths
+  }
 
   def isWorkingAtLeast16HoursPerWeek (periodStart:LocalDate) : Boolean = {
     val taxYearConfig = TFCConfig.getConfig(periodStart, location)
@@ -185,23 +229,20 @@ case class Claimant(
 
 }
 
-object Claimant extends CCFormat with MessagesObject {
-
-  def validateIncome(income: BigDecimal): Boolean = {
-    income >= BigDecimal(0.00)
-  }
+object Claimant {
 
   implicit val claimantReads: Reads[Claimant] = (
-    (JsPath \ "totalIncome").read[BigDecimal].filter(ValidationError(messages("cc.elig.income.less.than.0")))(x => validateIncome(x)) and
-      (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
-        (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-          (JsPath \ "location").read[String] and
-            (JsPath \ "disability").read[Disability] and
-              (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false)) and
-                (JsPath \ "minimumEarnings").read[MinimumEarnings] and
-                  (JsPath \ "age").readNullable[String] and
-                    (JsPath \ "employmentStatus").readNullable[String] and
-                      (JsPath \ "selfEmployedSelection").readNullable[Boolean]
+    (JsPath \ "previousIncome").readNullable[Income] and
+      (JsPath \ "currentIncome").readNullable[Income] and
+        (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
+          (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
+            (JsPath \ "location").read[String] and
+              (JsPath \ "disability").read[Disability] and
+                (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false)) and
+                  (JsPath \ "minimumEarnings").read[MinimumEarnings] and
+                    (JsPath \ "age").readNullable[String] and
+                      (JsPath \ "employmentStatus").readNullable[String] and
+                        (JsPath \ "selfEmployedSelection").readNullable[Boolean]
     )(Claimant.apply _)
 }
 
