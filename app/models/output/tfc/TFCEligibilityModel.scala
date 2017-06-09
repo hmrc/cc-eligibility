@@ -59,19 +59,12 @@ object OutputClaimant {
 case class OutputChild(
                         id: Short,
                         qualifying: Boolean,
-                        from: LocalDate,
-                        until: LocalDate,
+                        from: Option[LocalDate],
+                        until: Option[LocalDate],
                         freeRollout: Boolean ,
                         tfcRollout: Boolean
                         )
 
 object OutputChild extends CCFormat {
-  implicit val childWrites : Writes[OutputChild] = (
-    (JsPath \ "id").write[Short] and
-        (JsPath \ "qualifying").write[Boolean] and
-          (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-            (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-              (JsPath \ "freeRollout").write[Boolean] and
-                (JsPath \ "tfcRollout").write[Boolean]
-    )(unlift(OutputChild.unapply))
+  implicit val childWrites : Writes[OutputChild] = Json.writes[OutputChild]
 }
