@@ -178,8 +178,8 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
       }
 
       "Check if claimant and partner eligible for maximum earnings rule (maximum £100000 earnings)" in {
-        val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 99999.99, isPartner = false, location = "england", disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
-        val partner = Claimant(hoursPerWeek = 16.50, totalIncome = 99500.99, isPartner = false, location = "england", disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
+        val claimant = Claimant(hoursPerWeek = 16.50, isPartner = false, location = "england", disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
+        val partner = Claimant(hoursPerWeek = 16.50, isPartner = false, location = "england", disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
@@ -190,8 +190,8 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
       }
 
       "Check if claimant and partner qualify for TFC" in {
-        val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england", disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
-        val partner = Claimant(hoursPerWeek = 17.50, totalIncome = 52000, isPartner = false, location = "england", disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
+        val claimant = Claimant(hoursPerWeek = 16.50, isPartner = false, location = "england", disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
+        val partner = Claimant(hoursPerWeek = 17.50, isPartner = false, location = "england", disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
@@ -201,8 +201,24 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
       }
 
       "claimant and partner both not qualify (claimant fails maximum earnings rule)" in {
-        val claimant = Claimant(hoursPerWeek = 9.50, totalIncome = 115001, isPartner = false, location = "england", disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
-        val partner = Claimant(hoursPerWeek = 4.50, totalIncome = 52000, isPartner = true, location = "england", disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
+        val claimantIncome = Some(Income(Some(1199999.0),Some(100.0),Some(100.0),None))
+        val partnerIncome = Some(Income(Some(99999.0),Some(100.0),Some(100.0),None))
+        val claimant = Claimant(currentIncome = claimantIncome,
+          hoursPerWeek = 9.50,
+          isPartner = false,
+          location = "england",
+          disability = Disability(),
+          carersAllowance = false,
+          minimumEarnings = MinimumEarnings(),
+          age = None)
+        val partner = Claimant(currentIncome = partnerIncome,
+          hoursPerWeek = 4.50,
+          isPartner = true,
+          location = "england",
+          disability = Disability(),
+          carersAllowance = false,
+          minimumEarnings = MinimumEarnings(),
+          age = None)
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
@@ -212,8 +228,24 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
       }
 
       "claimant qualify and partner not qualify (partner fails maximum earnings rule)" in {
-        val claimant = Claimant(hoursPerWeek = 16.50, totalIncome = 12000, isPartner = false, location = "england",  disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
-        val partner = Claimant(hoursPerWeek = 14.50, totalIncome = 115001, isPartner = true, location = "england",  disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
+        val claimantIncome = Some(Income(Some(99999.0),Some(100.0),Some(100.0),None))
+        val partnerIncome = Some(Income(Some(9999999.0),Some(100.0),Some(100.0),None))
+        val claimant = Claimant(previousIncome = claimantIncome,
+          hoursPerWeek = 16.50,
+          isPartner = false,
+          location = "england",
+          disability = Disability(),
+          carersAllowance = false,
+          minimumEarnings = MinimumEarnings(),
+          age = None)
+        val partner = Claimant(previousIncome = partnerIncome,
+          hoursPerWeek = 14.50,
+          isPartner = true,
+          location = "england",
+          disability = Disability(),
+          carersAllowance = false,
+          minimumEarnings = MinimumEarnings(),
+          age = None)
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
@@ -223,8 +255,24 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
       }
 
       "claimant not qualify and partner qualify (claimant fails totalIncome)" in {
-        val claimant = Claimant(hoursPerWeek = 9.50, totalIncome = 1200000, isPartner = false, location = "england",  disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
-        val partner = Claimant(hoursPerWeek = 16.50, totalIncome = 59000, isPartner = true, location = "england",  disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
+        val claimantIncome = Some(Income(Some(1199999.0),Some(100.0),Some(100.0),None))
+        val partnerIncome = Some(Income(Some(99999.0),Some(100.0),Some(100.0),None))
+        val claimant = Claimant(currentIncome = claimantIncome,
+          hoursPerWeek = 9.50,
+          isPartner = false,
+          location = "england",
+          disability = Disability(),
+          carersAllowance = false,
+          minimumEarnings = MinimumEarnings(),
+          age = None)
+        val partner = Claimant(currentIncome = partnerIncome,
+          hoursPerWeek = 16.50,
+          isPartner = true,
+          location = "england",
+          disability = Disability(),
+          carersAllowance = false,
+          minimumEarnings = MinimumEarnings(),
+          age = None)
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
@@ -234,8 +282,8 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
       }
 
       "claimant qualify if carer's allowance is selected with zero hours worked" in {
-        val claimant = Claimant(hoursPerWeek = 0, totalIncome = 12000, isPartner = false, location = "england",  disability = Disability(), carersAllowance = true, minimumEarnings = MinimumEarnings(), age = None)
-        val partner = Claimant(hoursPerWeek = 16.50, totalIncome = 59000, isPartner = true, location = "england",  disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
+        val claimant = Claimant(hoursPerWeek = 0, isPartner = false, location = "england",  disability = Disability(), carersAllowance = true, minimumEarnings = MinimumEarnings(), age = None)
+        val partner = Claimant(hoursPerWeek = 16.50, isPartner = true, location = "england",  disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
