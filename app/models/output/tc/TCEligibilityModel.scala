@@ -34,7 +34,6 @@ object TCEligibilityModel {
 case class TaxYear(
                     from: LocalDate,
                     until: LocalDate,
-                    houseHoldIncome: BigDecimal,
                     periods: List[TCPeriod]
                   )
 
