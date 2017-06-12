@@ -111,7 +111,7 @@ val eligibility = new TFCEligibilityService
       for(child <- children) yield {
         val qualifyStartDate = determineChildStartDateInTFCPeriod(child, periodFrom, periodUntil, location)
         val qualifyEndDate = determineChildEndDateInTFCPeriod(child, periodFrom, periodUntil, location)
-        val childEligibility = !(qualifyStartDate == None) && !(qualifyEndDate == None)
+        val childEligibility = qualifyStartDate.isDefined && qualifyEndDate.isDefined
         OutputChild(
           id = child.id,
           qualifying = childEligibility,
