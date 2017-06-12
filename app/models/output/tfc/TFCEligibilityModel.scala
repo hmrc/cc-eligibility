@@ -17,9 +17,7 @@
 package models.output.tfc
 
 import org.joda.time.LocalDate
-import play.api.libs.json.{JsPath, Json, Writes}
-import play.api.libs.functional.syntax._
-import play.api.libs.json.Writes._
+import play.api.libs.json.{Json, Writes}
 import utils.CCFormat
 
 case class TFCEligibilityModel(
@@ -59,19 +57,12 @@ object OutputClaimant {
 case class OutputChild(
                         id: Short,
                         qualifying: Boolean,
-                        from: LocalDate,
-                        until: LocalDate,
-                        freeRollout: Boolean ,
-                        tfcRollout: Boolean
+                        from: Option[LocalDate],
+                        until: Option[LocalDate],
+                        freeRollout: Boolean, //Not required in frontend
+                        tfcRollout: Boolean //Not required in frontend
                         )
 
 object OutputChild extends CCFormat {
-  implicit val childWrites : Writes[OutputChild] = (
-    (JsPath \ "id").write[Short] and
-        (JsPath \ "qualifying").write[Boolean] and
-          (JsPath \ "from").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-            (JsPath \ "until").write[LocalDate](jodaLocalDateWrites(datePattern)) and
-              (JsPath \ "freeRollout").write[Boolean] and
-                (JsPath \ "tfcRollout").write[Boolean]
-    )(unlift(OutputChild.unapply))
+  implicit val childWrites : Writes[OutputChild] = Json.writes[OutputChild]
 }

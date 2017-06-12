@@ -150,10 +150,10 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val untilPeriod4 = LocalDate.parse("2017-10-15", formatter)
 
 
-      val outputChild1 = OutputChild(id = 0, qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
-      val outputChild2 = OutputChild(id = 0, qualifying = true, from = startPeriod2, until = untilPeriod2, freeRollout = false, tfcRollout = false)
-      val outputChild3 = OutputChild(id = 0, qualifying = true, from = startPeriod3, until = untilPeriod3, freeRollout = false, tfcRollout = false)
-      val outputChild4 = OutputChild(id = 0, qualifying = true, from = startPeriod4, until = untilPeriod4, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0, qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
+      val outputChild2 = OutputChild(id = 0, qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), freeRollout = false, tfcRollout = false)
+      val outputChild3 = OutputChild(id = 0, qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), freeRollout = false, tfcRollout = false)
+      val outputChild4 = OutputChild(id = 0, qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), freeRollout = false, tfcRollout = false)
 
       result shouldBe List(
         TFCPeriod(
@@ -206,8 +206,8 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val childFrom = LocalDate.parse("2016-08-31", formatter)
       val childUntil = LocalDate.parse("2016-09-04", formatter)
-      val outputChild = OutputChild(id = 0, qualifying = true, from = childFrom, until = childUntil, freeRollout = false, tfcRollout = false)
-      val outputChild2 = OutputChild(id = 0, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val outputChild = OutputChild(id = 0, qualifying = true, from = Some(childFrom), until = Some(childUntil), freeRollout = false, tfcRollout = false)
+      val outputChild2 = OutputChild(id = 0, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
       result shouldBe List(
         TFCPeriod(
@@ -248,7 +248,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val childFrom = LocalDate.parse("2016-08-27", formatter)
       val childUntil = LocalDate.parse("2016-11-27", formatter)
-      val outputChild = OutputChild(id = 0, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val outputChild = OutputChild(id = 0, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
       result shouldBe List(
         TFCPeriod(
@@ -270,7 +270,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = TFCEligibility.eligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
-      result shouldBe dateOfBirth
+      result shouldBe Some(dateOfBirth)
     }
 
     "determine child's start date in a TFC period where child is yet to be born (in current period)" in {
@@ -282,7 +282,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = TFCEligibility.eligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
-      result shouldBe dateOfBirth
+      result shouldBe Some(dateOfBirth)
     }
 
     "determine child's start date in a TFC period where child is yet to be born (after current period)" in {
@@ -294,7 +294,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = TFCEligibility.eligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
-      result shouldBe null
+      result shouldBe None
     }
 
     "determine child's start date in a TFC period where child is eligible (in current period)" in {
@@ -306,7 +306,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = TFCEligibility.eligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
-      result shouldBe from
+      result shouldBe Some(from)
     }
 
     "determine child's start date in a TFC period where child 11th birthday is in current period" in {
@@ -318,7 +318,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = TFCEligibility.eligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
-      result shouldBe from
+      result shouldBe Some(from)
     }
 
     "determine child's start date in a TFC period where child 11th birthday sept date is before current period" in {
@@ -330,9 +330,8 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = TFCEligibility.eligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
-      result shouldBe null
+      result shouldBe None
     }
-
 
     "determine child's start date in a TFC period where child 11th birthday sept date is after current period" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
@@ -343,7 +342,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = TFCEligibility.eligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
-      result shouldBe from
+      result shouldBe Some(from)
     }
 
     "determine child's start date in a TFC period where child 11th birthday sept date is within current period" in {
@@ -355,7 +354,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = TFCEligibility.eligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
-      result shouldBe from
+      result shouldBe Some(from)
     }
 
 
@@ -370,7 +369,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val childSeptDate = child.endWeek1stOfSeptemberDate(from, "england")
       LocalDate.fromDateFields(childSeptDate) shouldBe LocalDate.parse("2016-09-04", formatter)
       val result = TFCEligibility.eligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
-      result shouldBe null
+      result shouldBe None
     }
 
     "determine child's end date in a TFC period where the birthday after period end date" in {
@@ -382,7 +381,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = TFCEligibility.eligibility.determineChildEndDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
-      result shouldBe null
+      result shouldBe None
     }
 
     "determine child's end date in a TFC period where the birthday is on period until date" in {
@@ -394,7 +393,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = TFCEligibility.eligibility.determineChildEndDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
-      result shouldBe null
+      result shouldBe None
     }
 
     "determine child's end date in a TFC period where the birthday is within the TFC period" in {
@@ -406,7 +405,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = TFCEligibility.eligibility.determineChildEndDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
-      result shouldBe until
+      result shouldBe Some(until)
     }
 
     "determine child's end date in a TFC period where the birthday is before TFC period start date" in {
@@ -418,7 +417,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = TFCEligibility.eligibility.determineChildEndDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
-      result shouldBe until
+      result shouldBe Some(until)
     }
 
     "determine child's end date in a TFC period where the 11th birthday sept date is after TFC period until date" in {
@@ -430,7 +429,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = TFCEligibility.eligibility.determineChildEndDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
-      result shouldBe until
+      result shouldBe Some(until)
     }
 
     "determine child's end date in a TFC period where the 11th birthday sept date is within TFC period" in {
@@ -443,7 +442,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val childSeptDate = child.endWeek1stOfSeptemberDate(from, "england")
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = TFCEligibility.eligibility.determineChildEndDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
-      result shouldBe LocalDate.fromDateFields(childSeptDate)
+      result shouldBe Some(LocalDate.fromDateFields(childSeptDate))
     }
 
     "determine child's end date in a TFC period where the 11th birthday sept date is before TFC period" in {
@@ -455,7 +454,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         disability = Disability(disabled = false, severelyDisabled = false))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = TFCEligibility.eligibility.determineChildEndDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
-      result shouldBe null
+      result shouldBe None
     }
 
     "determine periods(2 period) based on from (claim date) and until date of TFC for one eligible child" in {
@@ -472,7 +471,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputClaimant = OutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1 = LocalDate.parse("2016-08-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-11-27", formatter)
-      val outputChild = OutputChild(id = 0, qualifying = false, null, null, false, false)
+      val outputChild = OutputChild(id = 0, qualifying = false, None, None, false, false)
 
       result shouldBe List(
         TFCPeriod(
@@ -498,8 +497,8 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         OutputChild(
           id = 2,
           qualifying = false,
-          from = null,
-          until = null,
+          from = None,
+          until = None,
           freeRollout = false,
           tfcRollout = false
         )
@@ -524,8 +523,8 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-      val outputChild1 = OutputChild(id = 0, qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = true)
-      val outputChild2 = OutputChild(id = 0, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0, qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = true)
+      val outputChild2 = OutputChild(id = 0, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
       result shouldBe List(
         TFCPeriod(
@@ -561,13 +560,13 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod2 = LocalDate.parse("2016-11-01", formatter)
       val untilPeriod2 = LocalDate.parse("2017-02-01", formatter)
 
-      val Period1OutputChild1 = OutputChild(id = 0, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period1OutputChild2 = OutputChild(id = 0, qualifying = false, from = null, until = null, freeRollout = true, tfcRollout = false)
-      val Period1OutputChild3 = OutputChild(id = 0, qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = true)
+      val Period1OutputChild1 = OutputChild(id = 0, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period1OutputChild2 = OutputChild(id = 0, qualifying = false, from = None, until = None, freeRollout = true, tfcRollout = false)
+      val Period1OutputChild3 = OutputChild(id = 0, qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = true)
 
-      val Period2OutputChild1 = OutputChild(id = 0, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period2OutputChild2 = OutputChild(id = 0, qualifying = true, from = dateOfBirthChild2, until = untilPeriod2, freeRollout = true, tfcRollout = true)
-      val Period2OutputChild3 = OutputChild(id = 0, qualifying = true, from = startPeriod2, until = untilPeriod2, freeRollout = false, tfcRollout = true)
+      val Period2OutputChild1 = OutputChild(id = 0, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period2OutputChild2 = OutputChild(id = 0, qualifying = true, from = Some(dateOfBirthChild2), until = Some(untilPeriod2), freeRollout = true, tfcRollout = true)
+      val Period2OutputChild3 = OutputChild(id = 0, qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), freeRollout = false, tfcRollout = true)
 
       result shouldBe List(
         TFCPeriod(
@@ -625,37 +624,37 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val child1EndDate = LocalDate.parse("2016-09-04", formatter)
       val child2EndDate = LocalDate.parse("2017-09-03", formatter)
 
-      val Period1OutputChild1 = OutputChild(id = 1, qualifying = true, from = startPeriod1, until = child1EndDate, freeRollout = false, tfcRollout = false)
-      val Period1OutputChild2 = OutputChild(id = 2, qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = true)
-      val Period1OutputChild3 = OutputChild(id = 3, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val Period1OutputChild1 = OutputChild(id = 1, qualifying = true, from = Some(startPeriod1), until = Some(child1EndDate), freeRollout = false, tfcRollout = false)
+      val Period1OutputChild2 = OutputChild(id = 2, qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = true)
+      val Period1OutputChild3 = OutputChild(id = 3, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
-      val Period2OutputChild1 = OutputChild(id = 1, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period2OutputChild2 = OutputChild(id = 2, qualifying = true, from = startPeriod2, until = untilPeriod2, freeRollout = false, tfcRollout = true)
-      val Period2OutputChild3 = OutputChild(id = 3, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val Period2OutputChild1 = OutputChild(id = 1, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period2OutputChild2 = OutputChild(id = 2, qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), freeRollout = false, tfcRollout = true)
+      val Period2OutputChild3 = OutputChild(id = 3, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
-      val Period3OutputChild1 = OutputChild(id = 1, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period3OutputChild2 = OutputChild(id = 2, qualifying = true, from = startPeriod3, until = untilPeriod3, freeRollout = false, tfcRollout = true)
-      val Period3OutputChild3 = OutputChild(id = 3, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val Period3OutputChild1 = OutputChild(id = 1, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period3OutputChild2 = OutputChild(id = 2, qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), freeRollout = false, tfcRollout = true)
+      val Period3OutputChild3 = OutputChild(id = 3, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
-      val Period4OutputChild1 = OutputChild(id = 1, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period4OutputChild2 = OutputChild(id = 2, qualifying = true, from = startPeriod4, until = untilPeriod4, freeRollout = false, tfcRollout = true)
-      val Period4OutputChild3 = OutputChild(id = 3, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val Period4OutputChild1 = OutputChild(id = 1, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period4OutputChild2 = OutputChild(id = 2, qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), freeRollout = false, tfcRollout = true)
+      val Period4OutputChild3 = OutputChild(id = 3, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
-      val Period5OutputChild1 = OutputChild(id = 1, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period5OutputChild2 = OutputChild(id = 2, qualifying = true, from = startPeriod5, until = child2EndDate, freeRollout = false, tfcRollout = true)
-      val Period5OutputChild3 = OutputChild(id = 3, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val Period5OutputChild1 = OutputChild(id = 1, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period5OutputChild2 = OutputChild(id = 2, qualifying = true, from = Some(startPeriod5), until = Some(child2EndDate), freeRollout = false, tfcRollout = true)
+      val Period5OutputChild3 = OutputChild(id = 3, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
-      val Period6OutputChild1 = OutputChild(id = 1, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period6OutputChild2 = OutputChild(id = 2, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period6OutputChild3 = OutputChild(id = 3, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val Period6OutputChild1 = OutputChild(id = 1, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period6OutputChild2 = OutputChild(id = 2, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period6OutputChild3 = OutputChild(id = 3, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
-      val Period7OutputChild1 = OutputChild(id = 1, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period7OutputChild2 = OutputChild(id = 2, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period7OutputChild3 = OutputChild(id = 3, qualifying = true, from = dateOfBirthChild3, until = untilPeriod7, freeRollout = false, tfcRollout = false)
+      val Period7OutputChild1 = OutputChild(id = 1, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period7OutputChild2 = OutputChild(id = 2, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period7OutputChild3 = OutputChild(id = 3, qualifying = true, from = Some(dateOfBirthChild3), until = Some(untilPeriod7), freeRollout = false, tfcRollout = false)
 
-      val Period8OutputChild1 = OutputChild(id = 1, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period8OutputChild2 = OutputChild(id = 2, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period8OutputChild3 = OutputChild(id = 3, qualifying = true, from = startPeriod8, until = untilPeriod8, freeRollout = false, tfcRollout = false)
+      val Period8OutputChild1 = OutputChild(id = 1, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period8OutputChild2 = OutputChild(id = 2, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period8OutputChild3 = OutputChild(id = 3, qualifying = true, from = Some(startPeriod8), until = Some(untilPeriod8), freeRollout = false, tfcRollout = false)
 
       result shouldBe List(
         TFCPeriod(
@@ -745,18 +744,17 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val child1EndDate = LocalDate.parse("2016-09-04", formatter)
 
-      val Period1OutputChild1 = OutputChild(id = 0, qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
-      val Period1OutputChild2 = OutputChild(id = 0, qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = true)
+      val Period1OutputChild1 = OutputChild(id = 0, qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
+      val Period1OutputChild2 = OutputChild(id = 0, qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = true)
 
-      val Period2OutputChild1 = OutputChild(id = 0, qualifying = true, from = startPeriod2, until = child1EndDate, freeRollout = false, tfcRollout = false)
-      val Period2OutputChild2 = OutputChild(id = 0, qualifying = true, from = startPeriod2, until = untilPeriod2, freeRollout = false, tfcRollout = true)
+      val Period2OutputChild1 = OutputChild(id = 0, qualifying = true, from = Some(startPeriod2), until = Some(child1EndDate), freeRollout = false, tfcRollout = false)
+      val Period2OutputChild2 = OutputChild(id = 0, qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), freeRollout = false, tfcRollout = true)
 
-      val Period3OutputChild1 = OutputChild(id = 0, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period3OutputChild2 = OutputChild(id = 0, qualifying = true, from = startPeriod3, until = untilPeriod3, freeRollout = false, tfcRollout = true)
+      val Period3OutputChild1 = OutputChild(id = 0, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period3OutputChild2 = OutputChild(id = 0, qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), freeRollout = false, tfcRollout = true)
 
-      val Period4OutputChild1 = OutputChild(id = 0, qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period4OutputChild2 = OutputChild(id = 0, qualifying = true, from = startPeriod4, until = untilPeriod4, freeRollout = false, tfcRollout = true)
-
+      val Period4OutputChild1 = OutputChild(id = 0, qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period4OutputChild2 = OutputChild(id = 0, qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), freeRollout = false, tfcRollout = true)
 
       result shouldBe List(
         TFCPeriod(
@@ -821,29 +819,29 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod6 = LocalDate.parse("2018-01-30", formatter)
       val untilPeriod6 = LocalDate.parse("2018-04-30", formatter)
 
-      val Period1OutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period1OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = true)
-      val Period1OutputChild3 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val Period1OutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period1OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = true)
+      val Period1OutputChild3 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
-      val Period2OutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period2OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod2, until = untilPeriod2, freeRollout = false, tfcRollout = true)
-      val Period2OutputChild3 = OutputChild(id = 0,  qualifying = true, from = startPeriod2, until = untilPeriod2, freeRollout = false, tfcRollout = false)
+      val Period2OutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period2OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), freeRollout = false, tfcRollout = true)
+      val Period2OutputChild3 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), freeRollout = false, tfcRollout = false)
 
-      val Period3OutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period3OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod3, until = untilPeriod3, freeRollout = false, tfcRollout = true)
-      val Period3OutputChild3 = OutputChild(id = 0,  qualifying = true, from = startPeriod3, until = untilPeriod3, freeRollout = false, tfcRollout = false)
+      val Period3OutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period3OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), freeRollout = false, tfcRollout = true)
+      val Period3OutputChild3 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), freeRollout = false, tfcRollout = false)
 
-      val Period4OutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period4OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod4, until = untilPeriod4, freeRollout = false, tfcRollout = true)
-      val Period4OutputChild3 = OutputChild(id = 0,  qualifying = true, from = startPeriod4, until = untilPeriod4, freeRollout = false, tfcRollout = false)
+      val Period4OutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period4OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), freeRollout = false, tfcRollout = true)
+      val Period4OutputChild3 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), freeRollout = false, tfcRollout = false)
 
-      val Period5OutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period5OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod5, until = untilPeriod5, freeRollout = false, tfcRollout = true)
-      val Period5OutputChild3 = OutputChild(id = 0,  qualifying = true, from = startPeriod5, until = untilPeriod5, freeRollout = false, tfcRollout = false)
+      val Period5OutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period5OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(untilPeriod5), freeRollout = false, tfcRollout = true)
+      val Period5OutputChild3 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(untilPeriod5), freeRollout = false, tfcRollout = false)
 
-      val Period6OutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period6OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod6, until = untilPeriod6, freeRollout = false, tfcRollout = true)
-      val Period6OutputChild3 = OutputChild(id = 0,  qualifying = true, from = startPeriod6, until = untilPeriod6, freeRollout = false, tfcRollout = false)
+      val Period6OutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period6OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod6), until = Some(untilPeriod6), freeRollout = false, tfcRollout = true)
+      val Period6OutputChild3 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod6), until = Some(untilPeriod6), freeRollout = false, tfcRollout = false)
 
       result shouldBe List(
         TFCPeriod(
@@ -922,14 +920,14 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val child1EndDate = LocalDate.parse("2017-09-03", formatter)
 
-      val Period1OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = child1EndDate, freeRollout = false, tfcRollout = false)
-      val Period1OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = true)
+      val Period1OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(child1EndDate), freeRollout = false, tfcRollout = false)
+      val Period1OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = true)
 
-      val Period2OutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period2OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod2, until = untilPeriod2, freeRollout = false, tfcRollout = true)
+      val Period2OutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period2OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), freeRollout = false, tfcRollout = true)
 
-      val Period3OutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period3OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod3, until = untilPeriod3, freeRollout = false, tfcRollout = true)
+      val Period3OutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period3OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), freeRollout = false, tfcRollout = true)
 
       result shouldBe List(
         TFCPeriod(
@@ -992,25 +990,25 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val untilPeriod5 = LocalDate.parse("2018-11-28", formatter)
       val child2EndDate = LocalDate.parse("2018-09-02", formatter)
 
-      val Period1OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = true)
-      val Period1OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
-      val Period1OutputChild3 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val Period1OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = true)
+      val Period1OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
+      val Period1OutputChild3 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
-      val Period2OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod2, until = untilPeriod2, freeRollout = false, tfcRollout = true)
-      val Period2OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod2, until = untilPeriod2, freeRollout = false, tfcRollout = false)
-      val Period2OutputChild3 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val Period2OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), freeRollout = false, tfcRollout = true)
+      val Period2OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), freeRollout = false, tfcRollout = false)
+      val Period2OutputChild3 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
-      val Period3OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod3, until = untilPeriod3, freeRollout = false, tfcRollout = true)
-      val Period3OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod3, until = untilPeriod3, freeRollout = false, tfcRollout = false)
-      val Period3OutputChild3 = OutputChild(id = 0,  qualifying = true, from = dateOfBirthChild3, until = untilPeriod3, freeRollout = false, tfcRollout = false)
+      val Period3OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), freeRollout = false, tfcRollout = true)
+      val Period3OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), freeRollout = false, tfcRollout = false)
+      val Period3OutputChild3 = OutputChild(id = 0,  qualifying = true, from = Some(dateOfBirthChild3), until = Some(untilPeriod3), freeRollout = false, tfcRollout = false)
 
-      val Period4OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod4, until = untilPeriod4, freeRollout = false, tfcRollout = true)
-      val Period4OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod4, until = untilPeriod4, freeRollout = false, tfcRollout = false)
-      val Period4OutputChild3 = OutputChild(id = 0,  qualifying = true, from = startPeriod4, until = untilPeriod4, freeRollout = false, tfcRollout = false)
+      val Period4OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), freeRollout = false, tfcRollout = true)
+      val Period4OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), freeRollout = false, tfcRollout = false)
+      val Period4OutputChild3 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), freeRollout = false, tfcRollout = false)
 
-      val Period5OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod5, until = untilPeriod5, freeRollout = false, tfcRollout = true)
-      val Period5OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod5, until = child2EndDate, freeRollout = false, tfcRollout = false)
-      val Period5OutputChild3 = OutputChild(id = 0,  qualifying = true, from = startPeriod5, until = untilPeriod5, freeRollout = false, tfcRollout = false)
+      val Period5OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(untilPeriod5), freeRollout = false, tfcRollout = true)
+      val Period5OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(child2EndDate), freeRollout = false, tfcRollout = false)
+      val Period5OutputChild3 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(untilPeriod5), freeRollout = false, tfcRollout = false)
 
       result shouldBe List(
         TFCPeriod(
@@ -1081,26 +1079,26 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod7 = LocalDate.parse("2017-07-15", formatter)
       val untilPeriod7 = LocalDate.parse("2017-10-15", formatter)
 
-      val Period1OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = true)
-      val Period1OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val Period1OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = true)
+      val Period1OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
-      val Period2OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod2, until = untilPeriod2, freeRollout = false, tfcRollout = true)
-      val Period2OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod2, until = untilPeriod2, freeRollout = false, tfcRollout = false)
+      val Period2OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), freeRollout = false, tfcRollout = true)
+      val Period2OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), freeRollout = false, tfcRollout = false)
 
-      val Period3OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod3, until = untilPeriod3, freeRollout = false, tfcRollout = true)
-      val Period3OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod3, until = untilPeriod3, freeRollout = false, tfcRollout = false)
+      val Period3OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), freeRollout = false, tfcRollout = true)
+      val Period3OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), freeRollout = false, tfcRollout = false)
 
-      val Period4OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod4, until = untilPeriod4, freeRollout = false, tfcRollout = true)
-      val Period4OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod4, until = untilPeriod4, freeRollout = false, tfcRollout = false)
+      val Period4OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), freeRollout = false, tfcRollout = true)
+      val Period4OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), freeRollout = false, tfcRollout = false)
 
-      val Period5OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod5, until = untilPeriod5, freeRollout = false, tfcRollout = true)
-      val Period5OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod5, until = untilPeriod5, freeRollout = false, tfcRollout = false)
+      val Period5OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(untilPeriod5), freeRollout = false, tfcRollout = true)
+      val Period5OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(untilPeriod5), freeRollout = false, tfcRollout = false)
 
-      val Period6OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod6, until = untilPeriod6, freeRollout = false, tfcRollout = true)
-      val Period6OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod6, until = untilPeriod6, freeRollout = false, tfcRollout = false)
+      val Period6OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod6), until = Some(untilPeriod6), freeRollout = false, tfcRollout = true)
+      val Period6OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod6), until = Some(untilPeriod6), freeRollout = false, tfcRollout = false)
 
-      val Period7OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod7, until = untilPeriod7, freeRollout = false, tfcRollout = true)
-      val Period7OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod7, until = untilPeriod7, freeRollout = false, tfcRollout = false)
+      val Period7OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod7), until = Some(untilPeriod7), freeRollout = false, tfcRollout = true)
+      val Period7OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod7), until = Some(untilPeriod7), freeRollout = false, tfcRollout = false)
 
       result shouldBe List(
         TFCPeriod(
@@ -1189,29 +1187,29 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val child2EndDate = LocalDate.parse("2017-09-03", formatter)
 
-      val Period1OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = true)
-      val Period1OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = true)
+      val Period1OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = true)
+      val Period1OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = true)
 
-      val Period2OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod2, until = untilPeriod2, freeRollout = false, tfcRollout = true)
-      val Period2OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod2, until = untilPeriod2, freeRollout = false, tfcRollout = true)
+      val Period2OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), freeRollout = false, tfcRollout = true)
+      val Period2OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), freeRollout = false, tfcRollout = true)
 
-      val Period3OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod3, until = untilPeriod3, freeRollout = false, tfcRollout = true)
-      val Period3OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod3, until = untilPeriod3, freeRollout = false, tfcRollout = true)
+      val Period3OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), freeRollout = false, tfcRollout = true)
+      val Period3OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), freeRollout = false, tfcRollout = true)
 
-      val Period4OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod4, until = untilPeriod4, freeRollout = false, tfcRollout = true)
-      val Period4OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod4, until = untilPeriod4, freeRollout = false, tfcRollout = true)
+      val Period4OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), freeRollout = false, tfcRollout = true)
+      val Period4OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), freeRollout = false, tfcRollout = true)
 
-      val Period5OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod5, until = untilPeriod5, freeRollout = false, tfcRollout = true)
-      val Period5OutputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod5, until = child2EndDate, freeRollout = false, tfcRollout = true)
+      val Period5OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(untilPeriod5), freeRollout = false, tfcRollout = true)
+      val Period5OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(child2EndDate), freeRollout = false, tfcRollout = true)
 
-      val Period6OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod6, until = untilPeriod6, freeRollout = false, tfcRollout = true)
-      val Period6OutputChild2 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val Period6OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod6), until = Some(untilPeriod6), freeRollout = false, tfcRollout = true)
+      val Period6OutputChild2 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
-      val Period7OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod7, until = untilPeriod7, freeRollout = false, tfcRollout = true)
-      val Period7OutputChild2 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val Period7OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod7), until = Some(untilPeriod7), freeRollout = false, tfcRollout = true)
+      val Period7OutputChild2 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
-      val Period8OutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod8, until = untilPeriod8, freeRollout = false, tfcRollout = true)
-      val Period8OutputChild2 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val Period8OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod8), until = Some(untilPeriod8), freeRollout = false, tfcRollout = true)
+      val Period8OutputChild2 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
       result shouldBe List(
         TFCPeriod(
@@ -1299,17 +1297,17 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod4 = LocalDate.parse("2017-02-23", formatter)
       val untilPeriod4 = LocalDate.parse("2017-05-23", formatter)
 
-      val Period1OutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period1OutputChild2 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = true, tfcRollout = false)
+      val Period1OutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period1OutputChild2 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = true, tfcRollout = false)
 
-      val Period2OutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period2OutputChild2 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = true, tfcRollout = false)
+      val Period2OutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period2OutputChild2 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = true, tfcRollout = false)
 
-      val Period3OutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period3OutputChild2 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = true, tfcRollout = false)
+      val Period3OutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period3OutputChild2 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = true, tfcRollout = false)
 
-      val Period4OutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period4OutputChild2 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = true, tfcRollout = false)
+      val Period4OutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period4OutputChild2 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = true, tfcRollout = false)
 
       result shouldBe List(
         TFCPeriod(
@@ -1369,17 +1367,17 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod4 = LocalDate.parse("2017-02-28", formatter)
       val untilPeriod4 = LocalDate.parse("2017-05-28", formatter)
 
-      val Period1OutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period1OutputChild2 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val Period1OutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period1OutputChild2 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
-      val Period2OutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period2OutputChild2 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val Period2OutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period2OutputChild2 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
-      val Period3OutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period3OutputChild2 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val Period3OutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period3OutputChild2 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
-      val Period4OutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val Period4OutputChild2 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val Period4OutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val Period4OutputChild2 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
       result shouldBe List(
         TFCPeriod(
@@ -1419,7 +1417,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
       val result = TFCEligibility.eligibility.determinePeriodEligibility(List(outputClaimant), List(outputChild1))
 
@@ -1435,7 +1433,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
       val result = TFCEligibility.eligibility.determinePeriodEligibility(List(outputClaimant, outputClaimant1), List(outputChild1))
 
@@ -1450,7 +1448,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
       val result = TFCEligibility.eligibility.determinePeriodEligibility(List(outputClaimant, outputClaimant1), List(outputChild1))
 
@@ -1465,7 +1463,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
       val result = TFCEligibility.eligibility.determinePeriodEligibility(List(outputClaimant, outputClaimant1), List(outputChild1))
 
@@ -1480,7 +1478,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-      val outputChild1 = OutputChild(id = 0,  qualifying = false, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0,  qualifying = false, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
       val result = TFCEligibility.eligibility.determinePeriodEligibility(List(outputClaimant, outputClaimant1), List(outputChild1))
 
@@ -1495,7 +1493,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-      val outputChild1 = OutputChild(id = 0,  qualifying = false, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0,  qualifying = false, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
       val result = TFCEligibility.eligibility.determinePeriodEligibility(List(outputClaimant, outputClaimant1), List(outputChild1))
 
@@ -1508,7 +1506,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-      val outputChild1 = OutputChild(id = 0,  qualifying = false, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0,  qualifying = false, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
       val result = TFCEligibility.eligibility.determinePeriodEligibility(List(outputClaimant), List(outputChild1))
 
@@ -1522,7 +1520,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
       val result = TFCEligibility.eligibility.determinePeriodEligibility(List(outputClaimant), List(outputChild1))
 
@@ -1536,7 +1534,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-      val outputChild1 = OutputChild(id = 0,  qualifying = false, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0,  qualifying = false, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
       val result = TFCEligibility.eligibility.determinePeriodEligibility(List(outputClaimant), List(outputChild1))
 
@@ -1549,9 +1547,9 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
-      val outputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
       val result = TFCEligibility.eligibility.determinePeriodEligibility(List(outputClaimant), List(outputChild1, outputChild2))
 
@@ -1564,9 +1562,9 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-      val outputChild1 = OutputChild(id = 0,  qualifying = false, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0,  qualifying = false, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
-      val outputChild2 = OutputChild(id = 0,  qualifying = false, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild2 = OutputChild(id = 0,  qualifying = false, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
       val result = TFCEligibility.eligibility.determinePeriodEligibility(List(outputClaimant), List(outputChild1, outputChild2))
 
@@ -1579,9 +1577,9 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
-      val outputChild2 = OutputChild(id = 0,  qualifying = false, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild2 = OutputChild(id = 0,  qualifying = false, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
       val result = TFCEligibility.eligibility.determinePeriodEligibility(List(outputClaimant), List(outputChild1, outputChild2))
 
@@ -1596,9 +1594,9 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
-      val outputChild2 = OutputChild(id = 0,  qualifying = false, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild2 = OutputChild(id = 0,  qualifying = false, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
       val result = TFCEligibility.eligibility.determinePeriodEligibility(List(outputClaimant, outputClaimant1), List(outputChild1, outputChild2))
 
@@ -1613,9 +1611,9 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
-      val outputChild2 = OutputChild(id = 0,  qualifying = false, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild2 = OutputChild(id = 0,  qualifying = false, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
       val result = TFCEligibility.eligibility.determinePeriodEligibility(List(outputClaimant, outputClaimant1), List(outputChild1, outputChild2))
 
@@ -1630,11 +1628,11 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
-      val outputChild2 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
-      val outputChild3 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild3 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
       val result = TFCEligibility.eligibility.determinePeriodEligibility(List(outputClaimant, outputClaimant1), List(outputChild1, outputChild2, outputChild3))
 
@@ -1649,11 +1647,11 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-      val outputChild1 = OutputChild(id = 0,  qualifying = false, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild1 = OutputChild(id = 0,  qualifying = false, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
-      val outputChild2 = OutputChild(id = 0,  qualifying = false, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild2 = OutputChild(id = 0,  qualifying = false, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
-      val outputChild3 = OutputChild(id = 0,  qualifying = false, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val outputChild3 = OutputChild(id = 0,  qualifying = false, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
       val result = TFCEligibility.eligibility.determinePeriodEligibility(List(outputClaimant, outputClaimant1), List(outputChild1, outputChild2, outputChild3))
 
@@ -1674,7 +1672,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val outputClaimant = OutputClaimant(qualifying = false, isPartner = false)
       val startPeriod = LocalDate.parse("2016-03-30", formatter)
       val untilPeriod = LocalDate.parse("2016-06-30", formatter)
-      val PeriodOutputChild = OutputChild(id = 0,  qualifying = true, from = startPeriod, until = untilPeriod, freeRollout = false, tfcRollout = false)
+      val PeriodOutputChild = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod), until = Some(untilPeriod), freeRollout = false, tfcRollout = false)
       val tfcPeriods = List(TFCPeriod(from = startPeriod, until = untilPeriod, periodEligibility = false, claimants = List(outputClaimant), children = List(PeriodOutputChild)))
       val tfcEligibilityModel = TFCEligibilityModel(from = from, until = tfcPeriods.last.until, householdEligibility = false, periods = tfcPeriods, freeRollout = false, tfcRollout = false)
       val eligibilityOutputModel = Eligibility(tfc = Some(tfcEligibilityModel))
@@ -1699,8 +1697,8 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-30", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-30", formatter)
       val septDate = LocalDate.parse("2016-09-04", formatter)
-      val PeriodOutputChild = OutputChild(id = 0,  qualifying = true, from = startPeriod, until = septDate, freeRollout = false, tfcRollout = false)
-      val PeriodOutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val PeriodOutputChild = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod), until = Some(septDate), freeRollout = false, tfcRollout = false)
+      val PeriodOutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
       val tfcPeriods = List(
         TFCPeriod(from = startPeriod,
@@ -1738,8 +1736,8 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-09-30", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-30", formatter)
 
-      val PeriodOutputChild = OutputChild(id = 0,  qualifying = true, from = startPeriod, until = untilPeriod, freeRollout = false, tfcRollout = false)
-      val PeriodOutputChild1 = OutputChild(id = 0,  qualifying = true, from = startPeriod1, until = untilPeriod1, freeRollout = false, tfcRollout = false)
+      val PeriodOutputChild = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod), until = Some(untilPeriod), freeRollout = false, tfcRollout = false)
+      val PeriodOutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), freeRollout = false, tfcRollout = false)
 
       val tfcPeriods = List(
         TFCPeriod(from = startPeriod,
@@ -1777,9 +1775,9 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val startPeriod2 = LocalDate.parse("2016-12-30", formatter)
       val untilPeriod2 = LocalDate.parse("2017-03-30", formatter)
 
-      val PeriodOutputChild = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val PeriodOutputChild1 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
-      val PeriodOutputChild2 = OutputChild(id = 0,  qualifying = false, from = null, until = null, freeRollout = false, tfcRollout = false)
+      val PeriodOutputChild = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val PeriodOutputChild1 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
+      val PeriodOutputChild2 = OutputChild(id = 0,  qualifying = false, from = None, until = None, freeRollout = false, tfcRollout = false)
 
       val tfcPeriods = List(
         TFCPeriod(from = startPeriod,
