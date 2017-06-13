@@ -39,38 +39,32 @@ val eligibility = new TFCEligibilityService
     import scala.concurrent.ExecutionContext.Implicits.global
     val auditEvents: AuditEvents = AuditEvents
 
-    def determineChildStartDateInTFCPeriod(child: models.input.tfc.Child, periodFrom : LocalDate, periodUntil: LocalDate, location: String) : LocalDate = {
+    def determineChildStartDateInTFCPeriod(child: models.input.tfc.Child, periodFrom : LocalDate, periodUntil: LocalDate, location: String): Option[LocalDate] = {
       val childDob : java.util.Date = child.dob.toDate
       val childBirthdaySeptDate : java.util.Date = child.endWeek1stOfSeptemberDate(periodFrom, location)
 
       childDob match {
         case dob if(dob.before(periodFrom.toDate)) =>
           childBirthdaySeptDate match {
-            case septDate if septDate.after(periodFrom.toDate) =>
-              periodFrom
-            case _ => null
+            case septDate if septDate.after(periodFrom.toDate) => Some(periodFrom)
+            case _ => None
           }
-        case dob if(dob.before(periodUntil.toDate)) =>
-          child.dob
-        case _ => null
+        case dob if(dob.before(periodUntil.toDate)) => Some(child.dob)
+        case _ => None
       }
     }
 
-    def determineChildEndDateInTFCPeriod(child: models.input.tfc.Child, periodFrom : LocalDate, periodUntil: LocalDate, location: String) : LocalDate = {
+    def determineChildEndDateInTFCPeriod(child: models.input.tfc.Child, periodFrom : LocalDate, periodUntil: LocalDate, location: String): Option[LocalDate] = {
       val childDob : java.util.Date = child.dob.toDate
       val childBirthdaySeptDate : java.util.Date = child.endWeek1stOfSeptemberDate(periodFrom, location)
 
       childDob match {
-        case dob if(dob.after(periodUntil.toDate) || dob.equals(periodUntil.toDate)) =>
-          null
+        case dob if(dob.after(periodUntil.toDate) || dob.equals(periodUntil.toDate)) => None
         case _ =>
           childBirthdaySeptDate match {
-            case septDate if septDate.after(periodUntil.toDate) =>
-              periodUntil
-            case septDate if septDate.after(periodFrom.toDate) =>
-              LocalDate.fromDateFields(septDate)
-            case _ =>
-              null
+            case septDate if septDate.after(periodUntil.toDate) => Some(periodUntil)
+            case septDate if septDate.after(periodFrom.toDate) => Some(LocalDate.fromDateFields(septDate))
+            case _ => None
           }
       }
     }
@@ -117,8 +111,7 @@ val eligibility = new TFCEligibilityService
       for(child <- children) yield {
         val qualifyStartDate = determineChildStartDateInTFCPeriod(child, periodFrom, periodUntil, location)
         val qualifyEndDate = determineChildEndDateInTFCPeriod(child, periodFrom, periodUntil, location)
-        val childEligibility = !(qualifyStartDate == null) && !(qualifyEndDate == null)
-
+        val childEligibility = qualifyStartDate.isDefined && qualifyEndDate.isDefined
         OutputChild(
           id = child.id,
           qualifying = childEligibility,

@@ -146,7 +146,8 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                         ],
                         "children": [
                           {
-                            "id": 0,                            "childcareCost": 200.0,
+                            "id": 0,
+                            "childcareCost": 200.0,
                             "childcareCostPeriod": "Month",
                             "qualifying": true,
                             "childElements": {
@@ -185,8 +186,8 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
       val outputUntilPeriod1 = LocalDate.parse("2015-09-30", formatter)
       val outputStartPeriod2 = LocalDate.parse("2015-09-30", formatter)
       val outputUntilPeriod2 = LocalDate.parse("2015-12-30", formatter)
-      val outputPeriodChild1 = models.output.tfc.OutputChild(id = 0, qualifying = true, from = outputStartPeriod1, until = outputUntilPeriod1, freeRollout = false, tfcRollout = false)
-      val outputPeriodChild2 = models.output.tfc.OutputChild(id = 0, qualifying = true, from = outputStartPeriod2, until = outputUntilPeriod2, freeRollout = false, tfcRollout = false)
+      val outputPeriodChild1 = models.output.tfc.OutputChild(id = 0, qualifying = true, from = Some(outputStartPeriod1), until = Some(outputUntilPeriod1), freeRollout = false, tfcRollout = false)
+      val outputPeriodChild2 = models.output.tfc.OutputChild(id = 0, qualifying = true, from = Some(outputStartPeriod2), until = Some(outputUntilPeriod2), freeRollout = false, tfcRollout = false)
 
       val tfcPeriods = List(
         TFCPeriod(from = outputStartPeriod1,
@@ -308,10 +309,8 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
       )
 
       val outputTaxYear = models.output.esc.TaxYear(from = periodStart, until = periodEnd, periods = escPeriods)
-
       val escEligibilityModel = ESCEligibilityModel(taxYears = List(outputTaxYear))
       val eligibilityOutputModel = Eligibility(esc = Some(escEligibilityModel))
-
 
       val outputJson = Json.parse(
         s"""

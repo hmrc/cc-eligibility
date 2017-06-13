@@ -23,8 +23,6 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "from" : null,
-              "until" : null,
               "freeRollout": true,
               "tfcRollout": false
             }

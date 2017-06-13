@@ -35,24 +35,18 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "from" :  null,
-              "until" : null,
               "freeRollout": true,
               "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
-              "from" :  null,
-              "until" : null,
               "freeRollout": true,
               "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
-              "from" :  null,
-              "until" : null,
               "freeRollout": false,
               "tfcRollout": false
             }
@@ -84,24 +78,18 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "from" :null,
-              "until" : null,
               "freeRollout": true,
               "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
-              "from" :null,
-              "until" : null,
               "freeRollout": true,
               "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
-              "from" :null,
-              "until" : null,
               "freeRollout": false,
               "tfcRollout": false
             }
@@ -149,8 +137,6 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "from" : null,
-              "until" : null,
               "freeRollout": false,
               "tfcRollout": false
             }
@@ -198,8 +184,6 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "from" : null,
-              "until" : null,
               "freeRollout": false,
               "tfcRollout": false
             }
@@ -223,8 +207,6 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "from" : null,
-              "until" : null,
               "freeRollout": false,
               "tfcRollout": false
             },
@@ -247,8 +229,6 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "from" : null,
-              "until" : null,
               "freeRollout": false,
               "tfcRollout": false
             }
@@ -272,8 +252,6 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "from" : null,
-              "until" : null,
               "freeRollout": false,
               "tfcRollout": false
             },
@@ -321,8 +299,6 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "from" : null,
-              "until" : null,
               "freeRollout": false,
               "tfcRollout": false
             },
@@ -370,8 +346,6 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "from" : null,
-              "until" : null,
               "freeRollout": false,
               "tfcRollout": false
             },
