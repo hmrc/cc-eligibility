@@ -6,6 +6,8 @@ POST    /tax-free-childcare/eligibility             controllers.tfc.TFCEligibili
 
 POST    /employer-supported-childcare/eligibility   controllers.esc.ESCEligibilityController.eligible
 
+POST    /free-entitlement/eligibility               controllers.freeEntitlement.FreeEntitlementController.eligible
+
 ##########################################################################################################
 
 
