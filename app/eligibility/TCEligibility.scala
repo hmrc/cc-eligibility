@@ -165,36 +165,6 @@ trait TCEligibility extends CCEligibility {
         }
     }
 
-    // TODO: Move to calculator
-//    def calculateIncomeDisregard(currentIncome : BigDecimal, previousTotalIncome : BigDecimal,periodStart : LocalDate) : BigDecimal = {
-//      val taxYearConfig = TCConfig.getConfig(periodStart)
-//      val incomeDisregard = if(currentIncome < previousTotalIncome) { // if current income falls
-//        val incomeDifferenceComparison: BigDecimal = taxYearConfig.currentIncomeFallDifferenceAmount
-//        val incomeDifference: BigDecimal = previousTotalIncome - currentIncome
-//
-//        if (incomeDifference > incomeDifferenceComparison){
-//          val disregard: BigDecimal = incomeDifference - incomeDifferenceComparison
-//          previousTotalIncome - disregard
-//        } else {
-//          previousTotalIncome
-//        }
-//      } else if (currentIncome > previousTotalIncome){ // if current income rises
-//      val incomeDifferenceComparison: BigDecimal = taxYearConfig.currentIncomeRiseDifferenceAmount
-//        val incomeDifference: BigDecimal = currentIncome - previousTotalIncome
-//
-//        if (incomeDifference > incomeDifferenceComparison){
-//          val disregard: BigDecimal = incomeDifference - incomeDifferenceComparison
-//          previousTotalIncome + disregard
-//        } else {
-//          previousTotalIncome
-//        }
-//      } else { // if both incomes are equal
-//        currentIncome
-//      }
-//      incomeDisregard
-//    }
-
-    //TODO maybe to check for this at the controller level before all element check?
     def isEligibleForTC(listOfTaxYears : List[models.output.tc.TaxYear]) : Boolean = {
       listOfTaxYears.exists(_.periods.exists(period => period.householdElements.wtc && period.householdElements.ctc))
     }

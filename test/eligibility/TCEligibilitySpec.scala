@@ -688,63 +688,6 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       }
     }
 
-    // TODO: Move these tests to calculator
-//
-//    "calculate income disregard (current income fall > £2500)" in {
-//      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-//      val periodStartDate = LocalDate.parse("2017-08-31", formatter)
-//
-//      val currentIncome = BigDecimal(12001.00)
-//      val previousIncome = BigDecimal(15000.00)
-//
-//      val result = TCEligibility.eligibility.calculateIncomeDisregard(currentIncome, previousIncome, periodStartDate)
-//      result shouldBe BigDecimal(14501.00)
-//    }
-//
-//    "calculate income disregard (current income fall <= £2500)" in {
-//      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-//      val periodStartDate = LocalDate.parse("2017-08-31", formatter)
-//
-//      val currentIncome = BigDecimal(14000.00)
-//      val previousIncome = BigDecimal(15000.00)
-//
-//      val result = TCEligibility.eligibility.calculateIncomeDisregard(currentIncome, previousIncome, periodStartDate)
-//      result shouldBe BigDecimal(15000.00)
-//    }
-//
-//    "calculate income disregard (current income rise > £2500)" in {
-//      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-//      val periodStartDate = LocalDate.parse("2017-08-31", formatter)
-//
-//      val currentIncome = BigDecimal(26000.00)
-//      val previousIncome = BigDecimal(20010.00)
-//
-//      val result = TCEligibility.eligibility.calculateIncomeDisregard(currentIncome, previousIncome, periodStartDate)
-//      result shouldBe BigDecimal(23500.00)
-//    }
-//
-//    "calculate income disregard (current income rise <= £2500)" in {
-//      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-//      val periodStartDate = LocalDate.parse("2017-08-31", formatter)
-//
-//      val currentIncome = BigDecimal(21000.00)
-//      val previousIncome = BigDecimal(20010.00)
-//
-//      val result = TCEligibility.eligibility.calculateIncomeDisregard(currentIncome, previousIncome, periodStartDate)
-//      result shouldBe BigDecimal(20010.00)
-//    }
-//
-//    "calculate income disregard (current income is equal to previous income )" in {
-//      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-//      val periodStartDate = LocalDate.parse("2017-08-31", formatter)
-//
-//      val currentIncome = BigDecimal(25000.32412)
-//      val previousIncome = BigDecimal(25000.32412)
-//
-//      val result = TCEligibility.eligibility.calculateIncomeDisregard(currentIncome, previousIncome, periodStartDate)
-//      result shouldBe BigDecimal(25000.32412)
-//    }
-
     "populate the child's elements model for a period (3 children: 1st < 16, 2nd is 15, 3rd is 19)" in {
       val dateOfBirth1 = LocalDate.parse("2004-08-31", formatter)
       val dateOfBirth2 = LocalDate.parse("2001-08-31", formatter)
