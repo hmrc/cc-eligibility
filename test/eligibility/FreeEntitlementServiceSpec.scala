@@ -26,19 +26,20 @@ class FreeEntitlementServiceSpec extends UnitSpec {
   "FreeEntitlementService" should {
     "return eligibility" in {
 
-      val res = await(FreeEntitlementService.eligibility(FreeEntitlementPayload("England",
+      val res = await(FreeEntitlementService.eligibility(FreeEntitlementPayload("england",
         List(LocalDate.now()))))
 
-      res shouldBe FreeEntitlementPageModel(region = "England")
+      res shouldBe FreeEntitlementPageModel(region = "england")
     }
 
     "return eligibility for 2 3 4 year old child eligibility" in {
 
-      val res = await(FreeEntitlementService.eligibility(FreeEntitlementPayload("England",
+      val res = await(FreeEntitlementService.eligibility(FreeEntitlementPayload("england",
         List(LocalDate.now().minusYears(2), LocalDate.now().minusYears(3), LocalDate.now().minusYears(4)))))
 
       res shouldBe FreeEntitlementPageModel(twoYearOld = true,
-        threeYearOld = true, fourYearOld = true, threeFourYearOldSep2017 = true, region = "England")
+        threeYearOld = true, fourYearOld = true, threeFourYearOldSep2017 = true,
+        region = "england", isFifteenHours = true)
     }
   }
 }

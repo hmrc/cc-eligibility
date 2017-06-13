@@ -71,11 +71,11 @@ trait AuditEvents {
     auditEvent("HouseholdMinimumEarnings", Map(s"$user-selfEmployedin1stYear" -> data.toString))
   }
 
-  def auditFreeEntitlmentRequest(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+  def auditFreeEntitlementRequest(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
     auditEvent("FreeEntitlmentRequest", Map("FreeEntitlmentRequest" -> data.toString))
   }
 
-  def auditFreeEntitlmentResponse(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+  def auditFreeEntitlementResponse(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
     auditEvent("FreeEntitlmentResponse", Map("FreeEntitlmentResponse" -> data.toString))
   }
 

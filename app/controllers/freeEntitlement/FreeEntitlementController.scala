@@ -47,10 +47,10 @@ trait FreeEntitlementController extends BaseController {
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
-          auditEvent.auditFreeEntitlmentRequest(result.toString)
+          auditEvent.auditFreeEntitlementRequest(result.toString)
           freeHoursService.eligibility(result).map {
             response =>
-              auditEvent.auditFreeEntitlmentResponse(Json.toJson(response).toString())
+              auditEvent.auditFreeEntitlementResponse(Json.toJson(response).toString())
               Ok(Json.toJson(response))
           } recover {
             case e: Exception =>

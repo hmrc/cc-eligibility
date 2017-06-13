@@ -23,8 +23,8 @@ import models.input.freeEntitlement.FreeEntitlementPayload
 import models.output.freeEntitlement.FreeEntitlementPageModel
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import scala.concurrent.ExecutionContext.Implicits.global
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 trait FreeEntitlementService {
@@ -48,18 +48,42 @@ object FreeEntitlementService extends FreeEntitlementService {
         age(x, currentDate = firstSept2017) == ConfigConstants.freeEntitlementFourYearOld
     )
 
+    val twoYearOld = hasChildAtAge(ConfigConstants.freeEntitlementTwoYearOld)
+
+    val threeYearOld = hasChildAtAge(ConfigConstants.freeEntitlementThreeYearOld)
+
+    val fourYearOld = hasChildAtAge(ConfigConstants.freeEntitlementFourYearOld)
+
+    val location = request.claimantLocation
+
+    val isFifteenHours: Boolean = {
+      location match {
+        case "england" => (twoYearOld || threeYearOld || fourYearOld || threeFourYearOldSep2017)
+        case "scotland" => (twoYearOld || threeYearOld || fourYearOld)
+        case "northern-ireland" => threeYearOld
+        case "wales" => (twoYearOld || threeYearOld)
+        case _ => false
+      }
+    }
+
     Future {
       FreeEntitlementPageModel(
-        twoYearOld = hasChildAtAge(ConfigConstants.freeEntitlementTwoYearOld),
-        threeYearOld = hasChildAtAge(ConfigConstants.freeEntitlementThreeYearOld),
-        fourYearOld = hasChildAtAge(ConfigConstants.freeEntitlementFourYearOld),
+        twoYearOld = twoYearOld,
+        threeYearOld = threeYearOld,
+        fourYearOld = fourYearOld,
         threeFourYearOldSep2017 = threeFourYearOldSep2017,
-        region = request.claimantLocation
-        //tfcEligibility = false, //need implementation
-        //freeEntitlementRollout = false //need implementation
+        region = location,
+        tfcEligibility = getTFCEligibility,
+        freeEntitlementRollout = getRollout,
+        isFifteenHours = isFifteenHours,
+        isThirtyHours = false
       )
     }
   }
+
+  private def getTFCEligibility: Boolean = false
+
+  private def getRollout: Boolean = false
 
   private def age(dob: LocalDate, currentDate: LocalDate = LocalDate.now()): Int = {
     val dobCalendar: Calendar = Calendar.getInstance()

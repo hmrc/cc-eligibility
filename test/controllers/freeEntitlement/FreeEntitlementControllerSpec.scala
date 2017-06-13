@@ -52,7 +52,7 @@ class FreeEntitlementControllerSpec extends UnitSpec with OneAppPerSuite with Mo
         override val auditEvent: AuditEvents = mock[AuditEvents]
       }
 
-      val inputJson = Json.toJson(FreeEntitlementPayload("England", List()))
+      val inputJson = Json.toJson(FreeEntitlementPayload("england", List()))
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(testController.freeHoursService.eligibility(any())).thenReturn(Future.successful(FreeEntitlementPageModel()))
