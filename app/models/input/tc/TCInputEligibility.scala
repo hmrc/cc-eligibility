@@ -48,8 +48,6 @@ object Payload extends MessagesObject {
 case class TaxYear(
                     from: LocalDate,
                     until: LocalDate,
-                    totalIncome: BigDecimal,
-                    previousTotalIncome: BigDecimal,
                     claimants: List[Claimant],
                     children: List[Child]
                   ) extends models.input.BaseTaxYear {
@@ -173,15 +171,9 @@ object TaxYear extends CCFormat with MessagesObject {
     noOfClaimant.length > 0 && noOfClaimant.length < 3
   }
 
-  def validateIncome(income: BigDecimal): Boolean = {
-    income >= BigDecimal(0.00)
-  }
-
   implicit val taxYearReads: Reads[TaxYear] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
-      (JsPath \ "totalIncome").read[BigDecimal].filter(ValidationError(messages("cc.elig.income.less.than.0")))(validateIncome(_)) and
-      (JsPath \ "previousTotalIncome").read[BigDecimal].filter(ValidationError(messages("cc.elig.income.less.than.0")))(validateIncome(_)) and
       (JsPath \ "claimants").read[List[Claimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
       (JsPath \ "children").read[List[Child]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
     ) (TaxYear.apply _)
