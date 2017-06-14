@@ -103,34 +103,6 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
       status(result) shouldBe Status.BAD_REQUEST
     }
 
-    "Accept invalid json if total income is less than 0 and return Bad request" in {
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility = mock[TCEligibilityService]
-        override val auditEvent = mock[AuditEvents]
-      }
-
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/negative_income.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
-      val result = await(controller.eligible(request))
-      status(result) shouldBe Status.BAD_REQUEST
-    }
-
-    "Accept invalid json if total previous income is less than 0 and return Bad request" in {
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility = mock[TCEligibilityService]
-        override val auditEvent = mock[AuditEvents]
-      }
-
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/negative_previous_income.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
-      val result = await(controller.eligible(request))
-      status(result) shouldBe Status.BAD_REQUEST
-    }
-
     "Accept invalid json if child id has negative value should return 400" in {
       val controller = new TCEligibilityController with TCEligibility {
         override val eligibility = mock[TCEligibilityService]
@@ -228,8 +200,6 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
                   {
                     "from": "${periodStartDate.toString("yyyy-MM-dd")}",
                     "until": "${periodEndDate.toString("yyyy-MM-dd")}",
-                    "houseHoldIncome": 0.00,
-
                     "periods": [
                       {
                         "from": "${periodStartDate.toString("yyyy-MM-dd")}",
@@ -256,7 +226,8 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
                         ],
                         "children": [
                           {
-                            "id": 0,                            "childcareCost": 3000.00,
+                            "id": 0,
+                            "childcareCost": 3000.00,
                             "childcareCostPeriod": "Month",
                             "qualifying": false,
                             "childElements": {

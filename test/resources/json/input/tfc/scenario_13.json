@@ -20,6 +20,9 @@
           }
         },
         {
+          "currentIncome": {
+            "employmentIncome": 1199999.0
+          },
           "hoursPerWeek": 5.00,
           "isPartner": true,
           "location": "england",

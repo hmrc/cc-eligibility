@@ -19,7 +19,7 @@
               "isPartner" : false
             },
             {
-              "qualifying" : true,
+              "qualifying" : false,
               "isPartner" : true
             }
           ],

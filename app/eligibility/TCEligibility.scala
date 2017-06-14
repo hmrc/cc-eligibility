@@ -155,49 +155,16 @@ trait TCEligibility extends CCEligibility {
       periods
     }
 
-    private def constructTaxYearsWithPeriods(request : models.input.tc.Request) : List[models.output.tc.TaxYear] = {
-      val taxYears : List[models.input.tc.TaxYear] = request.payload.taxYears
-      val constructedTaxYears : List[models.output.tc.TaxYear] = for (ty <- taxYears) yield {
-        val incomeWithDisregard = calculateIncomeDisregard(ty.totalIncome, ty.previousTotalIncome, ty.from)
+    private def constructTaxYearsWithPeriods(request: models.input.tc.Request): List[models.output.tc.TaxYear] = {
+      for (ty <- request.payload.taxYears) yield {
           models.output.tc.TaxYear(
             from = ty.from,
             until = ty.until,
-            houseHoldIncome = incomeWithDisregard,
             periods = determinePeriodsForTaxYear(ty)
           )
         }
-      constructedTaxYears
     }
 
-    def calculateIncomeDisregard(currentIncome : BigDecimal, previousTotalIncome : BigDecimal,periodStart : LocalDate) : BigDecimal = {
-      val taxYearConfig = TCConfig.getConfig(periodStart)
-      val incomeDisregard = if(currentIncome < previousTotalIncome) { // if current income falls
-        val incomeDifferenceComparison: BigDecimal = taxYearConfig.currentIncomeFallDifferenceAmount
-        val incomeDifference: BigDecimal = previousTotalIncome - currentIncome
-
-        if (incomeDifference > incomeDifferenceComparison){
-          val disregard: BigDecimal = incomeDifference - incomeDifferenceComparison
-          previousTotalIncome - disregard
-        } else {
-          previousTotalIncome
-        }
-      } else if (currentIncome > previousTotalIncome){ // if current income rises
-      val incomeDifferenceComparison: BigDecimal = taxYearConfig.currentIncomeRiseDifferenceAmount
-        val incomeDifference: BigDecimal = currentIncome - previousTotalIncome
-
-        if (incomeDifference > incomeDifferenceComparison){
-          val disregard: BigDecimal = incomeDifference - incomeDifferenceComparison
-          previousTotalIncome + disregard
-        } else {
-          previousTotalIncome
-        }
-      } else { // if both incomes are equal
-        currentIncome
-      }
-      incomeDisregard
-    }
-
-    //TODO maybe to check for this at the controller level before all element check?
     def isEligibleForTC(listOfTaxYears : List[models.output.tc.TaxYear]) : Boolean = {
       listOfTaxYears.exists(_.periods.exists(period => period.householdElements.wtc && period.householdElements.ctc))
     }

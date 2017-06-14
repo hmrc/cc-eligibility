@@ -3,9 +3,7 @@
       "taxYears": [
           {
               "from": "2016-08-27",
-              "until": "2017-04-06",
-              "totalIncome": 0.00,
-              "previousTotalIncome": 0.00
+              "until": "2017-04-06"
           }
       ]
   }
