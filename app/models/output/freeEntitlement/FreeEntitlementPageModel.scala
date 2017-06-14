@@ -24,8 +24,6 @@ case class FreeEntitlementPageModel (
                                       fourYearOld : Boolean = false,
                                       threeFourYearOldSep2017 : Boolean = false,
                                       region : String = "",
-                                      tfcEligibility : Boolean = false,
-                                      freeEntitlementRollout: Boolean = false,
                                       isFifteenHours: Boolean = false,
                                       isThirtyHours: Boolean = false
                                     )

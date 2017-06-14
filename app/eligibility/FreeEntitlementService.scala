@@ -73,17 +73,10 @@ object FreeEntitlementService extends FreeEntitlementService {
         fourYearOld = fourYearOld,
         threeFourYearOldSep2017 = threeFourYearOldSep2017,
         region = location,
-        tfcEligibility = getTFCEligibility,
-        freeEntitlementRollout = getRollout,
-        isFifteenHours = isFifteenHours,
-        isThirtyHours = false
+        isFifteenHours = isFifteenHours
       )
     }
   }
-
-  private def getTFCEligibility: Boolean = false
-
-  private def getRollout: Boolean = false
 
   private def age(dob: LocalDate, currentDate: LocalDate = LocalDate.now()): Int = {
     val dobCalendar: Calendar = Calendar.getInstance()

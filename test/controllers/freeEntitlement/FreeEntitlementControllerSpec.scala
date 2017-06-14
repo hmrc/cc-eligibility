@@ -38,7 +38,7 @@ class FreeEntitlementControllerSpec extends UnitSpec with OneAppPerSuite with Mo
   "FreeEntitlementController" should {
 
     "not return NOT_FOUND endpoint" in {
-      val result = route(app, FakeRequest(POST, "/cc-eligibility/free-entitlement/eligibility"))
+      val result = route(app, FakeRequest(POST, "/cc-eligibility/fifteen-hours-entitlement/eligibility"))
       result.isDefined shouldBe true
       status(result.get) should not be NOT_FOUND
     }

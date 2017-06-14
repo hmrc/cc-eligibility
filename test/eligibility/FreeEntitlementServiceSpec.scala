@@ -23,7 +23,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 class FreeEntitlementServiceSpec extends UnitSpec {
 
-  "FreeEntitlementService" should {
+  "FreeEntitlementServgice" should {
     "return eligibility" in {
 
       val res = await(FreeEntitlementService.eligibility(FreeEntitlementPayload("england",
