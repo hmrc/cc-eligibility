@@ -991,7 +991,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
     }
-    "(Scenario 43)(Couple) Claimant and partner not qualifying, one qualifying child" in {
+    "(Scenario 44)(Couple) Claimant and partner not qualifying, one qualifying child" in {
       val controller = new TFCEligibilityController with TFCEligibility {
         override val eligibility: TFCEligibilityService = mock[TFCEligibilityService]
         override val auditEvent = mock[AuditEvents]

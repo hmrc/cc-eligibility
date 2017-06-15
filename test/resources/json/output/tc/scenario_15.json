@@ -6,7 +6,6 @@
         {
           "from": "2016-05-27",
           "until": "2017-04-06",
-          "houseHoldIncome": 0.00,
           "periods": [
             {
               "from": "2016-05-27",
@@ -47,7 +46,8 @@
                   }
                 },
                 {
-                  "id": 0,                  "childcareCost": 3000.00,
+                  "id": 0,
+                  "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
                   "childElements": {
@@ -86,7 +86,6 @@
               "children": [
                 {
                   "id": 1,
-
                   "childcareCost": 200.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": false,
@@ -99,7 +98,8 @@
                   }
                 },
                 {
-                  "id": 0,                  "childcareCost": 3000.00,
+                  "id": 0,
+                  "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
                   "childElements": {
@@ -117,7 +117,6 @@
         {
           "from": "2017-04-06",
           "until": "2018-04-06",
-          "houseHoldIncome": 0.00,
           "periods": [
             {
               "from": "2017-04-06",

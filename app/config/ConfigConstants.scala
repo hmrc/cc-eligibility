@@ -20,7 +20,6 @@ object ConfigConstants {
   lazy val defaultAmount = BigDecimal(0)
 
   lazy val noOfMonths: Int = 12
-
   lazy val freeEntitlementTwoYearOld: Int = 2
   lazy val freeEntitlementThreeYearOld: Int = 3
   lazy val freeEntitlementFourYearOld: Int = 4

@@ -105,7 +105,7 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
       val outputChild = models.output.tc.OutputChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
       val outputHhElements = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
       val outputPeriod = models.output.tc.TCPeriod(from = periodStartDate, until = periodEndDate, householdElements = outputHhElements, claimants = List(outputClaimant), children = List(outputChild))
-      val outputTaxYear = models.output.tc.TaxYear(from = periodStartDate, until = periodEndDate, houseHoldIncome = BigDecimal(0.00), periods = List(outputPeriod))
+      val outputTaxYear = models.output.tc.TaxYear(from = periodStartDate, until = periodEndDate, periods = List(outputPeriod))
       val tcEligibilityModel = TCEligibilityModel(eligible = true, taxYears = List(outputTaxYear))
 
       val eligibility = Eligibility(tc = Some(tcEligibilityModel))
@@ -120,7 +120,6 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                   {
                     "from": "${periodStartDate.toString("yyyy-MM-dd")}",
                     "until": "${periodEndDate.toString("yyyy-MM-dd")}",
-                    "houseHoldIncome": 0.0,
                     "periods": [
                       {
                         "from": "${periodStartDate.toString("yyyy-MM-dd")}",

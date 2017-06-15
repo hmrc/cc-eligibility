@@ -32,6 +32,7 @@ package spec
  * limitations under the License.
  */
 
+import org.joda.time.format.DateTimeFormat
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import uk.gov.hmrc.play.test.UnitSpec
@@ -43,4 +44,5 @@ trait CCSpecConfig extends UnitSpec with OneAppPerSuite {
     Messages(Lang("en", "uk"), messagesApi)
   }
 
+  val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
 }
