@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package utils
+package models.output.freeEntitlement
 
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
-import play.api.Logger
-import play.api.libs.json.{JsNull, JsString, JsValue, Writes}
+import play.api.libs.json.Json
 
-object CCFormat extends CCFormat
+case class ThirtyHoursEligibilityModel (
+                                         eligibility: Boolean,
+                                         rollout: Boolean
+                                         )
 
-trait CCFormat {
-  val datePattern = "yyyy-MM-dd"
+object ThirtyHoursEligibilityModel {
+  implicit val formats = Json.format[ThirtyHoursEligibilityModel]
 }

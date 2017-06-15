@@ -6,7 +6,6 @@
       "from": "2016-09-01",
       "until": "2018-03-01",
       "householdEligibility": true,
-      "freeRollout": true,
       "tfcRollout": true,
       "periods": [
         {
@@ -29,13 +28,11 @@
               "qualifying" : true,
               "from": "2016-09-01",
               "until": "2016-09-04",
-              "freeRollout": false,
               "tfcRollout": true
             },
             {
               "id" : 0,
               "qualifying" : false,
-              "freeRollout": true,
               "tfcRollout": false
             }
           ]
@@ -58,13 +55,11 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "freeRollout": false,
               "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
-              "freeRollout": true,
               "tfcRollout": false
             }
           ]
@@ -87,13 +82,11 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "freeRollout": false,
               "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
-              "freeRollout": true,
               "tfcRollout": false
             }
           ]
@@ -116,7 +109,6 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "freeRollout": false,
               "tfcRollout": false
             },
             {
@@ -124,7 +116,6 @@
               "qualifying" : true,
               "from" : "2017-06-20",
               "until" : "2017-09-01",
-              "freeRollout": true,
               "tfcRollout": true
             }
           ]
@@ -147,7 +138,6 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "freeRollout": false,
               "tfcRollout": false
             },
             {
@@ -155,7 +145,6 @@
               "qualifying" : true,
               "from" : "2017-09-01",
               "until" : "2017-12-01",
-              "freeRollout": true,
               "tfcRollout": true
             }
           ]
@@ -178,7 +167,6 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "freeRollout": false,
               "tfcRollout": false
             },
             {
@@ -186,7 +174,6 @@
               "qualifying" : true,
               "from" : "2017-12-01",
               "until" : "2018-03-01",
-              "freeRollout": true,
               "tfcRollout": true
             }
           ]

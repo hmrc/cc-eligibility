@@ -31,8 +31,15 @@ trait FakeCCEligibilityApplication extends WithFakeApplication {
     "tfc-min-earnings" -> "true",
     "tfc-rollout.0.rule-date" -> "default",
     "tfc-rollout.0.all-disabled" -> true,
-    "tfc-rollout.0.born-on-after" -> "01-09-2013"
+    "tfc-rollout.0.born-on-after" -> "01-09-2013",
+    "free-hours.0.rule-date" -> "default",
+    "free-hours.0.fifteen.england" -> "2,3,4",
+    "free-hours.0.fifteen.scotland" -> "2,3,4",
+    "free-hours.0.fifteen.northern-ireland" -> "3",
+    "free-hours.0.fifteen.wales" -> "2,3",
+    "free-hours.0.thirty.england" -> "3,4"
   )
+
   override lazy val fakeApplication = FakeApplication(additionalConfiguration = config)
   implicit lazy val mat: Materializer = fakeApplication.materializer
 

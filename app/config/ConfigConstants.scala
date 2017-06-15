@@ -16,6 +16,9 @@
 
 package config
 
+import org.joda.time.LocalDate
+import org.joda.time.format.DateTimeFormat
+
 object ConfigConstants {
   lazy val defaultAmount = BigDecimal(0)
 
@@ -23,4 +26,7 @@ object ConfigConstants {
   lazy val freeEntitlementTwoYearOld: Int = 2
   lazy val freeEntitlementThreeYearOld: Int = 3
   lazy val freeEntitlementFourYearOld: Int = 4
+
+  lazy val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+  lazy val firstSept2017 = LocalDate.parse("2017-09-01", formatter)
 }

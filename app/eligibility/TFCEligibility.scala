@@ -32,7 +32,7 @@ object TFCEligibility extends TFCEligibility
 
 trait TFCEligibility extends CCTFCEligibility with TFCRolloutSchemeConfig {
 
-val eligibility = new TFCEligibilityService
+  val eligibility = new TFCEligibilityService
 
   class TFCEligibilityService extends CCTFCEligibilityService {
 
@@ -117,7 +117,6 @@ val eligibility = new TFCEligibilityService
           qualifying = childEligibility,
           from = qualifyStartDate,
           until = qualifyEndDate,
-          freeRollout = isChildDOBWithinRollout(child),
           tfcRollout = isChildEligibleForTFCRollout(child, childEligibility)
         )
       }
@@ -148,7 +147,6 @@ val eligibility = new TFCEligibilityService
               until = outputPeriods.last.until,
               householdEligibility = householdEligibility,
               periods = outputPeriods,
-              freeRollout = outputPeriods.exists(_.children.exists(_.freeRollout)),
               tfcRollout = outputPeriods.exists(_.children.exists(_.tfcRollout))
             )
           )

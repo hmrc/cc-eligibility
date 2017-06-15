@@ -16,20 +16,25 @@
 
 package utils
 
-import models.input.tfc.Child
 import org.joda.time.LocalDate
-import play.api.Configuration
 
-trait TFCRolloutSchemeConfig extends CCConfig {
+trait ChildHelper {
 
-  def futureDate = LocalDate.now().plusWeeks(2)
-
-  def isChildEligibleForTFCRollout(child: Child, isEligibleForTFC: Boolean): Boolean = {
-    val tfcRollout: Configuration = loadConfigByType("tfc-rollout")
-    val bornOnOrAfter = dateFormat.parse(tfcRollout.getString("born-on-after").get)
-    val isAvailableForAllDisabled: Boolean = tfcRollout.getBoolean("all-disabled").getOrElse(false)
-
-    isEligibleForTFC && child.dob.isBefore(futureDate) && ((child.isDisabled && isAvailableForAllDisabled) || !bornOnOrAfter.after(child.dob.toDate))
+  def age(dob: LocalDate, currentDate: LocalDate = LocalDate.now()): Int = {
+    if (dob.isAfter(currentDate)) {
+      -1
+    } else {
+      val age: Int = currentDate.getYear - dob.getYear
+      if (
+        (currentDate.getMonthOfYear < dob.getMonthOfYear)
+          || (currentDate.getMonthOfYear == dob.getMonthOfYear && currentDate.getDayOfMonth < dob.getDayOfMonth)
+      ) {
+        age - 1
+      }
+      else {
+        age
+      }
+    }
   }
 
 }

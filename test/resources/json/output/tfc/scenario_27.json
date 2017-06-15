@@ -6,7 +6,6 @@
       "from": "2016-03-07",
       "until": "2017-03-07",
       "householdEligibility": true,
-      "freeRollout": false,
       "tfcRollout": true,
       "periods": [
         {
@@ -29,7 +28,6 @@
               "qualifying" : true,
               "from" : "2016-03-07",
               "until" : "2016-06-07",
-              "freeRollout": false,
               "tfcRollout": true
             },
             {
@@ -37,7 +35,6 @@
               "qualifying" : true,
               "from" : "2016-03-07",
               "until" : "2016-06-07",
-              "freeRollout": false,
               "tfcRollout": true
             }
           ]
@@ -62,7 +59,6 @@
               "qualifying" : true,
               "from" : "2016-06-07",
               "until" : "2016-09-07",
-              "freeRollout": false,
               "tfcRollout": true
             },
             {
@@ -70,7 +66,6 @@
               "qualifying" : true,
               "from" : "2016-06-07",
               "until" : "2016-09-07",
-              "freeRollout": false,
               "tfcRollout": true
             }
           ]
@@ -95,7 +90,6 @@
               "qualifying" : true,
               "from" : "2016-09-07",
               "until" : "2016-12-07",
-              "freeRollout": false,
               "tfcRollout": true
             },
             {
@@ -103,7 +97,6 @@
               "qualifying" : true,
               "from" : "2016-09-07",
               "until" : "2016-12-07",
-              "freeRollout": false,
               "tfcRollout": true
             }
           ]
@@ -128,7 +121,6 @@
               "qualifying" : true,
               "from" : "2016-12-07",
               "until" : "2017-03-07",
-              "freeRollout": false,
               "tfcRollout": true
             },
             {
@@ -136,7 +128,6 @@
               "qualifying" : true,
               "from" : "2016-12-07",
               "until" : "2017-03-07",
-              "freeRollout": false,
               "tfcRollout": true
             }
           ]
