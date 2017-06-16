@@ -16,10 +16,6 @@
 
 package utils
 
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
-import play.api.Logger
-import play.api.libs.json.{JsNull, JsString, JsValue, Writes}
 
 object CCFormat extends CCFormat
 

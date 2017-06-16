@@ -44,6 +44,25 @@ class FreeEntitlementControllerSpec extends UnitSpec with OneAppPerSuite with Mo
       status(result.get) should not be NOT_FOUND
     }
 
+    "return Bad Request if invalid data is sent" in {
+      val testController = new FreeEntitlementController {
+        override val freeHoursService = mock[FreeEntitlementService]
+        override val auditEvent: AuditEvents = mock[AuditEvents]
+      }
+
+      val inputJson = Json.obj()
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+
+      when(
+        testController.freeHoursService.fifteenHours(any())
+      ).thenReturn(
+        Future.successful(FifteenHoursEligibilityModel())
+      )
+
+      val result = await(testController.fifteenHours(request))
+      status(result) shouldBe BAD_REQUEST
+    }
+
     "accept valid request" in {
       val testController = new FreeEntitlementController {
         override val freeHoursService = mock[FreeEntitlementService]
@@ -90,6 +109,25 @@ class FreeEntitlementControllerSpec extends UnitSpec with OneAppPerSuite with Mo
       val result = route(app, FakeRequest(POST, "/cc-eligibility/thirty-hours-entitlement/eligibility"))
       result.isDefined shouldBe true
       status(result.get) should not be NOT_FOUND
+    }
+
+    "return Bad Request if invalid data is sent" in {
+      val testController = new FreeEntitlementController {
+        override val freeHoursService = mock[FreeEntitlementService]
+        override val auditEvent: AuditEvents = mock[AuditEvents]
+      }
+
+      val inputJson: JsValue = Json.obj()
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+
+      when(
+        testController.freeHoursService.thirtyHours(any())(any(), any())
+      ).thenReturn(
+        Future.successful(ThirtyHoursEligibilityModel(true, true))
+      )
+
+      val result = await(testController.thirtyHours(request))
+      status(result) shouldBe BAD_REQUEST
     }
 
     "accept valid request" in {
