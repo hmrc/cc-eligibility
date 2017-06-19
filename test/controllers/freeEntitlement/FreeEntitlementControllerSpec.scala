@@ -16,9 +16,11 @@
 
 package controllers.freeEntitlement
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.github.fge.jackson.JsonLoader
 import eligibility.FreeEntitlementService
 import models.input.freeEntitlement.FreeEntitlementPayload
-import models.output.freeEntitlement.FreeEntitlementPageModel
+import models.output.freeEntitlement.{ThirtyHoursEligibilityModel, FifteenHoursEligibilityModel}
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.test.FakeRequest
@@ -29,13 +31,12 @@ import play.api.test.Helpers._
 import service.AuditEvents
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
-import play.api.libs.json.Json
-
+import play.api.libs.json.{JsValue, Json}
 import scala.concurrent.Future
 
 class FreeEntitlementControllerSpec extends UnitSpec with OneAppPerSuite with MockitoSugar {
 
-  "FreeEntitlementController" should {
+  "fifteenHours" should {
 
     "not return NOT_FOUND endpoint" in {
       val result = route(app, FakeRequest(POST, "/cc-eligibility/fifteen-hours-entitlement/eligibility"))
@@ -43,40 +44,131 @@ class FreeEntitlementControllerSpec extends UnitSpec with OneAppPerSuite with Mo
       status(result.get) should not be NOT_FOUND
     }
 
-    "accept valid json request" in {
-
+    "return Bad Request if invalid data is sent" in {
       val testController = new FreeEntitlementController {
-
         override val freeHoursService = mock[FreeEntitlementService]
+        override val auditEvent: AuditEvents = mock[AuditEvents]
+      }
 
+      val inputJson = Json.obj()
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+
+      when(
+        testController.freeHoursService.fifteenHours(any())
+      ).thenReturn(
+        Future.successful(FifteenHoursEligibilityModel())
+      )
+
+      val result = await(testController.fifteenHours(request))
+      status(result) shouldBe BAD_REQUEST
+    }
+
+    "accept valid request" in {
+      val testController = new FreeEntitlementController {
+        override val freeHoursService = mock[FreeEntitlementService]
         override val auditEvent: AuditEvents = mock[AuditEvents]
       }
 
       val inputJson = Json.toJson(FreeEntitlementPayload("england", List()))
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(testController.freeHoursService.eligibility(any())).thenReturn(Future.successful(FreeEntitlementPageModel()))
+      when(
+        testController.freeHoursService.fifteenHours(any())
+      ).thenReturn(
+        Future.successful(FifteenHoursEligibilityModel())
+      )
 
-      val result = await(testController.eligible(request))
+      val result = await(testController.fifteenHours(request))
       status(result) shouldBe OK
     }
 
-    "throw bad request exception given invalid json request" in {
-
+    "return InternalServer error if exception is thrown" in {
       val testController = new FreeEntitlementController {
-
         override val freeHoursService = mock[FreeEntitlementService]
-
         override val auditEvent: AuditEvents = mock[AuditEvents]
       }
 
-      val inputJson = Json.toJson("Payload")
+      val inputJson = Json.toJson(FreeEntitlementPayload("england", List()))
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(testController.freeHoursService.eligibility(any())).thenReturn(Future.successful(FreeEntitlementPageModel()))
+      when(
+        testController.freeHoursService.fifteenHours(any())
+      ).thenReturn(
+        Future.failed(new RuntimeException)
+      )
 
-      val result = await(testController.eligible(request))
+      val result = await(testController.fifteenHours(request))
+      status(result) shouldBe INTERNAL_SERVER_ERROR
+    }
+
+  }
+
+  "thirtyHours" should {
+
+    "not return NOT_FOUND endpoint" in {
+      val result = route(app, FakeRequest(POST, "/cc-eligibility/thirty-hours-entitlement/eligibility"))
+      result.isDefined shouldBe true
+      status(result.get) should not be NOT_FOUND
+    }
+
+    "return Bad Request if invalid data is sent" in {
+      val testController = new FreeEntitlementController {
+        override val freeHoursService = mock[FreeEntitlementService]
+        override val auditEvent: AuditEvents = mock[AuditEvents]
+      }
+
+      val inputJson: JsValue = Json.obj()
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+
+      when(
+        testController.freeHoursService.thirtyHours(any())(any(), any())
+      ).thenReturn(
+        Future.successful(ThirtyHoursEligibilityModel(true, true))
+      )
+
+      val result = await(testController.thirtyHours(request))
       status(result) shouldBe BAD_REQUEST
     }
+
+    "accept valid request" in {
+      val testController = new FreeEntitlementController {
+        override val freeHoursService = mock[FreeEntitlementService]
+        override val auditEvent: AuditEvents = mock[AuditEvents]
+      }
+
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_1.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+
+      when(
+        testController.freeHoursService.thirtyHours(any())(any(), any())
+      ).thenReturn(
+        Future.successful(ThirtyHoursEligibilityModel(true, true))
+      )
+
+      val result = await(testController.thirtyHours(request))
+      status(result) shouldBe OK
+    }
+
+    "return InternalServer error if exception is thrown" in {
+      val testController = new FreeEntitlementController {
+        override val freeHoursService = mock[FreeEntitlementService]
+        override val auditEvent: AuditEvents = mock[AuditEvents]
+      }
+
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_1.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+
+      when(
+        testController.freeHoursService.thirtyHours(any())(any(), any())
+      ).thenReturn(
+        Future.failed(new RuntimeException)
+      )
+
+      val result = await(testController.thirtyHours(request))
+      status(result) shouldBe INTERNAL_SERVER_ERROR
+    }
+
   }
 }

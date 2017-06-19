@@ -5,6 +5,9 @@
       "numberOfPeriods": 4,
       "claimants": [
         {
+          "currentIncome": {
+            "employmentIncome": 1199999.0
+          },
           "hoursPerWeek": 30.00,
           "isPartner": false,
           "location": "england",
@@ -20,6 +23,9 @@
           }
         },
         {
+          "currentIncome": {
+            "employmentIncome": 99999.99
+          },
           "hoursPerWeek": 28.00,
           "isPartner": true,
           "location": "england",

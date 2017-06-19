@@ -6,7 +6,6 @@
       "from": "2016-01-10",
       "until": "2017-01-10",
       "householdEligibility": true,
-      "freeRollout": true,
       "tfcRollout": true,
       "periods": [
         {
@@ -27,13 +26,11 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "freeRollout": false,
               "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
-              "freeRollout": true,
               "tfcRollout": false
             }
           ]
@@ -56,13 +53,11 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "freeRollout": false,
               "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
-              "freeRollout": true,
               "tfcRollout": false
             }
           ]
@@ -85,13 +80,11 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "freeRollout": false,
               "tfcRollout": false
             },
             {
               "id" : 0,
               "qualifying" : false,
-              "freeRollout": true,
               "tfcRollout": false
             }
           ]
@@ -114,7 +107,6 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "freeRollout": false,
               "tfcRollout": false
             },
             {
@@ -122,7 +114,6 @@
               "qualifying" : true,
               "from" : "2016-10-15",
               "until" : "2017-01-10",
-              "freeRollout": true,
               "tfcRollout": true
             }
           ]

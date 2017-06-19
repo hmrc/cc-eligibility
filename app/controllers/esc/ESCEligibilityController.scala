@@ -40,7 +40,7 @@ trait ESCEligibilityController extends EligibilityController {
     implicit request =>
       request.body.validate[Request].fold(
         error => {
-          Logger.warn(s"ESC Validation JsError *****\n")
+          Logger.warn(s"ESC Validation JsError *****")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
@@ -51,7 +51,7 @@ trait ESCEligibilityController extends EligibilityController {
               Ok(utils.JSONFactory.generateResultJson(response))
           } recover {
             case e: Exception =>
-              Logger.warn(s"ESC Eligibility Exception: ${e.getMessage}\n")
+              Logger.warn(s"ESC Eligibility Exception: ${e.getMessage}")
               InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
           }
         }

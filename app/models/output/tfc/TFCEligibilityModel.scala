@@ -24,7 +24,6 @@ case class TFCEligibilityModel(
                                 from: LocalDate,
                                 until: LocalDate,
                                 householdEligibility: Boolean,
-                                freeRollout: Boolean,
                                 tfcRollout: Boolean,
                                 periods: List[TFCPeriod]
                                 )
@@ -59,7 +58,6 @@ case class OutputChild(
                         qualifying: Boolean,
                         from: Option[LocalDate],
                         until: Option[LocalDate],
-                        freeRollout: Boolean, //Not required in frontend
                         tfcRollout: Boolean //Not required in frontend
                         )
 

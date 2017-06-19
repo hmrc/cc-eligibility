@@ -18,16 +18,10 @@ package models.output.freeEntitlement
 
 import play.api.libs.json.Json
 
-case class FreeEntitlementPageModel (
-                                      twoYearOld : Boolean = false,
-                                      threeYearOld : Boolean = false,
-                                      fourYearOld : Boolean = false,
-                                      threeFourYearOldSep2017 : Boolean = false,
-                                      region : String = "",
-                                      isFifteenHours: Boolean = false,
-                                      isThirtyHours: Boolean = false
+case class FifteenHoursEligibilityModel (
+                                      eligibility: Boolean = false
                                     )
 
-object FreeEntitlementPageModel {
-  implicit val formats = Json.format[FreeEntitlementPageModel]
+object FifteenHoursEligibilityModel {
+  implicit val formats = Json.format[FifteenHoursEligibilityModel]
 }

@@ -6,7 +6,6 @@
       "from": "2016-08-27",
       "until": "2016-11-27",
       "householdEligibility": false,
-      "freeRollout": true,
       "tfcRollout": false,
       "periods": [
         {
@@ -23,7 +22,6 @@
             {
               "id" : 0,
               "qualifying" : false,
-              "freeRollout": true,
               "tfcRollout": false
             }
           ]

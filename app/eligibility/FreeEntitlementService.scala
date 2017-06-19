@@ -16,87 +16,79 @@
 
 package eligibility
 
-import java.util.Calendar
-
 import config.ConfigConstants
 import models.input.freeEntitlement.FreeEntitlementPayload
-import models.output.freeEntitlement.FreeEntitlementPageModel
+import models.input.tfc.{TFC, Request}
+import models.output.freeEntitlement.{FifteenHoursEligibilityModel, ThirtyHoursEligibilityModel}
 import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
-
+import play.api.Configuration
+import uk.gov.hmrc.play.http.HeaderCarrier
+import utils.{ChildHelper, CCConfig}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-trait FreeEntitlementService {
+object FreeEntitlementService extends FreeEntitlementService
 
-  def eligibility(request: FreeEntitlementPayload): Future[FreeEntitlementPageModel]
+trait FreeEntitlementService extends CCConfig with ChildHelper with TFCEligibility {
 
-}
+  private def isChildDOBWithinRollout(dob: LocalDate): Boolean = {
 
-object FreeEntitlementService extends FreeEntitlementService {
+    val futureDate = LocalDate.now().plusWeeks(2)
+    val freeHoursRollout: Configuration = loadConfigByType("free-hours-rollout")
+    val bornOnOrAfter = dateFormat.parse(freeHoursRollout.getString("born-on-after").get)
 
-  override def eligibility(request: FreeEntitlementPayload): Future[FreeEntitlementPageModel] = {
+    dob.isBefore(futureDate) && !bornOnOrAfter.after(dob.toDate)
+  }
 
-    def hasChildAtAge(ageFilter: Int): Boolean =
-      request.childDOBList.exists(dob => age(dob) == ageFilter)
+  private def hasCildAtAge(configField: String, dobs: List[LocalDate], currentDate: LocalDate = LocalDate.now): Boolean = {
+    val freeHours: Configuration = loadConfigByType("free-hours")
+    val ageFilter: List[Int] = freeHours.getString(configField).getOrElse("").split(",").toList.filterNot(_.isEmpty).map(_.toInt)
 
-    val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-    val firstSept2017 = LocalDate.parse("2017-09-01", formatter)
+    dobs.exists(dob => ageFilter.contains(age(dob, currentDate)))
+  }
 
-    val threeFourYearOldSep2017 = request.childDOBList.exists(x =>
-      age(x, currentDate = firstSept2017) == ConfigConstants.freeEntitlementThreeYearOld ||
-        age(x, currentDate = firstSept2017) == ConfigConstants.freeEntitlementFourYearOld
-    )
+  def thirtyHours(tfcRequest: Request)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[ThirtyHoursEligibilityModel] = {
 
-    val twoYearOld = hasChildAtAge(ConfigConstants.freeEntitlementTwoYearOld)
+    eligibility.eligibility(tfcRequest).map { tfcEligibilityResult =>
 
-    val threeYearOld = hasChildAtAge(ConfigConstants.freeEntitlementThreeYearOld)
+      val tfcPayload: TFC = tfcRequest.payload.tfc
+      val tfcEligibility: Boolean = tfcEligibilityResult.tfc.map(_.householdEligibility).getOrElse(false)
 
-    val fourYearOld = hasChildAtAge(ConfigConstants.freeEntitlementFourYearOld)
+      val location = tfcPayload.claimants.head.location
 
-    val location = request.claimantLocation
+      val hasChild3Or4Sept2017: Boolean = hasCildAtAge(
+        configField = s"thirty.${location}",
+        dobs = tfcRequest.payload.tfc.children.map(_.dob),
+        currentDate = if(LocalDate.now.isBefore(ConfigConstants.firstSept2017)) { // TODO: Use only LocalDate.now after 01.09.2017
+          ConfigConstants.firstSept2017
+        }
+        else {
+          LocalDate.now
+        }
+      )
 
-    val isFifteenHours: Boolean = {
-      location match {
-        case "england" => (twoYearOld || threeYearOld || fourYearOld || threeFourYearOldSep2017)
-        case "scotland" => (twoYearOld || threeYearOld || fourYearOld)
-        case "northern-ireland" => threeYearOld
-        case "wales" => (twoYearOld || threeYearOld)
-        case _ => false
-      }
-    }
+      val rollout = tfcPayload.children.exists( child =>
+        isChildDOBWithinRollout(child.dob)
+      )
 
-    Future {
-      FreeEntitlementPageModel(
-        twoYearOld = twoYearOld,
-        threeYearOld = threeYearOld,
-        fourYearOld = fourYearOld,
-        threeFourYearOldSep2017 = threeFourYearOldSep2017,
-        region = location,
-        isFifteenHours = isFifteenHours
+      ThirtyHoursEligibilityModel(
+        eligibility = tfcEligibility && hasChild3Or4Sept2017,
+        rollout = rollout
       )
     }
   }
 
-  private def age(dob: LocalDate, currentDate: LocalDate = LocalDate.now()): Int = {
-    val dobCalendar: Calendar = Calendar.getInstance()
-    dobCalendar.setTime(dob.toDate)
-
-    val today = Calendar.getInstance()
-    today.setTime(currentDate.toDate)
-
-    if (dobCalendar.after(today)) {
-      -1
-    } else {
-      val age: Int = today.get(Calendar.YEAR) - dobCalendar.get(Calendar.YEAR)
-      if (today.get(Calendar.MONTH) < dobCalendar.get(Calendar.MONTH)) {
-        age - 1
-      } else if (today.get(Calendar.MONTH) == dobCalendar.get(Calendar.MONTH) &&
-        today.get(Calendar.DAY_OF_MONTH) < dobCalendar.get(Calendar.DAY_OF_MONTH)) {
-        age - 1
-      } else {
-        age
-      }
+  def fifteenHours(request: FreeEntitlementPayload): Future[FifteenHoursEligibilityModel] = {
+    val location = request.claimantLocation
+    Future {
+      FifteenHoursEligibilityModel(
+        eligibility = hasCildAtAge(
+          configField = s"fifteen.${location}",
+          dobs = request.childDOBList,
+          currentDate = LocalDate.now
+        )
+      )
     }
   }
+
 }
