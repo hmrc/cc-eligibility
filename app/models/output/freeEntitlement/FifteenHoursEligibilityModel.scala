@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package utils
+package models.output.freeEntitlement
 
+import play.api.libs.json.Json
 
-object CCFormat extends CCFormat
+case class FifteenHoursEligibilityModel (
+                                      eligibility: Boolean = false
+                                    )
 
-trait CCFormat {
-  val datePattern = "yyyy-MM-dd"
+object FifteenHoursEligibilityModel {
+  implicit val formats = Json.format[FifteenHoursEligibilityModel]
 }

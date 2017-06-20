@@ -16,9 +16,25 @@
 
 package utils
 
+import org.joda.time.LocalDate
 
-object CCFormat extends CCFormat
+trait ChildHelper {
 
-trait CCFormat {
-  val datePattern = "yyyy-MM-dd"
+  def age(dob: LocalDate, currentDate: LocalDate = LocalDate.now()): Int = {
+    if (dob.isAfter(currentDate)) {
+      -1
+    } else {
+      val age: Int = currentDate.getYear - dob.getYear
+      if (
+        (currentDate.getMonthOfYear < dob.getMonthOfYear)
+          || (currentDate.getMonthOfYear == dob.getMonthOfYear && currentDate.getDayOfMonth < dob.getDayOfMonth)
+      ) {
+        age - 1
+      }
+      else {
+        age
+      }
+    }
+  }
+
 }

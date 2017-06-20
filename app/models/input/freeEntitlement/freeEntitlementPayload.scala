@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package utils
+package models.input.freeEntitlement
 
+import org.joda.time.LocalDate
+import play.api.libs.json.Json
 
-object CCFormat extends CCFormat
+case class FreeEntitlementPayload(claimantLocation: String,
+                                  childDOBList: List[LocalDate])
 
-trait CCFormat {
-  val datePattern = "yyyy-MM-dd"
+object FreeEntitlementPayload {
+  implicit val format = Json.format[FreeEntitlementPayload]
 }

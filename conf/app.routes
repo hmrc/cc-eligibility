@@ -6,6 +6,10 @@ POST    /tax-free-childcare/eligibility             controllers.tfc.TFCEligibili
 
 POST    /employer-supported-childcare/eligibility   controllers.esc.ESCEligibilityController.eligible
 
+POST    /fifteen-hours-entitlement/eligibility      controllers.freeEntitlement.FreeEntitlementController.fifteenHours
+
+POST    /thirty-hours-entitlement/eligibility       controllers.freeEntitlement.FreeEntitlementController.thirtyHours
+
 ##########################################################################################################
 
 

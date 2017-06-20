@@ -24,13 +24,6 @@ trait TFCRolloutSchemeConfig extends CCConfig {
 
   def futureDate = LocalDate.now().plusWeeks(2)
 
-  def isChildDOBWithinRollout(child: Child): Boolean = {
-    val tfcRollout: Configuration = loadConfigByType("tfc-rollout")
-    val bornOnOrAfter = dateFormat.parse(tfcRollout.getString("born-on-after").get)
-
-    child.dob.isBefore(futureDate) && !bornOnOrAfter.after(child.dob.toDate)
-  }
-
   def isChildEligibleForTFCRollout(child: Child, isEligibleForTFC: Boolean): Boolean = {
     val tfcRollout: Configuration = loadConfigByType("tfc-rollout")
     val bornOnOrAfter = dateFormat.parse(tfcRollout.getString("born-on-after").get)
