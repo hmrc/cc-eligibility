@@ -273,15 +273,6 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
       val periodStart = LocalDate.parse("2015-06-20", formatter)
       val periodEnd = LocalDate.parse("2016-04-06", formatter)
 
-      val outputChild1 = models.output.esc.OutputChild(
-        id = 0,
-        qualifying = false
-      )
-      val outputChild2 = models.output.esc.OutputChild(
-        id = 0,
-        qualifying = true
-      )
-
       val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
@@ -323,19 +314,7 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                                  "qualifying":true,
                                  "isPartner":false,
                                  "eligibleMonthsInPeriod":11,
-                                 "elements":{
-                                    "vouchers":true
-                                 }
-                              }
-                           ],
-                           "children":[
-                              {
-                                 "id":0,
-                                 "qualifying":false
-                              },
-                              {
-                                 "id":0,
-                                 "qualifying":true
+                                 "vouchers":true
                               }
                            ]
                         }

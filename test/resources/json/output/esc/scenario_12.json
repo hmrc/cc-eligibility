@@ -14,23 +14,13 @@
                   "qualifying": true,
                   "isPartner": false,
                   "eligibleMonthsInPeriod": 8,
-                  "elements": {
-                    "vouchers": true
-                  }
+                  "vouchers": true
                 },
                 {
                   "qualifying": false,
                   "isPartner": true,
                   "eligibleMonthsInPeriod": 0,
-                  "elements": {
-                    "vouchers": false
-                  }
-                }
-              ],
-              "children": [
-                {
-                  "id": 0,
-                  "qualifying": true
+                  "vouchers": false
                 }
               ]
             }

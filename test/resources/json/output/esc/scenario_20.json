@@ -16,28 +16,17 @@
                   "qualifying": true,
                   "isPartner": false,
                   "eligibleMonthsInPeriod": 3,
-                  "elements": {
-                    "vouchers": true
-                  }
-                }, {
+                  "vouchers": true
+                },
+                {
                   "qualifying": true,
                   "isPartner": true,
                   "eligibleMonthsInPeriod": 3,
-                  "elements": {
-                    "vouchers": true
-                  }
-                }
-              ],
-              "children": [
-                {
-                  "id": 0,
-                  "qualifying": true
-                }, {
-                  "id": 1,
-                  "qualifying": false
+                  "vouchers": true
                 }
               ]
-            }, {
+            },
+            {
               "from": "2016-09-01",
               "until": "2017-04-06",
               "claimants": [
@@ -45,30 +34,19 @@
                   "qualifying": true,
                   "isPartner": false,
                   "eligibleMonthsInPeriod": 0,
-                  "elements": {
-                    "vouchers": false
-                  }
-                }, {
+                  "vouchers": false
+                },
+                {
                   "qualifying": true,
                   "isPartner": true,
                   "eligibleMonthsInPeriod": 0,
-                  "elements": {
-                    "vouchers": false
-                  }
-                }
-              ],
-              "children": [
-                {
-                  "id": 0,
-                  "qualifying": false
-                }, {
-                  "id": 1,
-                  "qualifying": false
+                  "vouchers": false
                 }
               ]
             }
           ]
-        }, {
+        },
+        {
           "from": "2017-04-06",
           "until": "2017-06-27",
           "periods": [
@@ -80,28 +58,17 @@
                   "qualifying": true,
                   "isPartner": false,
                   "eligibleMonthsInPeriod": 0,
-                  "elements": {
-                    "vouchers": false
-                  }
-                }, {
+                  "vouchers": false
+                },
+                {
                   "qualifying": true,
                   "isPartner": true,
                   "eligibleMonthsInPeriod": 0,
-                  "elements": {
-                    "vouchers": false
-                  }
-                }
-              ],
-              "children": [
-                {
-                  "id": 0,
-                  "qualifying": false
-                }, {
-                  "id": 1,
-                  "qualifying": false
+                  "vouchers": false
                 }
               ]
-            }, {
+            },
+            {
               "from": "2017-04-30",
               "until": "2017-06-27",
               "claimants": [
@@ -109,35 +76,22 @@
                   "qualifying": true,
                   "isPartner": false,
                   "eligibleMonthsInPeriod": 2,
-                  "elements": {
-                    "vouchers": true
-                  }
-                }, {
+                  "vouchers": true
+                },
+                {
                   "qualifying": true,
                   "isPartner": true,
                   "eligibleMonthsInPeriod": 2,
-                  "elements": {
-                    "vouchers": true
-                  }
-                }
-              ],
-              "children": [
-                {
-                  "id": 0,
-                  "qualifying": false
-                }, {
-                  "id": 1,
-                  "qualifying": true
+                  "vouchers": true
                 }
               ]
             }
           ]
         }
       ],
-      "eligibility":true,
-      "parentEligibility":true,
-      "partnerEligibility":true
+      "eligibility": true,
+      "parentEligibility": true,
+      "partnerEligibility": true
     }
-
   }
 }
