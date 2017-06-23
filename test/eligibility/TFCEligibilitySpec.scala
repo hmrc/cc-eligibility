@@ -656,11 +656,11 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val Period7OutputChild1 = OutputChild(id = 1, qualifying = false, from = None, until = None, tfcRollout = false)
       val Period7OutputChild2 = OutputChild(id = 2, qualifying = false, from = None, until = None, tfcRollout = false)
-      val Period7OutputChild3 = OutputChild(id = 3, qualifying = true, from = Some(dateOfBirthChild3), until = Some(untilPeriod7), tfcRollout = false)
+      val Period7OutputChild3 = OutputChild(id = 3, qualifying = true, from = Some(dateOfBirthChild3), until = Some(untilPeriod7), tfcRollout = dateOfBirthChild3.isBefore(LocalDate.now().plusWeeks(2)))
 
       val Period8OutputChild1 = OutputChild(id = 1, qualifying = false, from = None, until = None, tfcRollout = false)
       val Period8OutputChild2 = OutputChild(id = 2, qualifying = false, from = None, until = None, tfcRollout = false)
-      val Period8OutputChild3 = OutputChild(id = 3, qualifying = true, from = Some(startPeriod8), until = Some(untilPeriod8), tfcRollout = false)
+      val Period8OutputChild3 = OutputChild(id = 3, qualifying = true, from = Some(startPeriod8), until = Some(untilPeriod8), tfcRollout = dateOfBirthChild3.isBefore(LocalDate.now().plusWeeks(2)))
 
       result shouldBe List(
         TFCPeriod(
@@ -1006,15 +1006,15 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val Period3OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), tfcRollout = true)
       val Period3OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), tfcRollout = false)
-      val Period3OutputChild3 = OutputChild(id = 0,  qualifying = true, from = Some(dateOfBirthChild3), until = Some(untilPeriod3), tfcRollout = false)
+      val Period3OutputChild3 = OutputChild(id = 0,  qualifying = true, from = Some(dateOfBirthChild3), until = Some(untilPeriod3), tfcRollout = dateOfBirthChild3.isBefore(LocalDate.now().plusWeeks(2)))
 
       val Period4OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), tfcRollout = true)
       val Period4OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), tfcRollout = false)
-      val Period4OutputChild3 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), tfcRollout = false)
+      val Period4OutputChild3 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), tfcRollout = dateOfBirthChild3.isBefore(LocalDate.now().plusWeeks(2)))
 
       val Period5OutputChild1 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(untilPeriod5), tfcRollout = true)
       val Period5OutputChild2 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(child2EndDate), tfcRollout = false)
-      val Period5OutputChild3 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(untilPeriod5), tfcRollout = false)
+      val Period5OutputChild3 = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(untilPeriod5), tfcRollout = dateOfBirthChild3.isBefore(LocalDate.now().plusWeeks(2)))
 
       result shouldBe List(
         TFCPeriod(
