@@ -184,7 +184,7 @@ trait ESCEligibility extends CCEligibilityHelpers {
       children.flatten
     }
 
-    def constructTaxYearsWithPeriods(request: models.input.esc.Request) : List[models.output.esc.TaxYear] = {
+    def constructTaxYearsWithPeriods(request: models.input.esc.ESCEligibilityInput) : List[models.output.esc.TaxYear] = {
       generateTaxYears(request.taxYears).reverse
     }
 
@@ -204,7 +204,7 @@ trait ESCEligibility extends CCEligibilityHelpers {
       generateTaxYearsHelper(taxYears, List(), 0)
     }
 
-    def constructChildrenWithPeriods(request: models.input.esc.Request) : List[models.output.esc.OutputChild] = {
+    def constructChildrenWithPeriods(request: models.input.esc.ESCEligibilityInput) : List[models.output.esc.OutputChild] = {
       generateChildren(request.taxYears).reverse
     }
 
@@ -240,9 +240,9 @@ trait ESCEligibility extends CCEligibilityHelpers {
       (eligibility, parentEligibility, partnerEligibility)
     }
 
-    def eligibility(request : Request) : Future[Eligibility] = {
+    def eligibility(request : ESCEligibilityInput) : Future[Eligibility] = {
       request match {
-        case request : models.input.esc.Request => {
+        case request : models.input.esc.ESCEligibilityInput => {
           val constructTaxYears = constructTaxYearsWithPeriods(request)
           val constructChildren = constructChildrenWithPeriods(request)
           val (eligibility,parentEligibility,partnerEligibility) = determineESCEligibility(constructTaxYears, constructChildren)

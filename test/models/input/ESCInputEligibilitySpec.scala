@@ -32,10 +32,10 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
     "read a valid JSON input and convert to a specific type" in {
         val resource: JsonNode = JsonLoader.fromResource("/json/input/esc/eligibility_input_test.json")
         val json: JsValue = Json.parse(resource.toString)
-        val result = json.validate[Request]
+        val result = json.validate[ESCEligibilityInput]
         result match {
           case JsSuccess(x, _) => {
-            x shouldBe a[Request]
+            x shouldBe a[ESCEligibilityInput]
             x.taxYears.head.from shouldBe a[LocalDate]
             x.taxYears.head.until shouldBe a[LocalDate]
             x.taxYears.head.claimants.isInstanceOf[List[Claimant]] shouldBe true

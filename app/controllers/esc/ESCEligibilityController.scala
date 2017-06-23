@@ -18,7 +18,7 @@ package controllers.esc
 
 import controllers.EligibilityController
 import eligibility.ESCEligibility
-import models.input.esc.Request
+import models.input.esc.ESCEligibilityInput
 import play.api.Logger
 import play.api.libs.json.JsValue
 import play.api.mvc.Action
@@ -38,7 +38,7 @@ trait ESCEligibilityController extends EligibilityController {
 
   override def eligible : Action[JsValue] = Action.async(parse.json) {
     implicit request =>
-      request.body.validate[Request].fold(
+      request.body.validate[ESCEligibilityInput].fold(
         error => {
           Logger.warn(s"ESC Validation JsError *****")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))

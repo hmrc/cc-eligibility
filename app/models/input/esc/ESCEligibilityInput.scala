@@ -24,12 +24,12 @@ import play.api.libs.json.Reads._
 import play.api.libs.json._
 import utils.{CCFormat, ESCConfig, MessagesObject}
 
-case class Request(
+case class ESCEligibilityInput(
                     taxYears: List[TaxYear]
                   )
 
-object Request {
-  implicit val requestFormat: Reads[Request] = Json.reads[Request]
+object ESCEligibilityInput {
+  implicit val requestFormat: Reads[ESCEligibilityInput] = Json.reads[ESCEligibilityInput]
 }
 
 case class TaxYear(

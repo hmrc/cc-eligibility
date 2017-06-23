@@ -21,7 +21,7 @@ import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import controllers.esc.ESCEligibilityController
 import eligibility.ESCEligibility
-import models.input.esc.Request
+import models.input.esc.ESCEligibilityInput
 import org.mockito.Matchers.{eq => mockEq}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
@@ -44,7 +44,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_1.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -65,7 +65,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_2.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -86,7 +86,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_3.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -107,7 +107,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_4.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -128,7 +128,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_5.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -149,7 +149,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_6.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -170,7 +170,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_7.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -191,7 +191,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_8.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -212,7 +212,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_9.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -233,7 +233,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_10.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -254,7 +254,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_11.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -275,7 +275,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_12.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -296,7 +296,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_13.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -317,7 +317,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_14.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -338,7 +338,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_15.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -359,7 +359,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_16.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
@@ -379,7 +379,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_17.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -400,7 +400,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_18.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -421,7 +421,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_19.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
@@ -442,7 +442,7 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_20.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[ESCEligibilityInput]
 
       val eligible = ESCEligibility.eligibility.eligibility(request.get)
 
