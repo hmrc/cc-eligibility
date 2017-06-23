@@ -16,7 +16,7 @@
 
 package models.output
 
-import models.output.esc.ESCEligibilityModel
+import models.output.esc.{ESCEligibilityOutput, ESCEligibilityOutput$}
 import models.output.tc.TCEligibilityModel
 import models.output.tfc.TFCEligibilityModel
 import play.api.libs.functional.syntax._
@@ -27,14 +27,14 @@ object OutputAPIModel {
   case class Eligibility(
                           tc: Option[TCEligibilityModel] = None,
                           tfc: Option[TFCEligibilityModel] = None,
-                          esc: Option[ESCEligibilityModel] = None
+                          esc: Option[ESCEligibilityOutput] = None
                         )
 
   object Eligibility {
     implicit val eligibilityWrites : Writes[Eligibility] = (
       (JsPath \ "tc").write[Option[TCEligibilityModel]] and
         (JsPath \ "tfc").write[Option[TFCEligibilityModel]] and
-          (JsPath \ "esc").write[Option[ESCEligibilityModel]]
+          (JsPath \ "esc").write[Option[ESCEligibilityOutput]]
       )(unlift(Eligibility.unapply))
   }
 

@@ -179,14 +179,12 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = true
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
 
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+vouchers = true
       )
 
       result shouldBe List(
@@ -195,10 +193,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           until = periodEnd,
           claimants = List(
             outputClaimant1
-          ),
-          children = List(
-            outputChild1,
-            outputChild2
           )
         )
       )
@@ -226,13 +220,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 0,
-        elements = models.output.esc.ClaimantElements(
-          vouchers = false
-        )
+        vouchers = false
       )
 
       result shouldBe List(
@@ -241,10 +233,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           until = periodEnd,
           claimants = List(
             outputClaimant1
-          ),
-          children = List(
-            outputChild1,
-            outputChild2
           )
         )
       )
@@ -272,13 +260,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = true
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -287,10 +273,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           until = periodEnd,
           claimants = List(
             outputClaimant1
-          ),
-          children = List(
-            outputChild1,
-            outputChild2
           )
         )
       )
@@ -318,13 +300,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = true
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -333,10 +313,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           until = periodEnd,
           claimants = List(
             outputClaimant1
-          ),
-          children = List(
-            outputChild1,
-            outputChild2
           )
         )
       )
@@ -365,13 +341,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 3,
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       val outputChild3 = models.output.esc.OutputChild(
@@ -383,13 +357,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant2 = models.output.esc.OutputClaimant(
+      val outputClaimant2 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 0,
-        elements = models.output.esc.ClaimantElements(
-          vouchers = false
-        )
+        vouchers = false
       )
 
       val outputChild5 = models.output.esc.OutputChild(
@@ -401,13 +373,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = true
       )
 
-      val outputClaimant3 = models.output.esc.OutputClaimant(
+      val outputClaimant3 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 5,
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -416,10 +386,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           until = september,
           claimants = List(
             outputClaimant1
-          ),
-          children = List(
-            outputChild1,
-            outputChild2
           )
         ),
         ESCPeriod(
@@ -427,10 +393,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           until = dateOfBirth2,
           claimants = List(
             outputClaimant2
-          ),
-          children = List(
-            outputChild3,
-            outputChild4
           )
         ),
         ESCPeriod(
@@ -438,10 +400,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           until = periodEnd,
           claimants = List(
             outputClaimant3
-          ),
-          children = List(
-            outputChild5,
-            outputChild6
           )
         )
 
@@ -471,13 +429,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 0,
-        elements = models.output.esc.ClaimantElements(
-          vouchers = false
-        )
+        vouchers = false
       )
 
       val outputChild3 = models.output.esc.OutputChild(
@@ -489,13 +445,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant2 = models.output.esc.OutputClaimant(
+      val outputClaimant2 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 7,
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -504,9 +458,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           until = dateOfBirth1,
           claimants = List(
           outputClaimant1
-          ),
-          children = List(
-          outputChild1,outputChild2
           )
         ),
         ESCPeriod(
@@ -514,9 +465,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           until = periodEnd,
           claimants = List(
             outputClaimant2
-          ),
-          children = List(
-            outputChild3,outputChild4
           )
         )
 
@@ -541,13 +489,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 0,
-        elements = models.output.esc.ClaimantElements(
-          vouchers = false
-        )
+        vouchers = false
       )
 
       val outputChild2 = models.output.esc.OutputChild(
@@ -555,13 +501,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = true
       )
 
-      val outputClaimant2 = models.output.esc.OutputClaimant(
+      val outputClaimant2 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 7,
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -570,18 +514,12 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           until = september,
           claimants = List(
             outputClaimant1
-          ),
-          children = List(
-            outputChild1
           )
         ),
         ESCPeriod(
           from = september,
           until = periodEnd,
-          claimants = List(outputClaimant2),
-          children = List(
-            outputChild2
-          )
+          claimants = List(outputClaimant2)
         )
       )
     }
@@ -609,13 +547,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = true
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -624,9 +560,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           until = periodEnd,
           claimants = List(
             outputClaimant1
-          ),
-          children = List(
-            outputChild1,outputChild2
           )
         )
       )
@@ -655,13 +588,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 3,
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       val outputChild3 = models.output.esc.OutputChild(
@@ -673,13 +604,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = true
       )
 
-      val outputClaimant2 = models.output.esc.OutputClaimant(
+      val outputClaimant2 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 7,
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -688,9 +617,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           until = dateOfBirth2,
           claimants = List(
           outputClaimant1
-          ),
-          children = List(
-          outputChild1, outputChild2
           )
         ),
         ESCPeriod(
@@ -698,9 +624,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           until = periodEnd,
           claimants = List(
             outputClaimant2
-          ),
-          children = List(
-            outputChild3, outputChild4
           )
         )
       )
@@ -738,13 +661,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -753,9 +674,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           until = periodEnd,
           claimants = List(
           outputClaimant1
-          ),
-          children = List(
-          outputChild1,outputChild2,outputChild3
           )
         )
       )
@@ -794,13 +712,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = true
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -813,9 +729,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = periodEnd,
               claimants = List(
                 outputClaimant1
-              ),
-              children = List(
-                outputChild1,outputChild2,outputChild3
               )
             )
           )
@@ -856,14 +769,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -876,9 +786,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = periodEnd,
               claimants = List(
                 outputClaimant1
-              ),
-              children = List(
-                outputChild1,outputChild2,outputChild3
               )
             )
           )
@@ -919,14 +826,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 0,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = false
-        )
+        vouchers = false
       )
 
       result shouldBe List(
@@ -939,11 +843,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = periodEnd,
               claimants = List(
                 outputClaimant1
-              ),
-              children = List(
-                outputChild1,
-                outputChild2,
-                outputChild3
               )
             )
           )
@@ -984,14 +883,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = true
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -1004,9 +900,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = periodEnd,
               claimants = List(
                 outputClaimant1
-              ),
-              children = List(
-                outputChild1, outputChild2, outputChild3
               )
             )
           )
@@ -1049,14 +942,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = true
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -1069,9 +959,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = periodEnd,
               claimants = List(
                 outputClaimant1
-              ),
-              children = List(
-                outputChild1, outputChild2, outputChild3
               )
             )
           )
@@ -1114,14 +1001,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = true
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -1134,9 +1018,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = periodEnd,
               claimants = List(
                 outputClaimant1
-              ),
-              children = List(
-                outputChild1, outputChild2, outputChild3
               )
             )
           )
@@ -1179,14 +1060,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = true
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -1199,9 +1077,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = periodEnd,
               claimants = List(
                 outputClaimant1
-              ),
-              children = List(
-                outputChild1, outputChild2, outputChild3
               )
             )
           )
@@ -1244,14 +1119,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -1264,9 +1136,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = periodEnd,
               claimants = List(
                 outputClaimant1
-              ),
-              children = List(
-              outputChild1, outputChild2, outputChild3
               )
             )
           )
@@ -1294,28 +1163,23 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 0,
 
-        elements = models.output.esc.ClaimantElements(
-          vouchers = false
-        )
+        vouchers = false
       )
       val outputChild2 = models.output.esc.OutputChild(
         id = 0,
         qualifying = true
       )
 
-      val outputClaimant2 = models.output.esc.OutputClaimant(
+      val outputClaimant2 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 7,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -1328,9 +1192,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = dateOfBirth1,
               claimants = List(
                 outputClaimant1
-              ),
-              children = List(
-                outputChild1
               )
             ),
             ESCPeriod(
@@ -1338,9 +1199,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = periodEnd,
               claimants = List(
                 outputClaimant2
-              ),
-              children = List(
-                outputChild2
               )
             )
           )
@@ -1387,14 +1245,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 3,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       val outputChild4 = models.output.esc.OutputChild(
@@ -1411,14 +1266,12 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant2 = models.output.esc.OutputClaimant(
+      val outputClaimant2 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 0,
 
-        elements = models.output.esc.ClaimantElements(
-          vouchers = false
-        )
+        vouchers = false
       )
 
 
@@ -1436,14 +1289,12 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant3 = models.output.esc.OutputClaimant(
+      val outputClaimant3 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 0,
 
-        elements = models.output.esc.ClaimantElements(
-          vouchers = false
-        )
+        vouchers = false
       )
 
       val outputChild10 = models.output.esc.OutputChild(
@@ -1460,14 +1311,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant4 = models.output.esc.OutputClaimant(
+      val outputClaimant4 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 6,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -1480,9 +1328,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = september1,
               claimants = List(
                 outputClaimant1
-              ),
-              children = List(
-                outputChild1, outputChild2, outputChild3
               )
             ),
             ESCPeriod(
@@ -1490,9 +1335,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = ty1periodEnd,
               claimants = List(
                 outputClaimant2
-              ),
-              children = List(
-                outputChild4, outputChild5, outputChild6
               )
             )
           )
@@ -1506,9 +1348,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = dateOfBirth2,
               claimants = List(
                 outputClaimant3
-              ),
-              children = List(
-                outputChild7, outputChild8, outputChild9
               )
             ),
             ESCPeriod(
@@ -1516,9 +1355,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = ty2periodEnd,
               claimants = List(
                 outputClaimant4
-              ),
-              children = List(
-                outputChild10, outputChild11, outputChild12
               )
             )
           )
@@ -1565,14 +1401,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       val outputChild4 = models.output.esc.OutputChild(
@@ -1589,14 +1422,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant2 = models.output.esc.OutputClaimant(
+      val outputClaimant2 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 12,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       result shouldBe List(
@@ -1609,9 +1439,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = ty1periodEnd,
               claimants = List(
               outputClaimant1
-              ),
-              children = List(
-              outputChild1,outputChild2, outputChild3
               )
             )
           )
@@ -1625,9 +1452,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = ty2periodEnd,
               claimants = List(
                 outputClaimant2
-              ),
-              children = List(
-                outputChild4,outputChild5, outputChild6
               )
             )
           )
@@ -1672,14 +1496,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       val outputChild4 = models.output.esc.OutputChild(
@@ -1696,14 +1517,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant2 = models.output.esc.OutputClaimant(
+      val outputClaimant2 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 12,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
@@ -1717,9 +1535,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = ty1periodEnd,
               claimants = List(
               outputClaimant1
-              ),
-              children = List(
-              outputChild1,outputChild2,outputChild3
               )
             )
           )
@@ -1733,9 +1548,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = ty2periodEnd,
               claimants = List(
                 outputClaimant2
-              ),
-              children = List(
-                outputChild4,outputChild5,outputChild6
               )
             )
           )
@@ -1774,14 +1586,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       val outputChild3 = models.output.esc.OutputChild(
@@ -1794,14 +1603,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant2 = models.output.esc.OutputClaimant(
+      val outputClaimant2 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 5,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
 
@@ -1814,14 +1620,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = true
       )
 
-      val outputClaimant3 = models.output.esc.OutputClaimant(
+      val outputClaimant3 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 7,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
@@ -1835,9 +1638,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = ty1periodEnd,
               claimants = List(
               outputClaimant1
-              ),
-              children = List(
-                outputChild1, outputChild2
               )
             )
           )
@@ -1851,9 +1651,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = september,
               claimants = List(
                 outputClaimant2
-              ),
-              children = List(
-                outputChild3, outputChild4
               )
             ),
             ESCPeriod(
@@ -1861,9 +1658,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = ty2periodEnd,
               claimants = List(
                 outputClaimant3
-              ),
-              children = List(
-                outputChild5, outputChild6
               )
             )
           )
@@ -1909,14 +1703,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = false
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       val outputChild4 = models.output.esc.OutputChild(
@@ -1933,14 +1724,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = true
       )
 
-      val outputClaimant2 = models.output.esc.OutputClaimant(
+      val outputClaimant2 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 12,
-
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
@@ -1954,9 +1742,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = ty1periodEnd,
               claimants = List(
               outputClaimant1
-              ),
-              children = List(
-              outputChild1,outputChild2,outputChild3
               )
             )
           )
@@ -1970,9 +1755,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               until = ty2periodEnd,
               claimants = List(
                 outputClaimant2
-              ),
-              children = List(
-                outputChild4,outputChild5,outputChild6
               )
             )
           )
@@ -2209,14 +1991,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = true,
           isPartner = false,
           eligibleMonthsInPeriod = 0,
-
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          vouchers = false
         )
       )
     }
@@ -2232,23 +2011,15 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = true,
           isPartner = false,
-          eligibleMonthsInPeriod = 0,
-
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          eligibleMonthsInPeriod = 0,vouchers = false
         ),
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = true,
           isPartner = true,
-          eligibleMonthsInPeriod = 0,
-
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          eligibleMonthsInPeriod = 0,vouchers = false
         )
       )
     }
@@ -2264,23 +2035,15 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = false,
           isPartner = false,
-          eligibleMonthsInPeriod = 0,
-
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          eligibleMonthsInPeriod = 0,vouchers = false
         ),
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = true,
           isPartner = true,
-          eligibleMonthsInPeriod = 0,
-
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          eligibleMonthsInPeriod = 0,vouchers = false
         )
       )
     }
@@ -2295,14 +2058,10 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = false,
           isPartner = false,
-          eligibleMonthsInPeriod = 0,
-
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          eligibleMonthsInPeriod = 0,vouchers = false
         )
       )
     }
@@ -2318,23 +2077,15 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = false,
           isPartner = false,
-          eligibleMonthsInPeriod = 0,
-
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          eligibleMonthsInPeriod = 0,vouchers = false
         ),
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = false,
           isPartner = true,
-          eligibleMonthsInPeriod = 0,
-
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          eligibleMonthsInPeriod = 0,vouchers = false
         )
       )
     }
@@ -2361,14 +2112,12 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = true,
           isPartner = false,
           eligibleMonthsInPeriod = 5,
 
-          elements = models.output.esc.ClaimantElements(
-            vouchers = true
-          )
+          vouchers = true
         )
       )
     }
@@ -2396,23 +2145,17 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = false,
           isPartner = false,
           eligibleMonthsInPeriod = 0,
-
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          vouchers = false
         ),
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = true,
           isPartner = true,
           eligibleMonthsInPeriod = 5,
-
-          elements = models.output.esc.ClaimantElements(
-            vouchers = true
-          )
+          vouchers = true
         )
       )
     }
@@ -2440,21 +2183,17 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = true,
           isPartner = false,
           eligibleMonthsInPeriod = 5,
-          elements = models.output.esc.ClaimantElements(
-            vouchers = true
-          )
+          vouchers = true
         ),
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = false,
           isPartner = true,
           eligibleMonthsInPeriod = 0,
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          vouchers = false
         )
       )
     }
@@ -2481,13 +2220,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = false,
           isPartner = false,
           eligibleMonthsInPeriod = 0,
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          vouchers = false
         )
       )
     }
@@ -2515,21 +2252,17 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = false,
           isPartner = false,
           eligibleMonthsInPeriod = 0,
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          vouchers = false
         ),
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = false,
           isPartner = true,
           eligibleMonthsInPeriod = 0,
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          vouchers = false
         )
       )
     }
@@ -2556,13 +2289,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = true,
           isPartner = false,
           eligibleMonthsInPeriod = 0,
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          vouchers = false
         )
       )
     }
@@ -2590,21 +2321,17 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = true,
           isPartner = false,
           eligibleMonthsInPeriod = 0,
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          vouchers = false
         ),
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = true,
           isPartner = true,
           eligibleMonthsInPeriod = 0,
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          vouchers = false
         )
       )
     }
@@ -2632,21 +2359,17 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = true,
           isPartner = false,
           eligibleMonthsInPeriod = 0,
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          vouchers = false
         ),
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = false,
           isPartner = true,
           eligibleMonthsInPeriod = 0,
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          vouchers = false
         )
       )
     }
@@ -2673,13 +2396,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = false,
           isPartner = false,
           eligibleMonthsInPeriod = 0,
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          vouchers = false
         )
       )
     }
@@ -2707,21 +2428,17 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = false,
           isPartner = false,
           eligibleMonthsInPeriod = 0,
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          vouchers = false
         ),
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = false,
           isPartner = true,
           eligibleMonthsInPeriod = 0,
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          vouchers = false
         )
       )
     }
@@ -2748,13 +2465,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = false,
           isPartner = false,
           eligibleMonthsInPeriod = 0,
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          vouchers = false
         )
       )
     }
@@ -2781,13 +2496,11 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
       val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
-        models.output.esc.OutputClaimant(
+        models.output.esc.ESCOutputClaimant(
           qualifying = false,
           isPartner = false,
           eligibleMonthsInPeriod = 0,
-          elements = models.output.esc.ClaimantElements(
-            vouchers = false
-          )
+          vouchers = false
         )
       )
     }
