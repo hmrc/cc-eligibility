@@ -16,25 +16,22 @@
 
 package eligibility
 
-import akka.stream.impl.StreamSupervisor.Children
-import models.input.BaseRequest
 import models.input.esc._
 import models.output.OutputAPIModel.Eligibility
 import models.output.esc.ESCEligibilityOutput
 import org.joda.time.LocalDate
 import play.api.Logger
 import utils.{ESCConfig, MessagesObject}
-
 import scala.annotation.tailrec
 import scala.concurrent.Future
 
 object ESCEligibility extends ESCEligibility
 
-trait ESCEligibility extends CCEligibility {
+trait ESCEligibility extends CCEligibilityHelpers {
 
   val eligibility = new ESCEligibilityService
 
-  class ESCEligibilityService extends CCEligibilityService with MessagesObject {
+  class ESCEligibilityService extends MessagesObject {
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -188,7 +185,7 @@ trait ESCEligibility extends CCEligibility {
     }
 
     def constructTaxYearsWithPeriods(request: models.input.esc.Request) : List[models.output.esc.TaxYear] = {
-      generateTaxYears(request.payload.taxYears).reverse
+      generateTaxYears(request.taxYears).reverse
     }
 
     def generateTaxYears(taxYears : List[models.input.esc.TaxYear]) : List[models.output.esc.TaxYear] = {
@@ -208,7 +205,7 @@ trait ESCEligibility extends CCEligibility {
     }
 
     def constructChildrenWithPeriods(request: models.input.esc.Request) : List[models.output.esc.OutputChild] = {
-      generateChildren(request.payload.taxYears).reverse
+      generateChildren(request.taxYears).reverse
     }
 
     def generateChildren(taxYears : List[models.input.esc.TaxYear]) : List[models.output.esc.OutputChild] = {
@@ -243,10 +240,7 @@ trait ESCEligibility extends CCEligibility {
       (eligibility, parentEligibility, partnerEligibility)
     }
 
-
-
-
-    override def eligibility(request : BaseRequest) : Future[Eligibility] = {
+    def eligibility(request : Request) : Future[Eligibility] = {
       request match {
         case request : models.input.esc.Request => {
           val constructTaxYears = constructTaxYearsWithPeriods(request)

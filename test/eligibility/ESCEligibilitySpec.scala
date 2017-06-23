@@ -39,7 +39,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
     "return a Future[Eligibility] result" in {
       val service = ESCEligibility
-      val result = service.eligibility.eligibility(Request(payload = Payload(taxYears = List())))
+      val result = service.eligibility.eligibility(Request(taxYears = List()))
       result.isInstanceOf[Future[Eligibility]] shouldBe true
     }
 
@@ -694,7 +694,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val request = Request(Payload(List(taxYear)))
+      val request = Request(List(taxYear))
 
       val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
 
@@ -751,8 +751,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val request = Request(Payload(List(taxYear)))
-
+      val request = Request(List(taxYear))
       val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
 
       val outputChild1 = models.output.esc.OutputChild(
@@ -808,7 +807,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val request = Request(Payload(List(taxYear)))
+      val request = Request(List(taxYear))
 
       val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
 
@@ -865,7 +864,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val request = Request(Payload(List(taxYear)))
+      val request = Request(List(taxYear))
 
       val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
 
@@ -924,7 +923,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val request = Request(Payload(List(taxYear)))
+      val request = Request(List(taxYear))
 
       val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
 
@@ -983,7 +982,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val request = Request(Payload(List(taxYear)))
+      val request = Request(List(taxYear))
 
       val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
 
@@ -1042,7 +1041,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val request = Request(Payload(List(taxYear)))
+      val request = Request(List(taxYear))
 
       val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
 
@@ -1101,7 +1100,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val request = Request(Payload(List(taxYear)))
+      val request = Request(List(taxYear))
 
       val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
 
@@ -1154,7 +1153,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1), claimants = List(claimant1))
-      val request = Request(Payload(List(taxYear)))
+      val request = Request(List(taxYear))
 
       val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
 
@@ -1227,7 +1226,7 @@ vouchers = true
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear1 = TaxYear(from = ty1periodStart, until = ty1periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val taxYear2 = TaxYear(from = ty2periodStart, until = ty2periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val request = Request(Payload(List(taxYear1, taxYear2)))
+      val request = Request(List(taxYear1, taxYear2))
 
       val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
 
@@ -1383,7 +1382,7 @@ vouchers = true
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear1 = TaxYear(from = ty1periodStart, until = ty1periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val taxYear2 = TaxYear(from = ty2periodStart, until = ty2periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val request = Request(Payload(List(taxYear1, taxYear2)))
+      val request = Request(List(taxYear1, taxYear2))
 
       val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
 
@@ -1480,7 +1479,7 @@ vouchers = true
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear1 = TaxYear(from = ty1periodStart, until = ty1periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val taxYear2 = TaxYear(from = ty2periodStart, until = ty2periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val request = Request(Payload(List(taxYear1, taxYear2)))
+      val request = Request(List(taxYear1, taxYear2))
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -1575,7 +1574,7 @@ vouchers = true
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear1 = TaxYear(from = ty1periodStart, until = ty1periodEnd, children = List(child1, child2), claimants = List(claimant1))
       val taxYear2 = TaxYear(from = ty2periodStart, until = ty2periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val request = Request(Payload(List(taxYear1, taxYear2)))
+      val request = Request(List(taxYear1, taxYear2))
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -1686,7 +1685,7 @@ vouchers = true
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear1 = TaxYear(from = ty1periodStart, until = ty1periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val taxYear2 = TaxYear(from = ty2periodStart, until = ty2periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val request = Request(Payload(List(taxYear1, taxYear2)))
+      val request = Request(List(taxYear1, taxYear2))
 
 
       val outputChild1 = models.output.esc.OutputChild(
@@ -2570,19 +2569,5 @@ vouchers = true
       val result = ESCEligibility.eligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 2
     }
-
-
-    "throw IllegalArgumentException if incorrect type of request is used" in {
-      val otherRequest = mock[BaseRequest]
-
-      try {
-        val result = ESCEligibility.eligibility.eligibility(otherRequest)
-        result shouldBe a[IllegalArgumentException]
-      } catch {
-        case e: Exception =>
-          e shouldBe a[IllegalArgumentException]
-      }
-    }
-
   }
 }

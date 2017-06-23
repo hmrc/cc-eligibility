@@ -57,19 +57,6 @@ class ESCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       status(result) shouldBe Status.OK
     }
 
-    "Empty tax year should return Bad request" in {
-      val controller = new ESCEligibilityController with ESCEligibility {
-        override val eligibility = mock[ESCEligibilityService]
-        override val auditEvent = mock[AuditEvents]
-      }
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/esc/empty_tax_year.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
-      val result = await(controller.eligible(request))
-      status(result) shouldBe Status.BAD_REQUEST
-    }
-
     "Accept invalid json schema (tax year), should return Bad request" in {
       val controller = new ESCEligibilityController with ESCEligibility {
         override val eligibility = mock[ESCEligibilityService]
