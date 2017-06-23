@@ -18,7 +18,7 @@ package utils
 
 import controllers.FakeCCEligibilityApplication
 import models.output.OutputAPIModel._
-import models.output.esc.{ESCEligibilityModel, ESCPeriod}
+import models.output.esc.{ESCEligibilityOutput, ESCPeriod}
 import models.output.tc._
 import models.output.tfc._
 import org.joda.time.LocalDate
@@ -282,13 +282,11 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
         qualifying = true
       )
 
-      val outputClaimant1 = models.output.esc.OutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 11,
-        elements = models.output.esc.ClaimantElements(
-          vouchers = true
-        )
+        vouchers = true
       )
 
       val escPeriods =  List(
@@ -297,16 +295,12 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
           until = periodEnd,
           claimants = List(
             outputClaimant1
-          ),
-          children = List(
-            outputChild1,
-            outputChild2
           )
         )
       )
 
       val outputTaxYear = models.output.esc.TaxYear(from = periodStart, until = periodEnd, periods = escPeriods)
-      val escEligibilityModel = ESCEligibilityModel(taxYears = List(outputTaxYear))
+      val escEligibilityModel = ESCEligibilityOutput(taxYears = List(outputTaxYear))
       val eligibilityOutputModel = Eligibility(esc = Some(escEligibilityModel))
 
       val outputJson = Json.parse(
