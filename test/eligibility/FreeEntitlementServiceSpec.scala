@@ -93,6 +93,8 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
 
   }
 
+  //Some of these tests will fail after 01/09/2017 but the logic needs fixing anyway
+
   "determine eligibility corectly for thirtyHours" when {
     val testCases = Table(
       ("Location", "TFC Eligibility", "Dates of Birth", "Eligibility Result", "Eligibility Rollout"),
