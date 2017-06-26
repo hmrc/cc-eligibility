@@ -63,7 +63,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Empty tax year should return Bad request" in {
-      val controller = new TCEligibilityController with TCEligibility {
+      val controller = new TCEligibilityController {
         override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
@@ -77,7 +77,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept invalid json schema and should return Bad request" in {
-      val controller = new TCEligibilityController with TCEligibility {
+      val controller = new TCEligibilityController{
         override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
@@ -91,7 +91,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept invalid json with incorrect until date format json and return a Bad request" in {
-      val controller = new TCEligibilityController with TCEligibility {
+      val controller = new TCEligibilityController {
         override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
@@ -105,7 +105,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept invalid json if child id has negative value should return 400" in {
-      val controller = new TCEligibilityController with TCEligibility {
+      val controller = new TCEligibilityController {
         override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
@@ -119,7 +119,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept a valid json if there is negative childcare cost should return 400" in {
-      val controller = new TCEligibilityController with TCEligibility {
+      val controller = new TCEligibilityController {
         override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
@@ -133,7 +133,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept a valid json if number of claimants more than 2 should return Bad request" in {
-      val controller = new TCEligibilityController with TCEligibility {
+      val controller = new TCEligibilityController {
         override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
@@ -147,7 +147,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept a valid json if number of claimant/s less than 1 should return Bad request" in {
-      val controller = new TCEligibilityController with TCEligibility {
+      val controller = new TCEligibilityController {
         override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
@@ -161,7 +161,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept a valid json if number of children more than 25 should return Bad request" in {
-      val controller = new TCEligibilityController with TCEligibility {
+      val controller = new TCEligibilityController {
         override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
@@ -175,7 +175,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Accept json for scenario 1 and return a valid response" in {
-      val controller = new TCEligibilityController with TCEligibility {
+      val controller = new TCEligibilityController {
         override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
@@ -258,7 +258,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
     }
 
     "Return Internal Server Error with error message if an exception is thrown during eligibility" in {
-      val controller = new TCEligibilityController with TCEligibility {
+      val controller = new TCEligibilityController {
         override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }

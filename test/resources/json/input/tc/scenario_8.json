@@ -1,45 +1,43 @@
 {
-    "payload": {
-          "taxYears": [
-              {
-                  "from": "2016-08-27",
-                  "until": "2017-04-06",
-                  "claimants": [
-                      {
-                          "hoursPerWeek": 10,
-                          "isPartner": false,
-                          "qualifyingAge": true,
-                          "disability": {
-                              "disabled": false,
-                              "severelyDisabled": false
-                          },
-                        "carersAllowance": false
-                      },
-                      {
-                          "hoursPerWeek": 10,
-                          "isPartner": true,
-                          "qualifyingAge": true,
-                          "disability": {
-                              "disabled": true,
-                              "severelyDisabled": true
-                          },
-                        "carersAllowance": false
-                      }
-                  ],
-                  "children": [
-                      {
-                        "id": 0,
-                        "childcareCost": 3000.00,
-                        "childcareCostPeriod": "Month",
-                        "dob": "2000-09-12",
-                        "disability": {
-                          "disabled": false,
-                          "severelyDisabled": false
-                        },
-                        "education": null
-                      }
-                  ]
-              }
-          ]
-  }
+  "taxYears": [
+    {
+      "from": "2016-08-27",
+      "until": "2017-04-06",
+      "claimants": [
+        {
+          "hoursPerWeek": 10,
+          "isPartner": false,
+          "qualifyingAge": true,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          },
+          "carersAllowance": false
+        },
+        {
+          "hoursPerWeek": 10,
+          "isPartner": true,
+          "qualifyingAge": true,
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": true
+          },
+          "carersAllowance": false
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2000-09-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          },
+          "education": null
+        }
+      ]
+    }
+  ]
 }

@@ -1,34 +1,31 @@
 {
-  "payload": {
-      "taxYears": [
+  "taxYears": [
+    {
+      "from": "2016-08-27",
+      "until": "2017-04-06",
+      "claimants": [
         {
-          "from": "2016-08-27",
-          "until": "2017-04-06",
-          "claimants": [
-            {
-              "hoursPerWeek": 40,
-              "isPartner": false,
-              "disability": {
-                "disabled": false,
-                "severelyDisabled": false
-              },
-              "carersAllowance": false
-            },
-            {
-              "hoursPerWeek": 30,
-              "isPartner": true,
-              "qualifyingAge": true,
-              "disability": {
-                "disabled": true,
-                "severelyDisabled": false
-              },
-              "carersAllowance": false
-            }
-          ],
-          "children": [
-
-          ]
+          "hoursPerWeek": 40,
+          "isPartner": false,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          },
+          "carersAllowance": false
+        },
+        {
+          "hoursPerWeek": 30,
+          "isPartner": true,
+          "qualifyingAge": true,
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          },
+          "carersAllowance": false
         }
+      ],
+      "children": [
       ]
-  }
+    }
+  ]
 }

@@ -1,90 +1,88 @@
 {
-  "payload": {
-    "taxYears": [
-      {
-        "from": "2016-10-27",
-        "until": "2017-04-06",
-        "claimants": [
-          {
-            "hoursPerWeek": 30,
-            "isPartner": false,
-            "disability": {
-              "disabled": false,
-              "severelyDisabled": false
-            },
-            "carersAllowance": false
-          }
-        ],
-        "children": [
-          {
-            "id": 0,
-            "childcareCost": 3000.00,
-            "childcareCostPeriod": "Month",
-            "dob": "1997-08-27",
-            "disability": {
-              "disabled": false,
-              "severelyDisabled": false
-            },
-            "education": {
-              "inEducation": true,
-              "startDate": "2014-09-01"
-            }
+  "taxYears": [
+    {
+      "from": "2016-10-27",
+      "until": "2017-04-06",
+      "claimants": [
+        {
+          "hoursPerWeek": 30,
+          "isPartner": false,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
           },
-          {
-            "id": 1,
-            "childcareCost": 3000.00,
-            "childcareCostPeriod": "Month",
-            "dob": "2002-07-12",
-            "disability": {
-              "disabled": true,
-              "severelyDisabled": true
-            },
-            "education": null
-          }
-        ]
-      },
-      {
-        "from": "2017-04-06",
-        "until": "2018-04-06",
-        "claimants": [
-          {
-            "hoursPerWeek": 30,
-            "isPartner": false,
-            "disability": {
-              "disabled": false,
-              "severelyDisabled": false
-            },
-            "carersAllowance": false
-          }
-        ],
-        "children": [
-          {
-            "id": 0,
-            "childcareCost": 3000.00,
-            "childcareCostPeriod": "Month",
-            "dob": "1997-08-27",
-            "disability": {
-              "disabled": false,
-              "severelyDisabled": false
-            },
-            "education": {
-              "inEducation": true,
-              "startDate": "2014-09-01"
-            }
+          "carersAllowance": false
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "1997-08-27",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
           },
-          {
-            "id": 1,
-            "childcareCost": 3000.00,
-            "childcareCostPeriod": "Month",
-            "dob": "2002-07-12",
-            "disability": {
-              "disabled": true,
-              "severelyDisabled": true
-            },
-            "education": null
+          "education": {
+            "inEducation": true,
+            "startDate": "2014-09-01"
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "id": 1,
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2002-07-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": true
+          },
+          "education": null
+        }
+      ]
+    },
+    {
+      "from": "2017-04-06",
+      "until": "2018-04-06",
+      "claimants": [
+        {
+          "hoursPerWeek": 30,
+          "isPartner": false,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          },
+          "carersAllowance": false
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "1997-08-27",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          },
+          "education": {
+            "inEducation": true,
+            "startDate": "2014-09-01"
+          }
+        },
+        {
+          "id": 1,
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2002-07-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": true
+          },
+          "education": null
+        }
+      ]
+    }
+  ]
 }

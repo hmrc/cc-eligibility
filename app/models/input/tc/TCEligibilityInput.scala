@@ -27,8 +27,12 @@ case class TCEligibilityInput(
                                taxYears: List[TaxYear]
                              )
 
-object TCEligibilityInput {
-  implicit val requestFormat: Reads[TCEligibilityInput] = Json.reads[TCEligibilityInput]
+object TCEligibilityInput extends MessagesObject {
+  def validateTaxYear(taxYears: List[TaxYear]): Boolean = taxYears.length >= 1
+
+  implicit val tcEligibilityReads: Reads[TCEligibilityInput] =
+    (JsPath \ "taxYears").read[List[TaxYear]].filter(ValidationError(messages("cc.elig.tax.year.min")))(x => validateTaxYear(x)).map { ty => TCEligibilityInput(ty) }
+
 }
 
 
