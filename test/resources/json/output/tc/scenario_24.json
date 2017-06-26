@@ -33,7 +33,6 @@
               ],
               "children": [
                 {
-                  "id": 0,
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
@@ -47,7 +46,6 @@
                   }
                 },
                 {
-                  "id": 1,
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": false,
@@ -94,7 +92,6 @@
               ],
               "children": [
                 {
-                  "id": 0,
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
@@ -108,7 +105,6 @@
                   }
                 },
                 {
-                  "id": 1,
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": false,
@@ -149,7 +145,6 @@
               ],
               "children": [
                 {
-                  "id": 0,
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
@@ -163,7 +158,6 @@
                   }
                 },
                 {
-                  "id": 1,
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
@@ -204,7 +198,6 @@
               ],
               "children": [
                 {
-                  "id": 0,
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": false,
@@ -218,7 +211,6 @@
                   }
                 },
                 {
-                  "id": 1,
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,

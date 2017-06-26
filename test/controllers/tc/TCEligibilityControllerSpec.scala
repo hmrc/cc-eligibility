@@ -227,7 +227,6 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
                         ],
                         "children": [
                           {
-                            "id": 0,
                             "childcareCost": 3000.00,
                             "childcareCostPeriod": "Month",
                             "qualifying": false,

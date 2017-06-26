@@ -694,9 +694,9 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
       val result = TCEligibility.determineChildrenEligibilityForPeriod(List(child1, child2, child3), periodStartDate)
 
-      val outputChild1 = models.output.tc.OutputChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputChild2 = models.output.tc.OutputChild(id = 1, childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = true, severeDisability = false, childcare = true))
-      val outputChild3 = models.output.tc.OutputChild(id = 2, childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = true, disability = true, severeDisability = true))
+      val outputChild1 = models.output.tc.OutputChild(childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild2 = models.output.tc.OutputChild(childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = true, severeDisability = false, childcare = true))
+      val outputChild3 = models.output.tc.OutputChild(childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = true, disability = true, severeDisability = true))
 
       result shouldBe List(outputChild3, outputChild2, outputChild1)
     }
@@ -714,9 +714,9 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
       val result = TCEligibility.determineChildrenEligibilityForPeriod(List(child1, child2, child3), periodStartDate)
 
-      val outputChild1 = models.output.tc.OutputChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputChild2 = models.output.tc.OutputChild(id = 1, childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = true, severeDisability = false, childcare = true))
-      val outputChild3 = models.output.tc.OutputChild(id = 2, childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = true, disability = true, severeDisability = true))
+      val outputChild1 = models.output.tc.OutputChild(childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild2 = models.output.tc.OutputChild(childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = true, severeDisability = false, childcare = true))
+      val outputChild3 = models.output.tc.OutputChild(childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = true, disability = true, severeDisability = true))
 
       result shouldBe List(outputChild3, outputChild2, outputChild1)
     }
@@ -734,9 +734,9 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
       val result = TCEligibility.determineChildrenEligibilityForPeriod(List(child1, child2, child3), periodStartDate)
 
-      val outputChild1 = models.output.tc.OutputChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputChild2 = models.output.tc.OutputChild(id = 1, childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = true, severeDisability = false, childcare = true))
-      val outputChild3 = models.output.tc.OutputChild(id = 2, childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = false, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false))
+      val outputChild1 = models.output.tc.OutputChild(childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild2 = models.output.tc.OutputChild(childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = true, severeDisability = false, childcare = true))
+      val outputChild3 = models.output.tc.OutputChild(childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = false, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false))
 
       result shouldBe List(outputChild3, outputChild2, outputChild1)
     }
@@ -757,10 +757,10 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
       val result = TCEligibility.determineChildrenEligibilityForPeriod(List(child1, child2, child3, child4), periodStartDate)
 
-      val outputChild1 = models.output.tc.OutputChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputChild2 = models.output.tc.OutputChild(id = 1, childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputChild3 = models.output.tc.OutputChild(id = 2, childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputChild4 = models.output.tc.OutputChild(id = 3, childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild1 = models.output.tc.OutputChild(childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild2 = models.output.tc.OutputChild(childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild3 = models.output.tc.OutputChild(childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild4 = models.output.tc.OutputChild(childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true))
 
       result shouldBe List(outputChild1, outputChild2, outputChild3, outputChild4)
     }
@@ -778,9 +778,9 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
       val result = TCEligibility.determineChildrenEligibilityForPeriod(List(child1, child2, child3), periodStartDate)
 
-      val outputChild1 = models.output.tc.OutputChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputChild2 = models.output.tc.OutputChild(id = 1, childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputChild3 = models.output.tc.OutputChild(id = 2, childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild1 = models.output.tc.OutputChild(childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild2 = models.output.tc.OutputChild(childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild3 = models.output.tc.OutputChild(childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true))
 
       result shouldBe List(outputChild1, outputChild2, outputChild3)
     }
@@ -797,8 +797,8 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
       val result = TCEligibility.determineChildrenEligibilityForPeriod(List(child1, child2), periodStartDate)
 
-      val outputChild1 = models.output.tc.OutputChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputChild2 = models.output.tc.OutputChild(id = 1, childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild1 = models.output.tc.OutputChild(childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild2 = models.output.tc.OutputChild(childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
 
       result shouldBe List(outputChild1, outputChild2)
     }
@@ -819,10 +819,10 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
       val result = TCEligibility.determineChildrenEligibilityForPeriod(List(child1, child2, child3, child4), periodStartDate)
 
-      val outputChild1 = models.output.tc.OutputChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputChild2 = models.output.tc.OutputChild(id = 1, childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputChild3 = models.output.tc.OutputChild(id = 2, childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputChild4 = models.output.tc.OutputChild(id = 3, childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild1 = models.output.tc.OutputChild(childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild2 = models.output.tc.OutputChild(childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild3 = models.output.tc.OutputChild(childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild4 = models.output.tc.OutputChild(childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true))
 
       result shouldBe List(outputChild1, outputChild2, outputChild3, outputChild4)
     }
@@ -841,9 +841,9 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
       val result = TCEligibility.determineChildrenEligibilityForPeriod(List(child1, child2, child3), periodStartDate)
 
-      val outputChild1 = models.output.tc.OutputChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputChild2 = models.output.tc.OutputChild(id = 1, childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputChild3 = models.output.tc.OutputChild(id = 2, childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild1 = models.output.tc.OutputChild(childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild2 = models.output.tc.OutputChild(childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild3 = models.output.tc.OutputChild(childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true))
 
       result shouldBe List(outputChild1, outputChild2, outputChild3)
     }
@@ -864,10 +864,10 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
       val result = TCEligibility.determineChildrenEligibilityForPeriod(List(child1, child2, child3, child4), periodStartDate)
 
-      val outputChild1 = models.output.tc.OutputChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputChild2 = models.output.tc.OutputChild(id = 1, childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputChild3 = models.output.tc.OutputChild(id = 2, childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputChild4 = models.output.tc.OutputChild(id = 3, childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild1 = models.output.tc.OutputChild(childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild2 = models.output.tc.OutputChild(childcareCost = BigDecimal(99.21), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild3 = models.output.tc.OutputChild(childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild4 = models.output.tc.OutputChild(childcareCost = BigDecimal(0.01), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = false, youngAdult = false, disability = false, severeDisability = false, childcare = true))
 
       result shouldBe List(outputChild1, outputChild2, outputChild3, outputChild4)
     }
@@ -1264,7 +1264,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1), children = List(child1))
 
       val outputClaimant = models.output.tc.OutputClaimant(qualifying = true, isPartner = false, claimantDisability = ClaimantDisability(disability = false, severeDisability = false))
-      val outputChild = models.output.tc.OutputChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild = models.output.tc.OutputChild(childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
       val outputHhElements = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
       val outputPeriod = models.output.tc.TCPeriod(from = periodStartDate, until = periodEndDate, householdElements = outputHhElements, claimants = List(outputClaimant), children = List(outputChild))
       val outputTaxYear = models.output.tc.TaxYear(from = periodStartDate, until = periodEndDate, periods = List(outputPeriod))
@@ -1286,7 +1286,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val ty = models.input.tc.TaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1), children = List(child1))
 
       val outputClaimant = models.output.tc.OutputClaimant(qualifying = true, isPartner = false, claimantDisability = ClaimantDisability(disability = false, severeDisability = false))
-      val outputChild = models.output.tc.OutputChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputChild = models.output.tc.OutputChild(childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
       val outputHhElements = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
       val outputPeriod = models.output.tc.TCPeriod(from = periodStartDate, until = periodEndDate, householdElements = outputHhElements, claimants = List(outputClaimant), children = List(outputChild))
       val outputTaxYear = models.output.tc.TaxYear(from = periodStartDate, until = periodEndDate, periods = List(outputPeriod))

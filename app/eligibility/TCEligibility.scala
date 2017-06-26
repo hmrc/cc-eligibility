@@ -159,7 +159,6 @@ trait TCEligibility extends CCEligibilityHelpers with MessagesObject {
         val youngAdultElement = child.getsYoungAdultElement(periodStart)
 
         val outputChild = OutputChild(
-          id = child.id,
           childcareCost = child.childcareCost,
           childcareCostPeriod = child.childcareCostPeriod,
           qualifying = isChild || youngAdultElement,
