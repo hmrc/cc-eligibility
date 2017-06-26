@@ -16,33 +16,20 @@
 
 package models.input.esc
 
+import models.input.{BaseClaimant, BaseTaxYear}
 import org.joda.time.LocalDate
 import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
-import utils.{MessagesObject, CCFormat, ESCConfig}
+import utils.{CCFormat, ESCConfig, MessagesObject}
 
-case class Request(
-                    payload: Payload
-                  ) extends models.input.BaseRequest
-
-object Request {
-  implicit val requestFormat: Reads[Request] =
-    (JsPath \ "payload").read[Payload].map { payload => Request(payload)}
-}
-
-case class Payload(
+case class ESCEligibilityInput(
                     taxYears: List[TaxYear]
-                  ) extends models.input.BasePayload
+                  )
 
-object Payload extends MessagesObject {
-  def validateTaxYear(taxYears: List[TaxYear]): Boolean = {
-    taxYears.length >= 1
-  }
-
-  implicit val payloadReads: Reads[Payload] =
-    (JsPath \ "taxYears").read[List[TaxYear]].filter(ValidationError(messages("cc.elig.tax.year.min")))(x => validateTaxYear(x)).map { ty => Payload(ty)}
+object ESCEligibilityInput {
+  implicit val requestFormat: Reads[ESCEligibilityInput] = Json.reads[ESCEligibilityInput]
 }
 
 case class TaxYear(
@@ -50,7 +37,7 @@ case class TaxYear(
                     until: LocalDate,
                     claimants: List[Claimant],
                     children: List[Child]
-                  ) extends models.input.BaseTaxYear
+                  ) extends BaseTaxYear
 
 object TaxYear extends CCFormat with MessagesObject {
 
@@ -73,12 +60,10 @@ object TaxYear extends CCFormat with MessagesObject {
 case class Claimant(
                      isPartner: Boolean = false,
                      employerProvidesESC : Boolean = false
-                   ) extends models.input.BaseClaimant {
-
+                   ) extends BaseClaimant {
   def isClaimantQualifyingForESC : Boolean = {
-     employerProvidesESC
+    employerProvidesESC
   }
-
 }
 
 object Claimant extends CCFormat {

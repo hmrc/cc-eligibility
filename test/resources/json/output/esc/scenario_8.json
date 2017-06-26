@@ -14,19 +14,7 @@
                     "qualifying": true,
                     "isPartner": false,
                     "eligibleMonthsInPeriod": 8,
-                    "elements": {
-                      "vouchers": true
-                    }
-                  }
-                ],
-                "children": [
-                  {
-                    "id": 0,
-                    "qualifying": true
-                  },
-                  {
-                    "id": 1,
-                    "qualifying": false
+                    "vouchers": true
                   }
                 ]
               }

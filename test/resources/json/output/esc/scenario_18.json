@@ -14,27 +14,13 @@
                   "qualifying": true,
                   "isPartner": false,
                   "eligibleMonthsInPeriod": 3,
-                  "elements": {
-                    "vouchers": true
-                  }
+                  "vouchers": true
                 },
                 {
                   "qualifying": true,
                   "isPartner": true,
                   "eligibleMonthsInPeriod": 3,
-                  "elements": {
-                    "vouchers": true
-                  }
-                }
-              ],
-              "children": [
-                {
-                  "id": 0,
-                  "qualifying": true
-                },
-                {
-                  "id": 1,
-                  "qualifying": false
+                  "vouchers": true
                 }
               ]
             },
@@ -46,29 +32,14 @@
               "qualifying": true,
               "isPartner": false,
               "eligibleMonthsInPeriod": 7,
-              "elements": {
                 "vouchers": true
-              }
               },
               {
                 "qualifying": true,
                 "isPartner": true,
                 "eligibleMonthsInPeriod": 7,
-                "elements": {
                   "vouchers": true
-                }
               }
-            ],
-            "children": [
-              {
-              "id": 0,
-              "qualifying": false
-              },
-              {
-                "id": 1,
-                "qualifying": true
-              }
-
             ]
             }
           ]
