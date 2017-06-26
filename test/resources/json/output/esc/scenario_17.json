@@ -14,62 +14,42 @@
                   "qualifying": true,
                   "isPartner": false,
                   "eligibleMonthsInPeriod": 1,
-                  "elements": {
-                    "vouchers": true
-                  }
+                  "vouchers": true
                 },
                 {
                   "qualifying": true,
                   "isPartner": true,
                   "eligibleMonthsInPeriod": 1,
-                  "elements": {
-                    "vouchers": true
-                  }
-                }
-              ],
-              "children": [
-                {
-                  "id": 0,
-                  "qualifying": true
+                  "vouchers": true
                 }
               ]
             },
             {
-            "from": "2016-09-01",
-            "until": "2017-04-06",
-            "claimants": [
-            {
-              "qualifying": true,
-              "isPartner": false,
-              "eligibleMonthsInPeriod": 0,
-              "elements": {
-              "vouchers": false
-              }
-            },
-            {
-              "qualifying": true,
-              "isPartner": true,
-              "eligibleMonthsInPeriod": 0,
-              "elements": {
-              "vouchers": false
-            }
-            }
-            ],
-            "children": [
-            {
-              "id": 0,
-              "qualifying": false
-            }
-            ]
+              "from": "2016-09-01",
+              "until": "2017-04-06",
+              "claimants": [
+                {
+                  "qualifying": true,
+                  "isPartner": false,
+                  "eligibleMonthsInPeriod": 0,
+                  "vouchers": false
+                },
+                {
+                  "qualifying": true,
+                  "isPartner": true,
+                  "eligibleMonthsInPeriod": 0,
+                  "vouchers": false
+                }
+              ]
             }
           ]
         }
       ],
-         "eligibility":true,
-         "parentEligibility":true,
-         "partnerEligibility":true
-       },
-       "tc": null,
-       "tfc": null
+      "eligibility": true,
+      "parentEligibility": true,
+      "partnerEligibility": true
+    },
+    "tc": null,
+    "tfc": null
   }
 }

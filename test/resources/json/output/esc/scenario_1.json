@@ -1,5 +1,7 @@
 {
     "eligibility": {
+      "tc": null,
+      "tfc": null,
       "esc": {
         "taxYears": [
           {
@@ -14,15 +16,7 @@
                     "qualifying": false,
                     "isPartner": false,
                     "eligibleMonthsInPeriod": 0,
-                    "elements": {
-                      "vouchers": false
-                    }
-                  }
-                ],
-                "children": [
-                  {
-                    "id": 0,
-                    "qualifying": true
+                    "vouchers": false
                   }
                 ]
               }
@@ -32,9 +26,7 @@
         "eligibility":false,
         "parentEligibility":false,
         "partnerEligibility":false
-      },
-      "tc": null,
-      "tfc": null
+      }
     }
 }
 

@@ -19,7 +19,7 @@ package controllers.esc
 import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import eligibility.ESCEligibility
-import models.input.esc.Request
+import models.input.esc.ESCEligibilityInput
 import models.output.OutputAPIModel.Eligibility
 import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
@@ -45,107 +45,94 @@ class ESCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
     }
 
     "Accept valid json should return Json body" in {
-      val controller = new ESCEligibilityController with ESCEligibility {
-        override val eligibility = mock[ESCEligibilityService]
+      val controller = new ESCEligibilityController {
+        override val escEligibility = mock[ESCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/esc/eligibility_input_test.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.escEligibility.eligibility(any[ESCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
       val result = await(controller.eligible(request))
       status(result) shouldBe Status.OK
     }
 
-    "Empty tax year should return Bad request" in {
-      val controller = new ESCEligibilityController with ESCEligibility {
-        override val eligibility = mock[ESCEligibilityService]
-        override val auditEvent = mock[AuditEvents]
-      }
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/esc/empty_tax_year.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
-      val result = await(controller.eligible(request))
-      status(result) shouldBe Status.BAD_REQUEST
-    }
-
     "Accept invalid json schema (tax year), should return Bad request" in {
-      val controller = new ESCEligibilityController with ESCEligibility {
-        override val eligibility = mock[ESCEligibilityService]
+      val controller = new ESCEligibilityController {
+        override val escEligibility = mock[ESCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/esc/invalid_tax_year.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.escEligibility.eligibility(any[ESCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
       val result = await(controller.eligible(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Accept invalid json with incorrect until date format json should return a Bad request" in {
       val controller = new ESCEligibilityController with ESCEligibility {
-        override val eligibility = mock[ESCEligibilityService]
+        override val escEligibility = mock[ESCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/esc/incorrect_date_format.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.escEligibility.eligibility(any[ESCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
       val result = await(controller.eligible(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Accept invalid json if child id has negative value should return 400" in {
       val controller = new ESCEligibilityController with ESCEligibility {
-        override val eligibility = mock[ESCEligibilityService]
+        override val escEligibility = mock[ESCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/esc/negative_child_id.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.escEligibility.eligibility(any[ESCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
       val result = await(controller.eligible(request))
       status(result) shouldBe 400
     }
 
     "Accept a valid json if number of claimant/s less than 1 should return Bad request" in {
       val controller = new ESCEligibilityController with ESCEligibility {
-        override val eligibility = mock[ESCEligibilityService]
+        override val escEligibility = mock[ESCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/esc/no_claimants.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.escEligibility.eligibility(any[ESCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
       val result = await(controller.eligible(request))
       status(result) shouldBe 400
     }
 
     "Accept a valid json if number of children more than 25 should return Bad request" in {
       val controller = new ESCEligibilityController with ESCEligibility {
-        override val eligibility = mock[ESCEligibilityService]
+        override val escEligibility = mock[ESCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/esc/invalid_no_of_children.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.escEligibility.eligibility(any[ESCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
       val result = await(controller.eligible(request))
       status(result) shouldBe 400
     }
 
     "Accept valid json scenario and return a valid response (ESC start date provided)" in {
       val controller = new ESCEligibilityController with ESCEligibility {
-        override val eligibility = mock[ESCEligibilityService]
+        override val escEligibility = mock[ESCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/esc/eligibility_input_test.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[Request]
-      val eligibilityResult = ESCEligibility.eligibility.eligibility(JsonResult.get)
+      val JsonResult = inputJson.validate[ESCEligibilityInput]
+      val eligibilityResult = ESCEligibility.eligibility(JsonResult.get)
 
-      when(controller.eligibility.eligibility(mockEq(JsonResult.get))).thenReturn(Future.successful(eligibilityResult))
+      when(controller.escEligibility.eligibility(mockEq(JsonResult.get))).thenReturn(Future.successful(eligibilityResult))
       val result = await(controller.eligible(request))
 
       val outputJson = Json.parse(
@@ -168,15 +155,7 @@ class ESCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                                             "qualifying": false,
                                             "isPartner": false,
                                             "eligibleMonthsInPeriod": 0,
-                                            "elements": {
-                                                "vouchers": false
-                                            }
-                                        }
-                                    ],
-                                    "children": [
-                                        {
-                                            "id": 0,
-                                            "qualifying": true
+                                            "vouchers": false
                                         }
                                     ]
                                 }
@@ -197,14 +176,14 @@ class ESCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
 
     "Return Internal Server Error with error message if an exception is thrown during eligibility" in {
       val controller = new ESCEligibilityController with ESCEligibility {
-        override val eligibility = mock[ESCEligibilityService]
+        override val escEligibility = mock[ESCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/esc/eligibility_input_test.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[Request]
+      val JsonResult = inputJson.validate[ESCEligibilityInput]
 
-      when(controller.eligibility.eligibility(mockEq(JsonResult.get))).thenReturn(Future.failed(new Exception("Something bad happened in Eligibility")))
+      when(controller.escEligibility.eligibility(mockEq(JsonResult.get))).thenReturn(Future.failed(new Exception("Something bad happened in Eligibility")))
       val result = await(controller.eligible(request))
       val outputJSON = Json.parse(
         """

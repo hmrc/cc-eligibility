@@ -18,17 +18,16 @@ package models.output.esc
 
 import org.joda.time.LocalDate
 import play.api.libs.json.{Json, Writes}
-import utils.CCFormat
 
-case class ESCEligibilityModel(
+case class ESCEligibilityOutput(
                                 taxYears: List[TaxYear],
                                 eligibility: Boolean = false,
                                 parentEligibility: Boolean = false,
                                 partnerEligibility: Boolean = false
                               )
 
-object ESCEligibilityModel {
-  implicit val escEligible: Writes[ESCEligibilityModel] = Json.writes[ESCEligibilityModel]
+object ESCEligibilityOutput {
+  implicit val escEligible: Writes[ESCEligibilityOutput] = Json.writes[ESCEligibilityOutput]
 }
 
 case class TaxYear(
@@ -37,41 +36,30 @@ case class TaxYear(
                     periods: List[ESCPeriod]
                   )
 
-object TaxYear extends CCFormat {
+object TaxYear {
   implicit val taxYearWrites: Writes[TaxYear] = Json.writes[TaxYear]
 }
 
 case class ESCPeriod(
                       from: LocalDate,
                       until: LocalDate,
-                      claimants: List[OutputClaimant],
-                      children: List[OutputChild]
+                      claimants: List[ESCOutputClaimant]
                     )
 
-object ESCPeriod extends CCFormat {
+object ESCPeriod {
   implicit val periodWrites: Writes[ESCPeriod] = Json.writes[ESCPeriod]
 }
 
-case class ClaimantElements(
-                             // claimants qualification is determined by employer providing esc
-                             // and children's qualification (if there is at least 1 qualifying child)
-                             vouchers: Boolean = false
-                           )
-
-object ClaimantElements {
-  implicit val claimantWrites: Writes[ClaimantElements] = Json.writes[ClaimantElements]
-}
-
-case class OutputClaimant(
+case class ESCOutputClaimant(
                            qualifying: Boolean = false,
                            isPartner: Boolean = false,
                            eligibleMonthsInPeriod: Int = 0,
-                           elements: ClaimantElements
+                           vouchers: Boolean = false
                          )
 
 //escAmount can be a voucher amount, childcare bursary amount or directly contracted amount
-object OutputClaimant extends CCFormat {
-  implicit val claimantWrites: Writes[OutputClaimant] = Json.writes[OutputClaimant]
+object ESCOutputClaimant {
+  implicit val claimantWrites: Writes[ESCOutputClaimant] = Json.writes[ESCOutputClaimant]
 }
 
 case class OutputChild(
