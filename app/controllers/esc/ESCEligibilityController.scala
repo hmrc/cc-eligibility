@@ -27,13 +27,13 @@ import service.AuditEvents
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object ESCEligibilityController extends ESCEligibilityController with ESCEligibility {
+object ESCEligibilityController extends ESCEligibilityController  {
+  override val escEligibility = ESCEligibility
   override val auditEvent = AuditEvents
 }
 
 trait ESCEligibilityController extends EligibilityController {
-  this: ESCEligibility =>
-
+  val escEligibility: ESCEligibility
   val auditEvent : AuditEvents
 
   override def eligible : Action[JsValue] = Action.async(parse.json) {
@@ -45,7 +45,7 @@ trait ESCEligibilityController extends EligibilityController {
         },
         result => {
           auditEvent.auditESCRequest(result.toString)
-          eligibility.eligibility(result).map {
+          escEligibility.eligibility(result).map {
             response =>
               auditEvent.auditESCResponse(utils.JSONFactory.generateResultJson(response).toString())
               Ok(utils.JSONFactory.generateResultJson(response))

@@ -27,11 +27,7 @@ import scala.concurrent.Future
 
 object ESCEligibility extends ESCEligibility
 
-trait ESCEligibility extends CCEligibilityHelpers {
-
-  val eligibility = new ESCEligibilityService
-
-  class ESCEligibilityService extends MessagesObject {
+trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -240,7 +236,7 @@ trait ESCEligibility extends CCEligibilityHelpers {
       (eligibility, parentEligibility, partnerEligibility)
     }
 
-    def eligibility(request : ESCEligibilityInput) : Future[Eligibility] = {
+    def eligibility(request: ESCEligibilityInput) : Future[Eligibility] = {
       request match {
         case request : models.input.esc.ESCEligibilityInput => {
           val constructTaxYears = constructTaxYearsWithPeriods(request)
@@ -264,6 +260,4 @@ trait ESCEligibility extends CCEligibilityHelpers {
           throw new IllegalArgumentException(messages("cc.elig.wrong.type"))
       }
     }
-
-  }
 }

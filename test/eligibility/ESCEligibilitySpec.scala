@@ -17,8 +17,6 @@
 package eligibility
 
 import controllers.FakeCCEligibilityApplication
-import eligibility.ESCEligibility.ESCEligibilityService
-import models.input.BaseRequest
 import models.input.esc._
 import models.output.OutputAPIModel.Eligibility
 import models.output.esc.ESCPeriod
@@ -32,14 +30,9 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
   "ESCEligibilityService" should {
 
-    "return an instance of ESCEligibilityService" in {
-      val service = ESCEligibility
-      service.eligibility shouldBe a[ESCEligibilityService]
-    }
-
     "return a Future[Eligibility] result" in {
       val service = ESCEligibility
-      val result = service.eligibility.eligibility(ESCEligibilityInput(taxYears = List()))
+      val result = service.eligibility(ESCEligibilityInput(taxYears = List()))
       result.isInstanceOf[Future[Eligibility]] shouldBe true
     }
 
@@ -52,7 +45,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val taxYear = TaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
       val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
-      val result = ESCEligibility.eligibility invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
+      val result = ESCEligibility invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 1
     }
@@ -66,7 +59,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val taxYear = TaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
       val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
-      val result = ESCEligibility.eligibility invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
+      val result = ESCEligibility invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 2
     }
@@ -80,7 +73,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val taxYear = TaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
       val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
-      val result = ESCEligibility.eligibility invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
+      val result = ESCEligibility invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 1
     }
@@ -94,7 +87,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val taxYear = TaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
       val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
-      val result = ESCEligibility.eligibility invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
+      val result = ESCEligibility invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 2
     }
@@ -108,7 +101,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val taxYear = TaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
       val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
-      val result = ESCEligibility.eligibility invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
+      val result = ESCEligibility invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 2
     }
@@ -124,7 +117,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = TaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child, child2))
 
-      val result = ESCEligibility.eligibility.generateSplitDates(taxYear)
+      val result = ESCEligibility.generateSplitDates(taxYear)
       result shouldBe List(dateOfBirth)
     }
 
@@ -138,7 +131,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = TaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child, child2))
 
-      val result = ESCEligibility.eligibility.generateSplitDates(taxYear)
+      val result = ESCEligibility.generateSplitDates(taxYear)
       result shouldBe List(dateOfBirth)
     }
 
@@ -153,7 +146,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = TaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child, child2))
 
-      val result = ESCEligibility.eligibility.determineStartDatesOfPeriodsInTaxYear(taxYear)
+      val result = ESCEligibility.determineStartDatesOfPeriodsInTaxYear(taxYear)
       result shouldBe List(today,september,dateOfBirth2)
     }
 
@@ -168,7 +161,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val child2 = Child(id = 1, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false))
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val result = ESCEligibility.eligibility.determinePeriodsForTaxYear(taxYear)
+      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -183,8 +176,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 10,
-
-vouchers = true
+        vouchers = true
       )
 
       result shouldBe List(
@@ -209,7 +201,7 @@ vouchers = true
       val child2 = Child(id = 1, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false))
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val result = ESCEligibility.eligibility.determinePeriodsForTaxYear(taxYear)
+      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -249,7 +241,7 @@ vouchers = true
       val child2 = Child(id = 0, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false))
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val result = ESCEligibility.eligibility.determinePeriodsForTaxYear(taxYear)
+      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -289,7 +281,7 @@ vouchers = true
       val child2 = Child(id = 0, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false))
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val result = ESCEligibility.eligibility.determinePeriodsForTaxYear(taxYear)
+      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -330,7 +322,7 @@ vouchers = true
       val child2 = Child(id = 1, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false))
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val result = ESCEligibility.eligibility.determinePeriodsForTaxYear(taxYear)
+      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -418,7 +410,7 @@ vouchers = true
       val child2 = Child(id = 1, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false))
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val result = ESCEligibility.eligibility.determinePeriodsForTaxYear(taxYear)
+      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -482,7 +474,7 @@ vouchers = true
       val child1 = Child(id = 0, dob = dateOfBirth1, disability = Disability(disabled = false, severelyDisabled = false))
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1), claimants = List(claimant1))
-      val result = ESCEligibility.eligibility.determinePeriodsForTaxYear(taxYear)
+      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -536,7 +528,7 @@ vouchers = true
       val child2 = Child(id = 0, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false))
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val result = ESCEligibility.eligibility.determinePeriodsForTaxYear(taxYear)
+      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -577,7 +569,7 @@ vouchers = true
       val child2 = Child(id = 0, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false))
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val result = ESCEligibility.eligibility.determinePeriodsForTaxYear(taxYear)
+      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -645,7 +637,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val result = ESCEligibility.eligibility.determinePeriodsForTaxYear(taxYear)
+      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -696,7 +688,7 @@ vouchers = true
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val request = ESCEligibilityInput(List(taxYear))
 
-      val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
+      val result = ESCEligibility.constructTaxYearsWithPeriods(request)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -752,7 +744,7 @@ vouchers = true
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val request = ESCEligibilityInput(List(taxYear))
-      val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
+      val result = ESCEligibility.constructTaxYearsWithPeriods(request)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -809,7 +801,7 @@ vouchers = true
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val request = ESCEligibilityInput(List(taxYear))
 
-      val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
+      val result = ESCEligibility.constructTaxYearsWithPeriods(request)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -866,7 +858,7 @@ vouchers = true
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val request = ESCEligibilityInput(List(taxYear))
 
-      val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
+      val result = ESCEligibility.constructTaxYearsWithPeriods(request)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -925,7 +917,7 @@ vouchers = true
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val request = ESCEligibilityInput(List(taxYear))
 
-      val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
+      val result = ESCEligibility.constructTaxYearsWithPeriods(request)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -984,7 +976,7 @@ vouchers = true
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val request = ESCEligibilityInput(List(taxYear))
 
-      val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
+      val result = ESCEligibility.constructTaxYearsWithPeriods(request)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -1043,7 +1035,7 @@ vouchers = true
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val request = ESCEligibilityInput(List(taxYear))
 
-      val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
+      val result = ESCEligibility.constructTaxYearsWithPeriods(request)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -1102,7 +1094,7 @@ vouchers = true
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val request = ESCEligibilityInput(List(taxYear))
 
-      val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
+      val result = ESCEligibility.constructTaxYearsWithPeriods(request)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -1155,7 +1147,7 @@ vouchers = true
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1), claimants = List(claimant1))
       val request = ESCEligibilityInput(List(taxYear))
 
-      val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
+      val result = ESCEligibility.constructTaxYearsWithPeriods(request)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -1228,7 +1220,7 @@ vouchers = true
       val taxYear2 = TaxYear(from = ty2periodStart, until = ty2periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val request = ESCEligibilityInput(List(taxYear1, taxYear2))
 
-      val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
+      val result = ESCEligibility.constructTaxYearsWithPeriods(request)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -1384,7 +1376,7 @@ vouchers = true
       val taxYear2 = TaxYear(from = ty2periodStart, until = ty2periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val request = ESCEligibilityInput(List(taxYear1, taxYear2))
 
-      val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
+      val result = ESCEligibility.constructTaxYearsWithPeriods(request)
 
       val outputChild1 = models.output.esc.OutputChild(
         id = 0,
@@ -1523,7 +1515,7 @@ vouchers = true
         vouchers = true
       )
 
-      val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
+      val result = ESCEligibility.constructTaxYearsWithPeriods(request)
       result shouldBe List(
         models.output.esc.TaxYear(
           from = ty1periodStart,
@@ -1626,7 +1618,7 @@ vouchers = true
         vouchers = true
       )
 
-      val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
+      val result = ESCEligibility.constructTaxYearsWithPeriods(request)
       result shouldBe List(
         models.output.esc.TaxYear(
           from = ty1periodStart,
@@ -1730,7 +1722,7 @@ vouchers = true
         vouchers = true
       )
 
-      val result = ESCEligibility.eligibility.constructTaxYearsWithPeriods(request)
+      val result = ESCEligibility.constructTaxYearsWithPeriods(request)
       result shouldBe List(
         models.output.esc.TaxYear(
           from = ty1periodStart,
@@ -1775,7 +1767,7 @@ vouchers = true
       val child2 = Child(id = 1, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false))
       val child3 = Child(id = 2, dob = dateOfBirth3, disability = Disability(disabled = false, severelyDisabled = false))
 
-      val result = ESCEligibility.eligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
+      val result = ESCEligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
       result shouldBe List(
         models.output.esc.OutputChild(
           id = 0,
@@ -1801,7 +1793,7 @@ vouchers = true
       val child2 = Child(id = 1, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false))
       val child3 = Child(id = 2, dob = dateOfBirth3, disability = Disability(disabled = false, severelyDisabled = false))
 
-      val result = ESCEligibility.eligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
+      val result = ESCEligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
       result shouldBe List(
         models.output.esc.OutputChild(
           id = 0,
@@ -1830,7 +1822,7 @@ vouchers = true
       val child2 = Child(id = 1, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false))
       val child3 = Child(id = 2, dob = dateOfBirth3, disability = Disability(disabled = false, severelyDisabled = false))
 
-      val result = ESCEligibility.eligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
+      val result = ESCEligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
       result shouldBe List(
         models.output.esc.OutputChild(
           id = 0,
@@ -1859,7 +1851,7 @@ vouchers = true
       val child2 = Child(id = 1, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false))
       val child3 = Child(id = 2, dob = dateOfBirth3, disability = Disability(disabled = false, severelyDisabled = false))
 
-      val result = ESCEligibility.eligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
+      val result = ESCEligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
       result shouldBe List(
         models.output.esc.OutputChild(
           id = 0,
@@ -1886,7 +1878,7 @@ vouchers = true
       val child2 = Child(id = 1, dob = dateOfBirth2, disability = Disability(disabled = false, severelyDisabled = false))
       val child3 = Child(id = 2, dob = dateOfBirth3, disability = Disability(disabled = false, severelyDisabled = false))
 
-      val result = ESCEligibility.eligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
+      val result = ESCEligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
       result shouldBe List(
         models.output.esc.OutputChild(
           id = 0,
@@ -1918,7 +1910,7 @@ vouchers = true
       val child4 = Child(id = 3, dob = dateOfBirth4, disability = Disability(disabled = false, severelyDisabled = false))
       val child5 = Child(id = 4, dob = dateOfBirth5, disability = Disability(disabled = false, severelyDisabled = false))
 
-      val result = ESCEligibility.eligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3,child4, child5),ty1periodStart)
+      val result = ESCEligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3,child4, child5),ty1periodStart)
       result shouldBe List(
         models.output.esc.OutputChild(
           id = 0,
@@ -1955,7 +1947,7 @@ vouchers = true
       val child4 = Child(id = 3, dob = dateOfBirth4, disability = Disability(disabled = false, severelyDisabled = false))
       val child5 = Child(id = 4, dob = dateOfBirth5, disability = Disability(disabled = false, severelyDisabled = false))
 
-      val result = ESCEligibility.eligibility.hasQualifyingChildForPeriod(List(child1,child2,child3,child4,child5), ty1periodStart)
+      val result = ESCEligibility.hasQualifyingChildForPeriod(List(child1,child2,child3,child4,child5), ty1periodStart)
       result shouldBe true
     }
 
@@ -1976,7 +1968,7 @@ vouchers = true
       val child4 = Child(id = 3, dob = dateOfBirth4, disability = Disability(disabled = false, severelyDisabled = false))
       val child5 = Child(id = 4, dob = dateOfBirth5, disability = Disability(disabled = false, severelyDisabled = false))
 
-      val result = ESCEligibility.eligibility.hasQualifyingChildForPeriod(List(child1,child2,child3,child4,child5), ty1periodStart)
+      val result = ESCEligibility.hasQualifyingChildForPeriod(List(child1,child2,child3,child4,child5), ty1periodStart)
       result shouldBe false
     }
 
@@ -1988,7 +1980,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
 
-      val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCOutputClaimant(
           qualifying = true,
@@ -2008,7 +2000,7 @@ vouchers = true
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val claimant2 = Claimant(isPartner = true, employerProvidesESC = true)
 
-      val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCOutputClaimant(
           qualifying = true,
@@ -2032,7 +2024,7 @@ vouchers = true
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = false)
       val claimant2 = Claimant(isPartner = true, employerProvidesESC = true)
 
-      val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCOutputClaimant(
           qualifying = false,
@@ -2055,7 +2047,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = false)
 
-      val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCOutputClaimant(
           qualifying = false,
@@ -2074,7 +2066,7 @@ vouchers = true
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = false)
       val claimant2 = Claimant(isPartner = true, employerProvidesESC = false)
 
-      val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCOutputClaimant(
           qualifying = false,
@@ -2109,7 +2101,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
 
-      val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCOutputClaimant(
           qualifying = true,
@@ -2142,7 +2134,7 @@ vouchers = true
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = false)
       val claimant2 = Claimant(isPartner = true, employerProvidesESC = true)
 
-      val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCOutputClaimant(
           qualifying = false,
@@ -2180,7 +2172,7 @@ vouchers = true
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val claimant2 = Claimant(isPartner = true, employerProvidesESC = false)
 
-      val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCOutputClaimant(
           qualifying = true,
@@ -2217,7 +2209,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = false)
 
-      val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCOutputClaimant(
           qualifying = false,
@@ -2249,7 +2241,7 @@ vouchers = true
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = false)
       val claimant2 = Claimant(isPartner = true, employerProvidesESC = false)
 
-      val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCOutputClaimant(
           qualifying = false,
@@ -2286,7 +2278,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
 
-      val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCOutputClaimant(
           qualifying = true,
@@ -2318,7 +2310,7 @@ vouchers = true
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val claimant2 = Claimant(isPartner = true, employerProvidesESC = true)
 
-      val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCOutputClaimant(
           qualifying = true,
@@ -2356,7 +2348,7 @@ vouchers = true
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = true)
       val claimant2 = Claimant(isPartner = true, employerProvidesESC = false)
 
-      val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCOutputClaimant(
           qualifying = true,
@@ -2393,7 +2385,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = false)
 
-      val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCOutputClaimant(
           qualifying = false,
@@ -2425,7 +2417,7 @@ vouchers = true
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = false)
       val claimant2 = Claimant(isPartner = true, employerProvidesESC = false)
 
-      val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCOutputClaimant(
           qualifying = false,
@@ -2462,7 +2454,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false, employerProvidesESC = false)
 
-      val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCOutputClaimant(
           qualifying = false,
@@ -2493,7 +2485,7 @@ vouchers = true
 
       val claimant1 = Claimant(isPartner = false)
 
-      val result = ESCEligibility.eligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCOutputClaimant(
           qualifying = false,
@@ -2510,7 +2502,7 @@ vouchers = true
       val ty1periodStart = LocalDate.parse("2016-06-20", formatter)
       val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val result = ESCEligibility.eligibility.numberOfQualifyingMonthsForPeriod(qualifying = false, ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.numberOfQualifyingMonthsForPeriod(qualifying = false, ty1periodStart, ty1periodEnd)
       result shouldBe 0
     }
 
@@ -2520,7 +2512,7 @@ vouchers = true
       val ty1periodStart = LocalDate.parse("2016-06-20", formatter)
       val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val result = ESCEligibility.eligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 10
     }
 
@@ -2530,7 +2522,7 @@ vouchers = true
       val ty1periodStart = LocalDate.parse("2015-06-20", formatter)
       val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val result = ESCEligibility.eligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 22
     }
 
@@ -2539,7 +2531,7 @@ vouchers = true
       val ty1periodStart = LocalDate.parse("2016-04-1", formatter)
       val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val result = ESCEligibility.eligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 12
     }
 
@@ -2548,7 +2540,7 @@ vouchers = true
       val ty1periodStart = LocalDate.parse("2016-04-15", formatter)
       val ty1periodEnd = LocalDate.parse("2016-09-01", formatter)
 
-      val result = ESCEligibility.eligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 5
     }
 
@@ -2557,7 +2549,7 @@ vouchers = true
       val ty1periodStart = LocalDate.parse("2016-06-15", formatter)
       val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val result = ESCEligibility.eligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 10
     }
 
@@ -2566,7 +2558,7 @@ vouchers = true
       val ty1periodStart = LocalDate.parse("2017-04-06", formatter)
       val ty1periodEnd = LocalDate.parse("2017-06-15", formatter)
 
-      val result = ESCEligibility.eligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
+      val result = ESCEligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 2
     }
   }
