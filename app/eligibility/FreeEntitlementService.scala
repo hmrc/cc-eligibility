@@ -18,7 +18,7 @@ package eligibility
 
 import config.ConfigConstants
 import models.input.freeEntitlement.FreeEntitlementPayload
-import models.input.tfc.{TFC, Request}
+import models.input.tfc.{TFCEligibilityInput}
 import models.output.freeEntitlement.{FifteenHoursEligibilityModel, ThirtyHoursEligibilityModel}
 import org.joda.time.LocalDate
 import play.api.Configuration
@@ -47,18 +47,17 @@ trait FreeEntitlementService extends CCConfig with ChildHelper with TFCEligibili
     dobs.exists(dob => ageFilter.contains(age(dob, currentDate)))
   }
 
-  def thirtyHours(tfcRequest: Request)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[ThirtyHoursEligibilityModel] = {
+  def thirtyHours(tfcEligibilityInput: TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[ThirtyHoursEligibilityModel] = {
 
-    eligibility.eligibility(tfcRequest).map { tfcEligibilityResult =>
+    eligibility.eligibility(tfcEligibilityInput).map { tfcEligibilityResult =>
 
-      val tfcPayload: TFC = tfcRequest.payload.tfc
       val tfcEligibility: Boolean = tfcEligibilityResult.tfc.map(_.householdEligibility).getOrElse(false)
 
-      val location = tfcPayload.claimants.head.location
+      val location = tfcEligibilityInput.claimants.head.location
 
       val hasChild3Or4Sept2017: Boolean = hasCildAtAge(
         configField = s"thirty.${location}",
-        dobs = tfcRequest.payload.tfc.children.map(_.dob),
+        dobs = tfcEligibilityInput.children.map(_.dob),
         currentDate = if(LocalDate.now.isBefore(ConfigConstants.firstSept2017)) { // TODO: Use only LocalDate.now after 01.09.2017
           ConfigConstants.firstSept2017
         }
@@ -67,7 +66,7 @@ trait FreeEntitlementService extends CCConfig with ChildHelper with TFCEligibili
         }
       )
 
-      val rollout = tfcPayload.children.exists( child =>
+      val rollout = tfcEligibilityInput.children.exists( child =>
         isChildDOBWithinRollout(child.dob)
       )
 
