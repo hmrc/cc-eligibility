@@ -27,12 +27,13 @@ import service.AuditEvents
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object TCEligibilityController extends TCEligibilityController with TCEligibility{
+object TCEligibilityController extends TCEligibilityController {
+  override val tcEligibility: TCEligibility = TCEligibility
   override val auditEvent = AuditEvents
 }
 
 trait TCEligibilityController extends EligibilityController {
-  this: TCEligibility =>
+  val tcEligibility: TCEligibility
 
   val auditEvent : AuditEvents
 
@@ -45,7 +46,7 @@ trait TCEligibilityController extends EligibilityController {
         },
         result => {
           auditEvent.auditTCRequest(result.toString)
-          eligibility.eligibility(result).map {
+          tcEligibility.eligibility(result).map {
             response =>
               auditEvent.auditTCResponse(utils.JSONFactory.generateResultJson(response).toString())
               Ok(utils.JSONFactory.generateResultJson(response))

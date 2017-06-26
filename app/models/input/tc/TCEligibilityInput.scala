@@ -21,7 +21,7 @@ import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
-import utils.{CCFormat, MessagesObject, Periods, TCConfig}
+import utils.{MessagesObject, Periods, TCConfig}
 
 case class TCEligibilityInput(
                                taxYears: List[TaxYear]
@@ -341,13 +341,13 @@ object Child extends MessagesObject {
 }
 
 case class Education(
-                      inEducation: Boolean = false,
+                      inEducation: Boolean,
                       startDate: LocalDate
                     )
 
-object Education extends CCFormat {
+object Education {
   implicit val educationReads: Reads[Education] = (
     (JsPath \ "inEducation").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "startDate").read[LocalDate](jodaLocalDateReads(datePattern))
+      (JsPath \ "startDate").read[LocalDate]
     ) (Education.apply _)
 }

@@ -19,7 +19,7 @@ package controllers.tc
 import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import eligibility.TCEligibility
-import models.input.tc.Request
+import models.input.tc.TCEligibilityInput
 import models.output.OutputAPIModel.Eligibility
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
@@ -32,6 +32,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
 import spec.CCSpecConfig
+
 import scala.concurrent.Future
 
 class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApplication with MockitoSugar {
@@ -48,143 +49,143 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
 
     "Accept valid json and should return Json body" in {
 
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
 
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/scenario_1.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
       val result = await(controller.eligible(request))
       status(result) shouldBe Status.OK
     }
 
     "Empty tax year should return Bad request" in {
       val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility = mock[TCEligibilityService]
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
 
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/empty_tax_year.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
       val result = await(controller.eligible(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Accept invalid json schema and should return Bad request" in {
       val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility = mock[TCEligibilityService]
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
 
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/invalid_tax_year.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
       val result = await(controller.eligible(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Accept invalid json with incorrect until date format json and return a Bad request" in {
       val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility = mock[TCEligibilityService]
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
 
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/incorrect_date_format.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
       val result = await(controller.eligible(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
 
     "Accept invalid json if child id has negative value should return 400" in {
       val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility = mock[TCEligibilityService]
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
 
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/negative_child_id.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
       val result = await(controller.eligible(request))
       status(result) shouldBe 400
     }
 
     "Accept a valid json if there is negative childcare cost should return 400" in {
       val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility = mock[TCEligibilityService]
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
 
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/negative_childcare_cost.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
       val result = await(controller.eligible(request))
       status(result) shouldBe 400
     }
 
     "Accept a valid json if number of claimants more than 2 should return Bad request" in {
       val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility = mock[TCEligibilityService]
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
 
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/invalid_claimants_3.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
       val result = await(controller.eligible(request))
       status(result) shouldBe 400
     }
 
     "Accept a valid json if number of claimant/s less than 1 should return Bad request" in {
       val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility = mock[TCEligibilityService]
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
 
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/no_claimants.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
       val result = await(controller.eligible(request))
       status(result) shouldBe 400
     }
 
     "Accept a valid json if number of children more than 25 should return Bad request" in {
       val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility = mock[TCEligibilityService]
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
 
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/invalid_no_of_children.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibility.eligibility(any[Request]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
       val result = await(controller.eligible(request))
       status(result) shouldBe 400
     }
 
     "Accept json for scenario 1 and return a valid response" in {
       val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility = mock[TCEligibilityService]
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
 
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/scenario_1.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[Request]
-      val eligibilityResult = TCEligibility.eligibility.eligibility(JsonResult.get)
+      val JsonResult = inputJson.validate[TCEligibilityInput]
+      val eligibilityResult = TCEligibility.eligibility(JsonResult.get)
 
-      when(controller.eligibility.eligibility(mockEq(JsonResult.get))).thenReturn(Future.successful(eligibilityResult))
+      when(controller.tcEligibility.eligibility(mockEq(JsonResult.get))).thenReturn(Future.successful(eligibilityResult))
       val result = await(controller.eligible(request))
 
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
@@ -258,15 +259,15 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
 
     "Return Internal Server Error with error message if an exception is thrown during eligibility" in {
       val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility = mock[TCEligibilityService]
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
 
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/scenario_1.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[Request]
+      val JsonResult = inputJson.validate[TCEligibilityInput]
 
-      when(controller.eligibility.eligibility(mockEq(JsonResult.get))).thenReturn(Future.failed(new Exception("Something bad happened in Eligibility")))
+      when(controller.tcEligibility.eligibility(mockEq(JsonResult.get))).thenReturn(Future.failed(new Exception("Something bad happened in Eligibility")))
       val result = await(controller.eligible(request))
       val outputJSON = Json.parse(
         """
