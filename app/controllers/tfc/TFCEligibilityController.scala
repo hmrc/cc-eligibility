@@ -18,11 +18,12 @@ package controllers.tfc
 
 import controllers.EligibilityController
 import eligibility.TFCEligibility
-import models.input.tfc.Request
+import models.input.tfc.{TFCEligibilityInput}
 import play.api.Logger
 import play.api.libs.json.JsValue
 import play.api.mvc.Action
 import service.AuditEvents
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -37,7 +38,7 @@ trait TFCEligibilityController extends EligibilityController {
 
   override def eligible : Action[JsValue] = Action.async(parse.json) {
     implicit request =>
-      request.body.validate[Request].fold(
+      request.body.validate[TFCEligibilityInput].fold(
         error => {
           Logger.warn(s"TFC Validation JsError *****")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))

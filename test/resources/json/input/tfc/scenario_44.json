@@ -1,6 +1,4 @@
 {
-  "payload": {
-    "tfc": {
       "from": "2017-08-27",
       "numberOfPeriods": 1,
       "claimants": [
@@ -54,5 +52,3 @@
         }
       ]
     }
-  }
-}

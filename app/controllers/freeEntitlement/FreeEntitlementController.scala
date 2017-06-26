@@ -18,7 +18,7 @@ package controllers.freeEntitlement
 
 import eligibility.FreeEntitlementService
 import models.input.freeEntitlement.FreeEntitlementPayload
-import models.input.tfc.Request
+import models.input.tfc.TFCEligibilityInput
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Action
@@ -64,7 +64,7 @@ trait FreeEntitlementController extends BaseController {
 
   def thirtyHours: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
-      request.body.validate[Request].fold(
+      request.body.validate[TFCEligibilityInput].fold(
         error => {
           Logger.warn("Thirty Hours Validation JsError *****")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
