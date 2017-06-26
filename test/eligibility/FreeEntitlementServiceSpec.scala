@@ -120,7 +120,7 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
         }
 
         when(
-          freeEntitlementService.eligibility.eligibility(any[models.input.tfc.Request])(any[play.api.mvc.Request[_]], any[HeaderCarrier])
+          freeEntitlementService.eligibility.eligibility(any[models.input.tfc.TFCEligibilityInput])(any[play.api.mvc.Request[_]], any[HeaderCarrier])
         ).thenReturn(
           Future.successful(
             Eligibility(
@@ -137,9 +137,7 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
           )
         )
 
-        val tfcRequest = Request(
-          payload = Payload(
-            tfc = TFC(
+        val tfcRequest = TFCEligibilityInput(
               from = now,
               numberOfPeriods = 3,
               claimants = List(
@@ -156,8 +154,6 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
                 dob = dob,
                 disability = Disability()
               )
-            )
-          )
         )
 
         val result = await(freeEntitlementService.thirtyHours(tfcRequest))
