@@ -16,7 +16,7 @@
 
 package models.output
 
-import models.output.esc.{ESCEligibilityOutput, ESCEligibilityOutput$}
+import models.output.esc.ESCEligibilityOutput
 import models.output.tc.TCEligibilityModel
 import models.output.tfc.TFCEligibilityModel
 import play.api.libs.functional.syntax._
