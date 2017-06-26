@@ -18,7 +18,7 @@ package controllers.tc
 
 import controllers.EligibilityController
 import eligibility.TCEligibility
-import models.input.tc.Request
+import models.input.tc.TCEligibilityInput
 import play.api.Logger
 import play.api.libs.json.JsValue
 import play.api.mvc.Action
@@ -38,7 +38,7 @@ trait TCEligibilityController extends EligibilityController {
 
   override def eligible : Action[JsValue] = Action.async(parse.json) {
     implicit request =>
-      request.body.validate[Request].fold(
+      request.body.validate[TCEligibilityInput].fold(
         error => {
           Logger.warn(s"TC Validation JsError ******")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))

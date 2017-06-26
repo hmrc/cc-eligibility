@@ -16,12 +16,13 @@
 
 package eligibility
 
-import models.input.tc.{Child, TaxYear}
+import models.input.tc.{Child, TCEligibilityInput, TaxYear}
 import models.output.OutputAPIModel.Eligibility
 import models.output.tc.{ChildElements, ClaimantDisability, TCEligibilityModel}
 import org.joda.time.LocalDate
 import play.api.Logger
 import utils.{MessagesObject, TCConfig}
+
 import scala.concurrent.Future
 import models.output.tc.OutputChild
 
@@ -31,7 +32,7 @@ trait TCEligibility extends CCEligibility {
 
   val eligibility = new TCEligibilityService
 
-  class TCEligibilityService extends CCEligibilityService with MessagesObject {
+  class TCEligibilityService extends CCEligibilityHelpers  with MessagesObject {
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -155,8 +156,8 @@ trait TCEligibility extends CCEligibility {
       periods
     }
 
-    private def constructTaxYearsWithPeriods(request: models.input.tc.Request): List[models.output.tc.TaxYear] = {
-      for (ty <- request.payload.taxYears) yield {
+    private def constructTaxYearsWithPeriods(request: TCEligibilityInput): List[models.output.tc.TaxYear] = {
+      for (ty <- request.taxYears) yield {
           models.output.tc.TaxYear(
             from = ty.from,
             until = ty.until,
@@ -176,9 +177,9 @@ trait TCEligibility extends CCEligibility {
       taxYears.exists(_.periods.exists(_.householdElements.ctc))
 
 
-    override def eligibility(request : models.input.BaseRequest) : Future[Eligibility] = {
+    def eligibility(request : TCEligibilityInput) : Future[Eligibility] = {
       request match {
-        case request : models.input.tc.Request =>
+        case request : TCEligibilityInput =>
           val taxyears = constructTaxYearsWithPeriods(request)
           Future {
             Eligibility(
