@@ -21,7 +21,7 @@ import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import controllers.tfc.TFCEligibilityController
 import eligibility.TFCEligibility
-import models.input.tfc.Request
+import models.input.tfc.{TFCEligibilityInput}
 import org.mockito.Matchers.{any, eq => mockEq}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
@@ -47,7 +47,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       }
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_1.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
       when(controller.eligibility.eligibility(mockEq(request.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligible))
@@ -68,7 +68,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_2.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -90,7 +90,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_3.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -112,7 +112,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_4.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -134,7 +134,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_5.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -156,7 +156,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_6.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -178,7 +178,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_7.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -200,7 +200,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_8.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -222,7 +222,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_9.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -244,7 +244,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_10.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -257,7 +257,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe outputJson
     }
-    
+
     "(Scenario 11)(Single Parent) Qualifying claimant and household with a child yet to be born" in {
       val controller = new TFCEligibilityController with TFCEligibility {
         override val eligibility: TFCEligibilityService = mock[TFCEligibilityService]
@@ -266,7 +266,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_11.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -288,7 +288,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_12.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -310,7 +310,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_13.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -332,7 +332,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_14.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -354,7 +354,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_15.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -376,7 +376,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_16.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -398,7 +398,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_17.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -421,7 +421,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_18.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -444,7 +444,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_19.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -466,7 +466,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_20.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -489,7 +489,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_21.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -512,7 +512,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_22.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -535,7 +535,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_23.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -558,7 +558,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_24.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -581,7 +581,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_25.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -604,7 +604,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_26.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -627,7 +627,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_27.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -650,7 +650,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_28.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -673,7 +673,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_29.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -696,7 +696,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_30.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -719,7 +719,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_31.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -741,7 +741,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_32.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -763,7 +763,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_33.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -785,7 +785,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_34.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -807,7 +807,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_35.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -829,7 +829,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_36.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -850,7 +850,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_37.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -871,7 +871,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_38.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -892,7 +892,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_39.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -913,7 +913,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_40.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -934,7 +934,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_41.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -956,7 +956,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_42.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -978,7 +978,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_43.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 
@@ -999,7 +999,7 @@ class TFCScenarioSpec extends UnitSpec with FakeCCEligibilityApplication with Mo
 
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tfc/scenario_44.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TFCEligibilityInput]
 
       val eligible = TFCEligibility.eligibility.eligibility(request.get)
 

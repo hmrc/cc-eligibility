@@ -18,7 +18,7 @@ package eligibility
 
 import java.util.Calendar
 
-import models.input.tfc.{Child, Claimant, TFC}
+import models.input.tfc.{Child, Claimant, TFCEligibilityInput}
 import models.output.OutputAPIModel.Eligibility
 import models.output.tfc._
 import org.joda.time.LocalDate
@@ -82,18 +82,18 @@ trait TFCEligibility extends CCTFCEligibility with TFCRolloutSchemeConfig {
       periodEligibility
     }
 
-    def determineTFCPeriods(tfc: TFC) : List[TFCPeriod] = {
+    def determineTFCPeriods(tfcEligibilityInput: TFCEligibilityInput) : List[TFCPeriod] = {
       val currentCalendar = Calendar.getInstance()
       currentCalendar.clear()
-      currentCalendar.setTime(tfc.from.toDate)
+      currentCalendar.setTime(tfcEligibilityInput.from.toDate)
 
-      val periods = for(i <- 1 to tfc.numberOfPeriods) yield {
+      val periods = for(i <- 1 to tfcEligibilityInput.numberOfPeriods) yield {
         val startDate = LocalDate.fromDateFields(currentCalendar.getTime)
         currentCalendar.add(Calendar.MONTH, 3)
         val untilDate = LocalDate.fromDateFields(currentCalendar.getTime)
-        val outputClaimants = determineClaimantsEligibility(tfc.claimants, startDate)
-        val location = if(tfc.claimants.isEmpty) "default" else tfc.claimants.head.location
-        val outputChildren = determineChildrenEligibility(tfc.children, startDate, untilDate, location)
+        val outputClaimants = determineClaimantsEligibility(tfcEligibilityInput.claimants, startDate)
+        val location = if(tfcEligibilityInput.claimants.isEmpty) "default" else tfcEligibilityInput.claimants.head.location
+        val outputChildren = determineChildrenEligibility(tfcEligibilityInput.children, startDate, untilDate, location)
         val periodEligibility = determinePeriodEligibility(outputClaimants, outputChildren)
 
         TFCPeriod(
@@ -131,19 +131,19 @@ trait TFCEligibility extends CCTFCEligibility with TFCRolloutSchemeConfig {
       }
     }
 
-    override def eligibility(request : models.input.tfc.Request)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[Eligibility] = {
-      val outputPeriods = determineTFCPeriods(request.payload.tfc)
+    override def eligibility(request : TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[Eligibility] = {
+      val outputPeriods = determineTFCPeriods(request)
       val householdEligibility = if(TFCConfig.minimumEarningsEnabled) {
-        outputPeriods.exists(period => period.periodEligibility) && request.payload.tfc.validHouseholdMinimumEarnings
+        outputPeriods.exists(period => period.periodEligibility) && request.validHouseholdMinimumEarnings
       } else {
-        outputPeriods.exists(period => period.periodEligibility) && request.payload.tfc.validHouseholdHours
+        outputPeriods.exists(period => period.periodEligibility) && request.validHouseholdHours
       }
 
       Future {
         Eligibility(
           tfc = Some(
             TFCEligibilityModel(
-              from = request.payload.tfc.from,
+              from = request.from,
               until = outputPeriods.last.until,
               householdEligibility = householdEligibility,
               periods = outputPeriods,

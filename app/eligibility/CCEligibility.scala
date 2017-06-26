@@ -16,7 +16,7 @@
 
 package eligibility
 
-import models.input.tfc.Request
+import models.input.tfc.TFCEligibilityInput
 import models.input.{BaseRequest, BaseTaxYear}
 import models.output.OutputAPIModel.Eligibility
 import org.joda.time.LocalDate
@@ -52,6 +52,6 @@ trait CCTFCEligibility {
   val eligibility : CCTFCEligibilityService
 
   trait CCTFCEligibilityService {
-    def eligibility(request : Request)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[Eligibility]
+    def eligibility(request : TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[Eligibility]
   }
 }

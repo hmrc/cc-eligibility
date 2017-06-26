@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
 
 import config.ConfigConstants
+import models.input.tc.{Payload, Request}
 import org.joda.time.LocalDate
 import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
@@ -33,25 +34,7 @@ import utils._
 This is the Payload input class from cc-frontend to cc-eligibility
  */
 
-case class Request (
-                     payload: Payload
-                     )
-
-object Request {
-  implicit val requestFormat: Reads[Request] =
-    (JsPath \ "payload").read[Payload].map { payload => Request(payload)}
-}
-
-case class Payload(
-                    tfc: TFC
-                    )
-
-object Payload {
-  implicit val payloadReads: Reads[Payload] =
-    (JsPath \ "tfc").read[TFC].map { tfc => Payload(tfc)}
-}
-
-case class TFC(
+case class TFCEligibilityInput(
                 from: LocalDate,
                 numberOfPeriods: Short,
                 claimants: List[Claimant],
@@ -99,7 +82,7 @@ case class TFC(
   }
 }
 
-object TFC extends CCFormat with MessagesObject {
+object TFCEligibilityInput extends CCFormat with MessagesObject {
 
   def maxChildValidation(noOfChild: List[Child]): Boolean = {
     noOfChild.length <= 25
@@ -109,12 +92,12 @@ object TFC extends CCFormat with MessagesObject {
     noOfClaimant.length > 0 && noOfClaimant.length < 3
   }
 
-  implicit val tfcReads: Reads[TFC] = (
+  implicit val tfcReads: Reads[TFCEligibilityInput] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "numberOfPeriods").read[Short].orElse(Reads.pure(1)) and
         (JsPath \ "claimants").read[List[Claimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
           (JsPath \ "children").read[List[Child]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
-    )(TFC.apply _)
+    )(TFCEligibilityInput.apply _)
 }
 
 case class Income(

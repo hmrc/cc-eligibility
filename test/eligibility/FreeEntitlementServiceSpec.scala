@@ -93,6 +93,8 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
 
   }
 
+  //Some of these tests will fail after 01/09/2017 but the logic needs fixing anyway
+
   "determine eligibility corectly for thirtyHours" when {
     val testCases = Table(
       ("Location", "TFC Eligibility", "Dates of Birth", "Eligibility Result", "Eligibility Rollout"),
@@ -118,7 +120,7 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
         }
 
         when(
-          freeEntitlementService.eligibility.eligibility(any[models.input.tfc.Request])(any[play.api.mvc.Request[_]], any[HeaderCarrier])
+          freeEntitlementService.eligibility.eligibility(any[models.input.tfc.TFCEligibilityInput])(any[play.api.mvc.Request[_]], any[HeaderCarrier])
         ).thenReturn(
           Future.successful(
             Eligibility(
@@ -135,9 +137,7 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
           )
         )
 
-        val tfcRequest = Request(
-          payload = Payload(
-            tfc = TFC(
+        val tfcRequest = TFCEligibilityInput(
               from = now,
               numberOfPeriods = 3,
               claimants = List(
@@ -154,8 +154,6 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
                 dob = dob,
                 disability = Disability()
               )
-            )
-          )
         )
 
         val result = await(freeEntitlementService.thirtyHours(tfcRequest))
