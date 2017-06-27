@@ -1,55 +1,49 @@
 {
-  "eligibility": {
-    "esc": {
-      "taxYears": [
+  "taxYears": [
+    {
+      "from": "2016-06-27",
+      "until": "2017-04-06",
+      "periods": [
         {
           "from": "2016-06-27",
-          "until": "2017-04-06",
-          "periods": [
+          "until": "2016-09-01",
+          "claimants": [
             {
-              "from": "2016-06-27",
-              "until": "2016-09-01",
-              "claimants": [
-                {
-                  "qualifying": true,
-                  "isPartner": false,
-                  "eligibleMonthsInPeriod": 3,
-                  "vouchers": true
-                },
-                {
-                  "qualifying": true,
-                  "isPartner": true,
-                  "eligibleMonthsInPeriod": 3,
-                  "vouchers": true
-                }
-              ]
-            },
-            {
-            "from": "2016-09-01",
-            "until": "2017-04-06",
-            "claimants": [
-              {
               "qualifying": true,
               "isPartner": false,
-              "eligibleMonthsInPeriod": 7,
-                "vouchers": true
-              },
-              {
-                "qualifying": true,
-                "isPartner": true,
-                "eligibleMonthsInPeriod": 7,
-                  "vouchers": true
-              }
-            ]
+              "eligibleMonthsInPeriod": 3,
+              "vouchers": true
+            },
+            {
+              "qualifying": true,
+              "isPartner": true,
+              "eligibleMonthsInPeriod": 3,
+              "vouchers": true
             }
           ]
+        },
+        {
+        "from": "2016-09-01",
+        "until": "2017-04-06",
+        "claimants": [
+          {
+          "qualifying": true,
+          "isPartner": false,
+          "eligibleMonthsInPeriod": 7,
+            "vouchers": true
+          },
+          {
+            "qualifying": true,
+            "isPartner": true,
+            "eligibleMonthsInPeriod": 7,
+              "vouchers": true
+          }
+        ]
         }
-      ],
-         "eligibility":true,
-         "parentEligibility":true,
-         "partnerEligibility":true
-       },
-       "tc": null,
-       "tfc": null
-  }
+      ]
+    }
+  ],
+   "eligibility":true,
+   "parentEligibility":true,
+   "partnerEligibility":true
 }

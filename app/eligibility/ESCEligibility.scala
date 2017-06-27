@@ -247,12 +247,12 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
     val constructChildren = constructChildrenWithPeriods(request)
     val (eligibility, parentEligibility, partnerEligibility) = determineESCEligibility(constructTaxYears, constructChildren)
     Future {
-          ESCEligibilityOutput(
-            constructTaxYears,
-            eligibility,
-            parentEligibility,
-            partnerEligibility
-          )
+      ESCEligibilityOutput(
+        constructTaxYears,
+        eligibility,
+        parentEligibility,
+        partnerEligibility
+      )
     }
   }
 }
