@@ -24,6 +24,18 @@
                   "eligibleMonthsInPeriod": 3,
                   "vouchers": true
                 }
+              ],
+              "children":[
+                {
+                  "qualifying":true,
+                  "childCareCost":100,
+                  "childCareCostPeriod":"Month"
+                },
+                {
+                  "qualifying":false,
+                  "childCareCost":100,
+                  "childCareCostPeriod":"Month"
+                }
               ]
             },
             {
@@ -41,6 +53,18 @@
                   "isPartner": true,
                   "eligibleMonthsInPeriod": 0,
                   "vouchers": false
+                }
+              ],
+              "children":[
+                {
+                  "qualifying":false,
+                  "childCareCost":100,
+                  "childCareCostPeriod":"Month"
+                },
+                {
+                  "qualifying":false,
+                  "childCareCost":100,
+                  "childCareCostPeriod":"Month"
                 }
               ]
             }
@@ -66,6 +90,18 @@
                   "eligibleMonthsInPeriod": 0,
                   "vouchers": false
                 }
+              ],
+              "children":[
+                {
+                  "qualifying":false,
+                  "childCareCost":100,
+                  "childCareCostPeriod":"Month"
+                },
+                {
+                  "qualifying":false,
+                  "childCareCost":100,
+                  "childCareCostPeriod":"Month"
+                }
               ]
             },
             {
@@ -83,6 +119,18 @@
                   "isPartner": true,
                   "eligibleMonthsInPeriod": 2,
                   "vouchers": true
+                }
+              ],
+              "children":[
+                {
+                  "qualifying":false,
+                  "childCareCost":100,
+                  "childCareCostPeriod":"Month"
+                },
+                {
+                  "qualifying":true,
+                  "childCareCost":100,
+                  "childCareCostPeriod":"Month"
                 }
               ]
             }

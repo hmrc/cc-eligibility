@@ -18,6 +18,7 @@ package models.output.esc
 
 import org.joda.time.LocalDate
 import play.api.libs.json.{Json, Writes}
+import utils.Periods
 
 case class ESCEligibilityOutput(
                                 taxYears: List[TaxYear],
@@ -43,7 +44,8 @@ object TaxYear {
 case class ESCPeriod(
                       from: LocalDate,
                       until: LocalDate,
-                      claimants: List[ESCOutputClaimant]
+                      claimants: List[ESCOutputClaimant],
+                      children: List[OutputChild]
                     )
 
 object ESCPeriod {
@@ -63,8 +65,9 @@ object ESCOutputClaimant {
 }
 
 case class OutputChild(
-                        id: Short,
-                        qualifying: Boolean = false
+                        qualifying: Boolean = false,
+                        childCareCost: BigDecimal,
+                        childCareCostPeriod: Periods.Period = Periods.Monthly
                       )
 
 object OutputChild {

@@ -29,35 +29,26 @@ object ESCEligibility extends ESCEligibility
 
 trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
 
-    import scala.concurrent.ExecutionContext.Implicits.global
+  import scala.concurrent.ExecutionContext.Implicits.global
 
-    //TODO investigate if the end date should return 31st Aug instead of 1st Sept to get correct number of months
-    private def splitDatesForChildren(taxYear: TaxYear): List[LocalDate] = {
-      val dates: List[Option[LocalDate]] = for (child <- taxYear.children) yield {
-        val isBeingBorn = child.isBeingBornInTaxYear(taxYear)
-        val turns15 = child.isTurning15Before1September(taxYear.from, taxYear.until)
-        val turns16 = child.isTurning16Before1September(taxYear.from, taxYear.until)
+  //TODO investigate if the end date should return 31st Aug instead of 1st Sept to get correct number of months
+  private def splitDatesForChildren(taxYear: TaxYear): List[LocalDate] = {
+    val dates: List[Option[LocalDate]] = for (child <- taxYear.children) yield {
+      val isBeingBorn = child.isBeingBornInTaxYear(taxYear)
+      val turns15 = child.isTurning15Before1September(taxYear.from, taxYear.until)
+      val turns16 = child.isTurning16Before1September(taxYear.from, taxYear.until)
 
-        if (isBeingBorn._1) {
-          Some(isBeingBorn._2)
-        } else if (turns15._1 && !child.isDisabled) {
-          Some(turns15._2)
-        } else if (turns16._1 && child.isDisabled) {
-          Some(turns16._2)
-        } else {
-          None
-        }
+      if (isBeingBorn._1) {
+        Some(isBeingBorn._2)
+      } else if (turns15._1 && !child.isDisabled) {
+        Some(turns15._2)
+      } else if (turns16._1 && child.isDisabled) {
+        Some(turns16._2)
+      } else {
+        None
       }
-      dates.flatten.distinct.sortBy(x => x.toDate.getTime)
     }
-
-  private def causesSplit(child: Child, taxYear: TaxYear): Boolean = {
-    val isBeingBorn = child.isBeingBornInTaxYear(taxYear)
-    val turns15 = child.isTurning15Before1September(taxYear.from, taxYear.until)
-    val turns16 = child.isTurning16Before1September(taxYear.from, taxYear.until)
-
-    val causesSplit = isBeingBorn._1 || (turns15._1 && !child.isDisabled) || (turns16._1 && child.isDisabled)
-    causesSplit
+    dates.flatten.distinct.sortBy(x => x.toDate.getTime)
   }
 
   private def splitDates(taxYear: TaxYear, sortedSplitDates: List[LocalDate]): List[LocalDate] = {
@@ -79,6 +70,16 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
   }
 
   def generateSplitDates(taxYear: TaxYear): List[LocalDate] = {
+
+    def causesSplit(child: Child, taxYear : TaxYear) : Boolean = {
+      val isBeingBorn = child.isBeingBornInTaxYear(taxYear)
+      val turns15 = child.isTurning15Before1September(taxYear.from, taxYear.until)
+      val turns16 = child.isTurning16Before1September(taxYear.from, taxYear.until)
+
+      val causesSplit = isBeingBorn._1 || (turns15._1 && !child.isDisabled) || (turns16._1 && child.isDisabled)
+      causesSplit
+    }
+
     val numberOfChildrenEligibleInTaxYearWithNoSplits = taxYear.children.exists(ch => !causesSplit(ch, taxYear) && ch.qualifiesForESC(taxYear.from))
 
     val splitDateList = numberOfChildrenEligibleInTaxYearWithNoSplits match {
@@ -97,6 +98,17 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
         }
     }
     splitDateList
+
+//    //THERE ARE CHILDREN BEING BORN or CAUSE A SPLIT (TURNS 15 or 16)
+//    val sortedSplitDates: List[LocalDate] = splitDatesForChildren(taxYear)
+//    sortedSplitDates match {
+//      case date if date.length == 1 =>
+//        sortedSplitDates
+//      case date if date.length > 1 =>
+//        splitDates(taxYear, sortedSplitDates)
+//      case _ =>
+//        List()
+//    }
   }
 
   def determineStartDatesOfPeriodsInTaxYear(taxYear: TaxYear): List[LocalDate] = {
@@ -104,11 +116,6 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
     val taxYearStart: LocalDate = taxYear.from
     val inserted: List[LocalDate] = filtered.::(taxYearStart)
     inserted.distinct
-  }
-
-  def hasQualifyingChildForPeriod(children: List[Child], periodStart: LocalDate): Boolean = {
-    val qualifyingChild = children.exists(child => child.qualifiesForESC(periodStart))
-    qualifyingChild
   }
 
   def numberOfQualifyingMonthsForPeriod(qualifying: Boolean, periodStart: LocalDate, periodEnd: LocalDate): Int = {
@@ -120,11 +127,11 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
     }
   }
 
-  def determineClaimantsEligibilityForPeriod(children: List[Child], claimants: List[Claimant], periodStart: LocalDate,
+  def determineClaimantsEligibilityForPeriod(children: List[models.output.esc.OutputChild], claimants: List[Claimant], periodStart: LocalDate,
                                              periodEnd: LocalDate): List[models.output.esc.ESCOutputClaimant] = {
-    val outputClaimants = for (claimant <- claimants) yield {
-      val hasQualifyingChildren = hasQualifyingChildForPeriod(children, periodStart)
+    for (claimant <- claimants) yield {
       val claimantQualifying = claimant.isClaimantQualifyingForESC
+      val hasQualifyingChildren = children.exists(_.qualifying)
       val vouchers = claimantQualifying && hasQualifyingChildren
 
       val months = numberOfQualifyingMonthsForPeriod(vouchers, periodStart, periodEnd)
@@ -136,15 +143,14 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
         vouchers = vouchers
       )
     }
-    outputClaimants
   }
 
   def determineChildrensEligibilityForPeriod(children: List[Child], periodStart: LocalDate): List[models.output.esc.OutputChild] = {
     for (child <- children) yield {
-      val eligible = child.qualifiesForESC(periodStart)
       models.output.esc.OutputChild(
-        id = child.id,
-        qualifying = eligible
+        qualifying = child.qualifiesForESC(periodStart),
+        childCareCost = child.childCareCost,
+        childCareCostPeriod = child.childCareCostPeriod
       )
     }
   }
@@ -152,100 +158,71 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
   def determinePeriodsForTaxYear(ty: TaxYear): List[models.output.esc.ESCPeriod] = {
     val datesOfChanges = determineStartDatesOfPeriodsInTaxYear(ty)
 
-    val periods = for ((date, i) <- datesOfChanges.zipWithIndex) yield {
+    for ((date, i) <- datesOfChanges.zipWithIndex) yield {
       val fromAndUntil = fromAndUntilDateForPeriod(date, i, datesOfChanges, ty)
 
       // determine child's qualification and claimants qualification
       val children = determineChildrensEligibilityForPeriod(ty.children, fromAndUntil._1)
-      val claimants = determineClaimantsEligibilityForPeriod(ty.children, ty.claimants, fromAndUntil._1, fromAndUntil._2)
+      val claimants = determineClaimantsEligibilityForPeriod(children, ty.claimants, fromAndUntil._1, fromAndUntil._2)
 
       models.output.esc.ESCPeriod(
         from = fromAndUntil._1,
         until = fromAndUntil._2,
-        claimants = claimants
+        claimants = claimants,
+        children = children
       )
     }
-    periods
   }
 
-  def determineChildrenEligibility(ty: TaxYear) = {
-    val datesOfChanges = determineStartDatesOfPeriodsInTaxYear(ty)
+  def constructTaxYearsWithPeriods(taxYears: List[models.input.esc.TaxYear]): List[models.output.esc.TaxYear] = {
 
-    val children = for ((date, i) <- datesOfChanges.zipWithIndex) yield {
-      val fromAndUntil = fromAndUntilDateForPeriod(date, i, datesOfChanges, ty)
-
-      // determine child's qualification and claimants qualification
-      determineChildrensEligibilityForPeriod(ty.children, fromAndUntil._1)
-    }
-    children.flatten
-  }
-
-  def constructTaxYearsWithPeriods(request: models.input.esc.ESCEligibilityInput): List[models.output.esc.TaxYear] = {
-    generateTaxYears(request.taxYears).reverse
-  }
-
-  def generateTaxYears(taxYears: List[models.input.esc.TaxYear]): List[models.output.esc.TaxYear] = {
     @tailrec
     def generateTaxYearsHelper(taxYears: List[models.input.esc.TaxYear],
-                               acc: List[models.output.esc.TaxYear], i: Int): List[models.output.esc.TaxYear] = {
+                               acc: List[models.output.esc.TaxYear]): List[models.output.esc.TaxYear] = {
       taxYears match {
-        case Nil => acc
+        case Nil => acc.reverse
         case head :: tail =>
           val periods = determinePeriodsForTaxYear(head)
-          val ty: models.output.esc.TaxYear = models.output.esc.TaxYear(from = head.from, until = head.until, periods = periods)
-
-          generateTaxYearsHelper(tail, acc.::(ty), i + 1)
+          val ty: models.output.esc.TaxYear = models.output.esc.TaxYear(
+            from = head.from,
+            until = head.until,
+            periods = periods
+          )
+          generateTaxYearsHelper(tail, acc.::(ty))
       }
     }
 
-    generateTaxYearsHelper(taxYears, List(), 0)
+    generateTaxYearsHelper(taxYears, List())
   }
 
-  def constructChildrenWithPeriods(request: models.input.esc.ESCEligibilityInput): List[models.output.esc.OutputChild] = {
-    generateChildren(request.taxYears).reverse
-  }
+  def determineESCEligibility(taxYears: List[models.output.esc.TaxYear]): (Boolean, Boolean, Boolean) = {
 
-  def generateChildren(taxYears: List[models.input.esc.TaxYear]): List[models.output.esc.OutputChild] = {
-    @tailrec
-    def generateChildrenHelper(taxYears: List[models.input.esc.TaxYear],
-                               acc: List[models.output.esc.OutputChild]): List[models.output.esc.OutputChild] = {
-      taxYears match {
-        case Nil => acc
-        case head :: tail =>
-          val periods = determineChildrenEligibility(head)
-          generateChildrenHelper(tail, acc ::: (periods))
-      }
-    }
+    def getClaimantEligibility(isPartner: Boolean) = taxYears.exists(
+      _.periods.exists(
+        _.claimants.exists(
+          claimant => (claimant.isPartner == isPartner && claimant.qualifying)
+        )
+      )
+    )
 
-    generateChildrenHelper(taxYears, List())
-  }
+    val parentEligibility = getClaimantEligibility(isPartner = false)
+    val partnerEligibility = getClaimantEligibility(isPartner = true)
 
-  def determineESCEligibility(taxYears: List[models.output.esc.TaxYear], children: List[models.output.esc.OutputChild]): (Boolean, Boolean, Boolean) = {
+    val escChildrenEligibilityResult: Boolean = taxYears.exists(
+      _.periods.exists(
+        _.children.exists(
+          _.qualifying
+        )
+      )
+    )
 
-    def getClaimantEligibility(isPartner: Boolean) = taxYears.exists(taxYear => taxYear.periods.exists(
-      periods => periods.claimants.exists(
-        claimant => if (claimant.isPartner == isPartner && claimant.qualifying) {
-          true
-        }
-        else {
-          false
-        })))
-
-    val escClaimantEligibilityResult: (Boolean, Boolean) = (getClaimantEligibility(isPartner = false),
-      getClaimantEligibility(isPartner = true))
-
-    val escChildrenEligibilityResult: Boolean = children.exists(_.qualifying)
-
-    val eligibility = (escClaimantEligibilityResult._1 || escClaimantEligibilityResult._2) && escChildrenEligibilityResult
-    val parentEligibility = escClaimantEligibilityResult._1
-    val partnerEligibility = escClaimantEligibilityResult._2
+    val eligibility = (parentEligibility || partnerEligibility) && escChildrenEligibilityResult
     (eligibility, parentEligibility, partnerEligibility)
   }
 
   def eligibility(request: ESCEligibilityInput): Future[Eligibility] = {
-    val constructTaxYears = constructTaxYearsWithPeriods(request)
-    val constructChildren = constructChildrenWithPeriods(request)
-    val (eligibility, parentEligibility, partnerEligibility) = determineESCEligibility(constructTaxYears, constructChildren)
+    val constructTaxYears = constructTaxYearsWithPeriods(request.taxYears)
+    val (eligibility, parentEligibility, partnerEligibility) = determineESCEligibility(constructTaxYears)
     Future {
       Eligibility(
         esc = Some(

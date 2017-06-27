@@ -193,7 +193,6 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_8.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
       val request = inputJson.validate[ESCEligibilityInput]
-
       val eligible = ESCEligibility.eligibility(request.get)
 
       when(controller.escEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))

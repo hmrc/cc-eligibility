@@ -22,7 +22,7 @@ import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
-import utils.{CCFormat, ESCConfig, MessagesObject}
+import utils.{Periods, CCFormat, ESCConfig, MessagesObject}
 
 case class ESCEligibilityInput(
                     taxYears: List[TaxYear]
@@ -76,6 +76,8 @@ object Claimant extends CCFormat {
 case class Child (
                    id: Short,
                    dob: LocalDate,
+                   childCareCost: BigDecimal,
+                   childCareCostPeriod: Periods.Period = Periods.Monthly,
                    disability: Disability
                   ) extends models.input.BaseChild {
 
@@ -123,7 +125,9 @@ object Child extends CCFormat with MessagesObject {
   implicit val childReads: Reads[Child] = (
     (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
       (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
-        (JsPath \ "disability").read[Disability]
+        (JsPath \ "childCareCost").read[BigDecimal] and
+          (JsPath \ "childCareCostPeriod").read[Periods.Period] and
+            (JsPath \ "disability").read[Disability]
     )(Child.apply _)
 }
 

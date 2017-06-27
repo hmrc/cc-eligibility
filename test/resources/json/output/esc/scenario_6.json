@@ -16,6 +16,13 @@
                     "eligibleMonthsInPeriod": 8,
                     "vouchers": true
                   }
+                ],
+                "children":[
+                  {
+                    "qualifying":true,
+                    "childCareCost":100,
+                    "childCareCostPeriod":"Month"
+                  }
                 ]
               }
             ]

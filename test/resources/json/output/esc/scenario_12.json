@@ -22,16 +22,23 @@
                   "eligibleMonthsInPeriod": 0,
                   "vouchers": false
                 }
+              ],
+              "children":[
+                {
+                  "qualifying":true,
+                  "childCareCost":100,
+                  "childCareCostPeriod":"Month"
+                }
               ]
             }
           ]
         }
       ],
-         "eligibility":true,
-         "parentEligibility":true,
-         "partnerEligibility":false
-       },
-       "tc": null,
-       "tfc": null
+     "eligibility":true,
+     "parentEligibility":true,
+     "partnerEligibility":false
+   },
+   "tc": null,
+   "tfc": null
   }
 }
