@@ -17,7 +17,7 @@
 package eligibility
 
 import models.input.tfc.TFCEligibilityInput
-import models.input.{BaseRequest, BaseTaxYear}
+import models.input.BaseTaxYear
 import models.output.OutputAPIModel.Eligibility
 import org.joda.time.LocalDate
 import uk.gov.hmrc.play.http.HeaderCarrier
@@ -38,14 +38,6 @@ trait CCEligibilityHelpers {
     (from, until)
   }
 
-}
-
-trait CCEligibility extends CCEligibilityHelpers {
-  val eligibility : CCEligibilityService
-
-  trait CCEligibilityService {
-    def eligibility(request : BaseRequest) : Future[Eligibility]
-  }
 }
 
 trait CCTFCEligibility {

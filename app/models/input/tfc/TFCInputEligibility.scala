@@ -20,7 +20,6 @@ import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
 
 import config.ConfigConstants
-import models.input.tc.{Payload, Request}
 import org.joda.time.LocalDate
 import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._

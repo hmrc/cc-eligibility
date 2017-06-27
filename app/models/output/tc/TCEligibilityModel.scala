@@ -18,7 +18,7 @@ package models.output.tc
 
 import org.joda.time.LocalDate
 import play.api.libs.json.{Writes, Json}
-import utils.{CCFormat, Periods}
+import utils.Periods
 
 case class TCEligibilityModel(
                                eligible: Boolean = false,
@@ -37,7 +37,7 @@ case class TaxYear(
                     periods: List[TCPeriod]
                   )
 
-object TaxYear extends CCFormat {
+object TaxYear {
   implicit val taxYearWrites: Writes[TaxYear] = Json.writes[TaxYear]
 }
 
@@ -49,7 +49,7 @@ case class TCPeriod(
                      children: List[OutputChild]
                    )
 
-object TCPeriod extends CCFormat {
+object TCPeriod {
   implicit val periodWrites: Writes[TCPeriod] = Json.writes[TCPeriod]
 }
 
@@ -62,6 +62,7 @@ case class HouseholdElements(
                               family: Boolean = false,
                               wtc: Boolean = false,
                               ctc: Boolean = false
+                              //wtc and ctc needed for TCEligibilityModel, not used in frontend
                             )
 
 object HouseholdElements {
@@ -88,7 +89,6 @@ object ClaimantDisability {
 }
 
 case class OutputChild(
-                        id: Short,
                         childcareCost: BigDecimal = BigDecimal(0.00),
                         childcareCostPeriod: Periods.Period,
                         qualifying: Boolean = false,

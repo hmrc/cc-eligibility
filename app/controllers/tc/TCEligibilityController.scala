@@ -18,7 +18,7 @@ package controllers.tc
 
 import controllers.EligibilityController
 import eligibility.TCEligibility
-import models.input.tc.Request
+import models.input.tc.TCEligibilityInput
 import play.api.Logger
 import play.api.libs.json.JsValue
 import play.api.mvc.Action
@@ -27,25 +27,26 @@ import service.AuditEvents
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object TCEligibilityController extends TCEligibilityController with TCEligibility{
+object TCEligibilityController extends TCEligibilityController {
+  override val tcEligibility: TCEligibility = TCEligibility
   override val auditEvent = AuditEvents
 }
 
 trait TCEligibilityController extends EligibilityController {
-  this: TCEligibility =>
+  val tcEligibility: TCEligibility
 
   val auditEvent : AuditEvents
 
   override def eligible : Action[JsValue] = Action.async(parse.json) {
     implicit request =>
-      request.body.validate[Request].fold(
+      request.body.validate[TCEligibilityInput].fold(
         error => {
           Logger.warn(s"TC Validation JsError ******")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
           auditEvent.auditTCRequest(result.toString)
-          eligibility.eligibility(result).map {
+          tcEligibility.eligibility(result).map {
             response =>
               auditEvent.auditTCResponse(utils.JSONFactory.generateResultJson(response).toString())
               Ok(utils.JSONFactory.generateResultJson(response))

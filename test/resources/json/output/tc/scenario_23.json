@@ -32,7 +32,6 @@
               ],
               "children": [
                 {
-                  "id": 0,
                   "childcareCost": 3000,
                   "childcareCostPeriod": "Month",
                   "qualifying": false,
@@ -71,7 +70,6 @@
               ],
               "children": [
                 {
-                  "id": 0,
                   "childcareCost": 3000,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
@@ -116,7 +114,6 @@
               ],
               "children": [
                 {
-                  "id": 0,
                   "childcareCost": 3000,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,

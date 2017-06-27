@@ -21,7 +21,7 @@ import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import controllers.tc.TCEligibilityController
 import eligibility.TCEligibility
-import models.input.tc.Request
+import models.input.tc.TCEligibilityInput
 import org.mockito.Matchers.{eq => mockEq}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
@@ -30,6 +30,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import service.AuditEvents
 import spec.CCSpecConfig
+
 import scala.concurrent.Future
 
 /**
@@ -41,21 +42,21 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 1)(1 claimants, 1 children)(No elements) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
 
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_1.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -69,20 +70,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 2) (1 claimant working, 1 qualifying Child)" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_2.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -96,20 +97,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 3) (1 claimant, no children) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_3.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -123,20 +124,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 4) (1 claimant working disabled, severely disabled without income, 1 qualifying Child non disabled)" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_12.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
       // load output resource
       val outputResource: JsonNode = JsonLoader.fromResource("/json/output/tc/scenario_12.json")
@@ -149,20 +150,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 5)(Basic element, 30 hours, 1 claimant, disabled and severely disabled)(Single Tax Year) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_5.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -176,20 +177,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 6) (1 claimant working disabled, 1 qualifying Child disabled)" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_6.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -203,20 +204,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 7)(2 claimants, 0 children)(No elements) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_7.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -230,20 +231,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 8) (2 claimants one working, one child turns 15 years old before claim date) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_8.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -257,20 +258,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 9) (2 claimants one working, one child 3 years old) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_9.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -284,20 +285,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 10) (1 claimant working, 1 child in education) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_10.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -311,20 +312,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 11)(Basic Element, 30 hours, 1 claimant)(Single Tax Year) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_11.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -338,20 +339,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 12) (1 claimant working disabled, severely disabled without income, 1 qualifying Child)" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_12.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -365,20 +366,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 14)(2 claimants, 2 children)(Basic, 30 hours, childcare, second adult, family elements) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_14.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -392,20 +393,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 15) (1 claimant working disabled, 2 qualifying Child - 1 turning 16 and disabled)" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_15.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -419,20 +420,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 16)(Basic element, child, childcare)(Split periods)(Multiple tax years) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_16.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -446,20 +447,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 17) (1 claimant working, 1 child in education) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_17.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -473,20 +474,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 18)(1 Claimant, Basic, 30 hour, childcare, family, one child in higher education) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_18.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -500,20 +501,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 20)(multiple tax year, 1 claimant, 2 children in education) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_20.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -527,20 +528,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 21)(Basic element, child, childcare)(Split periods)(Multiple tax years) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_21.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -554,20 +555,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 22)(multiple tax year, 1 claimant, 1 child not in education) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_22.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -581,20 +582,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 23)(multiple tax year, 1 claimant, 1 child future dob) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_23.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -608,20 +609,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 24) (one claimant, one child turning 15, one child yet to be born) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_24.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -635,20 +636,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 26)(single tax year, 2 claimants, 2 childrens, one future dob) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_26.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -662,20 +663,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 27)(No basic element) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_27.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -689,21 +690,21 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 28)(2 claimants, 2 children)(family, 30 hours element) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_28.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
 
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
@@ -717,20 +718,20 @@ class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with
 
     "(Scenario 29)(1 claimants, 2 children)(Basic, 30 hours, childcare, second adult, family elements)(2 TY, 4 periods)(claimants hours change during second tax year) determine what elements the scenario receives" in {
       // mock out the eligibility service
-      val controller = new TCEligibilityController with TCEligibility {
-        override val eligibility : TCEligibilityService = mock[TCEligibilityService]
+      val controller = new TCEligibilityController {
+        override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
       // load input resource
       val inputResource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_29.json")
       val inputJson: JsValue = Json.parse(inputResource.toString)
-      val request = inputJson.validate[Request]
+      val request = inputJson.validate[TCEligibilityInput]
 
       // get a real result from eligibility
-      val eligible = TCEligibility.eligibility.eligibility(request.get)
+      val eligible = TCEligibility.eligibility(request.get)
 
       // fake request to the controller through the API endpoint
-      when(controller.eligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      when(controller.tcEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
       val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
 
       // load output resource
