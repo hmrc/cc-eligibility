@@ -17,11 +17,9 @@
 package eligibility
 
 import models.input.esc._
-
 import models.output.esc.ESCEligibilityOutput
 import org.joda.time.LocalDate
 import utils.{ESCConfig, MessagesObject}
-
 import scala.annotation.tailrec
 import scala.concurrent.Future
 
@@ -31,7 +29,6 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
-    //TODO investigate if the end date should return 31st Aug instead of 1st Sept to get correct number of months
     private def splitDatesForChildren(taxYear: TaxYear): List[LocalDate] = {
       val dates: List[Option[LocalDate]] = for (child <- taxYear.children) yield {
         val isBeingBorn = child.isBeingBornInTaxYear(taxYear)
