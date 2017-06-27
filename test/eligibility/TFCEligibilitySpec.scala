@@ -18,7 +18,7 @@ package eligibility
 
 import controllers.FakeCCEligibilityApplication
 import models.input.tfc._
-import models.output.tfc.{OutputChild, OutputClaimant, TFCEligibilityModel, TFCPeriod}
+import models.output.tfc.{OutputChild, OutputClaimant, TFCEligibilityOutput, TFCPeriod}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.mock.MockitoSugar
@@ -35,13 +35,13 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
   "TFCEligibility" should {
 
-    "return a Future[TFCEligibilityModel] result" in {
+    "return a Future[TFCEligibilityOutput] result" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val today = LocalDate.parse("2016-08-27", formatter)
       val untilDate = LocalDate.parse("2017-06-01", formatter)
       val tfcEligibilityInput = TFCEligibilityInput(from = today, numberOfPeriods = 3, claimants = List(), children = List())
       val result = TFCEligibility.eligibility(tfcEligibilityInput)
-      result.isInstanceOf[Future[TFCEligibilityModel]] shouldBe true
+      result.isInstanceOf[Future[TFCEligibilityOutput]] shouldBe true
     }
 
     "determine claimant's eligibility if qualifies all rules" in {
@@ -1676,7 +1676,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val untilPeriod = LocalDate.parse("2016-06-30", formatter)
       val PeriodOutputChild = OutputChild(id = 0,  qualifying = true, from = Some(startPeriod), until = Some(untilPeriod), tfcRollout = false)
       val tfcPeriods = List(TFCPeriod(from = startPeriod, until = untilPeriod, periodEligibility = false, claimants = List(outputClaimant), children = List(PeriodOutputChild)))
-      val tfcEligibilityModel = TFCEligibilityModel(from = from, until = tfcPeriods.last.until, householdEligibility = false, periods = tfcPeriods, tfcRollout = false)
+      val tfcEligibilityModel = TFCEligibilityOutput(from = from, until = tfcPeriods.last.until, householdEligibility = false, periods = tfcPeriods, tfcRollout = false)
       result shouldBe tfcEligibilityModel
     }
 
@@ -1714,7 +1714,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           children = List(PeriodOutputChild1))
 
       )
-      val tfcEligibilityModel = TFCEligibilityModel(from = from, until = tfcPeriods.last.until, householdEligibility = true, periods = tfcPeriods, tfcRollout = false)
+      val tfcEligibilityModel = TFCEligibilityOutput(from = from, until = tfcPeriods.last.until, householdEligibility = true, periods = tfcPeriods, tfcRollout = false)
       result shouldBe tfcEligibilityModel
     }
 
@@ -1751,7 +1751,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           claimants = List(outputClaimant1),
           children = List(PeriodOutputChild1))
       )
-      val tfcEligibilityModel = TFCEligibilityModel(from = from, until = tfcPeriods.last.until, householdEligibility = true, periods = tfcPeriods, tfcRollout = false)
+      val tfcEligibilityModel = TFCEligibilityOutput(from = from, until = tfcPeriods.last.until, householdEligibility = true, periods = tfcPeriods, tfcRollout = false)
       result shouldBe tfcEligibilityModel
     }
 
@@ -1796,7 +1796,7 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           claimants = List(outputClaimant),
           children = List(PeriodOutputChild2))
       )
-      val tfcEligibilityModel = TFCEligibilityModel(from = from, until = tfcPeriods.last.until, householdEligibility = false, periods = tfcPeriods, tfcRollout = false)
+      val tfcEligibilityModel = TFCEligibilityOutput(from = from, until = tfcPeriods.last.until, householdEligibility = false, periods = tfcPeriods, tfcRollout = false)
       result shouldBe tfcEligibilityModel
     }
   }

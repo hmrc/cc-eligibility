@@ -105,7 +105,7 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
       val outputHhElements = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
       val outputPeriod = models.output.tc.TCPeriod(from = periodStartDate, until = periodEndDate, householdElements = outputHhElements, claimants = List(outputClaimant), children = List(outputChild))
       val outputTaxYear = models.output.tc.TaxYear(from = periodStartDate, until = periodEndDate, periods = List(outputPeriod))
-      val tcEligibilityModel = TCEligibilityModel(eligible = true, taxYears = List(outputTaxYear))
+      val tcEligibilityModel = TCEligibilityOutput(eligible = true, taxYears = List(outputTaxYear))
 
       val outputJson = Json.parse(
         s"""
@@ -191,7 +191,7 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
           claimants = List(outputClaimant),
           children = List(outputPeriodChild2))
       )
-      val tfcEligibilityModel = TFCEligibilityModel(from = from, until = tfcPeriods.last.until, householdEligibility = true, periods = tfcPeriods, tfcRollout = false)
+      val tfcEligibilityModel = TFCEligibilityOutput(from = from, until = tfcPeriods.last.until, householdEligibility = true, periods = tfcPeriods, tfcRollout = false)
 
       val outputJson = Json.parse(
         s"""

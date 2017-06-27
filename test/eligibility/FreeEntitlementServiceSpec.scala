@@ -20,7 +20,7 @@ import controllers.FakeCCEligibilityApplication
 import models.input.freeEntitlement.FreeEntitlementPayload
 import models.input.tfc._
 
-import models.output.tfc.TFCEligibilityModel
+import models.output.tfc.TFCEligibilityOutput
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.mockito.Matchers._
@@ -125,7 +125,7 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
           freeEntitlementService.tfcEligibility.eligibility(any[models.input.tfc.TFCEligibilityInput])(any[play.api.mvc.Request[_]], any[HeaderCarrier])
         ).thenReturn(
           Future.successful(
-                TFCEligibilityModel(
+                TFCEligibilityOutput(
                   from = now,
                   until = now.plusMonths(3),
                   householdEligibility = tfcEligibilityVal,

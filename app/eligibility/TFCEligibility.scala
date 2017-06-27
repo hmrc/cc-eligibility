@@ -127,7 +127,7 @@ trait TFCEligibility extends TFCRolloutSchemeConfig {
       }
     }
 
-    def eligibility(request : TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[TFCEligibilityModel] = {
+    def eligibility(request : TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
       val outputPeriods = determineTFCPeriods(request)
       val householdEligibility = if(TFCConfig.minimumEarningsEnabled) {
         outputPeriods.exists(period => period.periodEligibility) && request.validHouseholdMinimumEarnings
@@ -136,7 +136,7 @@ trait TFCEligibility extends TFCRolloutSchemeConfig {
       }
 
       Future {
-            TFCEligibilityModel(
+            TFCEligibilityOutput(
               from = request.from,
               until = outputPeriods.last.until,
               householdEligibility = householdEligibility,

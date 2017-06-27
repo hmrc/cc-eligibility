@@ -20,7 +20,7 @@ import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import eligibility.TFCEligibility
 import models.input.tfc.TFCEligibilityInput
-import models.output.tfc.TFCEligibilityModel
+import models.output.tfc.TFCEligibilityOutput
 import org.joda.time.LocalDate
 import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
@@ -56,7 +56,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.tfcEligibility.eligibility(any[TFCEligibilityInput]())(any[play.api.mvc.Request[_]], any[HeaderCarrier])).
-        thenReturn(Future.successful(TFCEligibilityModel(LocalDate.now(), LocalDate.now, false, false, Nil)))
+        thenReturn(Future.successful(TFCEligibilityOutput(LocalDate.now(), LocalDate.now, false, false, Nil)))
       val result = await(controller.eligible(request))
       status(result) shouldBe Status.OK
     }
@@ -183,7 +183,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.tfcEligibility.eligibility(any[TFCEligibilityInput]())(any[play.api.mvc.Request[_]], any[HeaderCarrier])).
-        thenReturn(Future.successful(TFCEligibilityModel(LocalDate.now(), LocalDate.now, false, false, Nil)))
+        thenReturn(Future.successful(TFCEligibilityOutput(LocalDate.now(), LocalDate.now, false, false, Nil)))
       val result = await(controller.eligible(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
@@ -197,7 +197,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.tfcEligibility.eligibility(any[TFCEligibilityInput]())(any[play.api.mvc.Request[_]], any[HeaderCarrier])).
-        thenReturn(Future.successful(TFCEligibilityModel(LocalDate.now(), LocalDate.now, false, false, Nil)))
+        thenReturn(Future.successful(TFCEligibilityOutput(LocalDate.now(), LocalDate.now, false, false, Nil)))
       val result = await(controller.eligible(request))
       status(result) shouldBe 400
     }
@@ -211,7 +211,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.tfcEligibility.eligibility(any[TFCEligibilityInput]())(any[play.api.mvc.Request[_]], any[HeaderCarrier])).
-        thenReturn(Future.successful(TFCEligibilityModel(LocalDate.now(), LocalDate.now, false, false, Nil)))
+        thenReturn(Future.successful(TFCEligibilityOutput(LocalDate.now(), LocalDate.now, false, false, Nil)))
       val result = await(controller.eligible(request))
       status(result) shouldBe 400
     }
@@ -225,7 +225,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.tfcEligibility.eligibility(any[TFCEligibilityInput]())(any[play.api.mvc.Request[_]], any[HeaderCarrier])).
-        thenReturn(Future.successful(TFCEligibilityModel(LocalDate.now(), LocalDate.now, false, false, Nil)))
+        thenReturn(Future.successful(TFCEligibilityOutput(LocalDate.now(), LocalDate.now, false, false, Nil)))
       val result = await(controller.eligible(request))
       status(result) shouldBe BAD_REQUEST
     }

@@ -19,10 +19,6 @@ package eligibility
 import models.input.BaseTaxYear
 import org.joda.time.LocalDate
 
-/**
- * Created by adamconder on 24/07/15.
- */
-
 trait CCEligibilityHelpers {
 
   def fromAndUntilDateForPeriod[T <: BaseTaxYear](date : LocalDate, i : Int, datesOfChanges : List[LocalDate], ty : T) : (LocalDate, LocalDate) = {

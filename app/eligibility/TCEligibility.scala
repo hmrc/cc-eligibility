@@ -18,7 +18,7 @@ package eligibility
 
 import models.input.tc.{Child, TCEligibilityInput, TaxYear}
 
-import models.output.tc.{ChildElements, ClaimantDisability, OutputChild, TCEligibilityModel}
+import models.output.tc.{ChildElements, ClaimantDisability, OutputChild, TCEligibilityOutput}
 import org.joda.time.LocalDate
 import utils.{MessagesObject, TCConfig}
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -83,11 +83,11 @@ object TCEligibility extends TCEligibility {
     }
   }
 
-  override def eligibility(request: TCEligibilityInput): Future[TCEligibilityModel] = {
+  override def eligibility(request: TCEligibilityInput): Future[TCEligibilityOutput] = {
 
     val taxyears = constructTaxYearsWithPeriods(request)
     Future {
-          TCEligibilityModel(
+          TCEligibilityOutput(
             isEligibleForTC(taxyears),
             taxyears,
             determineWTCEligibility(taxyears),
@@ -99,7 +99,7 @@ object TCEligibility extends TCEligibility {
 
 trait TCEligibility extends CCEligibilityHelpers with MessagesObject {
 
-  def eligibility(request: TCEligibilityInput): Future[TCEligibilityModel]
+  def eligibility(request: TCEligibilityInput): Future[TCEligibilityOutput]
 
   def determineHouseholdEligibilityForPeriod(ty: TaxYear, periodStart: LocalDate): models.output.tc.HouseholdElements = {
     models.output.tc.HouseholdElements(
