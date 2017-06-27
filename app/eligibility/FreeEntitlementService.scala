@@ -27,9 +27,13 @@ import utils.{ChildHelper, CCConfig}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object FreeEntitlementService extends FreeEntitlementService
+object FreeEntitlementService extends FreeEntitlementService{
+  override val tfcEligibility: TFCEligibility = TFCEligibility
+}
 
 trait FreeEntitlementService extends CCConfig with ChildHelper {
+
+  val tfcEligibility: TFCEligibility
 
   private def isChildDOBWithinRollout(dob: LocalDate): Boolean = {
 
@@ -49,7 +53,7 @@ trait FreeEntitlementService extends CCConfig with ChildHelper {
 
   def thirtyHours(tfcEligibilityInput: TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[ThirtyHoursEligibilityModel] = {
 
-    TFCEligibility.eligibility(tfcEligibilityInput).map { tfcEligibilityResult =>
+    tfcEligibility.eligibility(tfcEligibilityInput).map { tfcEligibilityResult =>
 
       val tfcEligibility: Boolean = tfcEligibilityResult.householdEligibility
 

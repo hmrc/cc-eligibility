@@ -20,7 +20,7 @@ import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import eligibility.TCEligibility
 import models.input.tc.TCEligibilityInput
-import models.output.OutputAPIModel.Eligibility
+import models.output.tc.TCEligibilityModel
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.mockito.Matchers.{eq => mockEq, _}
@@ -57,7 +57,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/scenario_1.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(TCEligibilityModel(taxYears = Nil)))
       val result = await(controller.eligible(request))
       status(result) shouldBe Status.OK
     }
@@ -71,7 +71,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/empty_tax_year.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(TCEligibilityModel(taxYears = Nil)))
       val result = await(controller.eligible(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
@@ -85,7 +85,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/invalid_tax_year.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(TCEligibilityModel(taxYears = Nil)))
       val result = await(controller.eligible(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
@@ -99,7 +99,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/incorrect_date_format.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(TCEligibilityModel(taxYears = Nil)))
       val result = await(controller.eligible(request))
       status(result) shouldBe Status.BAD_REQUEST
     }
@@ -113,7 +113,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/negative_child_id.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(TCEligibilityModel(taxYears = Nil)))
       val result = await(controller.eligible(request))
       status(result) shouldBe 400
     }
@@ -127,7 +127,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/negative_childcare_cost.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(TCEligibilityModel(taxYears = Nil)))
       val result = await(controller.eligible(request))
       status(result) shouldBe 400
     }
@@ -141,7 +141,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/invalid_claimants_3.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(TCEligibilityModel(taxYears = Nil)))
       val result = await(controller.eligible(request))
       status(result) shouldBe 400
     }
@@ -155,7 +155,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/no_claimants.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(TCEligibilityModel(taxYears = Nil)))
       val result = await(controller.eligible(request))
       status(result) shouldBe 400
     }
@@ -169,7 +169,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/invalid_no_of_children.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(Eligibility()))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(TCEligibilityModel(taxYears = Nil)))
       val result = await(controller.eligible(request))
       status(result) shouldBe 400
     }
