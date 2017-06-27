@@ -36,10 +36,10 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
   "TCEligibility" should {
 
-    "return a Future[Eligibility] result" in {
+    "return a Future[TCEligibilityModel] result" in {
       val service = TCEligibility
       val result = service.eligibility(TCEligibilityInput(taxYears = List()))
-      result.isInstanceOf[Future[Eligibility]] shouldBe true
+      result.isInstanceOf[Future[TCEligibilityModel]] shouldBe true
     }
 
     "(no change) determine start dates of periods in the tax year" in {
@@ -1270,10 +1270,8 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val outputTaxYear = models.output.tc.TaxYear(from = periodStartDate, until = periodEndDate, periods = List(outputPeriod))
       val tcEligibilityModel = TCEligibilityModel(eligible = true, taxYears = List(outputTaxYear), wtc = true, ctc = true)
 
-      val eligibilityOutputModel = Eligibility(tc = Some(tcEligibilityModel))
-
-      val result  = TCEligibility.eligibility(TCEligibilityInput(taxYears = List(ty)))
-      result shouldBe eligibilityOutputModel.tc
+      val result  = await(TCEligibility.eligibility(TCEligibilityInput(taxYears = List(ty))))
+      result shouldBe tcEligibilityModel
     }
 
     "calculate and populate TC Eligibility model (one tax year, one period) (no income)" in {
@@ -1292,9 +1290,8 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val outputTaxYear = models.output.tc.TaxYear(from = periodStartDate, until = periodEndDate, periods = List(outputPeriod))
       val tcEligibilityModel = TCEligibilityModel(eligible = true, taxYears = List(outputTaxYear), wtc = true, ctc = true)
 
-      val eligibilityOutputModel = Eligibility(tc = Some(tcEligibilityModel))
-      val result  = TCEligibility.eligibility(TCEligibilityInput(taxYears = List(ty)))
-      result shouldBe eligibilityOutputModel.tc
+      val result  = await(TCEligibility.eligibility(TCEligibilityInput(taxYears = List(ty))))
+      result shouldBe tcEligibilityModel
     }
   }
 }

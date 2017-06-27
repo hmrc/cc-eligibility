@@ -194,8 +194,6 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
       val outputJson = Json.parse(
         s"""
           {
-            "eligibility": {
-              "tc": {
                 "eligible": false,
                 "taxYears": [
                   {
@@ -245,11 +243,7 @@ class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApp
                 ],
                 "wtc": true,
                 "ctc": false
-              },
-              "tfc": null,
-              "esc": null
-            }
-          }
+              }
         """.stripMargin)
 
       status(result) shouldBe Status.OK

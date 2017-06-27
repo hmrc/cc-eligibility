@@ -77,10 +77,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       val outputJson = Json.parse(
         s"""
         {
-            "eligibility": {
-                "tc": null,
-                "esc": null,
-                "tfc": {
                   "from": "2016-08-27",
                   "until": "2017-05-27",
                   "householdEligibility": true,
@@ -147,8 +143,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       ]
                     }
                    ]
-                }
-            }
         }
         """.stripMargin)
 
@@ -253,10 +247,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       val outputJson = Json.parse(
         s"""
         {
-            "eligibility": {
-                "tc": null,
-                "esc": null,
-                "tfc": {
                   "from": "2016-08-27",
                   "until": "2017-05-27",
                   "householdEligibility": true,
@@ -335,8 +325,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       ]
                     }
                    ]
-                }
-            }
         }
         """.stripMargin)
 
@@ -360,11 +348,7 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       val outputJson = Json.parse(
         s"""
         {
-            "eligibility": {
-                "tc": null,
-                "esc": null,
-                "tfc": {
-                  "from": "2016-08-27",
+                   "from": "2016-08-27",
                   "until": "2017-05-27",
                   "householdEligibility": true,
                   "tfcRollout":true,
@@ -442,8 +426,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       ]
                     }
                    ]
-                }
-            }
         }
         """.stripMargin)
 
@@ -467,10 +449,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       val outputJson = Json.parse(
         s"""
         {
-            "eligibility": {
-                "tc": null,
-                "esc": null,
-                "tfc": {
                   "from": "2016-08-27",
                   "until": "2017-05-27",
                   "householdEligibility": false,
@@ -549,8 +527,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       ]
                     }
                    ]
-                }
-            }
         }
         """.stripMargin)
 
@@ -574,10 +550,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       val outputJson = Json.parse(
         s"""
         {
-            "eligibility": {
-                "tc": null,
-                "esc": null,
-                "tfc": {
                   "from": "2016-08-27",
                   "until": "2017-05-27",
                   "householdEligibility": true,
@@ -656,8 +628,6 @@ class TFCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
                       ]
                     }
                    ]
-                }
-            }
         }
         """.stripMargin)
 
