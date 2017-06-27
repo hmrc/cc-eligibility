@@ -3,11 +3,11 @@
     "tfc": {
       "from": "2016-08-27",
       "numberOfPeriods": 1,
+      "location": "scotland",
       "claimants": [
         {
           "hoursPerWeek": 16.50,
           "isPartner": false,
-          "location": "scotland",
           "totalIncome": 99000.00,
           "disability": {
             "disabled": false,

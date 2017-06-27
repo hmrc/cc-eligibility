@@ -142,9 +142,9 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
             tfc = TFC(
               from = now,
               numberOfPeriods = 3,
+              location = location,
               claimants = List(
                 Claimant(
-                  location = location,
                   disability = Disability(),
                   minimumEarnings = MinimumEarnings(),
                   age = None

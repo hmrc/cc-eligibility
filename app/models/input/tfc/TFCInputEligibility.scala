@@ -54,6 +54,7 @@ object Payload {
 case class TFC(
                 from: LocalDate,
                 numberOfPeriods: Short,
+                location: String,
                 claimants: List[Claimant],
                 children: List[Child]
                 ) {
@@ -62,8 +63,8 @@ case class TFC(
     val parent = claimants.head
     if(claimants.length > 1) {
       val partner = claimants.last
-      val minEarningsParent = parent.satisfyMinimumEarnings(from, parent = true)
-      val minEarningsPartner = partner.satisfyMinimumEarnings(from, parent = false)
+      val minEarningsParent = parent.satisfyMinimumEarnings(from, parent = true, location)
+      val minEarningsPartner = partner.satisfyMinimumEarnings(from, parent = false, location)
       val auditMinEarns = minEarningsParent && minEarningsPartner
       if(auditMinEarns == false) {
         AuditEvents.auditMinEarnings(auditMinEarns)
@@ -75,7 +76,7 @@ case class TFC(
         case _ => false
       }
     } else {
-      val parentSatisfy = parent.satisfyMinimumEarnings(from, parent = true)
+      val parentSatisfy = parent.satisfyMinimumEarnings(from, parent = true, location)
       if(parentSatisfy == false) {
         AuditEvents.auditMinEarnings(parentSatisfy)
       }
@@ -87,14 +88,14 @@ case class TFC(
     val parent = claimants.head
     if(claimants.length > 1) {
       val partner = claimants.last
-      (parent.isWorkingAtLeast16HoursPerWeek(from), partner.isWorkingAtLeast16HoursPerWeek(from)) match {
+      (parent.isWorkingAtLeast16HoursPerWeek(from, location), partner.isWorkingAtLeast16HoursPerWeek(from, location)) match {
         case (true,true) => true
         case (true, false) => partner.carersAllowance
         case (false, true) => parent.carersAllowance
         case _ =>   false
       }
     } else {
-      (parent.isWorkingAtLeast16HoursPerWeek(from))
+      parent.isWorkingAtLeast16HoursPerWeek(from, location)
     }
   }
 }
@@ -112,8 +113,9 @@ object TFC extends CCFormat with MessagesObject {
   implicit val tfcReads: Reads[TFC] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "numberOfPeriods").read[Short].orElse(Reads.pure(1)) and
-        (JsPath \ "claimants").read[List[Claimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
-          (JsPath \ "children").read[List[Child]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
+        (JsPath \ "location").read[String] and
+          (JsPath \ "claimants").read[List[Claimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
+            (JsPath \ "children").read[List[Child]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
     )(TFC.apply _)
 }
 
@@ -132,7 +134,6 @@ case class Claimant(
                      currentIncome: Option[Income] = None,
                      hoursPerWeek: Double = 0.00,
                      isPartner: Boolean = false,
-                     location: String,
                      disability: Disability,
                      carersAllowance: Boolean = false,
                      minimumEarnings: MinimumEarnings,
@@ -169,23 +170,23 @@ case class Claimant(
     employmentIncome + otherIncome - pension * ConfigConstants.noOfMonths
   }
 
-  def isWorkingAtLeast16HoursPerWeek (periodStart:LocalDate) : Boolean = {
+  def isWorkingAtLeast16HoursPerWeek (periodStart:LocalDate, location:String) : Boolean = {
     val taxYearConfig = TFCConfig.getConfig(periodStart, location)
     val minimum : Double = taxYearConfig.minimumHoursWorked
     hoursPerWeek >= minimum
   }
 
-  def isTotalIncomeLessThan100000(periodStart:LocalDate) : Boolean = {
+  def isTotalIncomeLessThan100000(periodStart:LocalDate, location: String) : Boolean = {
     val taxYearConfig = TFCConfig.getConfig(periodStart, location)
     val maximumTotalIncome : Double = taxYearConfig.maxIncomePerClaimant
     (totalIncome - taxYearConfig.personalAllowancePerClaimant) <= maximumTotalIncome
   }
 
-  def isQualifyingForTFC(periodStart : LocalDate) : Boolean = {
-      isTotalIncomeLessThan100000(periodStart)
+  def isQualifyingForTFC(periodStart : LocalDate, location: String) : Boolean = {
+      isTotalIncomeLessThan100000(periodStart, location)
   }
 
-  def satisfyMinimumEarnings(periodStart: LocalDate, parent: Boolean)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
+  def satisfyMinimumEarnings(periodStart: LocalDate, parent: Boolean, location:String)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
     val user = if(parent) {
       "Parent"
     } else {
@@ -232,7 +233,6 @@ object Claimant {
       (JsPath \ "currentIncome").readNullable[Income] and
         (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
           (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-            (JsPath \ "location").read[String] and
               (JsPath \ "disability").read[Disability] and
                 (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false)) and
                   (JsPath \ "minimumEarnings").read[MinimumEarnings] and

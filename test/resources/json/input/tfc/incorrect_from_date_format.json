@@ -4,11 +4,11 @@
       {
         "from": "2016-08-27T18:46:17",
         "numberOfPeriods": 2,
+        "location": "england",
         "claimants": [
           {
             "hoursPerWeek": 30.00,
             "isPartner": false,
-            "location": "england",
             "totalIncome": 0.00,
             "disability": {
               "disabled": false,

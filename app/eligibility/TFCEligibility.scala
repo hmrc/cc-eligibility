@@ -91,8 +91,8 @@ trait TFCEligibility extends CCTFCEligibility with TFCRolloutSchemeConfig {
         val startDate = LocalDate.fromDateFields(currentCalendar.getTime)
         currentCalendar.add(Calendar.MONTH, 3)
         val untilDate = LocalDate.fromDateFields(currentCalendar.getTime)
-        val outputClaimants = determineClaimantsEligibility(tfc.claimants, startDate)
-        val location = if(tfc.claimants.isEmpty) "default" else tfc.claimants.head.location
+        val outputClaimants = determineClaimantsEligibility(tfc.claimants, startDate, tfc.location)
+        val location = if(tfc.claimants.isEmpty) "default" else tfc.location
         val outputChildren = determineChildrenEligibility(tfc.children, startDate, untilDate, location)
         val periodEligibility = determinePeriodEligibility(outputClaimants, outputChildren)
 
@@ -122,10 +122,10 @@ trait TFCEligibility extends CCTFCEligibility with TFCRolloutSchemeConfig {
       }
     }
 
-    def determineClaimantsEligibility(claimants: List[Claimant], periodStart : LocalDate) : List[OutputClaimant] = {
+    def determineClaimantsEligibility(claimants: List[Claimant], periodStart : LocalDate, location : String) : List[OutputClaimant] = {
       for(claimant <- claimants) yield {
         OutputClaimant(
-          qualifying = claimant.isQualifyingForTFC(periodStart),
+          qualifying = claimant.isQualifyingForTFC(periodStart, location),
           isPartner = claimant.isPartner
         )
       }

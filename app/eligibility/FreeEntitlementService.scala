@@ -54,7 +54,7 @@ trait FreeEntitlementService extends CCConfig with ChildHelper with TFCEligibili
       val tfcPayload: TFC = tfcRequest.payload.tfc
       val tfcEligibility: Boolean = tfcEligibilityResult.tfc.map(_.householdEligibility).getOrElse(false)
 
-      val location = tfcPayload.claimants.head.location
+      val location = tfcPayload.location
 
       val hasChild3Or4Sept2017: Boolean = hasCildAtAge(
         configField = s"thirty.${location}",
