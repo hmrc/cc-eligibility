@@ -1,6 +1,4 @@
-{
-  "payload": {
-    "tfc": {
+ {
       "from": "2016-04-10",
       "numberOfPeriods": 4,
       "location": "england",
@@ -67,5 +65,3 @@
         }
       ]
     }
-  }
-}

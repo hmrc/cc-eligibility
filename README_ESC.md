@@ -101,9 +101,7 @@ The ESC Eligibility micro-service will accept the parent details and children de
                     "qualifying": true,
                     "isPartner": false,
                     "eligibleMonthsInPeriod": 0,
-                    "elements": {
-                      "vouchers": false
-                    }
+                    "vouchers": false
                   }
                 ],
                 "children": [

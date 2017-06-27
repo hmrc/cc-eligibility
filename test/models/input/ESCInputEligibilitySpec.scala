@@ -32,28 +32,27 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
     "read a valid JSON input and convert to a specific type" in {
         val resource: JsonNode = JsonLoader.fromResource("/json/input/esc/eligibility_input_test.json")
         val json: JsValue = Json.parse(resource.toString)
-        val result = json.validate[Request]
+        val result = json.validate[ESCEligibilityInput]
         result match {
           case JsSuccess(x, _) => {
-            x shouldBe a[Request]
-            x.payload should not be null
-            x.payload.taxYears.head.from shouldBe a[LocalDate]
-            x.payload.taxYears.head.until shouldBe a[LocalDate]
-            x.payload.taxYears.head.claimants.isInstanceOf[List[Claimant]] shouldBe true
-            x.payload.taxYears.head.children.isInstanceOf[List[Child]] shouldBe true
+            x shouldBe a[ESCEligibilityInput]
+            x.taxYears.head.from shouldBe a[LocalDate]
+            x.taxYears.head.until shouldBe a[LocalDate]
+            x.taxYears.head.claimants.isInstanceOf[List[Claimant]] shouldBe true
+            x.taxYears.head.children.isInstanceOf[List[Child]] shouldBe true
 
             //Claimant model
-            x.payload.taxYears.head.claimants.head.isPartner.isInstanceOf[Boolean] shouldBe true
-            x.payload.taxYears.head.claimants.head.employerProvidesESC.isInstanceOf[Boolean] shouldBe true
+            x.taxYears.head.claimants.head.isPartner.isInstanceOf[Boolean] shouldBe true
+            x.taxYears.head.claimants.head.employerProvidesESC.isInstanceOf[Boolean] shouldBe true
 
             //Children model
-            x.payload.taxYears.head.children.head.id.isInstanceOf[Short] shouldBe true
-            x.payload.taxYears.head.children.head.dob shouldBe a[LocalDate]
-            x.payload.taxYears.head.children.head.disability shouldBe a[Disability]
+            x.taxYears.head.children.head.id.isInstanceOf[Short] shouldBe true
+            x.taxYears.head.children.head.dob shouldBe a[LocalDate]
+            x.taxYears.head.children.head.disability shouldBe a[Disability]
 
             //Disability model
-            x.payload.taxYears.head.children.head.disability.disabled.isInstanceOf[Boolean] shouldBe true
-            x.payload.taxYears.head.children.head.disability.severelyDisabled.isInstanceOf[Boolean] shouldBe true
+            x.taxYears.head.children.head.disability.disabled.isInstanceOf[Boolean] shouldBe true
+            x.taxYears.head.children.head.disability.severelyDisabled.isInstanceOf[Boolean] shouldBe true
           }
           case _ => throw new Exception
         }

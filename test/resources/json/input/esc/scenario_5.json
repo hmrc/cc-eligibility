@@ -1,26 +1,24 @@
 {
-  "payload": {
-    "taxYears": [
-      {
-        "from": "2016-08-27",
-        "until": "2017-04-06",
-        "claimants": [
-          {
-            "isPartner": false,
-            "employerProvidesESC": true
+  "taxYears": [
+    {
+      "from": "2016-08-27",
+      "until": "2017-04-06",
+      "claimants": [
+        {
+          "isPartner": false,
+          "employerProvidesESC": true
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "dob": "2018-05-12",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
           }
-        ],
-        "children": [
-          {
-            "id": 0,
-            "dob": "2018-05-12",
-            "disability": {
-              "disabled": false,
-              "severelyDisabled": false
-            }
-          }
-        ]
-      }
-    ]
-  }
+        }
+      ]
+    }
+  ]
 }

@@ -1,290 +1,284 @@
 {
-  "eligibility": {
-    "tc": null,
-    "esc": null,
-    "tfc": {
+  "from": "2016-09-01",
+  "until": "2018-09-01",
+  "householdEligibility": true,
+  "tfcRollout": true,
+  "periods": [
+    {
       "from": "2016-09-01",
+      "until": "2016-12-01",
+      "periodEligibility": true,
+      "claimants": [
+        {
+          "qualifying": true,
+          "isPartner": false
+        },
+        {
+          "qualifying": true,
+          "isPartner": true
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "qualifying": true,
+          "from": "2016-09-01",
+          "until": "2016-09-04",
+          "tfcRollout": true
+        },
+        {
+          "id": 0,
+          "qualifying": false,
+          "tfcRollout": false
+        },
+        {
+          "id": 0,
+          "qualifying": false,
+          "tfcRollout": false
+        }
+      ]
+    },
+    {
+      "from": "2016-12-01",
+      "until": "2017-03-01",
+      "periodEligibility": false,
+      "claimants": [
+        {
+          "qualifying": true,
+          "isPartner": false
+        },
+        {
+          "qualifying": true,
+          "isPartner": true
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "qualifying": false,
+          "tfcRollout": false
+        },
+        {
+          "id": 0,
+          "qualifying": false,
+          "tfcRollout": false
+        },
+        {
+          "id": 0,
+          "qualifying": false,
+          "tfcRollout": false
+        }
+      ]
+    },
+    {
+      "from": "2017-03-01",
+      "until": "2017-06-01",
+      "periodEligibility": false,
+      "claimants": [
+        {
+          "qualifying": true,
+          "isPartner": false
+        },
+        {
+          "qualifying": true,
+          "isPartner": true
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "qualifying": false,
+          "tfcRollout": false
+        },
+        {
+          "id": 0,
+          "qualifying": false,
+          "tfcRollout": false
+        },
+        {
+          "id": 0,
+          "qualifying": false,
+          "tfcRollout": false
+        }
+      ]
+    },
+    {
+      "from": "2017-06-01",
+      "until": "2017-09-01",
+      "periodEligibility": true,
+      "claimants": [
+        {
+          "qualifying": true,
+          "isPartner": false
+        },
+        {
+          "qualifying": true,
+          "isPartner": true
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "qualifying": false,
+          "tfcRollout": false
+        },
+        {
+          "id": 0,
+          "qualifying": true,
+          "from": "2017-08-31",
+          "until": "2017-09-01",
+          "tfcRollout": false
+        },
+        {
+          "id": 0,
+          "qualifying": false,
+          "tfcRollout": false
+        }
+      ]
+    },
+    {
+      "from": "2017-09-01",
+      "until": "2017-12-01",
+      "periodEligibility": true,
+      "claimants": [
+        {
+          "qualifying": true,
+          "isPartner": false
+        },
+        {
+          "qualifying": true,
+          "isPartner": true
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "qualifying": false,
+          "tfcRollout": false
+        },
+        {
+          "id": 0,
+          "qualifying": true,
+          "from": "2017-09-01",
+          "until": "2017-12-01",
+          "tfcRollout": false
+        },
+        {
+          "id": 0,
+          "qualifying": true,
+          "from": "2017-09-01",
+          "until": "2017-12-01",
+          "tfcRollout": false
+        }
+      ]
+    },
+    {
+      "from": "2017-12-01",
+      "until": "2018-03-01",
+      "periodEligibility": true,
+      "claimants": [
+        {
+          "qualifying": true,
+          "isPartner": false
+        },
+        {
+          "qualifying": true,
+          "isPartner": true
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "qualifying": false,
+          "tfcRollout": false
+        },
+        {
+          "id": 0,
+          "qualifying": true,
+          "from": "2017-12-01",
+          "until": "2018-03-01",
+          "tfcRollout": false
+        },
+        {
+          "id": 0,
+          "qualifying": true,
+          "from": "2017-12-01",
+          "until": "2018-03-01",
+          "tfcRollout": false
+        }
+      ]
+    },
+    {
+      "from": "2018-03-01",
+      "until": "2018-06-01",
+      "periodEligibility": true,
+      "claimants": [
+        {
+          "qualifying": true,
+          "isPartner": false
+        },
+        {
+          "qualifying": true,
+          "isPartner": true
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "qualifying": false,
+          "tfcRollout": false
+        },
+        {
+          "id": 0,
+          "qualifying": true,
+          "from": "2018-03-01",
+          "until": "2018-06-01",
+          "tfcRollout": false
+        },
+        {
+          "id": 0,
+          "qualifying": true,
+          "from": "2018-03-01",
+          "until": "2018-06-01",
+          "tfcRollout": false
+        }
+      ]
+    },
+    {
+      "from": "2018-06-01",
       "until": "2018-09-01",
-      "householdEligibility": true,
-      "tfcRollout": true,
-      "periods": [
+      "periodEligibility": true,
+      "claimants": [
         {
-          "from" : "2016-09-01",
-          "until" : "2016-12-01",
-          "periodEligibility" : true,
-          "claimants" : [
-            {
-              "qualifying" : true,
-              "isPartner" : false
-            },
-            {
-              "qualifying" : true,
-              "isPartner" : true
-            }
-          ],
-          "children" : [
-            {
-              "id" : 0,
-              "qualifying" : true,
-              "from" : "2016-09-01",
-              "until" : "2016-09-04",
-              "tfcRollout": true
-            },
-            {
-              "id" : 0,
-              "qualifying" : false,
-              "tfcRollout": false
-            },
-            {
-              "id" : 0,
-              "qualifying" : false,
-              "tfcRollout": false
-            }
-          ]
+          "qualifying": true,
+          "isPartner": false
         },
         {
-          "from" : "2016-12-01",
-          "until" : "2017-03-01",
-          "periodEligibility" : false,
-          "claimants" : [
-            {
-              "qualifying" : true,
-              "isPartner" : false
-            },
-            {
-              "qualifying" : true,
-              "isPartner" : true
-            }
-          ],
-          "children" : [
-            {
-              "id" : 0,
-              "qualifying" : false,
-              "tfcRollout": false
-            },
-            {
-              "id" : 0,
-              "qualifying" : false,
-              "tfcRollout": false
-            },
-            {
-              "id" : 0,
-              "qualifying" : false,
-              "tfcRollout": false
-            }
-          ]
+          "qualifying": true,
+          "isPartner": true
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "qualifying": false,
+          "tfcRollout": false
         },
         {
-          "from" : "2017-03-01",
-          "until" : "2017-06-01",
-          "periodEligibility" : false,
-          "claimants" : [
-            {
-              "qualifying" : true,
-              "isPartner" : false
-            },
-            {
-              "qualifying" : true,
-              "isPartner" : true
-            }
-          ],
-          "children" : [
-            {
-              "id" : 0,
-              "qualifying" : false,
-              "tfcRollout": false
-            },
-            {
-              "id" : 0,
-              "qualifying" : false,
-              "tfcRollout": false
-            },
-            {
-              "id" : 0,
-              "qualifying" : false,
-              "tfcRollout": false
-            }
-          ]
+          "id": 0,
+          "qualifying": true,
+          "from": "2018-06-01",
+          "until": "2018-09-01",
+          "tfcRollout": false
         },
         {
-          "from" : "2017-06-01",
-          "until" : "2017-09-01",
-          "periodEligibility" : true,
-          "claimants" : [
-            {
-              "qualifying" : true,
-              "isPartner" : false
-            },
-            {
-              "qualifying" : true,
-              "isPartner" : true
-            }
-          ],
-          "children" : [
-            {
-              "id" : 0,
-              "qualifying" : false,
-              "tfcRollout": false
-            },
-            {
-              "id" : 0,
-              "qualifying" : true,
-              "from" : "2017-08-31",
-              "until" : "2017-09-01",
-              "tfcRollout": false
-            },
-            {
-              "id" : 0,
-              "qualifying" : false,
-              "tfcRollout": false
-            }
-          ]
-        },
-        {
-          "from" : "2017-09-01",
-          "until" : "2017-12-01",
-          "periodEligibility" : true,
-          "claimants" : [
-            {
-              "qualifying" : true,
-              "isPartner" : false
-            },
-            {
-              "qualifying" : true,
-              "isPartner" : true
-            }
-          ],
-          "children" : [
-            {
-              "id" : 0,
-              "qualifying" : false,
-              "tfcRollout": false
-            },
-            {
-              "id" : 0,
-              "qualifying" : true,
-              "from" : "2017-09-01",
-              "until" : "2017-12-01",
-              "tfcRollout": false
-            },
-            {
-              "id" : 0,
-              "qualifying" : true,
-              "from" : "2017-09-01",
-              "until" : "2017-12-01",
-              "tfcRollout": false
-            }
-          ]
-        },
-        {
-          "from" : "2017-12-01",
-          "until" : "2018-03-01",
-          "periodEligibility" : true,
-          "claimants" : [
-            {
-              "qualifying" : true,
-              "isPartner" : false
-            },
-            {
-              "qualifying" : true,
-              "isPartner" : true
-            }
-          ],
-          "children" : [
-            {
-              "id" : 0,
-              "qualifying" : false,
-              "tfcRollout": false
-            },
-            {
-              "id" : 0,
-              "qualifying" : true,
-              "from" : "2017-12-01",
-              "until" : "2018-03-01",
-              "tfcRollout": false
-            },
-            {
-              "id" : 0,
-              "qualifying" : true,
-              "from" : "2017-12-01",
-              "until" : "2018-03-01",
-              "tfcRollout": false
-            }
-          ]
-        },
-        {
-          "from" : "2018-03-01",
-          "until" : "2018-06-01",
-          "periodEligibility" : true,
-          "claimants" : [
-            {
-              "qualifying" : true,
-              "isPartner" : false
-            },
-            {
-              "qualifying" : true,
-              "isPartner" : true
-            }
-          ],
-          "children" : [
-            {
-              "id" : 0,
-              "qualifying" : false,
-              "tfcRollout": false
-            },
-            {
-              "id" : 0,
-              "qualifying" : true,
-              "from" : "2018-03-01",
-              "until" : "2018-06-01",
-              "tfcRollout": false
-            },
-            {
-              "id" : 0,
-              "qualifying" : true,
-              "from" : "2018-03-01",
-              "until" : "2018-06-01",
-              "tfcRollout": false
-            }
-          ]
-        },
-        {
-          "from" : "2018-06-01",
-          "until" : "2018-09-01",
-          "periodEligibility" : true,
-          "claimants" : [
-            {
-              "qualifying" : true,
-              "isPartner" : false
-            },
-            {
-              "qualifying" : true,
-              "isPartner" : true
-            }
-          ],
-          "children" : [
-            {
-              "id" : 0,
-              "qualifying" : false,
-              "tfcRollout": false
-            },
-            {
-              "id" : 0,
-              "qualifying" : true,
-              "from" : "2018-06-01",
-              "until" : "2018-09-01",
-              "tfcRollout": false
-            },
-            {
-              "id" : 0,
-              "qualifying" : true,
-              "from" : "2018-06-01",
-              "until" : "2018-09-01",
-              "tfcRollout": false
-            }
-          ]
+          "id": 0,
+          "qualifying": true,
+          "from": "2018-06-01",
+          "until": "2018-09-01",
+          "tfcRollout": false
         }
       ]
     }
-  }
+  ]
 }

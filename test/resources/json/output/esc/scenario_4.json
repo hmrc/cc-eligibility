@@ -1,39 +1,25 @@
 {
-    "eligibility": {
-      "esc": {
-        "taxYears": [
-          {
-            "from": "2016-08-27",
-            "until": "2017-04-06",
-            "periods": [
-              {
-                "from": "2016-08-27",
-                "until": "2017-04-06",
-                "claimants": [
-                  {
-                    "qualifying": true,
-                    "isPartner": false,
-                    "eligibleMonthsInPeriod": 0,
-                    "elements": {
-                      "vouchers": false
-                    }
-                  }
-                ],
-                "children": [
-                  {
-                    "id": 0,
-                    "qualifying": false
-                  }
-                ]
-              }
-            ]
-          }
-        ],
-        "eligibility":false,
-        "parentEligibility":true,
-        "partnerEligibility":false
-      },
-      "tc": null,
-      "tfc": null
+  "taxYears": [
+    {
+      "from": "2016-08-27",
+      "until": "2017-04-06",
+      "periods": [
+        {
+          "from": "2016-08-27",
+          "until": "2017-04-06",
+          "claimants": [
+            {
+              "qualifying": true,
+              "isPartner": false,
+              "eligibleMonthsInPeriod": 0,
+              "vouchers": false
+            }
+          ]
+        }
+      ]
     }
+  ],
+  "eligibility":false,
+  "parentEligibility":true,
+  "partnerEligibility":false
 }

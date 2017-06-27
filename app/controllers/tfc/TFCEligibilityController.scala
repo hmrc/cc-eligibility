@@ -18,36 +18,37 @@ package controllers.tfc
 
 import controllers.EligibilityController
 import eligibility.TFCEligibility
-import models.input.tfc.Request
+import models.input.tfc.TFCEligibilityInput
 import play.api.Logger
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Action
 import service.AuditEvents
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object TFCEligibilityController extends TFCEligibilityController with TFCEligibility {
+object TFCEligibilityController extends TFCEligibilityController {
+  val tfcEligibility = TFCEligibility
   override val auditEvent = AuditEvents
 }
 
 trait TFCEligibilityController extends EligibilityController {
-
-  this : TFCEligibility =>
+  val tfcEligibility : TFCEligibility
   val auditEvent : AuditEvents
 
   override def eligible : Action[JsValue] = Action.async(parse.json) {
     implicit request =>
-      request.body.validate[Request].fold(
+      request.body.validate[TFCEligibilityInput].fold(
         error => {
           Logger.warn(s"TFC Validation JsError *****")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
           auditEvent.auditTFCRequest(result.toString)
-          eligibility.eligibility(result).map {
+          tfcEligibility.eligibility(result).map {
             response =>
-              auditEvent.auditTFCResponse(utils.JSONFactory.generateResultJson(response).toString())
-              Ok(utils.JSONFactory.generateResultJson(response))
+              auditEvent.auditTFCResponse(Json.toJson(response).toString())
+              Ok(Json.toJson(response))
           } recover {
             case e: Exception =>
               Logger.warn(s"Tax Free Childcare Eligibility Exception: ${e.getMessage}")

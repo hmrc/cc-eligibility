@@ -33,43 +33,41 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
     "Read a valid JSON input and convert to a specific type" in {
         val resource: JsonNode = JsonLoader.fromResource("/json/input/tfc/eligibility_input_test.json")
         val json: JsValue = Json.parse(resource.toString)
-        val result = json.validate[Request]
+        val result = json.validate[TFCEligibilityInput]
         result match {
           case JsSuccess(x, _) => {
-            x shouldBe a[Request]
-            x.payload should not be null
-            x.payload shouldBe a[Payload]
-            x.payload.tfc shouldBe a[TFC]
+            x shouldBe a[TFCEligibilityInput]
+            x should not be null
 
             //TFC model
-            x.payload.tfc.from shouldBe a[LocalDate]
-            x.payload.tfc.numberOfPeriods.isInstanceOf[Short] shouldBe true
-            x.payload.tfc.claimants.isInstanceOf[List[Claimant]] shouldBe true
-            x.payload.tfc.children.isInstanceOf[List[Child]] shouldBe true
+            x.from shouldBe a[LocalDate]
+            x.numberOfPeriods.isInstanceOf[Short] shouldBe true
+            x.claimants.isInstanceOf[List[Claimant]] shouldBe true
+            x.children.isInstanceOf[List[Child]] shouldBe true
 
             //Claimant model
-            x.payload.tfc.claimants.head.totalIncome shouldBe a[BigDecimal]
-            x.payload.tfc.claimants.head.hoursPerWeek.isInstanceOf[Double] shouldBe true
-            x.payload.tfc.claimants.head.isPartner.isInstanceOf[Boolean] shouldBe true
-            x.payload.tfc.claimants.head.disability shouldBe a[Disability]
+            x.claimants.head.totalIncome shouldBe a[BigDecimal]
+            x.claimants.head.hoursPerWeek.isInstanceOf[Double] shouldBe true
+            x.claimants.head.isPartner.isInstanceOf[Boolean] shouldBe true
+            x.claimants.head.disability shouldBe a[Disability]
 
             //Claimant Disability model
-            x.payload.tfc.claimants.head.disability.disabled.isInstanceOf[Boolean] shouldBe true
-            x.payload.tfc.claimants.head.disability.severelyDisabled.isInstanceOf[Boolean] shouldBe true
+            x.claimants.head.disability.disabled.isInstanceOf[Boolean] shouldBe true
+            x.claimants.head.disability.severelyDisabled.isInstanceOf[Boolean] shouldBe true
 
             //Other Support model
-            x.payload.tfc.claimants.head.carersAllowance.isInstanceOf[Boolean] shouldBe true
+            x.claimants.head.carersAllowance.isInstanceOf[Boolean] shouldBe true
 
             //Child model
-            x.payload.tfc.children.head.id.isInstanceOf[Short] shouldBe true
-            x.payload.tfc.children.head.childcareCost shouldBe a[BigDecimal]
-            x.payload.tfc.children.head.childcareCostPeriod shouldBe a[Periods.Period]
-            x.payload.tfc.children.head.dob shouldBe a[LocalDate]
-            x.payload.tfc.children.head.disability shouldBe a[Disability]
+            x.children.head.id.isInstanceOf[Short] shouldBe true
+            x.children.head.childcareCost shouldBe a[BigDecimal]
+            x.children.head.childcareCostPeriod shouldBe a[Periods.Period]
+            x.children.head.dob shouldBe a[LocalDate]
+            x.children.head.disability shouldBe a[Disability]
 
             //Child Disability model
-            x.payload.tfc.children.head.disability.disabled.isInstanceOf[Boolean] shouldBe true
-            x.payload.tfc.children.head.disability.severelyDisabled.isInstanceOf[Boolean] shouldBe true
+            x.children.head.disability.disabled.isInstanceOf[Boolean] shouldBe true
+            x.children.head.disability.severelyDisabled.isInstanceOf[Boolean] shouldBe true
           }
           case JsError(e) => throw new IllegalArgumentException(e.toString)
         }
@@ -165,14 +163,15 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
   }
 
     "Claimant" should {
-  
+
       "Check if claimant and partner eligible for minimum earnings rule (minimum 8 hours)" in {
         val claimant = Claimant(hoursPerWeek = 16.01, isPartner = false, disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
         val partner = Claimant(hoursPerWeek = 18.01, isPartner = false, disability = Disability(), carersAllowance = false, minimumEarnings = MinimumEarnings(), age = None)
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
-        val tfc = TFC(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
         tfc.claimants.head.isWorkingAtLeast16HoursPerWeek(fromDate, tfc.location) shouldBe true
         tfc.claimants.last.isWorkingAtLeast16HoursPerWeek(fromDate, tfc.location) shouldBe true
       }
@@ -183,7 +182,8 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
-        val tfc = TFC(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
 
         tfc.claimants.head.isTotalIncomeLessThan100000(fromDate, tfc.location) shouldBe true
         tfc.claimants.last.isTotalIncomeLessThan100000(fromDate, tfc.location) shouldBe true
@@ -195,7 +195,8 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
-        val tfc = TFC(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
         tfc.claimants.head.isQualifyingForTFC(fromDate, tfc.location) shouldBe true
         tfc.claimants.last.isQualifyingForTFC(fromDate, tfc.location) shouldBe true
       }
@@ -220,7 +221,8 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
-        val tfc = TFC(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
         tfc.claimants.head.isQualifyingForTFC(fromDate, tfc.location) shouldBe false
         tfc.claimants.last.isQualifyingForTFC(fromDate, tfc.location) shouldBe true
       }
@@ -245,7 +247,8 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
-        val tfc = TFC(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
         tfc.claimants.head.isQualifyingForTFC(fromDate, tfc.location) shouldBe true
         tfc.claimants.last.isQualifyingForTFC(fromDate, tfc.location) shouldBe false
       }
@@ -270,7 +273,8 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
-        val tfc = TFC(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
         tfc.claimants.head.isQualifyingForTFC(fromDate, tfc.location) shouldBe false
         tfc.claimants.last.isQualifyingForTFC(fromDate, tfc.location) shouldBe true
       }
@@ -281,7 +285,8 @@ class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
-        val tfc = TFC(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
         tfc.claimants.head.isQualifyingForTFC(fromDate, tfc.location) shouldBe true
         tfc.claimants.last.isQualifyingForTFC(fromDate, tfc.location) shouldBe true
       }

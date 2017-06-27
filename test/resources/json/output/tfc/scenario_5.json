@@ -1,34 +1,28 @@
 {
-  "eligibility": {
-    "tc": null,
-    "esc": null,
-    "tfc": {
+  "from": "2016-08-27",
+  "until": "2016-11-27",
+  "householdEligibility": true,
+  "tfcRollout": true,
+  "periods": [
+    {
       "from": "2016-08-27",
       "until": "2016-11-27",
-      "householdEligibility": true,
-      "tfcRollout": true,
-      "periods": [
+      "periodEligibility": true,
+      "claimants": [
         {
-          "from" : "2016-08-27",
-          "until" : "2016-11-27",
-          "periodEligibility" : true,
-          "claimants" : [
-            {
-              "qualifying" : true,
-              "isPartner" : false
-            }
-          ],
-          "children" : [
-            {
-              "id" : 0,
-              "qualifying" : true,
-              "from" : "2016-08-27",
-              "until" : "2016-11-27",
-              "tfcRollout": true
-            }
-          ]
+          "qualifying": true,
+          "isPartner": false
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "qualifying": true,
+          "from": "2016-08-27",
+          "until": "2016-11-27",
+          "tfcRollout": true
         }
       ]
     }
-  }
+  ]
 }

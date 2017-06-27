@@ -16,16 +16,8 @@
 
 package eligibility
 
-import models.input.tfc.Request
-import models.input.{BaseRequest, BaseTaxYear}
-import models.output.OutputAPIModel.Eligibility
+import models.input.BaseTaxYear
 import org.joda.time.LocalDate
-import uk.gov.hmrc.play.http.HeaderCarrier
-import scala.concurrent.Future
-
-/**
- * Created by adamconder on 24/07/15.
- */
 
 trait CCEligibilityHelpers {
 
@@ -38,20 +30,4 @@ trait CCEligibilityHelpers {
     (from, until)
   }
 
-}
-
-trait CCEligibility extends CCEligibilityHelpers {
-  val eligibility : CCEligibilityService
-
-  trait CCEligibilityService {
-    def eligibility(request : BaseRequest) : Future[Eligibility]
-  }
-}
-
-trait CCTFCEligibility {
-  val eligibility : CCTFCEligibilityService
-
-  trait CCTFCEligibilityService {
-    def eligibility(request : Request)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[Eligibility]
-  }
 }

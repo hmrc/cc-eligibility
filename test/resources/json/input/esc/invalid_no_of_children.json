@@ -1,230 +1,227 @@
 {
-    "payload": {
-          "taxYears": [
-              {
-                  "from": "2016-08-27",
-                  "until": "2017-04-06",
-                  "claimants": [
-                      {
-                          "isPartner": false,
-                          "disability": {
-                              "disabled": true,
-                              "severelyDisabled": true
-                          }
-                      }
-                  ],
-                  "children": [
-                      {
-                        "id": 0,
-                        "dob": "2014-05-12",
-                        "disability": {
-                          "disabled": true,
-                          "severelyDisabled": false
-                        }
-                      },
-
-                    {
-                      "id": 1,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 2,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 3,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 4,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 5,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 6,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 7,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 8,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 9,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 10,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 11,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 12,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 13,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 14,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 15,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 16,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 17,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 18,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 19,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 20,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 21,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 22,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 23,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 24,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    },
-                    {
-                      "id": 25,
-                      "dob": "2014-05-12",
-                      "disability": {
-                        "disabled": true,
-                        "severelyDisabled": false
-                      }
-                    }
-                  ]
-              }
-          ]
+  "taxYears": [
+    {
+      "from": "2016-08-27",
+      "until": "2017-04-06",
+      "claimants": [
+        {
+          "isPartner": false,
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": true
+          }
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 1,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 2,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 3,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 4,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 5,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 6,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 7,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 8,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 9,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 10,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 11,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 12,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 13,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 14,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 15,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 16,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 17,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 18,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 19,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 20,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 21,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 22,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 23,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 24,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        },
+        {
+          "id": 25,
+          "dob": "2014-05-12",
+          "disability": {
+            "disabled": true,
+            "severelyDisabled": false
+          }
+        }
+      ]
     }
+  ]
 }
