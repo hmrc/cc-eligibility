@@ -83,19 +83,15 @@ object TCEligibility extends TCEligibility {
     }
   }
 
-  override def eligibility(request: TCEligibilityInput): Future[Eligibility] = {
+  override def eligibility(request: TCEligibilityInput): Future[TCEligibilityModel] = {
 
     val taxyears = constructTaxYearsWithPeriods(request)
     Future {
-      Eligibility(
-        tc = Some(
           TCEligibilityModel(
             isEligibleForTC(taxyears),
             taxyears,
             determineWTCEligibility(taxyears),
             determineCTCEligibility(taxyears)
-          )
-        )
       )
     }
   }
@@ -103,7 +99,7 @@ object TCEligibility extends TCEligibility {
 
 trait TCEligibility extends CCEligibilityHelpers with MessagesObject {
 
-  def eligibility(request: TCEligibilityInput): Future[Eligibility]
+  def eligibility(request: TCEligibilityInput): Future[TCEligibilityModel]
 
   def determineHouseholdEligibilityForPeriod(ty: TaxYear, periodStart: LocalDate): models.output.tc.HouseholdElements = {
     models.output.tc.HouseholdElements(

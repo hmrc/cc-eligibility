@@ -30,11 +30,7 @@ import scala.concurrent.Future
 
 object TFCEligibility extends TFCEligibility
 
-trait TFCEligibility extends CCTFCEligibility with TFCRolloutSchemeConfig {
-
-  val eligibility = new TFCEligibilityService
-
-  class TFCEligibilityService extends CCTFCEligibilityService {
+trait TFCEligibility extends TFCRolloutSchemeConfig {
 
     import scala.concurrent.ExecutionContext.Implicits.global
     val auditEvents: AuditEvents = AuditEvents
@@ -131,7 +127,7 @@ trait TFCEligibility extends CCTFCEligibility with TFCRolloutSchemeConfig {
       }
     }
 
-    override def eligibility(request : TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[Eligibility] = {
+    def eligibility(request : TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[TFCEligibilityModel] = {
       val outputPeriods = determineTFCPeriods(request)
       val householdEligibility = if(TFCConfig.minimumEarningsEnabled) {
         outputPeriods.exists(period => period.periodEligibility) && request.validHouseholdMinimumEarnings
@@ -140,19 +136,13 @@ trait TFCEligibility extends CCTFCEligibility with TFCRolloutSchemeConfig {
       }
 
       Future {
-        Eligibility(
-          tfc = Some(
             TFCEligibilityModel(
               from = request.from,
               until = outputPeriods.last.until,
               householdEligibility = householdEligibility,
               periods = outputPeriods,
               tfcRollout = outputPeriods.exists(_.children.exists(_.tfcRollout))
-            )
-          )
         )
       }
     }
-
-  }
 }

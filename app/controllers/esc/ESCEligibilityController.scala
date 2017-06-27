@@ -20,7 +20,7 @@ import controllers.EligibilityController
 import eligibility.ESCEligibility
 import models.input.esc.ESCEligibilityInput
 import play.api.Logger
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Action
 import service.AuditEvents
 
@@ -47,8 +47,8 @@ trait ESCEligibilityController extends EligibilityController {
           auditEvent.auditESCRequest(result.toString)
           escEligibility.eligibility(result).map {
             response =>
-              auditEvent.auditESCResponse(utils.JSONFactory.generateResultJson(response).toString())
-              Ok(utils.JSONFactory.generateResultJson(response))
+              auditEvent.auditESCResponse(Json.toJson(response).toString())
+              Ok(Json.toJson(response))
           } recover {
             case e: Exception =>
               Logger.warn(s"ESC Eligibility Exception: ${e.getMessage}")
