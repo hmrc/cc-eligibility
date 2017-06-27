@@ -19,7 +19,7 @@ package eligibility
 import java.util.Calendar
 
 import models.input.tfc.{Child, Claimant, TFCEligibilityInput}
-import models.output.OutputAPIModel.Eligibility
+
 import models.output.tfc._
 import org.joda.time.LocalDate
 import service.AuditEvents

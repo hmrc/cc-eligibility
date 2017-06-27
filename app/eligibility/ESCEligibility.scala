@@ -17,7 +17,7 @@
 package eligibility
 
 import models.input.esc._
-import models.output.OutputAPIModel.Eligibility
+
 import models.output.esc.ESCEligibilityOutput
 import org.joda.time.LocalDate
 import utils.{ESCConfig, MessagesObject}

@@ -17,7 +17,7 @@
 package eligibility
 
 import models.input.tc.{Child, TCEligibilityInput, TaxYear}
-import models.output.OutputAPIModel.Eligibility
+
 import models.output.tc.{ChildElements, ClaimantDisability, OutputChild, TCEligibilityModel}
 import org.joda.time.LocalDate
 import utils.{MessagesObject, TCConfig}

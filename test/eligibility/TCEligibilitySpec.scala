@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import models.input.tc._
-import models.output.OutputAPIModel.Eligibility
+
 import models.output.tc.{ChildElements, ClaimantDisability, TCEligibilityModel}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
@@ -186,7 +186,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
           x shouldBe a[TCEligibilityInput]
 
           val response = TCEligibility.eligibility(x)
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
+          response.isInstanceOf[Future[TCEligibilityModel]] shouldBe true
           response.taxYears.length shouldBe 1
           response.taxYears.head.periods.length shouldBe 1
 
@@ -217,7 +217,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
           x shouldBe a[TCEligibilityInput]
 
           val response = TCEligibility.eligibility(x)
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
+          response.isInstanceOf[Future[TCEligibilityModel]] shouldBe true
           response.taxYears.length shouldBe 1
           response.taxYears.head.periods.length shouldBe 2
 
@@ -259,7 +259,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
           val response = TCEligibility.eligibility(x)
 
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
+          response.isInstanceOf[Future[TCEligibilityModel]] shouldBe true
           response.taxYears.length shouldBe 2
           response.taxYears.head.periods.length shouldBe 1
           response.taxYears.tail.head.periods.length shouldBe 1
@@ -309,7 +309,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
           val response = TCEligibility.eligibility(x)
 
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
+          response.isInstanceOf[Future[TCEligibilityModel]] shouldBe true
           response.taxYears.length shouldBe 2
           response.taxYears.head.periods.length shouldBe 2
           response.taxYears.tail.head.periods.length shouldBe 1
@@ -365,7 +365,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
           val response = TCEligibility.eligibility(x)
 
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
+          response.isInstanceOf[Future[TCEligibilityModel]] shouldBe true
           response.taxYears.length shouldBe 2
           //child turns 15 in the current tax year and 16 in the next tax year
           response.taxYears.head.periods.length shouldBe 1
@@ -425,7 +425,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
           val response = TCEligibility.eligibility(x)
 
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
+          response.isInstanceOf[Future[TCEligibilityModel]] shouldBe true
           response.taxYears.length shouldBe 2
           response.taxYears.head.periods.length shouldBe 2
           response.taxYears.tail.head.periods.length shouldBe 2
@@ -484,7 +484,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
           val response = TCEligibility.eligibility(x)
 
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
+          response.isInstanceOf[Future[TCEligibilityModel]] shouldBe true
           response.taxYears.length shouldBe 2
           response.taxYears.head.periods.length shouldBe 2
           response.taxYears.tail.head.periods.length shouldBe 2
@@ -541,7 +541,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
           val response = TCEligibility.eligibility(x)
 
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
+          response.isInstanceOf[Future[TCEligibilityModel]] shouldBe true
           response.taxYears.length shouldBe 2
           response.taxYears.head.periods.length shouldBe 1
           response.taxYears.tail.head.periods.length shouldBe 2
@@ -594,7 +594,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
           val response = TCEligibility.eligibility(x)
 
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
+          response.isInstanceOf[Future[TCEligibilityModel]] shouldBe true
           response.taxYears.length shouldBe 2
           response.taxYears.head.periods.length shouldBe 2
           response.taxYears.tail.head.periods.length shouldBe 1
@@ -650,7 +650,7 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
           val response = TCEligibility.eligibility(x)
 
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
+          response.isInstanceOf[Future[TCEligibilityModel]] shouldBe true
           response.taxYears.length shouldBe 2
           response.taxYears.head.periods.length shouldBe 1
           response.taxYears.tail.head.periods.length shouldBe 3

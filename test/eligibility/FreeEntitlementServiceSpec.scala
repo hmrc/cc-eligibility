@@ -19,7 +19,7 @@ package eligibility
 import controllers.FakeCCEligibilityApplication
 import models.input.freeEntitlement.FreeEntitlementPayload
 import models.input.tfc._
-import models.output.OutputAPIModel.Eligibility
+
 import models.output.tfc.TFCEligibilityModel
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat

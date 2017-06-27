@@ -17,7 +17,6 @@
 package utils
 
 import controllers.FakeCCEligibilityApplication
-import models.output.OutputAPIModel._
 import models.output.esc.{ESCEligibilityOutput, ESCPeriod}
 import models.output.tc._
 import models.output.tfc._
@@ -108,13 +107,9 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
       val outputTaxYear = models.output.tc.TaxYear(from = periodStartDate, until = periodEndDate, periods = List(outputPeriod))
       val tcEligibilityModel = TCEligibilityModel(eligible = true, taxYears = List(outputTaxYear))
 
-      val eligibility = Eligibility(tc = Some(tcEligibilityModel))
-
       val outputJson = Json.parse(
         s"""
           {
-            "eligibility": {
-              "tc": {
                 "eligible": true,
                 "taxYears": [
                   {
@@ -164,14 +159,10 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                 ],
                 "wtc": false,
                 "ctc": false
-              },
-              "tfc": null,
-              "esc": null
-            }
-          }
+              }
         """.stripMargin)
 
-      val result = utils.JSONFactory.generateResultJson(eligibility)
+      val result = Json.toJson(tcEligibilityModel)
       result shouldBe outputJson
     }
 
@@ -201,14 +192,10 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
           children = List(outputPeriodChild2))
       )
       val tfcEligibilityModel = TFCEligibilityModel(from = from, until = tfcPeriods.last.until, householdEligibility = true, periods = tfcPeriods, tfcRollout = false)
-      val eligibilityOutputModel = Eligibility(tfc = Some(tfcEligibilityModel))
 
       val outputJson = Json.parse(
         s"""
         {
-            "eligibility": {
-                "tc": null,
-                "tfc": {
                   "from": "2015-06-30",
                   "until": "2015-12-30",
                   "householdEligibility": true,
@@ -255,13 +242,10 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                       ]
                     }
                    ]
-                },
-            "esc": null
-            }
-        }
+                }
         """.stripMargin)
 
-      val result = utils.JSONFactory.generateResultJson(eligibilityOutputModel)
+      val result = Json.toJson(tfcEligibilityModel)
       result shouldBe outputJson
     }
 
@@ -291,16 +275,11 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
       val outputTaxYear = models.output.esc.TaxYear(from = periodStart, until = periodEnd, periods = escPeriods)
       val escEligibilityModel = ESCEligibilityOutput(taxYears = List(outputTaxYear))
-      val eligibilityOutputModel = Eligibility(esc = Some(escEligibilityModel))
 
       val outputJson = Json.parse(
         s"""
         {
-         "eligibility":{
-            "tc":null,
-            "tfc":null,
-            "esc":{
-               "taxYears":[
+                  "taxYears":[
                   {
                      "from":"2015-06-20",
                      "until":"2016-04-06",
@@ -323,12 +302,10 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                 "eligibility":false,
                 "parentEligibility":false,
                 "partnerEligibility":false
-            }
-         }
       }
         """.stripMargin)
 
-      val result = utils.JSONFactory.generateResultJson(eligibilityOutputModel)
+      val result = Json.toJson(escEligibilityModel)
       result shouldBe outputJson
     }
   }

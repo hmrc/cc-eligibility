@@ -16,12 +16,8 @@
 
 package eligibility
 
-import models.input.tfc.TFCEligibilityInput
 import models.input.BaseTaxYear
-import models.output.OutputAPIModel.Eligibility
 import org.joda.time.LocalDate
-import uk.gov.hmrc.play.http.HeaderCarrier
-import scala.concurrent.Future
 
 /**
  * Created by adamconder on 24/07/15.
