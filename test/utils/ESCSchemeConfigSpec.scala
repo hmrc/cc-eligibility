@@ -30,7 +30,7 @@ class ESCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
       val from = LocalDate.parse("2016-01-20", formatter)
       val until = LocalDate.parse("2016-04-05", formatter)
 
-      val ty = models.input.esc.TaxYear(
+      val ty = models.input.esc.ESCTaxYear(
         from = from,
         until = until,
         claimants = List(),
@@ -44,7 +44,7 @@ class ESCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication
       val from = LocalDate.parse("2015-10-20", formatter)
       val until = LocalDate.parse("2016-04-05", formatter)
 
-      val ty = models.input.esc.TaxYear(
+      val ty = models.input.esc.ESCTaxYear(
         from = from,
         until = until,
         claimants = List(),

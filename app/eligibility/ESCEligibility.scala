@@ -29,7 +29,7 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
-    private def splitDatesForChildren(taxYear: TaxYear): List[LocalDate] = {
+    private def splitDatesForChildren(taxYear: ESCTaxYear): List[LocalDate] = {
       val dates: List[Option[LocalDate]] = for (child <- taxYear.children) yield {
         val isBeingBorn = child.isBeingBornInTaxYear(taxYear)
         val turns15 = child.isTurning15Before1September(taxYear.from, taxYear.until)
@@ -48,7 +48,7 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
       dates.flatten.distinct.sortBy(x => x.toDate.getTime)
     }
 
-  private def causesSplit(child: Child, taxYear: TaxYear): Boolean = {
+  private def causesSplit(child: ESCChild, taxYear: ESCTaxYear): Boolean = {
     val isBeingBorn = child.isBeingBornInTaxYear(taxYear)
     val turns15 = child.isTurning15Before1September(taxYear.from, taxYear.until)
     val turns16 = child.isTurning16Before1September(taxYear.from, taxYear.until)
@@ -57,7 +57,7 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
     causesSplit
   }
 
-  private def splitDates(taxYear: TaxYear, sortedSplitDates: List[LocalDate]): List[LocalDate] = {
+  private def splitDates(taxYear: ESCTaxYear, sortedSplitDates: List[LocalDate]): List[LocalDate] = {
     val September1 = ESCConfig.september1stForDate(taxYear.from)
     sortedSplitDates.head match {
       case firstDateInList: LocalDate if firstDateInList.toDate.equals(September1.toDate) =>
@@ -75,7 +75,7 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
     }
   }
 
-  def generateSplitDates(taxYear: TaxYear): List[LocalDate] = {
+  def generateSplitDates(taxYear: ESCTaxYear): List[LocalDate] = {
     val numberOfChildrenEligibleInTaxYearWithNoSplits = taxYear.children.exists(ch => !causesSplit(ch, taxYear) && ch.qualifiesForESC(taxYear.from))
 
     val splitDateList = numberOfChildrenEligibleInTaxYearWithNoSplits match {
@@ -96,14 +96,14 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
     splitDateList
   }
 
-  def determineStartDatesOfPeriodsInTaxYear(taxYear: TaxYear): List[LocalDate] = {
+  def determineStartDatesOfPeriodsInTaxYear(taxYear: ESCTaxYear): List[LocalDate] = {
     val filtered: List[LocalDate] = generateSplitDates(taxYear)
     val taxYearStart: LocalDate = taxYear.from
     val inserted: List[LocalDate] = filtered.::(taxYearStart)
     inserted.distinct
   }
 
-  def hasQualifyingChildForPeriod(children: List[Child], periodStart: LocalDate): Boolean = {
+  def hasQualifyingChildForPeriod(children: List[ESCChild], periodStart: LocalDate): Boolean = {
     val qualifyingChild = children.exists(child => child.qualifiesForESC(periodStart))
     qualifyingChild
   }
@@ -117,7 +117,7 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
     }
   }
 
-  def determineClaimantsEligibilityForPeriod(children: List[Child], claimants: List[Claimant], periodStart: LocalDate,
+  def determineClaimantsEligibilityForPeriod(children: List[ESCChild], claimants: List[ESCClaimant], periodStart: LocalDate,
                                              periodEnd: LocalDate): List[models.output.esc.ESCOutputClaimant] = {
     val outputClaimants = for (claimant <- claimants) yield {
       val hasQualifyingChildren = hasQualifyingChildForPeriod(children, periodStart)
@@ -136,7 +136,7 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
     outputClaimants
   }
 
-  def determineChildrensEligibilityForPeriod(children: List[Child], periodStart: LocalDate): List[models.output.esc.OutputChild] = {
+  def determineChildrensEligibilityForPeriod(children: List[ESCChild], periodStart: LocalDate): List[models.output.esc.OutputChild] = {
     for (child <- children) yield {
       val eligible = child.qualifiesForESC(periodStart)
       models.output.esc.OutputChild(
@@ -146,7 +146,7 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
     }
   }
 
-  def determinePeriodsForTaxYear(ty: TaxYear): List[models.output.esc.ESCPeriod] = {
+  def determinePeriodsForTaxYear(ty: ESCTaxYear): List[models.output.esc.ESCPeriod] = {
     val datesOfChanges = determineStartDatesOfPeriodsInTaxYear(ty)
 
     val periods = for ((date, i) <- datesOfChanges.zipWithIndex) yield {
@@ -165,7 +165,7 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
     periods
   }
 
-  def determineChildrenEligibility(ty: TaxYear) = {
+  def determineChildrenEligibility(ty: ESCTaxYear) = {
     val datesOfChanges = determineStartDatesOfPeriodsInTaxYear(ty)
 
     val children = for ((date, i) <- datesOfChanges.zipWithIndex) yield {
@@ -181,9 +181,9 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
     generateTaxYears(request.taxYears).reverse
   }
 
-  def generateTaxYears(taxYears: List[models.input.esc.TaxYear]): List[models.output.esc.TaxYear] = {
+  def generateTaxYears(taxYears: List[models.input.esc.ESCTaxYear]): List[models.output.esc.TaxYear] = {
     @tailrec
-    def generateTaxYearsHelper(taxYears: List[models.input.esc.TaxYear],
+    def generateTaxYearsHelper(taxYears: List[models.input.esc.ESCTaxYear],
                                acc: List[models.output.esc.TaxYear], i: Int): List[models.output.esc.TaxYear] = {
       taxYears match {
         case Nil => acc
@@ -202,9 +202,9 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
     generateChildren(request.taxYears).reverse
   }
 
-  def generateChildren(taxYears: List[models.input.esc.TaxYear]): List[models.output.esc.OutputChild] = {
+  def generateChildren(taxYears: List[models.input.esc.ESCTaxYear]): List[models.output.esc.OutputChild] = {
     @tailrec
-    def generateChildrenHelper(taxYears: List[models.input.esc.TaxYear],
+    def generateChildrenHelper(taxYears: List[models.input.esc.ESCTaxYear],
                                acc: List[models.output.esc.OutputChild]): List[models.output.esc.OutputChild] = {
       taxYears match {
         case Nil => acc
