@@ -51,64 +51,8 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
     dates.flatten.distinct.sortBy(x => x.toDate.getTime)
   }
 
-  private def splitDates(taxYear: TaxYear, sortedSplitDates: List[LocalDate]): List[LocalDate] = {
-    val September1 = ESCConfig.september1stForDate(taxYear.from)
-    sortedSplitDates.head match {
-      case firstDateInList: LocalDate if firstDateInList.toDate.equals(September1.toDate) =>
-        //                  return split date on 1st September and the date when child is being born
-        val childBorn1stSept = taxYear.children.exists(ch => ch.isBeingBornOn1stSeptInTaxYear(taxYear))
-        childBorn1stSept match {
-          case true =>
-            List(sortedSplitDates.head)
-          case false =>
-            sortedSplitDates.slice(0, 2)
-        }
-      case firstDateInList: LocalDate =>
-        //return just the date when the child is being born either before or after 1st September.
-        List(sortedSplitDates.head)
-    }
-  }
-
   def generateSplitDates(taxYear: TaxYear): List[LocalDate] = {
-
-    def causesSplit(child: Child, taxYear : TaxYear) : Boolean = {
-      val isBeingBorn = child.isBeingBornInTaxYear(taxYear)
-      val turns15 = child.isTurning15Before1September(taxYear.from, taxYear.until)
-      val turns16 = child.isTurning16Before1September(taxYear.from, taxYear.until)
-
-      val causesSplit = isBeingBorn._1 || (turns15._1 && !child.isDisabled) || (turns16._1 && child.isDisabled)
-      causesSplit
-    }
-
-    val numberOfChildrenEligibleInTaxYearWithNoSplits = taxYear.children.exists(ch => !causesSplit(ch, taxYear) && ch.qualifiesForESC(taxYear.from))
-
-    val splitDateList = numberOfChildrenEligibleInTaxYearWithNoSplits match {
-      case true =>
-        List()
-      case false =>
-        //THERE ARE CHILDREN BEING BORN or CAUSE A SPLIT (TURNS 15 or 16)
-        val sortedSplitDates: List[LocalDate] = splitDatesForChildren(taxYear)
-        sortedSplitDates match {
-          case date if date.length == 1 =>
-            sortedSplitDates
-          case date if date.length > 1 =>
-            splitDates(taxYear, sortedSplitDates)
-          case _ =>
-            List()
-        }
-    }
-    splitDateList
-
-//    //THERE ARE CHILDREN BEING BORN or CAUSE A SPLIT (TURNS 15 or 16)
-//    val sortedSplitDates: List[LocalDate] = splitDatesForChildren(taxYear)
-//    sortedSplitDates match {
-//      case date if date.length == 1 =>
-//        sortedSplitDates
-//      case date if date.length > 1 =>
-//        splitDates(taxYear, sortedSplitDates)
-//      case _ =>
-//        List()
-//    }
+    splitDatesForChildren(taxYear)
   }
 
   def determineStartDatesOfPeriodsInTaxYear(taxYear: TaxYear): List[LocalDate] = {
