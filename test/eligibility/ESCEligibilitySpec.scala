@@ -103,7 +103,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
     }
 
 
-    "Determine split dates for tax year, when two children are born before September (return first child's date)" in {
+    "Determine split dates for tax year, when two children are born before September" in {
       val dateOfBirth = LocalDate.parse("2016-08-27", formatter)
       val dateOfBirth2 = LocalDate.parse("2016-08-28", formatter)
       val child = buildChild(dob = dateOfBirth)
@@ -113,10 +113,10 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val taxYear = TaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child, child2))
 
       val result = ESCEligibility.generateSplitDates(taxYear)
-      result shouldBe List(dateOfBirth)
+      result shouldBe List(dateOfBirth, dateOfBirth2)
     }
 
-    "Determine split dates for tax year, when two children are born 1 on 1st September and other on 2nd September (return first child's date)" in {
+    "Determine split dates for tax year, when two children are born 1 on 1st September and other on 2nd September" in {
       val dateOfBirth = LocalDate.parse("2016-09-01", formatter)
       val dateOfBirth2 = LocalDate.parse("2016-09-02", formatter)
       val child = buildChild(dob = dateOfBirth)
@@ -126,7 +126,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val taxYear = TaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child, child2))
 
       val result = ESCEligibility.generateSplitDates(taxYear)
-      result shouldBe List(dateOfBirth)
+      result shouldBe List(dateOfBirth, dateOfBirth2)
     }
 
     "Determine split dates for tax year, one turns 15 and other child being born on 2nd September (return 1st Sept and child's dob)" in {
@@ -225,7 +225,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       )
     }
 
-    "(no split)(1 child eligible, 1 child being born before 1st September) determine the periods for a tax year" in {
+    "(split)(1 child eligible, 1 child being born before 1st September) determine the periods for a tax year" in {
       val dateOfBirth1 = LocalDate.parse("2016-06-27", formatter)
       val dateOfBirth2 = LocalDate.parse("2003-06-27", formatter)
       val periodStart = LocalDate.parse("2016-06-20", formatter)
@@ -237,36 +237,43 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
       val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
 
-      val outputChild1 = buildOutputChild(
-        qualifying = false
-      )
-      val outputChild2 = buildOutputChild(
-        qualifying = true
-      )
-
-      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
-        qualifying = true,
-        isPartner = false,
-        eligibleMonthsInPeriod = 10,
-        vouchers = true
-      )
-
       result shouldBe List(
         ESCPeriod(
           from = periodStart,
-          until = periodEnd,
+          until = dateOfBirth1,
           claimants = List(
-            outputClaimant1
+            models.output.esc.ESCOutputClaimant(
+              qualifying = true,
+              isPartner = false,
+              eligibleMonthsInPeriod = 0,
+              vouchers = true
+            )
           ),
           children = List(
-            outputChild1,
-            outputChild2
+            buildOutputChild(qualifying = false),
+            buildOutputChild(qualifying = true)
+          )
+        ),
+        ESCPeriod(
+          from = dateOfBirth1,
+          until = periodEnd,
+          claimants = List(
+            models.output.esc.ESCOutputClaimant(
+              qualifying = true,
+              isPartner = false,
+              eligibleMonthsInPeriod = 10,
+              vouchers = true
+            )
+          ),
+          children = List(
+            buildOutputChild(qualifying = true),
+            buildOutputChild(qualifying = true)
           )
         )
       )
     }
 
-    "(no split)(child being born on 1st day of month) determine the periods for a tax year" in {
+    "(split)(child being born on 1st day of month) determine the periods for a tax year" in {
       val dateOfBirth1 = LocalDate.parse("2016-07-01", formatter)
       val dateOfBirth2 = LocalDate.parse("2003-06-27", formatter)
       val periodStart = LocalDate.parse("2016-06-20", formatter)
@@ -278,30 +285,37 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
       val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
 
-      val outputChild1 = buildOutputChild(
-        qualifying = false
-      )
-      val outputChild2 = buildOutputChild(
-        qualifying = true
-      )
-
-      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
-        qualifying = true,
-        isPartner = false,
-        eligibleMonthsInPeriod = 10,
-        vouchers = true
-      )
-
       result shouldBe List(
         ESCPeriod(
           from = periodStart,
-          until = periodEnd,
+          until = dateOfBirth1,
           claimants = List(
-            outputClaimant1
+            models.output.esc.ESCOutputClaimant(
+              qualifying = true,
+              isPartner = false,
+              eligibleMonthsInPeriod = 1,
+              vouchers = true
+            )
           ),
           children = List(
-            outputChild1,
-            outputChild2
+            buildOutputChild(qualifying = false),
+            buildOutputChild(qualifying = true)
+          )
+        ),
+        ESCPeriod(
+          from = dateOfBirth1,
+          until = periodEnd,
+          claimants = List(
+            models.output.esc.ESCOutputClaimant(
+              qualifying = true,
+              isPartner = false,
+              eligibleMonthsInPeriod = 9,
+              vouchers = true
+            )
+          ),
+          children = List(
+            buildOutputChild(qualifying = true),
+            buildOutputChild(qualifying = true)
           )
         )
       )
@@ -400,7 +414,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       )
     }
 
-    "(1 split)(2 children being born on different dates) determine the periods for a tax year" in {
+    "(2 splits)(2 children being born on different dates) determine the periods for a tax year" in {
       val dateOfBirth1 = LocalDate.parse("2016-09-27", formatter)
       val dateOfBirth2 = LocalDate.parse("2016-09-28", formatter)
       val periodStart = LocalDate.parse("2016-06-20", formatter)
@@ -413,58 +427,55 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
       val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
 
-      val outputChild1 = buildOutputChild(
-        qualifying = false
-      )
-      val outputChild2 = buildOutputChild(
-        qualifying = false
-      )
-
-      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
-        qualifying = true,
-        isPartner = false,
-        eligibleMonthsInPeriod = 0,
-        vouchers = false
-      )
-
-      val outputChild3 = buildOutputChild(
-        qualifying = true
-      )
-      val outputChild4 = buildOutputChild(
-        qualifying = false
-      )
-
-      val outputClaimant2 = models.output.esc.ESCOutputClaimant(
-        qualifying = true,
-        isPartner = false,
-        eligibleMonthsInPeriod = 7,
-        vouchers = true
-      )
-
       result shouldBe List(
         ESCPeriod(
           from = periodStart,
           until = dateOfBirth1,
           claimants = List(
-            outputClaimant1
+            models.output.esc.ESCOutputClaimant(
+              qualifying = true,
+              isPartner = false,
+              eligibleMonthsInPeriod = 0,
+              vouchers = false
+            )
           ),
           children = List(
-            outputChild1,
-            outputChild2
+            buildOutputChild(qualifying = false),
+            buildOutputChild(qualifying = false)
           )
         ),
         ESCPeriod(
           from = dateOfBirth1,
-          until = periodEnd,
+          until = dateOfBirth2,
           claimants = List(
-            outputClaimant2
+            models.output.esc.ESCOutputClaimant(
+              qualifying = true,
+              isPartner = false,
+              eligibleMonthsInPeriod = 0,
+              vouchers = true
+            )
           ),
           children = List(
-            outputChild3,
-            outputChild4
+            buildOutputChild(qualifying = true),
+            buildOutputChild(qualifying = false)
+          )
+        ),
+        ESCPeriod(
+          from = dateOfBirth2,
+          until = periodEnd,
+          claimants = List(
+            models.output.esc.ESCOutputClaimant(
+              qualifying = true,
+              isPartner = false,
+              eligibleMonthsInPeriod = 7,
+              vouchers = true
+            )
+          ),
+          children = List(
+            buildOutputChild(qualifying = true),
+            buildOutputChild(qualifying = true)
           )
         )
-
       )
     }
 
@@ -526,7 +537,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       )
     }
 
-    "(no split)(1child turning 16, 1 child eligible ) determine the periods for a tax year" in {
+    "(split)(1child turning 16, 1 child eligible ) determine the periods for a tax year" in {
       val dateOfBirth1 = LocalDate.parse("2000-06-27", formatter)
       val dateOfBirth2 = LocalDate.parse("2003-06-27", formatter)
       val periodStart = LocalDate.parse("2016-06-20", formatter)
@@ -539,30 +550,37 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
       val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
 
-      val outputChild1 = buildOutputChild(
-        qualifying = true
-      )
-      val outputChild2 = buildOutputChild(
-        qualifying = true
-      )
-
-      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
-        qualifying = true,
-        isPartner = false,
-        eligibleMonthsInPeriod = 10,
-        vouchers = true
-      )
-
       result shouldBe List(
         ESCPeriod(
           from = periodStart,
-          until = periodEnd,
+          until = september,
           claimants = List(
-            outputClaimant1
+            models.output.esc.ESCOutputClaimant(
+              qualifying = true,
+              isPartner = false,
+              eligibleMonthsInPeriod = 3,
+              vouchers = true
+            )
           ),
           children = List(
-            outputChild1,
-            outputChild2
+            buildOutputChild(qualifying = true),
+            buildOutputChild(qualifying = true)
+          )
+        ),
+        ESCPeriod(
+          from = september,
+          until = periodEnd,
+          claimants = List(
+            models.output.esc.ESCOutputClaimant(
+              qualifying = true,
+              isPartner = false,
+              eligibleMonthsInPeriod = 7,
+              vouchers = true
+            )
+          ),
+          children = List(
+            buildOutputChild(qualifying = false),
+            buildOutputChild(qualifying = true)
           )
         )
       )
@@ -635,14 +653,13 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       )
     }
 
-    "(no split)(child turning 15(disabled) and 2 children being born before 1st september) determine the periods for a tax year" in {
+    "(split)(child turning 15(disabled) and 2 children being born before 1st september) determine the periods for a tax year" in {
       val dateOfBirth1 = LocalDate.parse("2001-06-27", formatter)
       val dateOfBirth2 = LocalDate.parse("2016-06-27", formatter)
       val dateOfBirth3 = LocalDate.parse("2016-08-19", formatter)
 
       val periodStart = LocalDate.parse("2016-06-20", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
-      val september = LocalDate.parse("2016-09-01", formatter)
 
       val child1 = buildChild(dob = dateOfBirth1, disabled = true)
       val child2 = buildChild(dob = dateOfBirth2)
@@ -652,35 +669,56 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
 
-      val outputChild1 = buildOutputChild(
-        qualifying = true
-      )
-      val outputChild2 = buildOutputChild(
-        qualifying = false
-      )
-
-      val outputChild3 = buildOutputChild(
-        qualifying = false
-      )
-
-      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
-        qualifying = true,
-        isPartner = false,
-        eligibleMonthsInPeriod = 10,
-        vouchers = true
-      )
-
       result shouldBe List(
         ESCPeriod(
           from = periodStart,
-          until = periodEnd,
+          until = dateOfBirth2,
           claimants = List(
-            outputClaimant1
+            models.output.esc.ESCOutputClaimant(
+              qualifying = true,
+              isPartner = false,
+              eligibleMonthsInPeriod = 0,
+              vouchers = true
+            )
           ),
           children = List(
-            outputChild1,
-            outputChild2,
-            outputChild3
+            buildOutputChild(qualifying = true),
+            buildOutputChild(qualifying = false),
+            buildOutputChild(qualifying = false)
+          )
+        ),
+        ESCPeriod(
+          from = dateOfBirth2,
+          until = dateOfBirth3,
+          claimants = List(
+            models.output.esc.ESCOutputClaimant(
+              qualifying = true,
+              isPartner = false,
+              eligibleMonthsInPeriod = 2,
+              vouchers = true
+            )
+          ),
+          children = List(
+            buildOutputChild(qualifying = true),
+            buildOutputChild(qualifying = true),
+            buildOutputChild(qualifying = false)
+          )
+        ),
+        ESCPeriod(
+          from = dateOfBirth3,
+          until = periodEnd,
+          claimants = List(
+            models.output.esc.ESCOutputClaimant(
+              qualifying = true,
+              isPartner = false,
+              eligibleMonthsInPeriod = 8,
+              vouchers = true
+            )
+          ),
+          children = List(
+            buildOutputChild(qualifying = true),
+            buildOutputChild(qualifying = true),
+            buildOutputChild(qualifying = true)
           )
         )
       )
@@ -856,7 +894,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       )
     }
 
-    "(Single tax year)(no split - child being born when other child is eligible) determine tax years with periods" in {
+    "(Single tax year)(split - child being born when other child is eligible) determine tax years with periods" in {
       val dateOfBirth1 = LocalDate.parse("2016-06-27", formatter)
       val dateOfBirth2 = LocalDate.parse("2005-06-27", formatter)
       val dateOfBirth3 = LocalDate.parse("2006-08-19", formatter)
@@ -873,24 +911,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear))
 
-      val outputChild1 = buildOutputChild(
-        qualifying = false
-      )
-      val outputChild2 = buildOutputChild(
-        qualifying = true
-      )
-
-      val outputChild3 = buildOutputChild(
-        qualifying = true
-      )
-
-      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
-        qualifying = true,
-        isPartner = false,
-        eligibleMonthsInPeriod = 10,
-        vouchers = true
-      )
-
       result shouldBe List(
         models.output.esc.TaxYear(
           from = periodStart,
@@ -898,14 +918,36 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           periods = List(
             ESCPeriod(
               from = periodStart,
-              until = periodEnd,
+              until = dateOfBirth1,
               claimants = List(
-                outputClaimant1
+                models.output.esc.ESCOutputClaimant(
+                  qualifying = true,
+                  isPartner = false,
+                  eligibleMonthsInPeriod = 0,
+                  vouchers = true
+                )
               ),
               children = List(
-                outputChild1,
-                outputChild2,
-                outputChild3
+                buildOutputChild(qualifying = false),
+                buildOutputChild(qualifying = true),
+                buildOutputChild(qualifying = true)
+              )
+            ),
+            ESCPeriod(
+              from = dateOfBirth1,
+              until = periodEnd,
+              claimants = List(
+                models.output.esc.ESCOutputClaimant(
+                  qualifying = true,
+                  isPartner = false,
+                  eligibleMonthsInPeriod = 10,
+                  vouchers = true
+                )
+              ),
+              children = List(
+                buildOutputChild(qualifying = true),
+                buildOutputChild(qualifying = true),
+                buildOutputChild(qualifying = true)
               )
             )
           )
@@ -913,7 +955,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       )
     }
 
-    "(Single tax year)(no split - child turning 15) determine tax years with periods" in {
+    "(Single tax year)(split - child turning 15) determine tax years with periods" in {
       val dateOfBirth1 = LocalDate.parse("2001-06-27", formatter)
       val dateOfBirth2 = LocalDate.parse("2005-06-27", formatter)
       val dateOfBirth3 = LocalDate.parse("2006-08-19", formatter)
@@ -932,24 +974,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear))
 
-      val outputChild1 = buildOutputChild(
-        qualifying = true
-      )
-      val outputChild2 = buildOutputChild(
-        qualifying = true
-      )
-
-      val outputChild3 = buildOutputChild(
-        qualifying = true
-      )
-
-      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
-        qualifying = true,
-        isPartner = false,
-        eligibleMonthsInPeriod = 10,
-        vouchers = true
-      )
-
       result shouldBe List(
         models.output.esc.TaxYear(
           from = periodStart,
@@ -957,14 +981,36 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           periods = List(
             ESCPeriod(
               from = periodStart,
-              until = periodEnd,
+              until = september,
               claimants = List(
-                outputClaimant1
+                models.output.esc.ESCOutputClaimant(
+                  qualifying = true,
+                  isPartner = false,
+                  eligibleMonthsInPeriod = 3,
+                  vouchers = true
+                )
               ),
               children = List(
-                outputChild1,
-                outputChild2,
-                outputChild3
+                buildOutputChild(qualifying = true),
+                buildOutputChild(qualifying = true),
+                buildOutputChild(qualifying = true)
+              )
+            ),
+            ESCPeriod(
+              from = september,
+              until = periodEnd,
+              claimants = List(
+                models.output.esc.ESCOutputClaimant(
+                  qualifying = true,
+                  isPartner = false,
+                  eligibleMonthsInPeriod = 7,
+                  vouchers = true
+                )
+              ),
+              children = List(
+                buildOutputChild(qualifying = false),
+                buildOutputChild(qualifying = true),
+                buildOutputChild(qualifying = true)
               )
             )
           )
@@ -972,7 +1018,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       )
     }
 
-    "(Single tax year)(no split - child turning 16) determine tax years with periods" in {
+    "(Single tax year)(split - child turning 16) determine tax years with periods" in {
       val dateOfBirth1 = LocalDate.parse("2000-06-27", formatter)
       val dateOfBirth2 = LocalDate.parse("2005-06-27", formatter)
       val dateOfBirth3 = LocalDate.parse("2006-08-19", formatter)
@@ -991,24 +1037,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear))
 
-      val outputChild1 = buildOutputChild(
-        qualifying = true
-      )
-      val outputChild2 = buildOutputChild(
-        qualifying = true
-      )
-
-      val outputChild3 = buildOutputChild(
-        qualifying = true
-      )
-
-      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
-        qualifying = true,
-        isPartner = false,
-        eligibleMonthsInPeriod = 10,
-        vouchers = true
-      )
-
       result shouldBe List(
         models.output.esc.TaxYear(
           from = periodStart,
@@ -1016,14 +1044,36 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           periods = List(
             ESCPeriod(
               from = periodStart,
-              until = periodEnd,
+              until = september,
               claimants = List(
-                outputClaimant1
+                models.output.esc.ESCOutputClaimant(
+                  qualifying = true,
+                  isPartner = false,
+                  eligibleMonthsInPeriod = 3,
+                  vouchers = true
+                )
               ),
               children = List(
-                outputChild1,
-                outputChild2,
-                outputChild3
+                buildOutputChild(qualifying = true),
+                buildOutputChild(qualifying = true),
+                buildOutputChild(qualifying = true)
+              )
+            ),
+            ESCPeriod(
+              from = september,
+              until = periodEnd,
+              claimants = List(
+                models.output.esc.ESCOutputClaimant(
+                  qualifying = true,
+                  isPartner = false,
+                  eligibleMonthsInPeriod = 7,
+                  vouchers = true
+                )
+              ),
+              children = List(
+                buildOutputChild(qualifying = false),
+                buildOutputChild(qualifying = true),
+                buildOutputChild(qualifying = true)
               )
             )
           )
@@ -1031,7 +1081,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       )
     }
 
-    "(Single tax year)(no split - child turning 15, child turning 16, child being born before the other turn 15, 16) determine tax years with periods" in {
+    "(Single tax year)(split - child turning 15, child turning 16, child being born before the other turn 15, 16) determine tax years with periods" in {
       val dateOfBirth1 = LocalDate.parse("2000-06-27", formatter)
       val dateOfBirth2 = LocalDate.parse("2001-06-27", formatter)
       val dateOfBirth3 = LocalDate.parse("2007-08-19", formatter)
@@ -1050,24 +1100,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val taxYear = TaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear))
 
-      val outputChild1 = buildOutputChild(
-        qualifying = true
-      )
-      val outputChild2 = buildOutputChild(
-        qualifying = true
-      )
-
-      val outputChild3 = buildOutputChild(
-        qualifying = true
-      )
-
-      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
-        qualifying = true,
-        isPartner = false,
-        eligibleMonthsInPeriod = 10,
-        vouchers = true
-      )
-
       result shouldBe List(
         models.output.esc.TaxYear(
           from = periodStart,
@@ -1075,14 +1107,36 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
           periods = List(
             ESCPeriod(
               from = periodStart,
-              until = periodEnd,
+              until = september,
               claimants = List(
-                outputClaimant1
+                models.output.esc.ESCOutputClaimant(
+                  qualifying = true,
+                  isPartner = false,
+                  eligibleMonthsInPeriod = 3,
+                  vouchers = true
+                )
               ),
               children = List(
-                outputChild1,
-                outputChild2,
-                outputChild3
+                buildOutputChild(qualifying = true),
+                buildOutputChild(qualifying = true),
+                buildOutputChild(qualifying = true)
+              )
+            ),
+            ESCPeriod(
+              from = september,
+              until = periodEnd,
+              claimants = List(
+                models.output.esc.ESCOutputClaimant(
+                  qualifying = true,
+                  isPartner = false,
+                  eligibleMonthsInPeriod = 7,
+                  vouchers = true
+                )
+              ),
+              children = List(
+                buildOutputChild(qualifying = false),
+                buildOutputChild(qualifying = false),
+                buildOutputChild(qualifying = true)
               )
             )
           )
@@ -1237,7 +1291,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       )
     }
 
-    "(Multiple tax years)(TY 1 - 1 split child turning 15 non disabled)(TY 2 - 1 split - child being born after 1st September) determine tax years with periods" in {
+    "(Multiple tax years)(TY 1 - 1 split child turning 15 non disabled)(TY 2 - 2 splits - children being born after 1st September) determine tax years with periods" in {
       val dateOfBirth1 = LocalDate.parse("2001-06-21", formatter)
       val dateOfBirth2 = LocalDate.parse("2017-10-27", formatter)
       val dateOfBirth3 = LocalDate.parse("2017-11-19", formatter)
@@ -1259,81 +1313,6 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val taxYear2 = TaxYear(from = ty2periodStart, until = ty2periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear1, taxYear2))
 
-      val outputChild1 = buildOutputChild(
-        qualifying = true
-      )
-      val outputChild2 = buildOutputChild(
-        qualifying = false
-      )
-
-      val outputChild3 = buildOutputChild(
-        qualifying = false
-      )
-
-      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
-        qualifying = true,
-        isPartner = false,
-        eligibleMonthsInPeriod = 3,
-        vouchers = true
-      )
-
-      val outputChild4 = buildOutputChild(
-        qualifying = false
-      )
-      val outputChild5 = buildOutputChild(
-        qualifying = false
-      )
-
-      val outputChild6 = buildOutputChild(
-        qualifying = false
-      )
-
-      val outputClaimant2 = models.output.esc.ESCOutputClaimant(
-        qualifying = true,
-        isPartner = false,
-        eligibleMonthsInPeriod = 0,
-
-        vouchers = false
-      )
-
-
-      val outputChild7 = buildOutputChild(
-        qualifying = false
-      )
-      val outputChild8 = buildOutputChild(
-        qualifying = false
-      )
-
-      val outputChild9 = buildOutputChild(
-        qualifying = false
-      )
-
-      val outputClaimant3 = models.output.esc.ESCOutputClaimant(
-        qualifying = true,
-        isPartner = false,
-        eligibleMonthsInPeriod = 0,
-
-        vouchers = false
-      )
-
-      val outputChild10 = buildOutputChild(
-        qualifying = false
-      )
-      val outputChild11 = buildOutputChild(
-        qualifying = true
-      )
-
-      val outputChild12 = buildOutputChild(
-        qualifying = false
-      )
-
-      val outputClaimant4 = models.output.esc.ESCOutputClaimant(
-        qualifying = true,
-        isPartner = false,
-        eligibleMonthsInPeriod = 6,
-        vouchers = true
-      )
-
       result shouldBe List(
         models.output.esc.TaxYear(
           from = ty1periodStart,
@@ -1343,24 +1322,34 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               from = ty1periodStart,
               until = september1,
               claimants = List(
-                outputClaimant1
+                models.output.esc.ESCOutputClaimant(
+                  qualifying = true,
+                  isPartner = false,
+                  eligibleMonthsInPeriod = 3,
+                  vouchers = true
+                )
               ),
               children = List(
-                outputChild1,
-                outputChild2,
-                outputChild3
+                buildOutputChild(qualifying = true),
+                buildOutputChild(qualifying = false),
+                buildOutputChild(qualifying = false)
               )
             ),
             ESCPeriod(
               from = september1,
               until = ty1periodEnd,
               claimants = List(
-                outputClaimant2
+                models.output.esc.ESCOutputClaimant(
+                  qualifying = true,
+                  isPartner = false,
+                  eligibleMonthsInPeriod = 0,
+                  vouchers = false
+                )
               ),
               children = List(
-                outputChild4,
-                outputChild5,
-                outputChild6
+                buildOutputChild(qualifying = false),
+                buildOutputChild(qualifying = false),
+                buildOutputChild(qualifying = false)
               )
             )
           )
@@ -1373,24 +1362,51 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
               from = ty2periodStart,
               until = dateOfBirth2,
               claimants = List(
-                outputClaimant3
+                models.output.esc.ESCOutputClaimant(
+                  qualifying = true,
+                  isPartner = false,
+                  eligibleMonthsInPeriod = 0,
+                  vouchers = false
+                )
               ),
               children = List(
-                outputChild7,
-                outputChild8,
-                outputChild9
+                buildOutputChild(qualifying = false),
+                buildOutputChild(qualifying = false),
+                buildOutputChild(qualifying = false)
               )
             ),
             ESCPeriod(
               from = dateOfBirth2,
-              until = ty2periodEnd,
+              until = dateOfBirth3,
               claimants = List(
-                outputClaimant4
+                models.output.esc.ESCOutputClaimant(
+                  qualifying = true,
+                  isPartner = false,
+                  eligibleMonthsInPeriod = 1,
+                  vouchers = true
+                )
               ),
               children = List(
-                outputChild10,
-                outputChild11,
-                outputChild12
+                buildOutputChild(qualifying = false),
+                buildOutputChild(qualifying = true),
+                buildOutputChild(qualifying = false)
+              )
+            ),
+            ESCPeriod(
+              from = dateOfBirth3,
+              until = ty2periodEnd,
+              claimants = List(
+                models.output.esc.ESCOutputClaimant(
+                  qualifying = true,
+                  isPartner = false,
+                  eligibleMonthsInPeriod = 5,
+                  vouchers = true
+                )
+              ),
+              children = List(
+                buildOutputChild(qualifying = false),
+                buildOutputChild(qualifying = true),
+                buildOutputChild(qualifying = true)
               )
             )
           )

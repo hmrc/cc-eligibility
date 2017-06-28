@@ -31,8 +31,7 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
-  //TODO investigate if the end date should return 31st Aug instead of 1st Sept to get correct number of months
-  private def splitDatesForChildren(taxYear: TaxYear): List[LocalDate] = {
+  def generateSplitDates(taxYear: TaxYear): List[LocalDate] = {
     val dates: List[Option[LocalDate]] = for (child <- taxYear.children) yield {
       val isBeingBorn = child.isBeingBornInTaxYear(taxYear)
       val turns15 = child.isTurning15Before1September(taxYear.from, taxYear.until)
@@ -49,10 +48,6 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
       }
     }
     dates.flatten.distinct.sortBy(x => x.toDate.getTime)
-  }
-
-  def generateSplitDates(taxYear: TaxYear): List[LocalDate] = {
-    splitDatesForChildren(taxYear)
   }
 
   def determineStartDatesOfPeriodsInTaxYear(taxYear: TaxYear): List[LocalDate] = {
