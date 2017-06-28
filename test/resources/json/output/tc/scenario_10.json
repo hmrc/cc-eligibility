@@ -1,65 +1,59 @@
-  {
-  "eligibility": {
-      "tc": {
-        "eligible": true,
-        "taxYears": [
-          {
-            "from": "2016-08-27",
-            "until": "2017-04-06",
-            "periods": [
-              {
-                "from": "2016-08-27",
-                "until": "2017-04-06",
-                "householdElements": {
-                  "basic": true,
-                  "hours30": false,
-                  "childcare": true,
-                  "loneParent": false,
-                  "secondParent": true,
-                  "family": true,
-                  "wtc": true,
-                  "ctc": true
-                },
-                "claimants": [
-                  {
-                    "qualifying": true,
-                    "isPartner": false,
-                    "claimantDisability": {
-                      "disability": false,
-                      "severeDisability": false
-                    }
-                  },
-                  {
-                    "qualifying": true,
-                    "isPartner": true,
-                    "claimantDisability": {
-                      "disability": false,
-                      "severeDisability": false
-                    }
-                  }
-                ],
-                "children": [
-                  {
-                    "childcareCost": 3000,
-                    "childcareCostPeriod": "Month",
-                    "qualifying": true,
-                    "childElements": {
-                      "child": true,
-                      "youngAdult": false,
-                      "disability": true,
-                      "severeDisability": true,
-                      "childcare" : true
-                    }
-                  }
-                ]
+{
+  "eligible": true,
+  "taxYears": [
+    {
+      "from": "2016-08-27",
+      "until": "2017-04-06",
+      "periods": [
+        {
+          "from": "2016-08-27",
+          "until": "2017-04-06",
+          "householdElements": {
+            "basic": true,
+            "hours30": false,
+            "childcare": true,
+            "loneParent": false,
+            "secondParent": true,
+            "family": true,
+            "wtc": true,
+            "ctc": true
+          },
+          "claimants": [
+            {
+              "qualifying": true,
+              "isPartner": false,
+              "claimantDisability": {
+                "disability": false,
+                "severeDisability": false
               }
-            ]
-          }
-        ],
-       "wtc":true,
-       "ctc":true
-     },
-    "esc": null,
-      "tfc": null
-      }
-  }
+            },
+            {
+              "qualifying": true,
+              "isPartner": true,
+              "claimantDisability": {
+                "disability": false,
+                "severeDisability": false
+              }
+            }
+          ],
+          "children": [
+            {
+              "childcareCost": 3000,
+              "childcareCostPeriod": "Month",
+              "qualifying": true,
+              "childElements": {
+                "child": true,
+                "youngAdult": false,
+                "disability": true,
+                "severeDisability": true,
+                "childcare": true
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "wtc": true,
+  "ctc": true
+}

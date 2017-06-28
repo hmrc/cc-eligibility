@@ -20,15 +20,15 @@ import org.joda.time.LocalDate
 import play.api.libs.json.{Writes, Json}
 import utils.Periods
 
-case class TCEligibilityModel(
+case class TCEligibilityOutput(
                                eligible: Boolean = false,
                                taxYears: List[TaxYear],
                                wtc: Boolean = false,
                                ctc: Boolean = false
                              )
 
-object TCEligibilityModel {
-  implicit val tcEligible: Writes[TCEligibilityModel] = Json.writes[TCEligibilityModel]
+object TCEligibilityOutput {
+  implicit val tcEligible: Writes[TCEligibilityOutput] = Json.writes[TCEligibilityOutput]
 }
 
 case class TaxYear(
@@ -62,7 +62,7 @@ case class HouseholdElements(
                               family: Boolean = false,
                               wtc: Boolean = false,
                               ctc: Boolean = false
-                              //wtc and ctc needed for TCEligibilityModel, not used in frontend
+                              //wtc and ctc needed for TCEligibilityOutput, not used in frontend
                             )
 
 object HouseholdElements {

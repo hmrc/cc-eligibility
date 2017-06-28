@@ -20,8 +20,8 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import models.input.tc._
-import models.output.OutputAPIModel.Eligibility
-import models.output.tc.{ChildElements, ClaimantDisability, TCEligibilityModel}
+
+import models.output.tc.{ChildElements, ClaimantDisability, TCEligibilityOutput}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.mock.MockitoSugar
@@ -36,10 +36,10 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
   "TCEligibility" should {
 
-    "return a Future[Eligibility] result" in {
+    "return a Future[TCEligibilityOutput] result" in {
       val service = TCEligibility
       val result = service.eligibility(TCEligibilityInput(taxYears = List()))
-      result.isInstanceOf[Future[Eligibility]] shouldBe true
+      result.isInstanceOf[Future[TCEligibilityOutput]] shouldBe true
     }
 
     "(no change) determine start dates of periods in the tax year" in {
@@ -186,14 +186,14 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
           x shouldBe a[TCEligibilityInput]
 
           val response = TCEligibility.eligibility(x)
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
-          response.tc.get.taxYears.length shouldBe 1
-          response.tc.get.taxYears.head.periods.length shouldBe 1
+          response.isInstanceOf[Future[TCEligibilityOutput]] shouldBe true
+          response.taxYears.length shouldBe 1
+          response.taxYears.head.periods.length shouldBe 1
 
-          response.tc.get.taxYears.head.from shouldBe txYrStartDate
-          response.tc.get.taxYears.head.until shouldBe txYrEndDate
-          response.tc.get.taxYears.head.periods.head.from shouldBe txYrStartDate
-          response.tc.get.taxYears.head.periods.head.until shouldBe txYrEndDate
+          response.taxYears.head.from shouldBe txYrStartDate
+          response.taxYears.head.until shouldBe txYrEndDate
+          response.taxYears.head.periods.head.from shouldBe txYrStartDate
+          response.taxYears.head.periods.head.until shouldBe txYrEndDate
 
         case JsError(e) =>
           throw new RuntimeException(e.toList.toString())
@@ -217,20 +217,20 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
           x shouldBe a[TCEligibilityInput]
 
           val response = TCEligibility.eligibility(x)
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
-          response.tc.get.taxYears.length shouldBe 1
-          response.tc.get.taxYears.head.periods.length shouldBe 2
+          response.isInstanceOf[Future[TCEligibilityOutput]] shouldBe true
+          response.taxYears.length shouldBe 1
+          response.taxYears.head.periods.length shouldBe 2
 
           //taxYear start/end dates
-          response.tc.get.taxYears.head.from shouldBe txYrStartDate
-          response.tc.get.taxYears.head.until shouldBe txYrEndDate
+          response.taxYears.head.from shouldBe txYrStartDate
+          response.taxYears.head.until shouldBe txYrEndDate
 
           //period start/end dates
-          response.tc.get.taxYears.head.periods.head.from shouldBe period1StartDate
-          response.tc.get.taxYears.head.periods.head.until shouldBe period1EndDate
+          response.taxYears.head.periods.head.from shouldBe period1StartDate
+          response.taxYears.head.periods.head.until shouldBe period1EndDate
 
-          response.tc.get.taxYears.head.periods.tail.head.from shouldBe period2StartDate
-          response.tc.get.taxYears.head.periods.tail.head.until shouldBe period2EndDate
+          response.taxYears.head.periods.tail.head.from shouldBe period2StartDate
+          response.taxYears.head.periods.tail.head.until shouldBe period2EndDate
 
         case JsError(e) =>
           throw new RuntimeException(e.toList.toString())
@@ -259,25 +259,25 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
           val response = TCEligibility.eligibility(x)
 
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
-          response.tc.get.taxYears.length shouldBe 2
-          response.tc.get.taxYears.head.periods.length shouldBe 1
-          response.tc.get.taxYears.tail.head.periods.length shouldBe 1
+          response.isInstanceOf[Future[TCEligibilityOutput]] shouldBe true
+          response.taxYears.length shouldBe 2
+          response.taxYears.head.periods.length shouldBe 1
+          response.taxYears.tail.head.periods.length shouldBe 1
 
           //taxYear start/end dates
-          response.tc.get.taxYears.head.from shouldBe txYrStartDate
-          response.tc.get.taxYears.head.until shouldBe txYrEndDate
+          response.taxYears.head.from shouldBe txYrStartDate
+          response.taxYears.head.until shouldBe txYrEndDate
 
-          response.tc.get.taxYears.tail.head.from shouldBe txYr2StartDate
-          response.tc.get.taxYears.tail.head.until shouldBe txYr2EndDate
+          response.taxYears.tail.head.from shouldBe txYr2StartDate
+          response.taxYears.tail.head.until shouldBe txYr2EndDate
 
           //1st Tax Year period start/end dates
-          response.tc.get.taxYears.head.periods.head.from shouldBe period1StartDate
-          response.tc.get.taxYears.head.periods.head.until shouldBe period1EndDate
+          response.taxYears.head.periods.head.from shouldBe period1StartDate
+          response.taxYears.head.periods.head.until shouldBe period1EndDate
 
           //2nd Tax Year period start/end dates
-          response.tc.get.taxYears.tail.head.periods.head.from shouldBe period2StartDate
-          response.tc.get.taxYears.tail.head.periods.head.until shouldBe period2EndDate
+          response.taxYears.tail.head.periods.head.from shouldBe period2StartDate
+          response.taxYears.tail.head.periods.head.until shouldBe period2EndDate
 
         case JsError(e) =>
           throw new RuntimeException(e.toList.toString())
@@ -309,28 +309,28 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
           val response = TCEligibility.eligibility(x)
 
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
-          response.tc.get.taxYears.length shouldBe 2
-          response.tc.get.taxYears.head.periods.length shouldBe 2
-          response.tc.get.taxYears.tail.head.periods.length shouldBe 1
+          response.isInstanceOf[Future[TCEligibilityOutput]] shouldBe true
+          response.taxYears.length shouldBe 2
+          response.taxYears.head.periods.length shouldBe 2
+          response.taxYears.tail.head.periods.length shouldBe 1
 
           //taxYear start/end dates
-          response.tc.get.taxYears.head.from shouldBe txYrStartDate
-          response.tc.get.taxYears.head.until shouldBe txYrEndDate
+          response.taxYears.head.from shouldBe txYrStartDate
+          response.taxYears.head.until shouldBe txYrEndDate
 
-          response.tc.get.taxYears.tail.head.from shouldBe txYr2StartDate
-          response.tc.get.taxYears.tail.head.until shouldBe txYr2EndDate
+          response.taxYears.tail.head.from shouldBe txYr2StartDate
+          response.taxYears.tail.head.until shouldBe txYr2EndDate
 
           //1st Tax Year period start/end dates
-          response.tc.get.taxYears.head.periods.head.from shouldBe period1StartDate
-          response.tc.get.taxYears.head.periods.head.until shouldBe period1EndDate
+          response.taxYears.head.periods.head.from shouldBe period1StartDate
+          response.taxYears.head.periods.head.until shouldBe period1EndDate
 
-          response.tc.get.taxYears.head.periods.tail.head.from shouldBe period2StartDate
-          response.tc.get.taxYears.head.periods.tail.head.until shouldBe period2EndDate
+          response.taxYears.head.periods.tail.head.from shouldBe period2StartDate
+          response.taxYears.head.periods.tail.head.until shouldBe period2EndDate
 
           //2nd Tax Year period start/end dates
-          response.tc.get.taxYears.tail.head.periods.head.from shouldBe TxYr2period1StartDate
-          response.tc.get.taxYears.tail.head.periods.head.until shouldBe TxYr2period1EndDate
+          response.taxYears.tail.head.periods.head.from shouldBe TxYr2period1StartDate
+          response.taxYears.tail.head.periods.head.until shouldBe TxYr2period1EndDate
 
         case JsError(e) =>
           throw new RuntimeException(e.toList.toString())
@@ -365,32 +365,32 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
           val response = TCEligibility.eligibility(x)
 
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
-          response.tc.get.taxYears.length shouldBe 2
+          response.isInstanceOf[Future[TCEligibilityOutput]] shouldBe true
+          response.taxYears.length shouldBe 2
           //child turns 15 in the current tax year and 16 in the next tax year
-          response.tc.get.taxYears.head.periods.length shouldBe 1
-          response.tc.get.taxYears.tail.head.periods.length shouldBe 3
+          response.taxYears.head.periods.length shouldBe 1
+          response.taxYears.tail.head.periods.length shouldBe 3
 
           //taxYear start/end dates
-          response.tc.get.taxYears.head.from shouldBe txYrStartDate
-          response.tc.get.taxYears.head.until shouldBe txYrEndDate
+          response.taxYears.head.from shouldBe txYrStartDate
+          response.taxYears.head.until shouldBe txYrEndDate
 
-          response.tc.get.taxYears.tail.head.from shouldBe txYr2StartDate
-          response.tc.get.taxYears.tail.head.until shouldBe txYr2EndDate
+          response.taxYears.tail.head.from shouldBe txYr2StartDate
+          response.taxYears.tail.head.until shouldBe txYr2EndDate
 
           //1st Tax Year period start/end dates
-          response.tc.get.taxYears.head.periods.head.from shouldBe period1StartDate
-          response.tc.get.taxYears.head.periods.head.until shouldBe period1EndDate
+          response.taxYears.head.periods.head.from shouldBe period1StartDate
+          response.taxYears.head.periods.head.until shouldBe period1EndDate
 
           //2nd Tax Year period start/end dates
-          response.tc.get.taxYears.tail.head.periods.head.from shouldBe TxYr2period1StartDate
-          response.tc.get.taxYears.tail.head.periods.head.until shouldBe TxYr2period1EndDate
+          response.taxYears.tail.head.periods.head.from shouldBe TxYr2period1StartDate
+          response.taxYears.tail.head.periods.head.until shouldBe TxYr2period1EndDate
 
-          response.tc.get.taxYears.tail.head.periods.tail.head.from shouldBe TxYr2period2StartDate
-          response.tc.get.taxYears.tail.head.periods.tail.head.until shouldBe TxYr2period2EndDate
+          response.taxYears.tail.head.periods.tail.head.from shouldBe TxYr2period2StartDate
+          response.taxYears.tail.head.periods.tail.head.until shouldBe TxYr2period2EndDate
 
-          response.tc.get.taxYears.tail.head.periods.tail.tail.head.from shouldBe TxYr2period3StartDate
-          response.tc.get.taxYears.tail.head.periods.tail.tail.head.until shouldBe TxYr2period3EndDate
+          response.taxYears.tail.head.periods.tail.tail.head.from shouldBe TxYr2period3StartDate
+          response.taxYears.tail.head.periods.tail.tail.head.until shouldBe TxYr2period3EndDate
 
         case JsError(e) =>
           throw new RuntimeException(e.toList.toString())
@@ -425,31 +425,31 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
           val response = TCEligibility.eligibility(x)
 
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
-          response.tc.get.taxYears.length shouldBe 2
-          response.tc.get.taxYears.head.periods.length shouldBe 2
-          response.tc.get.taxYears.tail.head.periods.length shouldBe 2
+          response.isInstanceOf[Future[TCEligibilityOutput]] shouldBe true
+          response.taxYears.length shouldBe 2
+          response.taxYears.head.periods.length shouldBe 2
+          response.taxYears.tail.head.periods.length shouldBe 2
 
           //taxYear start/end dates
-          response.tc.get.taxYears.head.from shouldBe txYrStartDate
-          response.tc.get.taxYears.head.until shouldBe txYrEndDate
+          response.taxYears.head.from shouldBe txYrStartDate
+          response.taxYears.head.until shouldBe txYrEndDate
 
-          response.tc.get.taxYears.tail.head.from shouldBe txYr2StartDate
-          response.tc.get.taxYears.tail.head.until shouldBe txYr2EndDate
+          response.taxYears.tail.head.from shouldBe txYr2StartDate
+          response.taxYears.tail.head.until shouldBe txYr2EndDate
 
           //1st Tax Year period start/end dates
-          response.tc.get.taxYears.head.periods.head.from shouldBe period1StartDate
-          response.tc.get.taxYears.head.periods.head.until shouldBe period1EndDate
+          response.taxYears.head.periods.head.from shouldBe period1StartDate
+          response.taxYears.head.periods.head.until shouldBe period1EndDate
 
-          response.tc.get.taxYears.head.periods.tail.head.from shouldBe period2StartDate
-          response.tc.get.taxYears.head.periods.tail.head.until shouldBe period2EndDate
+          response.taxYears.head.periods.tail.head.from shouldBe period2StartDate
+          response.taxYears.head.periods.tail.head.until shouldBe period2EndDate
 
           //2nd Tax Year period start/end dates
-          response.tc.get.taxYears.tail.head.periods.head.from shouldBe TxYr2period1StartDate
-          response.tc.get.taxYears.tail.head.periods.head.until shouldBe TxYr2period1EndDate
+          response.taxYears.tail.head.periods.head.from shouldBe TxYr2period1StartDate
+          response.taxYears.tail.head.periods.head.until shouldBe TxYr2period1EndDate
 
-          response.tc.get.taxYears.tail.head.periods.tail.head.from shouldBe TxYr2period2StartDate
-          response.tc.get.taxYears.tail.head.periods.tail.head.until shouldBe TxYr2period2EndDate
+          response.taxYears.tail.head.periods.tail.head.from shouldBe TxYr2period2StartDate
+          response.taxYears.tail.head.periods.tail.head.until shouldBe TxYr2period2EndDate
 
         case JsError(e) =>
           throw new RuntimeException(e.toList.toString())
@@ -484,32 +484,32 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
           val response = TCEligibility.eligibility(x)
 
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
-          response.tc.get.taxYears.length shouldBe 2
-          response.tc.get.taxYears.head.periods.length shouldBe 2
-          response.tc.get.taxYears.tail.head.periods.length shouldBe 2
+          response.isInstanceOf[Future[TCEligibilityOutput]] shouldBe true
+          response.taxYears.length shouldBe 2
+          response.taxYears.head.periods.length shouldBe 2
+          response.taxYears.tail.head.periods.length shouldBe 2
 
           //taxYear start/end dates
-          response.tc.get.taxYears.head.from shouldBe txYrStartDate
-          response.tc.get.taxYears.head.until shouldBe txYrEndDate
+          response.taxYears.head.from shouldBe txYrStartDate
+          response.taxYears.head.until shouldBe txYrEndDate
 
-          response.tc.get.taxYears.tail.head.from shouldBe txYr2StartDate
-          response.tc.get.taxYears.tail.head.until shouldBe txYr2EndDate
+          response.taxYears.tail.head.from shouldBe txYr2StartDate
+          response.taxYears.tail.head.until shouldBe txYr2EndDate
 
           //1st Tax Year period 1 start/end dates
-          response.tc.get.taxYears.head.periods.head.from shouldBe TxYr1period1StartDate
-          response.tc.get.taxYears.head.periods.head.until shouldBe TxYr1period1EndDate
+          response.taxYears.head.periods.head.from shouldBe TxYr1period1StartDate
+          response.taxYears.head.periods.head.until shouldBe TxYr1period1EndDate
 
           //1st Tax Year period 2 start/end dates
-          response.tc.get.taxYears.head.periods.tail.head.from shouldBe TxYr1period2StartDate
-          response.tc.get.taxYears.head.periods.tail.head.until shouldBe TxYr1period2EndDate
+          response.taxYears.head.periods.tail.head.from shouldBe TxYr1period2StartDate
+          response.taxYears.head.periods.tail.head.until shouldBe TxYr1period2EndDate
 
           //2nd Tax Year period start/end dates
-          response.tc.get.taxYears.tail.head.periods.head.from shouldBe TxYr2period1StartDate
-          response.tc.get.taxYears.tail.head.periods.head.until shouldBe TxYr2period1EndDate
+          response.taxYears.tail.head.periods.head.from shouldBe TxYr2period1StartDate
+          response.taxYears.tail.head.periods.head.until shouldBe TxYr2period1EndDate
 
-          response.tc.get.taxYears.tail.head.periods.tail.head.from shouldBe TxYr2period2StartDate
-          response.tc.get.taxYears.tail.head.periods.tail.head.until shouldBe TxYr2period2EndDate
+          response.taxYears.tail.head.periods.tail.head.from shouldBe TxYr2period2StartDate
+          response.taxYears.tail.head.periods.tail.head.until shouldBe TxYr2period2EndDate
 
         case JsError(e) =>
           throw new RuntimeException(e.toList.toString())
@@ -541,28 +541,28 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
           val response = TCEligibility.eligibility(x)
 
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
-          response.tc.get.taxYears.length shouldBe 2
-          response.tc.get.taxYears.head.periods.length shouldBe 1
-          response.tc.get.taxYears.tail.head.periods.length shouldBe 2
+          response.isInstanceOf[Future[TCEligibilityOutput]] shouldBe true
+          response.taxYears.length shouldBe 2
+          response.taxYears.head.periods.length shouldBe 1
+          response.taxYears.tail.head.periods.length shouldBe 2
 
           //taxYear start/end dates
-          response.tc.get.taxYears.head.from shouldBe txYrStartDate
-          response.tc.get.taxYears.head.until shouldBe txYrEndDate
+          response.taxYears.head.from shouldBe txYrStartDate
+          response.taxYears.head.until shouldBe txYrEndDate
 
-          response.tc.get.taxYears.tail.head.from shouldBe txYr2StartDate
-          response.tc.get.taxYears.tail.head.until shouldBe txYr2EndDate
+          response.taxYears.tail.head.from shouldBe txYr2StartDate
+          response.taxYears.tail.head.until shouldBe txYr2EndDate
 
           //1st Tax Year period 1 start/end dates
-          response.tc.get.taxYears.head.periods.head.from shouldBe TxYr1period1StartDate
-          response.tc.get.taxYears.head.periods.head.until shouldBe TxYr1period1EndDate
+          response.taxYears.head.periods.head.from shouldBe TxYr1period1StartDate
+          response.taxYears.head.periods.head.until shouldBe TxYr1period1EndDate
 
           //2nd Tax Year period start/end dates
-          response.tc.get.taxYears.tail.head.periods.head.from shouldBe TxYr2period1StartDate
-          response.tc.get.taxYears.tail.head.periods.head.until shouldBe TxYr2period1EndDate
+          response.taxYears.tail.head.periods.head.from shouldBe TxYr2period1StartDate
+          response.taxYears.tail.head.periods.head.until shouldBe TxYr2period1EndDate
 
-          response.tc.get.taxYears.tail.head.periods.tail.head.from shouldBe TxYr2period2StartDate
-          response.tc.get.taxYears.tail.head.periods.tail.head.until shouldBe TxYr2period2EndDate
+          response.taxYears.tail.head.periods.tail.head.from shouldBe TxYr2period2StartDate
+          response.taxYears.tail.head.periods.tail.head.until shouldBe TxYr2period2EndDate
 
         case JsError(e) =>
           throw new RuntimeException(e.toList.toString())
@@ -594,28 +594,28 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
           val response = TCEligibility.eligibility(x)
 
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
-          response.tc.get.taxYears.length shouldBe 2
-          response.tc.get.taxYears.head.periods.length shouldBe 2
-          response.tc.get.taxYears.tail.head.periods.length shouldBe 1
+          response.isInstanceOf[Future[TCEligibilityOutput]] shouldBe true
+          response.taxYears.length shouldBe 2
+          response.taxYears.head.periods.length shouldBe 2
+          response.taxYears.tail.head.periods.length shouldBe 1
 
           //taxYear start/end dates
-          response.tc.get.taxYears.head.from shouldBe txYrStartDate
-          response.tc.get.taxYears.head.until shouldBe txYrEndDate
+          response.taxYears.head.from shouldBe txYrStartDate
+          response.taxYears.head.until shouldBe txYrEndDate
 
-          response.tc.get.taxYears.tail.head.from shouldBe txYr2StartDate
-          response.tc.get.taxYears.tail.head.until shouldBe txYr2EndDate
+          response.taxYears.tail.head.from shouldBe txYr2StartDate
+          response.taxYears.tail.head.until shouldBe txYr2EndDate
 
           //1st Tax Year period start/end dates
-          response.tc.get.taxYears.head.periods.head.from shouldBe txyr1period1StartDate
-          response.tc.get.taxYears.head.periods.head.until shouldBe txyr1period1EndDate
+          response.taxYears.head.periods.head.from shouldBe txyr1period1StartDate
+          response.taxYears.head.periods.head.until shouldBe txyr1period1EndDate
 
-          response.tc.get.taxYears.head.periods.tail.head.from shouldBe txyr1period2StartDate
-          response.tc.get.taxYears.head.periods.tail.head.until shouldBe txyr1period2EndDate
+          response.taxYears.head.periods.tail.head.from shouldBe txyr1period2StartDate
+          response.taxYears.head.periods.tail.head.until shouldBe txyr1period2EndDate
 
           //2nd Tax Year period start/end dates
-          response.tc.get.taxYears.tail.head.periods.head.from shouldBe TxYr2period1StartDate
-          response.tc.get.taxYears.tail.head.periods.head.until shouldBe TxYr2period1EndDate
+          response.taxYears.tail.head.periods.head.from shouldBe TxYr2period1StartDate
+          response.taxYears.tail.head.periods.head.until shouldBe TxYr2period1EndDate
 
         case JsError(e) =>
           throw new RuntimeException(e.toList.toString())
@@ -650,31 +650,31 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
 
           val response = TCEligibility.eligibility(x)
 
-          response.isInstanceOf[Future[Eligibility]] shouldBe true
-          response.tc.get.taxYears.length shouldBe 2
-          response.tc.get.taxYears.head.periods.length shouldBe 1
-          response.tc.get.taxYears.tail.head.periods.length shouldBe 3
+          response.isInstanceOf[Future[TCEligibilityOutput]] shouldBe true
+          response.taxYears.length shouldBe 2
+          response.taxYears.head.periods.length shouldBe 1
+          response.taxYears.tail.head.periods.length shouldBe 3
 
           //taxYear start/end dates
-          response.tc.get.taxYears.head.from shouldBe txYrStartDate
-          response.tc.get.taxYears.head.until shouldBe txYrEndDate
+          response.taxYears.head.from shouldBe txYrStartDate
+          response.taxYears.head.until shouldBe txYrEndDate
 
-          response.tc.get.taxYears.tail.head.from shouldBe txYr2StartDate
-          response.tc.get.taxYears.tail.head.until shouldBe txYr2EndDate
+          response.taxYears.tail.head.from shouldBe txYr2StartDate
+          response.taxYears.tail.head.until shouldBe txYr2EndDate
 
           //1st Tax Year period 1 start/end dates
-          response.tc.get.taxYears.head.periods.head.from shouldBe TxYr1period1StartDate
-          response.tc.get.taxYears.head.periods.head.until shouldBe TxYr1period1EndDate
+          response.taxYears.head.periods.head.from shouldBe TxYr1period1StartDate
+          response.taxYears.head.periods.head.until shouldBe TxYr1period1EndDate
 
           //2nd Tax Year period start/end dates
-          response.tc.get.taxYears.tail.head.periods.head.from shouldBe TxYr2period1StartDate
-          response.tc.get.taxYears.tail.head.periods.head.until shouldBe TxYr2period1EndDate
+          response.taxYears.tail.head.periods.head.from shouldBe TxYr2period1StartDate
+          response.taxYears.tail.head.periods.head.until shouldBe TxYr2period1EndDate
 
-          response.tc.get.taxYears.tail.head.periods.tail.head.from shouldBe TxYr2period2StartDate
-          response.tc.get.taxYears.tail.head.periods.tail.head.until shouldBe TxYr2period2EndDate
+          response.taxYears.tail.head.periods.tail.head.from shouldBe TxYr2period2StartDate
+          response.taxYears.tail.head.periods.tail.head.until shouldBe TxYr2period2EndDate
 
-          response.tc.get.taxYears.tail.head.periods.tail.tail.head.from shouldBe TxYr2period3StartDate
-          response.tc.get.taxYears.tail.head.periods.tail.tail.head.until shouldBe TxYr2period3EndDate
+          response.taxYears.tail.head.periods.tail.tail.head.from shouldBe TxYr2period3StartDate
+          response.taxYears.tail.head.periods.tail.tail.head.until shouldBe TxYr2period3EndDate
 
         case JsError(e) =>
           throw new RuntimeException(e.toList.toString())
@@ -1268,12 +1268,10 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val outputHhElements = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
       val outputPeriod = models.output.tc.TCPeriod(from = periodStartDate, until = periodEndDate, householdElements = outputHhElements, claimants = List(outputClaimant), children = List(outputChild))
       val outputTaxYear = models.output.tc.TaxYear(from = periodStartDate, until = periodEndDate, periods = List(outputPeriod))
-      val tcEligibilityModel = TCEligibilityModel(eligible = true, taxYears = List(outputTaxYear), wtc = true, ctc = true)
+      val tcEligibilityModel = TCEligibilityOutput(eligible = true, taxYears = List(outputTaxYear), wtc = true, ctc = true)
 
-      val eligibilityOutputModel = Eligibility(tc = Some(tcEligibilityModel))
-
-      val result : Future[Eligibility] = TCEligibility.eligibility(TCEligibilityInput(taxYears = List(ty)))
-      result.tc shouldBe eligibilityOutputModel.tc
+      val result  = await(TCEligibility.eligibility(TCEligibilityInput(taxYears = List(ty))))
+      result shouldBe tcEligibilityModel
     }
 
     "calculate and populate TC Eligibility model (one tax year, one period) (no income)" in {
@@ -1290,11 +1288,10 @@ class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication w
       val outputHhElements = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
       val outputPeriod = models.output.tc.TCPeriod(from = periodStartDate, until = periodEndDate, householdElements = outputHhElements, claimants = List(outputClaimant), children = List(outputChild))
       val outputTaxYear = models.output.tc.TaxYear(from = periodStartDate, until = periodEndDate, periods = List(outputPeriod))
-      val tcEligibilityModel = TCEligibilityModel(eligible = true, taxYears = List(outputTaxYear), wtc = true, ctc = true)
+      val tcEligibilityModel = TCEligibilityOutput(eligible = true, taxYears = List(outputTaxYear), wtc = true, ctc = true)
 
-      val eligibilityOutputModel = Eligibility(tc = Some(tcEligibilityModel))
-      val result : Future[Eligibility] = TCEligibility.eligibility(TCEligibilityInput(taxYears = List(ty)))
-      result.tc shouldBe eligibilityOutputModel.tc
+      val result  = await(TCEligibility.eligibility(TCEligibilityInput(taxYears = List(ty))))
+      result shouldBe tcEligibilityModel
     }
   }
 }

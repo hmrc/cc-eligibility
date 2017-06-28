@@ -1,69 +1,63 @@
 {
-  "eligibility": {
-    "esc": {
-      "taxYears": [
+  "taxYears":[
+    {
+      "from":"2016-08-27",
+      "until":"2017-04-06",
+      "periods":[
         {
-          "from": "2016-08-27",
-          "until": "2017-04-06",
-          "periods": [
+          "from":"2016-08-27",
+          "until":"2016-09-01",
+          "claimants":[
             {
-              "from": "2016-08-27",
-              "until": "2016-09-01",
-              "claimants": [
-                {
-                  "qualifying": true,
-                  "isPartner": false,
-                  "eligibleMonthsInPeriod": 1,
-                  "vouchers": true
-                },
-                {
-                  "qualifying": true,
-                  "isPartner": true,
-                  "eligibleMonthsInPeriod": 1,
-                  "vouchers": true
-                }
-              ],
-              "children":[
-                {
-                  "qualifying":true,
-                  "childCareCost":100,
-                  "childCareCostPeriod":"Month"
-                }
-              ]
+              "qualifying":true,
+              "isPartner":false,
+              "eligibleMonthsInPeriod":1,
+              "vouchers":true
             },
             {
-              "from": "2016-09-01",
-              "until": "2017-04-06",
-              "claimants": [
-                {
-                  "qualifying": true,
-                  "isPartner": false,
-                  "eligibleMonthsInPeriod": 0,
-                  "vouchers": false
-                },
-                {
-                  "qualifying": true,
-                  "isPartner": true,
-                  "eligibleMonthsInPeriod": 0,
-                  "vouchers": false
-                }
-              ],
-              "children":[
-                {
-                  "qualifying":false,
-                  "childCareCost":100,
-                  "childCareCostPeriod":"Month"
-                }
-              ]
+              "qualifying":true,
+              "isPartner":true,
+              "eligibleMonthsInPeriod":1,
+              "vouchers":true
+            }
+          ],
+          "children":[
+            {
+              "qualifying":true,
+              "childCareCost":100,
+              "childCareCostPeriod":"Month"
+            }
+          ]
+        },
+        {
+          "from":"2016-09-01",
+          "until":"2017-04-06",
+          "claimants":[
+            {
+              "qualifying":true,
+              "isPartner":false,
+              "eligibleMonthsInPeriod":0,
+              "vouchers":false
+            },
+            {
+              "qualifying":true,
+              "isPartner":true,
+              "eligibleMonthsInPeriod":0,
+              "vouchers":false
+            }
+          ],
+          "children":[
+            {
+              "qualifying":false,
+              "childCareCost":100,
+              "childCareCostPeriod":"Month"
             }
           ]
         }
-      ],
-      "eligibility": true,
-      "parentEligibility": true,
-      "partnerEligibility": true
-    },
-    "tc": null,
-    "tfc": null
-  }
+      ]
+    }
+  ],
+  "eligibility":true,
+  "parentEligibility":true,
+  "partnerEligibility":true
 }

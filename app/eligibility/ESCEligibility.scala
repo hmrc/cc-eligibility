@@ -17,11 +17,9 @@
 package eligibility
 
 import models.input.esc._
-import models.output.OutputAPIModel.Eligibility
 import models.output.esc.ESCEligibilityOutput
 import org.joda.time.LocalDate
-import utils.{ESCConfig, MessagesObject}
-
+import utils.MessagesObject
 import scala.annotation.tailrec
 import scala.concurrent.Future
 
@@ -159,19 +157,15 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
     (eligibility, parentEligibility, partnerEligibility)
   }
 
-  def eligibility(request: ESCEligibilityInput): Future[Eligibility] = {
+  def eligibility(request: ESCEligibilityInput): Future[ESCEligibilityOutput] = {
     val constructTaxYears = constructTaxYearsWithPeriods(request.taxYears)
     val (eligibility, parentEligibility, partnerEligibility) = determineESCEligibility(constructTaxYears)
     Future {
-      Eligibility(
-        esc = Some(
-          ESCEligibilityOutput(
-            constructTaxYears,
-            eligibility,
-            parentEligibility,
-            partnerEligibility
-          )
-        )
+      ESCEligibilityOutput(
+        constructTaxYears,
+        eligibility,
+        parentEligibility,
+        partnerEligibility
       )
     }
   }

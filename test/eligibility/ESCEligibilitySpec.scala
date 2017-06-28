@@ -19,8 +19,8 @@ package eligibility
 import controllers.FakeCCEligibilityApplication
 import fixtures.ESCChildren
 import models.input.esc._
-import models.output.OutputAPIModel.Eligibility
-import models.output.esc.ESCPeriod
+
+import models.output.esc.{ESCEligibilityOutput,ESCPeriod}
 import org.joda.time.LocalDate
 import org.scalatest.mock.MockitoSugar
 import play.api.libs.json.Json
@@ -34,7 +34,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
     "return a Future[Eligibility] result" in {
       val service = ESCEligibility
       val result = service.eligibility(ESCEligibilityInput(taxYears = List()))
-      result.isInstanceOf[Future[Eligibility]] shouldBe true
+      result.isInstanceOf[Future[ESCEligibilityOutput]] shouldBe true
     }
 
     "(no change) determine start dates of periods in the tax year" in {

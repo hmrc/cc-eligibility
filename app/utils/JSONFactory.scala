@@ -16,7 +16,7 @@
 
 package utils
 
-import models.output.OutputAPIModel.Eligibility
+
 import play.api.data.validation.ValidationError
 import play.api.libs.json._
 
@@ -32,10 +32,6 @@ trait JSONFactory {
       case Right(e) =>
         Json.obj("status" -> status, "error" -> s"${e.getMessage}")
     }
-  }
-
-  def generateResultJson(response : Eligibility): JsObject = {
-    Json.obj("eligibility" -> Json.toJson[Eligibility](response))
   }
 
   def errorBuilder(errors: Seq[(JsPath, Seq[ValidationError])]): JsArray = {

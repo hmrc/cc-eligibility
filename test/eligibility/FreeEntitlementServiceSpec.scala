@@ -19,8 +19,8 @@ package eligibility
 import controllers.FakeCCEligibilityApplication
 import models.input.freeEntitlement.FreeEntitlementPayload
 import models.input.tfc._
-import models.output.OutputAPIModel.Eligibility
-import models.output.tfc.TFCEligibilityModel
+
+import models.output.tfc.TFCEligibilityOutput
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.mockito.Matchers._
@@ -80,7 +80,9 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
 
     forAll(testCases) { case (location, dobs, isEligible) =>
       s"for ${location} and children dobs = ${dobs} eligibility should be ${isEligible}" in {
-        val freeEntitlementService: FreeEntitlementService = new FreeEntitlementService {}
+        val freeEntitlementService: FreeEntitlementService = new FreeEntitlementService {
+          override val tfcEligibility: TFCEligibility = mock[TFCEligibility]
+        }
 
         val data = FreeEntitlementPayload(
           claimantLocation = location,
@@ -115,24 +117,20 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
         implicit val request = FakeRequest()
         implicit val hc = new HeaderCarrier()
 
-        val freeEntitlementService: FreeEntitlementService = new FreeEntitlementService with TFCEligibility {
-          override val eligibility = mock[TFCEligibilityService]
+        val freeEntitlementService: FreeEntitlementService = new FreeEntitlementService {
+          val tfcEligibility = mock[TFCEligibility]
         }
 
         when(
-          freeEntitlementService.eligibility.eligibility(any[models.input.tfc.TFCEligibilityInput])(any[play.api.mvc.Request[_]], any[HeaderCarrier])
+          freeEntitlementService.tfcEligibility.eligibility(any[models.input.tfc.TFCEligibilityInput])(any[play.api.mvc.Request[_]], any[HeaderCarrier])
         ).thenReturn(
           Future.successful(
-            Eligibility(
-              tfc = Some(
-                TFCEligibilityModel(
+                TFCEligibilityOutput(
                   from = now,
                   until = now.plusMonths(3),
                   householdEligibility = tfcEligibilityVal,
                   tfcRollout = false,
                   periods = List.empty
-                )
-              )
             )
           )
         )
