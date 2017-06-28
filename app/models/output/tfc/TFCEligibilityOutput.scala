@@ -20,7 +20,7 @@ import org.joda.time.LocalDate
 import play.api.libs.json.{Json, Writes}
 import utils.CCFormat
 
-case class TFCEligibilityModel(
+case class TFCEligibilityOutput(
                                 from: LocalDate,
                                 until: LocalDate,
                                 householdEligibility: Boolean,
@@ -28,8 +28,8 @@ case class TFCEligibilityModel(
                                 periods: List[TFCPeriod]
                                 )
 
-object TFCEligibilityModel {
-  implicit val tfcEligible: Writes[TFCEligibilityModel] = Json.writes[TFCEligibilityModel]
+object TFCEligibilityOutput {
+  implicit val tfcEligible: Writes[TFCEligibilityOutput] = Json.writes[TFCEligibilityOutput]
 }
 
 case class TFCPeriod(

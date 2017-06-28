@@ -1,54 +1,52 @@
 {
-    "payload": {
-          "taxYears": [
-              {
-                  "from": "2016-09-10",
-                  "until": "2017-04-06",
-                  "claimants": [
-                      {
-                          "hoursPerWeek": 15.00,
-                          "isPartner": false,
-                          "disability": {
-                              "disabled": false,
-                              "severelyDisabled": false
-                          },
-                        "carersAllowance": false
-                      },
-                      {
-                          "hoursPerWeek": 0.00,
-                          "isPartner": true,
-                          "disability": {
-                              "disabled": false,
-                              "severelyDisabled": false
-                          },
-                        "carersAllowance": false
-                      }
-                  ],
-                  "children": [
-                      {
-                        "id": 0,
-                        "childcareCost": 3000.00,
-                        "childcareCostPeriod": "Month",
-                        "dob": "2001-07-28",
-                        "disability": {
-                          "disabled": false,
-                          "severelyDisabled": false
-                        },
-                        "education": null
-                      },
-                        {
-                          "id": 1,
-                          "childcareCost": 3000.00,
-                          "childcareCostPeriod": "Month",
-                          "dob": "2017-05-10",
-                          "disability": {
-                            "disabled": false,
-                            "severelyDisabled": false
-                          },
-                          "education": null
-                        }
-                  ]
-              }
-          ]
+  "taxYears": [
+    {
+      "from": "2016-09-10",
+      "until": "2017-04-06",
+      "claimants": [
+        {
+          "hoursPerWeek": 15.00,
+          "isPartner": false,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          },
+          "carersAllowance": false
+        },
+        {
+          "hoursPerWeek": 0.00,
+          "isPartner": true,
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          },
+          "carersAllowance": false
+        }
+      ],
+      "children": [
+        {
+          "id": 0,
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2001-07-28",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          },
+          "education": null
+        },
+        {
+          "id": 1,
+          "childcareCost": 3000.00,
+          "childcareCostPeriod": "Month",
+          "dob": "2017-05-10",
+          "disability": {
+            "disabled": false,
+            "severelyDisabled": false
+          },
+          "education": null
+        }
+      ]
     }
+  ]
 }

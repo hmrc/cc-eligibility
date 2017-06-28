@@ -1,143 +1,91 @@
 {
-  "eligibility": {
-    "tc": null,
-    "tfc": null,
-    "esc": {
-      "taxYears": [
+  "taxYears": [
+    {
+      "from": "2016-06-27",
+      "until": "2017-04-06",
+      "periods": [
         {
           "from": "2016-06-27",
-          "until": "2017-04-06",
-          "periods": [
+          "until": "2016-09-01",
+          "claimants": [
             {
-              "from": "2016-06-27",
-              "until": "2016-09-01",
-              "claimants": [
-                {
-                  "qualifying": true,
-                  "isPartner": false,
-                  "eligibleMonthsInPeriod": 3,
-                  "elements": {
-                    "vouchers": true
-                  }
-                }, {
-                  "qualifying": true,
-                  "isPartner": true,
-                  "eligibleMonthsInPeriod": 3,
-                  "elements": {
-                    "vouchers": true
-                  }
-                }
-              ],
-              "children": [
-                {
-                  "id": 0,
-                  "qualifying": true
-                }, {
-                  "id": 1,
-                  "qualifying": false
-                }
-              ]
-            }, {
-              "from": "2016-09-01",
-              "until": "2017-04-06",
-              "claimants": [
-                {
-                  "qualifying": true,
-                  "isPartner": false,
-                  "eligibleMonthsInPeriod": 0,
-                  "elements": {
-                    "vouchers": false
-                  }
-                }, {
-                  "qualifying": true,
-                  "isPartner": true,
-                  "eligibleMonthsInPeriod": 0,
-                  "elements": {
-                    "vouchers": false
-                  }
-                }
-              ],
-              "children": [
-                {
-                  "id": 0,
-                  "qualifying": false
-                }, {
-                  "id": 1,
-                  "qualifying": false
-                }
-              ]
+              "qualifying": true,
+              "isPartner": false,
+              "eligibleMonthsInPeriod": 3,
+              "vouchers": true
+            },
+            {
+              "qualifying": true,
+              "isPartner": true,
+              "eligibleMonthsInPeriod": 3,
+              "vouchers": true
             }
           ]
-        }, {
-          "from": "2017-04-06",
-          "until": "2017-06-27",
-          "periods": [
+        },
+        {
+          "from": "2016-09-01",
+          "until": "2017-04-06",
+          "claimants": [
             {
-              "from": "2017-04-06",
-              "until": "2017-04-30",
-              "claimants": [
-                {
-                  "qualifying": true,
-                  "isPartner": false,
-                  "eligibleMonthsInPeriod": 0,
-                  "elements": {
-                    "vouchers": false
-                  }
-                }, {
-                  "qualifying": true,
-                  "isPartner": true,
-                  "eligibleMonthsInPeriod": 0,
-                  "elements": {
-                    "vouchers": false
-                  }
-                }
-              ],
-              "children": [
-                {
-                  "id": 0,
-                  "qualifying": false
-                }, {
-                  "id": 1,
-                  "qualifying": false
-                }
-              ]
-            }, {
-              "from": "2017-04-30",
-              "until": "2017-06-27",
-              "claimants": [
-                {
-                  "qualifying": true,
-                  "isPartner": false,
-                  "eligibleMonthsInPeriod": 2,
-                  "elements": {
-                    "vouchers": true
-                  }
-                }, {
-                  "qualifying": true,
-                  "isPartner": true,
-                  "eligibleMonthsInPeriod": 2,
-                  "elements": {
-                    "vouchers": true
-                  }
-                }
-              ],
-              "children": [
-                {
-                  "id": 0,
-                  "qualifying": false
-                }, {
-                  "id": 1,
-                  "qualifying": true
-                }
-              ]
+              "qualifying": true,
+              "isPartner": false,
+              "eligibleMonthsInPeriod": 0,
+              "vouchers": false
+            },
+            {
+              "qualifying": true,
+              "isPartner": true,
+              "eligibleMonthsInPeriod": 0,
+              "vouchers": false
             }
           ]
         }
-      ],
-      "eligibility":true,
-      "parentEligibility":true,
-      "partnerEligibility":true
+      ]
+    },
+    {
+      "from": "2017-04-06",
+      "until": "2017-06-27",
+      "periods": [
+        {
+          "from": "2017-04-06",
+          "until": "2017-04-30",
+          "claimants": [
+            {
+              "qualifying": true,
+              "isPartner": false,
+              "eligibleMonthsInPeriod": 0,
+              "vouchers": false
+            },
+            {
+              "qualifying": true,
+              "isPartner": true,
+              "eligibleMonthsInPeriod": 0,
+              "vouchers": false
+            }
+          ]
+        },
+        {
+          "from": "2017-04-30",
+          "until": "2017-06-27",
+          "claimants": [
+            {
+              "qualifying": true,
+              "isPartner": false,
+              "eligibleMonthsInPeriod": 2,
+              "vouchers": true
+            },
+            {
+              "qualifying": true,
+              "isPartner": true,
+              "eligibleMonthsInPeriod": 2,
+              "vouchers": true
+            }
+          ]
+        }
+      ]
     }
-
-  }
+  ],
+  "eligibility": true,
+  "parentEligibility": true,
+  "partnerEligibility": true
 }

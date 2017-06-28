@@ -1,6 +1,5 @@
 {
-"eligibility": {
-    "tc":{
+
       "eligible": true,
       "taxYears": [
         {
@@ -43,7 +42,6 @@
               ],
               "children": [
                 {
-                  "id": 0,
                   "childcareCost": 3000.00,
                   "childcareCostPeriod": "Month",
                   "qualifying": true,
@@ -63,8 +61,4 @@
       ],
        "wtc":true,
        "ctc":true
-     },
-    "esc": null,
-    "tfc": null
-    }
-}
+     }

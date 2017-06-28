@@ -1,8 +1,4 @@
 {
-  "eligibility": {
-    "tc": null,
-    "esc": null,
-    "tfc": {
       "from": "2016-08-27",
       "until": "2016-11-27",
       "householdEligibility": false,
@@ -27,6 +23,4 @@
           ]
         }
       ]
-    }
-  }
 }

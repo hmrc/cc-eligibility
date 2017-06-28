@@ -1,45 +1,39 @@
 {
-"eligibility": {
-    "tc": {
-      "eligible": false,
-      "taxYears": [
+  "eligible": false,
+  "taxYears": [
+    {
+      "from": "2016-08-27",
+      "until": "2017-04-06",
+      "periods": [
         {
           "from": "2016-08-27",
           "until": "2017-04-06",
-          "periods": [
+          "householdElements": {
+            "basic": false,
+            "hours30": false,
+            "childcare": false,
+            "loneParent": false,
+            "secondParent": false,
+            "family": false,
+            "wtc": true,
+            "ctc": false
+          },
+          "claimants": [
             {
-              "from": "2016-08-27",
-              "until": "2017-04-06",
-              "householdElements": {
-                "basic": false,
-                "hours30": false,
-                "childcare": false,
-                "loneParent": false,
-                "secondParent": false,
-                "family": false,
-                "wtc": true,
-                "ctc": false
-              },
-              "claimants": [
-                {
-                  "qualifying": true,
-                  "isPartner": false,
-                  "claimantDisability": {
-                    "disability": true,
-                    "severeDisability": true
-                  }
-                }
-              ],
-              "children": [
-              ]
+              "qualifying": true,
+              "isPartner": false,
+              "claimantDisability": {
+                "disability": true,
+                "severeDisability": true
+              }
             }
+          ],
+          "children": [
           ]
         }
-      ],
-       "wtc":true,
-       "ctc":false
-     },
-     "tfc": null,
-    "esc": null
+      ]
     }
+  ],
+  "wtc": true,
+  "ctc": false
 }
