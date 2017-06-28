@@ -138,9 +138,9 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
         val tfcRequest = TFCEligibilityInput(
               from = now,
               numberOfPeriods = 3,
+              location = location,
               claimants = List(
                 Claimant(
-                  location = location,
                   disability = Disability(),
                   minimumEarnings = MinimumEarnings(),
                   age = None
