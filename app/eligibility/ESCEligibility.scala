@@ -178,7 +178,7 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
   }
 
   def constructTaxYearsWithPeriods(request: models.input.esc.ESCEligibilityInput): List[models.output.esc.TaxYear] = {
-    generateTaxYears(request.taxYears).reverse
+    generateTaxYears(request.escTaxYears).reverse
   }
 
   def generateTaxYears(taxYears: List[models.input.esc.TaxYear]): List[models.output.esc.TaxYear] = {
@@ -199,7 +199,7 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
   }
 
   def constructChildrenWithPeriods(request: models.input.esc.ESCEligibilityInput): List[models.output.esc.OutputChild] = {
-    generateChildren(request.taxYears).reverse
+    generateChildren(request.escTaxYears).reverse
   }
 
   def generateChildren(taxYears: List[models.input.esc.TaxYear]): List[models.output.esc.OutputChild] = {

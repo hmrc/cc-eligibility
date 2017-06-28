@@ -32,7 +32,7 @@ class ESCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
 
     "return a Future[Eligibility] result" in {
       val service = ESCEligibility
-      val result = service.eligibility(ESCEligibilityInput(taxYears = List()))
+      val result = service.eligibility(ESCEligibilityInput(escTaxYears = List()))
       result.isInstanceOf[Future[ESCEligibilityOutput]] shouldBe true
     }
 
