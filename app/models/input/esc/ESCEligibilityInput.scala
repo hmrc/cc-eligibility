@@ -25,7 +25,7 @@ import play.api.libs.json._
 import utils.{Periods, CCFormat, ESCConfig, MessagesObject}
 
 case class ESCEligibilityInput(
-                    taxYears: List[TaxYear]
+                     escTaxYears: List[TaxYear]
                   )
 
 object ESCEligibilityInput {

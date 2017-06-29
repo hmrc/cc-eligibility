@@ -112,7 +112,6 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
   }
 
   def constructTaxYearsWithPeriods(taxYears: List[models.input.esc.TaxYear]): List[models.output.esc.TaxYear] = {
-
     @tailrec
     def generateTaxYearsHelper(taxYears: List[models.input.esc.TaxYear],
                                acc: List[models.output.esc.TaxYear]): List[models.output.esc.TaxYear] = {
@@ -158,7 +157,7 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
   }
 
   def eligibility(request: ESCEligibilityInput): Future[ESCEligibilityOutput] = {
-    val constructTaxYears = constructTaxYearsWithPeriods(request.taxYears)
+    val constructTaxYears = constructTaxYearsWithPeriods(request.escTaxYears)
     val (eligibility, parentEligibility, partnerEligibility) = determineESCEligibility(constructTaxYears)
     Future {
       ESCEligibilityOutput(
