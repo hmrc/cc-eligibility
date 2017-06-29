@@ -171,13 +171,13 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
       val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
       val from = LocalDate.parse("2015-06-30", formatter)
 
-      val outputClaimant = models.output.tfc.OutputClaimant(qualifying = true, isPartner = false)
+      val outputClaimant = models.output.tfc.TFCOutputClaimant(qualifying = true, isPartner = false)
       val outputStartPeriod1 = LocalDate.parse("2015-06-30", formatter)
       val outputUntilPeriod1 = LocalDate.parse("2015-09-30", formatter)
       val outputStartPeriod2 = LocalDate.parse("2015-09-30", formatter)
       val outputUntilPeriod2 = LocalDate.parse("2015-12-30", formatter)
-      val outputPeriodChild1 = models.output.tfc.OutputChild(id = 0, qualifying = true, from = Some(outputStartPeriod1), until = Some(outputUntilPeriod1), tfcRollout = false)
-      val outputPeriodChild2 = models.output.tfc.OutputChild(id = 0, qualifying = true, from = Some(outputStartPeriod2), until = Some(outputUntilPeriod2), tfcRollout = false)
+      val outputPeriodChild1 = models.output.tfc.TFCOutputChild(id = 0, qualifying = true, from = Some(outputStartPeriod1), until = Some(outputUntilPeriod1), tfcRollout = false)
+      val outputPeriodChild2 = models.output.tfc.TFCOutputChild(id = 0, qualifying = true, from = Some(outputStartPeriod2), until = Some(outputUntilPeriod2), tfcRollout = false)
 
       val tfcPeriods = List(
         TFCPeriod(from = outputStartPeriod1,
