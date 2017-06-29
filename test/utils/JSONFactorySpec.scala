@@ -256,7 +256,7 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
       val periodStart = LocalDate.parse("2015-06-20", formatter)
       val periodEnd = LocalDate.parse("2016-04-06", formatter)
 
-      val outputClaimant1 = models.output.esc.ESCOutputClaimant(
+      val outputClaimant1 = models.output.esc.ESCClaimant(
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 11,
@@ -273,7 +273,7 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
         )
       )
 
-      val outputTaxYear = models.output.esc.TaxYear(from = periodStart, until = periodEnd, periods = escPeriods)
+      val outputTaxYear = models.output.esc.ESCTaxYear(from = periodStart, until = periodEnd, periods = escPeriods)
       val escEligibilityModel = ESCEligibilityOutput(taxYears = List(outputTaxYear))
 
       val outputJson = Json.parse(
