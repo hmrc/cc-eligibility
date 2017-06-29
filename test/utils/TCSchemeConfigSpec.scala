@@ -17,7 +17,7 @@
 package utils
 
 import controllers.FakeCCEligibilityApplication
-import models.input.tc.TaxYear
+import models.input.tc.TCTaxYear
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import spec.CCSpecConfig
@@ -31,7 +31,7 @@ class TCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val from = LocalDate.parse("2015-06-20", formatter)
       val until = LocalDate.parse("2016-04-05", formatter)
 
-      val ty = TaxYear(
+      val ty = TCTaxYear(
         from = from,
         until = until,
         claimants = List(),
@@ -45,7 +45,7 @@ class TCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val from = LocalDate.parse("2015-06-20", formatter)
       val until = LocalDate.parse("2016-04-05", formatter)
 
-      val ty = TaxYear(
+      val ty = TCTaxYear(
         from = from,
         until = until,
         claimants = List(),
