@@ -36,30 +36,30 @@ class ESCEligibilityInputSpec extends CCSpecConfig with FakeCCEligibilityApplica
         result match {
           case JsSuccess(x, _) => {
             x shouldBe a[ESCEligibilityInput]
-            x.taxYears.head.from shouldBe a[LocalDate]
-            x.taxYears.head.until shouldBe a[LocalDate]
-            x.taxYears.head.claimants.isInstanceOf[List[ESCClaimant]] shouldBe true
-            x.taxYears.head.children.isInstanceOf[List[ESCChild]] shouldBe true
+            x.escTaxYears.head.from shouldBe a[LocalDate]
+            x.escTaxYears.head.until shouldBe a[LocalDate]
+            x.escTaxYears.head.claimants.isInstanceOf[List[ESCClaimant]] shouldBe true
+            x.escTaxYears.head.children.isInstanceOf[List[ESCChild]] shouldBe true
 
             //Claimant model
-            x.taxYears.head.claimants.head.isPartner.isInstanceOf[Boolean] shouldBe true
-            x.taxYears.head.claimants.head.employerProvidesESC.isInstanceOf[Boolean] shouldBe true
+            x.escTaxYears.head.claimants.head.isPartner.isInstanceOf[Boolean] shouldBe true
+            x.escTaxYears.head.claimants.head.employerProvidesESC.isInstanceOf[Boolean] shouldBe true
 
             //Children model
-            x.taxYears.head.children.head.id.isInstanceOf[Short] shouldBe true
-            x.taxYears.head.children.head.dob shouldBe a[LocalDate]
-            x.taxYears.head.children.head.disability shouldBe a[ESCDisability]
+            x.escTaxYears.head.children.head.id.isInstanceOf[Short] shouldBe true
+            x.escTaxYears.head.children.head.dob shouldBe a[LocalDate]
+            x.escTaxYears.head.children.head.disability shouldBe a[ESCDisability]
 
             //Disability model
-            x.taxYears.head.children.head.disability.disabled.isInstanceOf[Boolean] shouldBe true
-            x.taxYears.head.children.head.disability.severelyDisabled.isInstanceOf[Boolean] shouldBe true
+            x.escTaxYears.head.children.head.disability.disabled.isInstanceOf[Boolean] shouldBe true
+            x.escTaxYears.head.children.head.disability.severelyDisabled.isInstanceOf[Boolean] shouldBe true
           }
           case _ => throw new Exception
         }
       }
   }
   "Child" should {
-  
+
       "(ESC)(< 0) determine if the child is qualifying for esc" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2016-08-31", formatter)
@@ -68,16 +68,16 @@ class ESCEligibilityInputSpec extends CCSpecConfig with FakeCCEligibilityApplica
         val child = ESCChild(id = 0, dob = dateOfBirth, disability = ESCDisability(disabled = false, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe false
       }
-  
+
       "(ESC)(< 15) determine if the child is qualifying for esc" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2004-08-31", formatter)
         val today = LocalDate.parse("2015-09-10", formatter)
-  
+
         val child = ESCChild(id = 0, dob = dateOfBirth, disability = ESCDisability(disabled = false, severelyDisabled = false))
         child.qualifiesForESC(now = today) shouldBe true
       }
-  
+
       "(ESC)(15)(before september following their birthday) determine if the child is qualifying for esc" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2001-06-27", formatter)
