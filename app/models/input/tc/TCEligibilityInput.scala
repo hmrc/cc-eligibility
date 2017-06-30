@@ -188,10 +188,6 @@ case class TCClaimant(
     hours >= minimum
   }
 
-  def isClaimantQualifyingForSevereDisabilityElement: Boolean = {
-    disability.severelyDisabled
-  }
-
 }
 
 object TCClaimant {
