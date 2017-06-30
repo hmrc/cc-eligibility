@@ -148,6 +148,34 @@ class AuditEventsTest extends CCSpecConfig with FakeCCEligibilityApplication wit
       event.detail("ESCResponse") should startWith("Data")
 
     }
+
+    "audit request received for FreeEntitlement - success " in {
+
+      val observableAuditConnector = createObservableAuditConnector
+      val auditor = createAuditor(observableAuditConnector)
+
+      auditor.auditFreeEntitlementRequest("Data")
+
+      val event =  observableAuditConnector.events.head
+
+      event.auditType should equal("FreeEntitlmentRequest")
+      event.detail("FreeEntitlmentRequest") should startWith("Data")
+
+    }
+
+    "audit response processed for FreeEntitlement - success " in {
+
+      val observableAuditConnector = createObservableAuditConnector
+      val auditor = createAuditor(observableAuditConnector)
+
+      auditor.auditFreeEntitlementResponse("Data")
+
+      val event =  observableAuditConnector.events.head
+
+      event.auditType should equal("FreeEntitlmentResponse")
+      event.detail("FreeEntitlmentResponse") should startWith("Data")
+
+    }
   }
 
 

@@ -193,12 +193,8 @@ case class Claimant(
         employmentStatus match {
           case Some("selfEmployed") =>
             AuditEvents.auditSelfEmploymentStatus(user, employmentStatus.get)
-            if (selfEmployedSelection.get) {
-              AuditEvents.auditSelfEmployedin1st(user, selfEmployedSelection.get)
-              true
-            } else {
-              false
-            }
+            AuditEvents.auditSelfEmployedin1st(user, selfEmployedSelection.getOrElse(false))
+            selfEmployedSelection.getOrElse(false)
           case Some("apprentice") => minimumEarnings.amount >= taxYearConfig.nmwApprentice
           case _ => false
         }
