@@ -25,39 +25,39 @@ import play.api.libs.json._
 import utils.{CCFormat, ESCConfig, MessagesObject}
 
 case class ESCEligibilityInput(
-                     escTaxYears: List[TaxYear]
+                                escTaxYears: List[ESCTaxYear]
                   )
 
 object ESCEligibilityInput {
   implicit val requestFormat: Reads[ESCEligibilityInput] = Json.reads[ESCEligibilityInput]
 }
 
-case class TaxYear(
-                    from: LocalDate,
-                    until: LocalDate,
-                    claimants: List[Claimant],
-                    children: List[Child]
+case class ESCTaxYear(
+                       from: LocalDate,
+                       until: LocalDate,
+                       claimants: List[ESCClaimant],
+                       children: List[ESCChild]
                   ) extends BaseTaxYear
 
-object TaxYear extends CCFormat with MessagesObject {
+object ESCTaxYear extends CCFormat with MessagesObject {
 
-  def maxChildValidation(noOfChild: List[Child]): Boolean = {
+  def maxChildValidation(noOfChild: List[ESCChild]): Boolean = {
     noOfChild.length <= 25
   }
 
-  def claimantValidation(noOfClaimant: List[Claimant]): Boolean = {
+  def claimantValidation(noOfClaimant: List[ESCClaimant]): Boolean = {
     noOfClaimant.length > 0 && noOfClaimant.length < 3
   }
 
-  implicit val taxYearReads: Reads[TaxYear] = (
+  implicit val taxYearReads: Reads[ESCTaxYear] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
-        (JsPath \ "claimants").read[List[Claimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
-          (JsPath \ "children").read[List[Child]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
-    )(TaxYear.apply _)
+        (JsPath \ "claimants").read[List[ESCClaimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
+          (JsPath \ "children").read[List[ESCChild]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
+    )(ESCTaxYear.apply _)
 }
 
-case class Claimant(
+case class ESCClaimant(
                      isPartner: Boolean = false,
                      employerProvidesESC : Boolean = false
                    ) extends BaseClaimant {
@@ -66,17 +66,17 @@ case class Claimant(
   }
 }
 
-object Claimant extends CCFormat {
-  implicit val claimantReads: Reads[Claimant] = (
+object ESCClaimant extends CCFormat {
+  implicit val claimantReads: Reads[ESCClaimant] = (
     (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "employerProvidesESC").read[Boolean].orElse(Reads.pure(false))
-    )(Claimant.apply _)
+    )(ESCClaimant.apply _)
 }
 
-case class Child (
+case class ESCChild(
                    id: Short,
                    dob: LocalDate,
-                   disability: Disability
+                   disability: ESCDisability
                   ) extends models.input.BaseChild {
 
   def isTurning16Before1September(periodStart: LocalDate, periodUntil : LocalDate) : (Boolean, LocalDate) = {
@@ -115,26 +115,26 @@ case class Child (
 
 }
 
-object Child extends CCFormat with MessagesObject {
+object ESCChild extends CCFormat with MessagesObject {
   def validID(id: Short): Boolean = {
     id >= 0
   }
 
-  implicit val childReads: Reads[Child] = (
+  implicit val childReads: Reads[ESCChild] = (
     (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
       (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
-        (JsPath \ "disability").read[Disability]
-    )(Child.apply _)
+        (JsPath \ "disability").read[ESCDisability]
+    )(ESCChild.apply _)
 }
 
-case class Disability(
+case class ESCDisability(
                        disabled: Boolean = false,
                        severelyDisabled: Boolean = false
                        )
 
-object Disability {
-  implicit val disabilityReads: Reads[Disability] = (
+object ESCDisability {
+  implicit val disabilityReads: Reads[ESCDisability] = (
     (JsPath \ "disabled").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false))
-    )(Disability.apply _)
+    )(ESCDisability.apply _)
 }
