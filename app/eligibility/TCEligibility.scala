@@ -16,9 +16,9 @@
 
 package eligibility
 
-import models.input.tc.{Child, TCEligibilityInput, TaxYear}
+import models.input.tc.{TCChild, TCEligibilityInput, TCTaxYear}
 
-import models.output.tc.{ChildElements, ClaimantDisability, OutputChild, TCEligibilityOutput}
+import models.output.tc.{TCChildElements, TCDisability, TCOutputChild, TCEligibilityOutput}
 import org.joda.time.LocalDate
 import utils.{MessagesObject, TCConfig}
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -26,7 +26,7 @@ import scala.concurrent.Future
 
 object TCEligibility extends TCEligibility {
 
-  private def determineStartDatesOfPeriodsInTaxYear(taxYear: models.input.tc.TaxYear): List[LocalDate] = {
+  private def determineStartDatesOfPeriodsInTaxYear(taxYear: models.input.tc.TCTaxYear): List[LocalDate] = {
     val dates: List[Option[LocalDate]] = for (child <- taxYear.children) yield {
       val isBeingBorn = child.isBeingBornInTaxYear(taxYear)
       val turns15 = child.isTurning15Before1September(taxYear.from, taxYear.until)
@@ -52,7 +52,7 @@ object TCEligibility extends TCEligibility {
     sorted.distinct
   }
 
-  private def determinePeriodsForTaxYear(ty: models.input.tc.TaxYear): List[models.output.tc.TCPeriod] = {
+  private def determinePeriodsForTaxYear(ty: models.input.tc.TCTaxYear): List[models.output.tc.TCPeriod] = {
     // get all date ranges of splits for tax year
     val datesOfChanges = determineStartDatesOfPeriodsInTaxYear(ty)
     // multiple periods have been identified
@@ -73,9 +73,9 @@ object TCEligibility extends TCEligibility {
     periods
   }
 
-  private def constructTaxYearsWithPeriods(request: TCEligibilityInput): List[models.output.tc.TaxYear] = {
+  private def constructTaxYearsWithPeriods(request: TCEligibilityInput): List[models.output.tc.TCTaxYear] = {
     for (ty <- request.taxYears) yield {
-      models.output.tc.TaxYear(
+      models.output.tc.TCTaxYear(
         from = ty.from,
         until = ty.until,
         periods = determinePeriodsForTaxYear(ty)
@@ -101,8 +101,8 @@ trait TCEligibility extends CCEligibilityHelpers with MessagesObject {
 
   def eligibility(request: TCEligibilityInput): Future[TCEligibilityOutput]
 
-  def determineHouseholdEligibilityForPeriod(ty: TaxYear, periodStart: LocalDate): models.output.tc.HouseholdElements = {
-    models.output.tc.HouseholdElements(
+  def determineHouseholdEligibilityForPeriod(ty: TCTaxYear, periodStart: LocalDate): models.output.tc.TCHouseHoldElements = {
+    models.output.tc.TCHouseHoldElements(
       basic = ty.getBasicElement(periodStart),
       hours30 = ty.gets30HoursElement(periodStart),
       childcare = ty.householdGetsChildcareElement(periodStart),
@@ -114,16 +114,16 @@ trait TCEligibility extends CCEligibilityHelpers with MessagesObject {
     )
   }
 
-  def determineClaimantsEligibilityForPeriod(ty: models.input.tc.TaxYear): List[models.output.tc.OutputClaimant] = {
+  def determineClaimantsEligibilityForPeriod(ty: models.input.tc.TCTaxYear): List[models.output.tc.TCOutputClaimant] = {
     for (claimant <- ty.claimants) yield {
       val claimantIsPartner = claimant.isPartner
       val claimantIsDisabled = claimant.getDisabilityElement(ty.from)
       val claimantIsSeverelyDisabled = ty.isOneOfClaimantsWorking16h(ty.from) && claimant.disability.severelyDisabled
 
-      val outputClaimant = models.output.tc.OutputClaimant(
+      val outputClaimant = models.output.tc.TCOutputClaimant(
         qualifying = true, //TODO - do we need this, verify in frontend and calculator
         isPartner = claimantIsPartner,
-        claimantDisability = ClaimantDisability(
+        claimantDisability = TCDisability(
           disability = claimantIsDisabled,
           severeDisability = claimantIsSeverelyDisabled
         )
@@ -132,9 +132,9 @@ trait TCEligibility extends CCEligibilityHelpers with MessagesObject {
     }
   }
 
-  def determineChildrenEligibilityForPeriod(children: List[Child], periodStart: LocalDate): List[OutputChild] = {
+  def determineChildrenEligibilityForPeriod(children: List[TCChild], periodStart: LocalDate): List[TCOutputChild] = {
 
-    def helper(children: List[Child], outputChildren: List[OutputChild], childrenWithChildElement: List[LocalDate]): List[OutputChild] = {
+    def helper(children: List[TCChild], outputChildren: List[TCOutputChild], childrenWithChildElement: List[LocalDate]): List[TCOutputChild] = {
       if (children.isEmpty) {
         outputChildren
       }
@@ -154,11 +154,11 @@ trait TCEligibility extends CCEligibilityHelpers with MessagesObject {
         }
         val youngAdultElement = child.getsYoungAdultElement(periodStart)
 
-        val outputChild = OutputChild(
+        val outputChild = TCOutputChild(
           childcareCost = child.childcareCost,
           childcareCostPeriod = child.childcareCostPeriod,
           qualifying = isChild || youngAdultElement,
-          childElements = ChildElements(
+          childElements = TCChildElements(
             child = getsChildElement,
             youngAdult = youngAdultElement,
             disability = child.getsDisabilityElement(periodStart),
@@ -174,14 +174,14 @@ trait TCEligibility extends CCEligibilityHelpers with MessagesObject {
   }
 
 
-  def isEligibleForTC(listOfTaxYears: List[models.output.tc.TaxYear]): Boolean = {
+  def isEligibleForTC(listOfTaxYears: List[models.output.tc.TCTaxYear]): Boolean = {
     listOfTaxYears.exists(_.periods.exists(period => period.householdElements.wtc && period.householdElements.ctc))
   }
 
-  def determineWTCEligibility(taxYears: List[models.output.tc.TaxYear]): Boolean =
+  def determineWTCEligibility(taxYears: List[models.output.tc.TCTaxYear]): Boolean =
     taxYears.exists(_.periods.exists(_.householdElements.wtc))
 
-  def determineCTCEligibility(taxYears: List[models.output.tc.TaxYear]): Boolean =
+  def determineCTCEligibility(taxYears: List[models.output.tc.TCTaxYear]): Boolean =
     taxYears.exists(_.periods.exists(_.householdElements.ctc))
 
 }

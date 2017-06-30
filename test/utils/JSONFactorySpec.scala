@@ -100,11 +100,11 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
       val periodStartDate = LocalDate.parse("2014-09-01", formatter)
       val periodEndDate = LocalDate.parse("2015-04-05", formatter)
 
-      val outputClaimant = models.output.tc.OutputClaimant(qualifying = true, isPartner = false, claimantDisability = ClaimantDisability(disability = false, severeDisability = false))
-      val outputChild = models.output.tc.OutputChild(childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = ChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputHhElements = models.output.tc.HouseholdElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
+      val outputClaimant = models.output.tc.TCOutputClaimant(qualifying = true, isPartner = false, claimantDisability = TCDisability(disability = false, severeDisability = false))
+      val outputChild = models.output.tc.TCOutputChild(childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = TCChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
+      val outputHhElements = models.output.tc.TCHouseHoldElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
       val outputPeriod = models.output.tc.TCPeriod(from = periodStartDate, until = periodEndDate, householdElements = outputHhElements, claimants = List(outputClaimant), children = List(outputChild))
-      val outputTaxYear = models.output.tc.TaxYear(from = periodStartDate, until = periodEndDate, periods = List(outputPeriod))
+      val outputTaxYear = models.output.tc.TCTaxYear(from = periodStartDate, until = periodEndDate, periods = List(outputPeriod))
       val tcEligibilityModel = TCEligibilityOutput(eligible = true, taxYears = List(outputTaxYear))
 
       val outputJson = Json.parse(

@@ -24,23 +24,23 @@ import play.api.libs.json._
 import utils.{MessagesObject, Periods, TCConfig}
 
 case class TCEligibilityInput(
-                               taxYears: List[TaxYear]
+                               taxYears: List[TCTaxYear]
                              )
 
 object TCEligibilityInput extends MessagesObject {
-  def validateTaxYear(taxYears: List[TaxYear]): Boolean = taxYears.length >= 1
+  def validateTaxYear(taxYears: List[TCTaxYear]): Boolean = taxYears.length >= 1
 
   implicit val tcEligibilityReads: Reads[TCEligibilityInput] =
-    (JsPath \ "taxYears").read[List[TaxYear]].filter(ValidationError(messages("cc.elig.tax.year.min")))(x => validateTaxYear(x)).map { ty => TCEligibilityInput(ty) }
+    (JsPath \ "taxYears").read[List[TCTaxYear]].filter(ValidationError(messages("cc.elig.tax.year.min")))(x => validateTaxYear(x)).map { ty => TCEligibilityInput(ty) }
 
 }
 
 
-case class TaxYear(
-                    from: LocalDate,
-                    until: LocalDate,
-                    claimants: List[Claimant],
-                    children: List[Child]
+case class TCTaxYear(
+                      from: LocalDate,
+                      until: LocalDate,
+                      claimants: List[TCClaimant],
+                      children: List[TCChild]
                   ) extends models.input.BaseTaxYear {
 
   def isHouseholdQualifyingForCTC(periodStart: LocalDate): Boolean = {
@@ -52,7 +52,7 @@ case class TaxYear(
   }
 
   def claimantsGetChildcareElement(periodStart: LocalDate): Boolean = {
-    def isClaimantDisabledOrCarer(person: Claimant) = {
+    def isClaimantDisabledOrCarer(person: TCClaimant) = {
       determineClaimantDisabilityOrSeverity(person) || person.carersAllowance
     }
 
@@ -87,7 +87,7 @@ case class TaxYear(
 
   private def doesHouseHoldQualify(periodStart: LocalDate): Boolean = {
 
-    def determineWorking16hours(person: Claimant): Boolean =
+    def determineWorking16hours(person: TCClaimant): Boolean =
       person.isWorkingAtLeast16HoursPerWeek(periodStart)
 
     val minimumHours: Double = TCConfig.getConfig(periodStart).minimumHoursWorkedIfCouple
@@ -106,7 +106,7 @@ case class TaxYear(
     isOneOfCoupleWorking16h && (isOneOfCoupleDisabled || isOneOfCoupleCarer || isCoupleWorking24Hours)
   }
 
-  private def determineClaimantDisabilityOrSeverity(claimant: Claimant): Boolean = {
+  private def determineClaimantDisabilityOrSeverity(claimant: TCClaimant): Boolean = {
     claimant.disability.disabled || claimant.disability.severelyDisabled
   }
 
@@ -153,28 +153,28 @@ case class TaxYear(
 
 }
 
-object TaxYear extends MessagesObject {
+object TCTaxYear extends MessagesObject {
 
-  def maxChildValidation(noOfChild: List[Child]): Boolean = {
+  def maxChildValidation(noOfChild: List[TCChild]): Boolean = {
     noOfChild.length <= 25
   }
 
-  def claimantValidation(noOfClaimant: List[Claimant]): Boolean = {
+  def claimantValidation(noOfClaimant: List[TCClaimant]): Boolean = {
     noOfClaimant.nonEmpty && noOfClaimant.length < 3
   }
 
-  implicit val taxYearReads: Reads[TaxYear] = (
+  implicit val taxYearReads: Reads[TCTaxYear] = (
     (JsPath \ "from").read[LocalDate] and
       (JsPath \ "until").read[LocalDate] and
-      (JsPath \ "claimants").read[List[Claimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
-      (JsPath \ "children").read[List[Child]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
-    ) (TaxYear.apply _)
+      (JsPath \ "claimants").read[List[TCClaimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
+      (JsPath \ "children").read[List[TCChild]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
+    ) (TCTaxYear.apply _)
 }
 
-case class Claimant(
+case class TCClaimant(
                      hours: Double,
                      isPartner: Boolean,
-                     disability: Disability,
+                     disability: TCDisability,
                      carersAllowance: Boolean
                    ) extends models.input.BaseClaimant {
 
@@ -194,36 +194,36 @@ case class Claimant(
 
 }
 
-object Claimant {
+object TCClaimant {
 
-  implicit val claimantReads: Reads[Claimant] = (
+  implicit val claimantReads: Reads[TCClaimant] = (
     (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
       (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "disability").read[Disability] and
+      (JsPath \ "disability").read[TCDisability] and
       (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false))
-    ) (Claimant.apply _)
+    ) (TCClaimant.apply _)
 }
 
-case class Disability(
+case class TCDisability(
                        disabled: Boolean,
                        severelyDisabled: Boolean
                      )
 
-object Disability {
-  implicit val disabilityReads: Reads[Disability] = (
+object TCDisability {
+  implicit val disabilityReads: Reads[TCDisability] = (
     (JsPath \ "disabled").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false))
-    ) (Disability.apply _)
+    ) (TCDisability.apply _)
 }
 
 
-case class Child(
-                  id: Short,
-                  childcareCost: BigDecimal,
-                  childcareCostPeriod: Periods.Period,
-                  dob: LocalDate,
-                  disability: Disability,
-                  education: Option[Education]
+case class TCChild(
+                    id: Short,
+                    childcareCost: BigDecimal,
+                    childcareCostPeriod: Periods.Period,
+                    dob: LocalDate,
+                    disability: TCDisability,
+                    education: Option[TCEducation]
                 ) extends models.input.BaseChild {
 
   def isTurning16Before1September(periodStart: LocalDate, periodUntil: LocalDate): (Boolean, LocalDate) = {
@@ -238,7 +238,7 @@ case class Child(
     isSplittingPeriodOn1stSeptemberForYear(periodStart, periodUntil, ageIncrease)
   }
 
-  def isTurning20InTaxYear(taxYear: TaxYear): (Boolean, LocalDate) = {
+  def isTurning20InTaxYear(taxYear: TCTaxYear): (Boolean, LocalDate) = {
     val taxYearConfig = TCConfig.getConfig(taxYear.from)
     val ageIncrease = taxYearConfig.youngAdultAgeLimit
     val childsBirthday = childsBirthdayDateForAge(ageIncrease)
@@ -325,7 +325,7 @@ case class Child(
   }
 }
 
-object Child extends MessagesObject {
+object TCChild extends MessagesObject {
   def validID(id: Short): Boolean = {
     id >= 0
   }
@@ -334,24 +334,24 @@ object Child extends MessagesObject {
     cost >= BigDecimal(0.00)
   }
 
-  implicit val childReads: Reads[Child] = (
+  implicit val childReads: Reads[TCChild] = (
     (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
       (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(messages("cc.elig.childcare.spend.too.low")))(x => childSpendValidation(x)) and
       (JsPath \ "childcareCostPeriod").read[Periods.Period] and
       (JsPath \ "dob").read[LocalDate] and
-      (JsPath \ "disability").read[Disability] and
-      (JsPath \ "education").readNullable[Education]
-    ) (Child.apply _)
+      (JsPath \ "disability").read[TCDisability] and
+      (JsPath \ "education").readNullable[TCEducation]
+    ) (TCChild.apply _)
 }
 
-case class Education(
+case class TCEducation(
                       inEducation: Boolean,
                       startDate: LocalDate
                     )
 
-object Education {
-  implicit val educationReads: Reads[Education] = (
+object TCEducation {
+  implicit val educationReads: Reads[TCEducation] = (
     (JsPath \ "inEducation").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "startDate").read[LocalDate]
-    ) (Education.apply _)
+    ) (TCEducation.apply _)
 }
