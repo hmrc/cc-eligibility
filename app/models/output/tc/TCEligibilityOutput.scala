@@ -21,39 +21,39 @@ import play.api.libs.json.{Writes, Json}
 import utils.Periods
 
 case class TCEligibilityOutput(
-                               eligible: Boolean = false,
-                               taxYears: List[TaxYear],
-                               wtc: Boolean = false,
-                               ctc: Boolean = false
+                                eligible: Boolean = false,
+                                taxYears: List[TCTaxYear],
+                                wtc: Boolean = false,
+                                ctc: Boolean = false
                              )
 
 object TCEligibilityOutput {
   implicit val tcEligible: Writes[TCEligibilityOutput] = Json.writes[TCEligibilityOutput]
 }
 
-case class TaxYear(
+case class TCTaxYear(
                     from: LocalDate,
                     until: LocalDate,
                     periods: List[TCPeriod]
                   )
 
-object TaxYear {
-  implicit val taxYearWrites: Writes[TaxYear] = Json.writes[TaxYear]
+object TCTaxYear {
+  implicit val taxYearWrites: Writes[TCTaxYear] = Json.writes[TCTaxYear]
 }
 
 case class TCPeriod(
                      from: LocalDate,
                      until: LocalDate,
-                     householdElements: HouseholdElements,
-                     claimants: List[OutputClaimant],
-                     children: List[OutputChild]
+                     householdElements: TCHouseHoldElements,
+                     claimants: List[TCOutputClaimant],
+                     children: List[TCOutputChild]
                    )
 
 object TCPeriod {
   implicit val periodWrites: Writes[TCPeriod] = Json.writes[TCPeriod]
 }
 
-case class HouseholdElements(
+case class TCHouseHoldElements(
                               basic: Boolean = false,
                               hours30: Boolean = false,
                               childcare: Boolean = false,
@@ -65,41 +65,41 @@ case class HouseholdElements(
                               //wtc and ctc needed for TCEligibilityOutput, not used in frontend
                             )
 
-object HouseholdElements {
-  implicit val householdWrites: Writes[HouseholdElements] = Json.writes[HouseholdElements]
+object TCHouseHoldElements {
+  implicit val householdWrites: Writes[TCHouseHoldElements] = Json.writes[TCHouseHoldElements]
 }
 
-case class OutputClaimant(
+case class TCOutputClaimant(
                            qualifying: Boolean = false,
                            isPartner: Boolean = false,
-                           claimantDisability: ClaimantDisability
+                           claimantDisability: TCDisability
                          )
 
-object OutputClaimant {
-  implicit val claimantWrites: Writes[OutputClaimant] = Json.writes[OutputClaimant]
+object TCOutputClaimant {
+  implicit val claimantWrites: Writes[TCOutputClaimant] = Json.writes[TCOutputClaimant]
 }
 
-case class ClaimantDisability(
+case class TCDisability(
                                disability: Boolean,
                                severeDisability: Boolean
                              )
 
-object ClaimantDisability {
-  implicit val claimantElementWrites: Writes[ClaimantDisability] = Json.writes[ClaimantDisability]
+object TCDisability {
+  implicit val claimantElementWrites: Writes[TCDisability] = Json.writes[TCDisability]
 }
 
-case class OutputChild(
+case class TCOutputChild(
                         childcareCost: BigDecimal = BigDecimal(0.00),
                         childcareCostPeriod: Periods.Period,
                         qualifying: Boolean = false,
-                        childElements: ChildElements
+                        childElements: TCChildElements
                       )
 
-object OutputChild {
-  implicit val childWrites: Writes[OutputChild] = Json.writes[OutputChild]
+object TCOutputChild {
+  implicit val childWrites: Writes[TCOutputChild] = Json.writes[TCOutputChild]
 }
 
-case class ChildElements(
+case class TCChildElements(
                           child: Boolean = false,
                           youngAdult: Boolean = false,
                           disability: Boolean = false,
@@ -107,6 +107,6 @@ case class ChildElements(
                           childcare: Boolean = false
                         )
 
-object ChildElements {
-  implicit val childElementsWrites: Writes[ChildElements] = Json.writes[ChildElements]
+object TCChildElements {
+  implicit val childElementsWrites: Writes[TCChildElements] = Json.writes[TCChildElements]
 }

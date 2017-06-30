@@ -16,7 +16,7 @@
 
 package utils
 
-import models.input.tfc.Child
+import models.input.tfc.TFCChild
 import org.joda.time.LocalDate
 import play.api.Configuration
 
@@ -24,7 +24,7 @@ trait TFCRolloutSchemeConfig extends CCConfig {
 
   def futureDate = LocalDate.now().plusWeeks(2)
 
-  def isChildEligibleForTFCRollout(child: Child, isEligibleForTFC: Boolean): Boolean = {
+  def isChildEligibleForTFCRollout(child: TFCChild, isEligibleForTFC: Boolean): Boolean = {
     val tfcRollout: Configuration = loadConfigByType("tfc-rollout")
     val bornOnOrAfter = dateFormat.parse(tfcRollout.getString("born-on-after").get)
     val isAvailableForAllDisabled: Boolean = tfcRollout.getBoolean("all-disabled").getOrElse(false)
