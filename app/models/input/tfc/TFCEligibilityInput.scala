@@ -34,11 +34,11 @@ This is the Payload input class from cc-frontend to cc-eligibility
  */
 
 case class TFCEligibilityInput(
-                from: LocalDate,
-                numberOfPeriods: Short,
-                location: String,
-                claimants: List[Claimant],
-                children: List[Child]
+                                from: LocalDate,
+                                numberOfPeriods: Short,
+                                location: String,
+                                claimants: List[TFCClaimant],
+                                children: List[TFCChild]
                 ) {
 
   def validHouseholdMinimumEarnings(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): (Boolean) = {
@@ -84,11 +84,11 @@ case class TFCEligibilityInput(
 
 object TFCEligibilityInput extends CCFormat with MessagesObject {
 
-  def maxChildValidation(noOfChild: List[Child]): Boolean = {
+  def maxChildValidation(noOfChild: List[TFCChild]): Boolean = {
     noOfChild.length <= 25
   }
 
-  def claimantValidation(noOfClaimant: List[Claimant]): Boolean = {
+  def claimantValidation(noOfClaimant: List[TFCClaimant]): Boolean = {
     noOfClaimant.length > 0 && noOfClaimant.length < 3
   }
 
@@ -96,32 +96,32 @@ object TFCEligibilityInput extends CCFormat with MessagesObject {
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "numberOfPeriods").read[Short].orElse(Reads.pure(1)) and
         (JsPath \ "location").read[String] and
-          (JsPath \ "claimants").read[List[Claimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
-            (JsPath \ "children").read[List[Child]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
+          (JsPath \ "claimants").read[List[TFCClaimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
+            (JsPath \ "children").read[List[TFCChild]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
     )(TFCEligibilityInput.apply _)
 }
 
-case class Income(
+case class TFCIncome(
                    employmentIncome : Option[BigDecimal],
                    pension : Option[BigDecimal],
                    otherIncome : Option[BigDecimal],
                    benefits : Option[BigDecimal]
                  )
-object Income {
-  implicit val formats = Json.format[Income]
+object TFCIncome {
+  implicit val formats = Json.format[TFCIncome]
 }
 
-case class Claimant(
-                     previousIncome: Option[Income] = None,
-                     currentIncome: Option[Income] = None,
-                     hoursPerWeek: Double = 0.00,
-                     isPartner: Boolean = false,
-                     disability: Disability,
-                     carersAllowance: Boolean = false,
-                     minimumEarnings: MinimumEarnings,
-                     age: Option[String],
-                     employmentStatus: Option[String] = None,
-                     selfEmployedSelection: Option[Boolean] = None
+case class TFCClaimant(
+                        previousIncome: Option[TFCIncome] = None,
+                        currentIncome: Option[TFCIncome] = None,
+                        hoursPerWeek: Double = 0.00,
+                        isPartner: Boolean = false,
+                        disability: TFCDisability,
+                        carersAllowance: Boolean = false,
+                        minimumEarnings: TFCMinimumEarnings,
+                        age: Option[String],
+                        employmentStatus: Option[String] = None,
+                        selfEmployedSelection: Option[Boolean] = None
                      ) extends models.input.BaseClaimant {
 
   def totalIncome: BigDecimal = {
@@ -131,12 +131,12 @@ case class Claimant(
       currentPension.getOrElse(ConfigConstants.defaultAmount))
   }
 
-  private def determineIncomeElems(income: Option[Income]) = income  match {
+  private def determineIncomeElems(income: Option[TFCIncome]) = income  match {
     case Some(x) => (x.employmentIncome, x.otherIncome, x.pension)
     case _ => (None, None, None)
   }
 
-  private def getIncomeElements(previousIncome: Option[Income], currentIncome: Option[Income] ) = {
+  private def getIncomeElements(previousIncome: Option[TFCIncome], currentIncome: Option[TFCIncome] ) = {
 
     val (empPrevious, otherPrevious, pensionPrevious) = determineIncomeElems(previousIncome)
     val (emp, other, pension) = determineIncomeElems(currentIncome)
@@ -193,12 +193,8 @@ case class Claimant(
         employmentStatus match {
           case Some("selfEmployed") =>
             AuditEvents.auditSelfEmploymentStatus(user, employmentStatus.get)
-            if (selfEmployedSelection.get) {
-              AuditEvents.auditSelfEmployedin1st(user, selfEmployedSelection.get)
-              true
-            } else {
-              false
-            }
+            AuditEvents.auditSelfEmployedin1st(user, selfEmployedSelection.getOrElse(false))
+            selfEmployedSelection.getOrElse(false)
           case Some("apprentice") => minimumEarnings.amount >= taxYearConfig.nmwApprentice
           case _ => false
         }
@@ -208,52 +204,52 @@ case class Claimant(
 
 }
 
-object Claimant {
+object TFCClaimant {
 
-  implicit val claimantReads: Reads[Claimant] = (
-    (JsPath \ "previousIncome").readNullable[Income] and
-      (JsPath \ "currentIncome").readNullable[Income] and
+  implicit val claimantReads: Reads[TFCClaimant] = (
+    (JsPath \ "previousIncome").readNullable[TFCIncome] and
+      (JsPath \ "currentIncome").readNullable[TFCIncome] and
         (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
           (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-              (JsPath \ "disability").read[Disability] and
+              (JsPath \ "disability").read[TFCDisability] and
                 (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false)) and
-                  (JsPath \ "minimumEarnings").read[MinimumEarnings] and
+                  (JsPath \ "minimumEarnings").read[TFCMinimumEarnings] and
                     (JsPath \ "age").readNullable[String] and
                       (JsPath \ "employmentStatus").readNullable[String] and
                         (JsPath \ "selfEmployedSelection").readNullable[Boolean]
-    )(Claimant.apply _)
+    )(TFCClaimant.apply _)
 }
 
-case class MinimumEarnings(
+case class TFCMinimumEarnings(
                           selection: Boolean = true,
                           amount: BigDecimal = 0.00
                           )
 
-object MinimumEarnings {
-  implicit val minEarningsRead: Reads[MinimumEarnings] = (
+object TFCMinimumEarnings {
+  implicit val minEarningsRead: Reads[TFCMinimumEarnings] = (
     (JsPath \ "selection").read[Boolean].orElse(Reads.pure(true)) and
       (JsPath \ "amount").read[BigDecimal].orElse(Reads.pure(0.00))
-  )(MinimumEarnings.apply _)
+  )(TFCMinimumEarnings.apply _)
 }
 
-case class Disability(
+case class TFCDisability(
                        disabled: Boolean = false,
                        severelyDisabled: Boolean = false
                        )
 
-object Disability {
-  implicit val disabilityReads: Reads[Disability] = (
+object TFCDisability {
+  implicit val disabilityReads: Reads[TFCDisability] = (
     (JsPath \ "disabled").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false))
-    )(Disability.apply _)
+    )(TFCDisability.apply _)
 }
 
-case class Child  (
+case class TFCChild(
                     id: Short,
                     childcareCost: BigDecimal = BigDecimal(0.00),
                     childcareCostPeriod: Periods.Period,
                     dob: LocalDate,
-                    disability: Disability
+                    disability: TFCDisability
                     ) extends models.input.BaseChild {
 
   def isDisabled: Boolean = {
@@ -315,7 +311,7 @@ case class Child  (
 }
 
 
-object Child extends CCFormat with MessagesObject {
+object TFCChild extends CCFormat with MessagesObject {
 
   def validID(id: Short): Boolean = {
     id >= 0
@@ -325,11 +321,11 @@ object Child extends CCFormat with MessagesObject {
     cost >= BigDecimal(0.00)
   }
 
-  implicit val childReads: Reads[Child] = (
+  implicit val childReads: Reads[TFCChild] = (
     (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
         (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(messages("cc.elig.childcare.spend.too.low")))(x => childSpendValidation(x)) and
           (JsPath \ "childcareCostPeriod").read[Periods.Period] and
             (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
-              (JsPath \ "disability").read[Disability]
-    )(Child.apply _)
+              (JsPath \ "disability").read[TFCDisability]
+    )(TFCChild.apply _)
 }

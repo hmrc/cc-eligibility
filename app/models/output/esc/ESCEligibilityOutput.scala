@@ -21,30 +21,30 @@ import play.api.libs.json.{Json, Writes}
 import utils.Periods
 
 case class ESCEligibilityOutput(
-                                taxYears: List[TaxYear],
-                                eligibility: Boolean = false,
-                                parentEligibility: Boolean = false,
-                                partnerEligibility: Boolean = false
+                                 taxYears: List[ESCTaxYear],
+                                 eligibility: Boolean = false,
+                                 parentEligibility: Boolean = false,
+                                 partnerEligibility: Boolean = false
                               )
 
 object ESCEligibilityOutput {
   implicit val escEligible: Writes[ESCEligibilityOutput] = Json.writes[ESCEligibilityOutput]
 }
 
-case class TaxYear(
+case class ESCTaxYear(
                     from: LocalDate,
                     until: LocalDate,
                     periods: List[ESCPeriod]
                   )
 
-object TaxYear {
-  implicit val taxYearWrites: Writes[TaxYear] = Json.writes[TaxYear]
+object ESCTaxYear {
+  implicit val taxYearWrites: Writes[ESCTaxYear] = Json.writes[ESCTaxYear]
 }
 
 case class ESCPeriod(
                       from: LocalDate,
                       until: LocalDate,
-                      claimants: List[ESCOutputClaimant],
+                      claimants: List[ESCClaimant],
                       children: List[OutputChild]
                     )
 
@@ -52,7 +52,7 @@ object ESCPeriod {
   implicit val periodWrites: Writes[ESCPeriod] = Json.writes[ESCPeriod]
 }
 
-case class ESCOutputClaimant(
+case class ESCClaimant(
                            qualifying: Boolean = false,
                            isPartner: Boolean = false,
                            eligibleMonthsInPeriod: Int = 0,
@@ -60,16 +60,16 @@ case class ESCOutputClaimant(
                          )
 
 //escAmount can be a voucher amount, childcare bursary amount or directly contracted amount
-object ESCOutputClaimant {
-  implicit val claimantWrites: Writes[ESCOutputClaimant] = Json.writes[ESCOutputClaimant]
+object ESCClaimant {
+  implicit val claimantWrites: Writes[ESCClaimant] = Json.writes[ESCClaimant]
 }
 
-case class OutputChild(
+case class ESCChild(
                         qualifying: Boolean = false,
                         childCareCost: BigDecimal,
                         childCareCostPeriod: Periods.Period = Periods.Monthly
-                      )
+                   )
 
-object OutputChild {
-  implicit val childWrites: Writes[OutputChild] = Json.writes[OutputChild]
+object ESCChild {
+  implicit val childWrites: Writes[ESCChild] = Json.writes[ESCChild]
 }

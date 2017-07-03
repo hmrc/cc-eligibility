@@ -140,17 +140,17 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
               numberOfPeriods = 3,
               location = location,
               claimants = List(
-                Claimant(
-                  disability = Disability(),
-                  minimumEarnings = MinimumEarnings(),
+                TFCClaimant(
+                  disability = TFCDisability(),
+                  minimumEarnings = TFCMinimumEarnings(),
                   age = None
                 )
               ),
-              children = for(dob <- dobs) yield Child(
+              children = for(dob <- dobs) yield TFCChild(
                 id = 0,
                 childcareCostPeriod = Periods.Monthly,
                 dob = dob,
-                disability = Disability()
+                disability = TFCDisability()
               )
         )
 

@@ -26,7 +26,7 @@ import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import spec.CCSpecConfig
 
-class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication with ESCChildren {
+class ESCEligibilityInputSpec extends CCSpecConfig with FakeCCEligibilityApplication with ESCChildren {
 
   "ESCInputEligibility" should {
 
@@ -38,8 +38,8 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
 
       taxYeaar.from shouldBe a[LocalDate]
       taxYeaar.until shouldBe a[LocalDate]
-      taxYeaar.claimants.isInstanceOf[List[Claimant]] shouldBe true
-      taxYeaar.children.isInstanceOf[List[Child]] shouldBe true
+      taxYeaar.claimants.isInstanceOf[List[ESCClaimant]] shouldBe true
+      taxYeaar.children.isInstanceOf[List[ESCChild]] shouldBe true
 
       //Claimant model
       val claimant = taxYeaar.claimants.head
@@ -50,7 +50,7 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
       val child = taxYeaar.children.head
       child.id.isInstanceOf[Short] shouldBe true
       child.dob shouldBe a[LocalDate]
-      child.disability shouldBe a[Disability]
+      child.disability shouldBe a[ESCDisability]
 
       //Disability model
       child.disability.disabled.isInstanceOf[Boolean] shouldBe true
@@ -141,12 +141,12 @@ class ESCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplica
     "Claimant" should {
 
       "Employer providing vouchers determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(isPartner = false, employerProvidesESC = true)
+        val claimant = ESCClaimant(isPartner = false, employerProvidesESC = true)
         claimant.isClaimantQualifyingForESC shouldBe true
       }
 
       "Employer not providing vouchers determine if claimants qualifies for esc (receives vouchers)" in {
-        val claimant = Claimant(isPartner = false, employerProvidesESC = false)
+        val claimant = ESCClaimant(isPartner = false, employerProvidesESC = false)
         claimant.isClaimantQualifyingForESC shouldBe false
       }
 
