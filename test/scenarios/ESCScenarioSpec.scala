@@ -84,7 +84,325 @@ class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication wit
         jsonBodyOf(result) shouldBe outputJson
       }
     }
+/*
+<<<<<<< HEAD
+    "(Scenario 6) determine the periods within tax years" in {
+      val controller = new ESCEligibilityController {
+        override val escEligibility = mock[ESCEligibility]
+        override val auditEvent = mock[AuditEvents]
+      }
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_6.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[ESCEligibilityInput]
 
+      val eligible = ESCEligibility.eligibility(request.get)
+
+      when(controller.escEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_6.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
+    "(Scenario 7) determine the periods within tax years" in {
+      val controller = new ESCEligibilityController with ESCEligibility {
+        override val escEligibility = mock[ESCEligibility]
+        override val auditEvent = mock[AuditEvents]
+      }
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_7.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[ESCEligibilityInput]
+
+      val eligible = ESCEligibility.eligibility(request.get)
+
+      when(controller.escEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_7.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
+    "(Scenario 8) determine the periods within tax years" in {
+      val controller = new ESCEligibilityController with ESCEligibility {
+        override val escEligibility = mock[ESCEligibility]
+        override val auditEvent = mock[AuditEvents]
+      }
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_8.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[ESCEligibilityInput]
+      val eligible = ESCEligibility.eligibility(request.get)
+
+      when(controller.escEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_8.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
+    "(Scenario 9) determine the periods within tax years" in {
+      val controller = new ESCEligibilityController with ESCEligibility {
+        override val escEligibility = mock[ESCEligibility]
+        override val auditEvent = mock[AuditEvents]
+      }
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_9.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[ESCEligibilityInput]
+
+      val eligible = ESCEligibility.eligibility(request.get)
+
+      when(controller.escEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_9.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
+    "(Scenario 10) determine the periods within tax years" in {
+      val controller = new ESCEligibilityController with ESCEligibility {
+        override val escEligibility = mock[ESCEligibility]
+        override val auditEvent = mock[AuditEvents]
+      }
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_10.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[ESCEligibilityInput]
+
+      val eligible = ESCEligibility.eligibility(request.get)
+
+      when(controller.escEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_10.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
+    "(Scenario 11) determine the periods within tax years" in {
+      val controller = new ESCEligibilityController with ESCEligibility {
+        override val escEligibility = mock[ESCEligibility]
+        override val auditEvent = mock[AuditEvents]
+      }
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_11.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[ESCEligibilityInput]
+
+      val eligible = ESCEligibility.eligibility(request.get)
+
+      when(controller.escEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_11.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
+    "(Scenario 12) determine the periods within tax years" in {
+      val controller = new ESCEligibilityController with ESCEligibility {
+        override val escEligibility = mock[ESCEligibility]
+        override val auditEvent = mock[AuditEvents]
+      }
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_12.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[ESCEligibilityInput]
+
+      val eligible = ESCEligibility.eligibility(request.get)
+
+      when(controller.escEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_12.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
+    "(Scenario 13) determine the periods within tax years" in {
+      val controller = new ESCEligibilityController with ESCEligibility {
+        override val escEligibility = mock[ESCEligibility]
+        override val auditEvent = mock[AuditEvents]
+      }
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_13.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[ESCEligibilityInput]
+
+      val eligible = ESCEligibility.eligibility(request.get)
+
+      when(controller.escEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_13.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
+    "(Scenario 14) determine the periods within tax years" in {
+      val controller = new ESCEligibilityController with ESCEligibility {
+        override val escEligibility = mock[ESCEligibility]
+        override val auditEvent = mock[AuditEvents]
+      }
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_14.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[ESCEligibilityInput]
+
+      val eligible = ESCEligibility.eligibility(request.get)
+
+      when(controller.escEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_14.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
+    "(Scenario 15) determine the periods within tax years" in {
+      val controller = new ESCEligibilityController with ESCEligibility {
+        override val escEligibility = mock[ESCEligibility]
+        override val auditEvent = mock[AuditEvents]
+      }
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_15.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[ESCEligibilityInput]
+
+      val eligible = ESCEligibility.eligibility(request.get)
+
+      when(controller.escEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_15.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
+    "(Scenario 16) determine the periods within tax years" in {
+      val controller = new ESCEligibilityController with ESCEligibility {
+        override val escEligibility = mock[ESCEligibility]
+        override val auditEvent = mock[AuditEvents]
+      }
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_16.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[ESCEligibilityInput]
+      val eligible = ESCEligibility.eligibility(request.get)
+
+      when(controller.escEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_16.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
+    "(Scenario 17) determine the periods within tax years" in {
+      val controller = new ESCEligibilityController with ESCEligibility {
+        override val escEligibility = mock[ESCEligibility]
+        override val auditEvent = mock[AuditEvents]
+      }
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_17.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[ESCEligibilityInput]
+
+      val eligible = ESCEligibility.eligibility(request.get)
+
+      when(controller.escEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_17.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
+    "(Scenario 18) determine the periods within tax years" in {
+      val controller = new ESCEligibilityController with ESCEligibility {
+        override val escEligibility = mock[ESCEligibility]
+        override val auditEvent = mock[AuditEvents]
+      }
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_18.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[ESCEligibilityInput]
+
+      val eligible = ESCEligibility.eligibility(request.get)
+
+      when(controller.escEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_18.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
+    "(Scenario 19) determine the periods within tax years" in {
+      val controller = new ESCEligibilityController with ESCEligibility {
+        override val escEligibility = mock[ESCEligibility]
+        override val auditEvent = mock[AuditEvents]
+      }
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_19.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[ESCEligibilityInput]
+
+      val eligible = ESCEligibility.eligibility(request.get)
+
+      when(controller.escEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_19.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
+    "(Scenario 20) determine the periods within tax years" in {
+      val controller = new ESCEligibilityController with ESCEligibility {
+        override val escEligibility = mock[ESCEligibility]
+        override val auditEvent = mock[AuditEvents]
+      }
+      val inputResource: JsonNode = JsonLoader.fromResource("/json/input/esc/scenario_20.json")
+      val inputJson: JsValue = Json.parse(inputResource.toString)
+      val request = inputJson.validate[ESCEligibilityInput]
+
+      val eligible = ESCEligibility.eligibility(request.get)
+
+      when(controller.escEligibility.eligibility(mockEq(request.get))).thenReturn(Future.successful(eligible))
+      val result = await(controller.eligible (FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)))
+
+      val outputResource: JsonNode = JsonLoader.fromResource("/json/output/esc/scenario_20.json")
+      val outputJson: JsValue = Json.parse(outputResource.toString)
+
+      status(result) shouldBe Status.OK
+      jsonBodyOf(result) shouldBe outputJson
+    }
+
+
+=======
+>>>>>>> master
+*/
   }
 
 }

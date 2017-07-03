@@ -269,6 +269,13 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
           until = periodEnd,
           claimants = List(
             outputClaimant1
+          ),
+          children = List(
+            models.output.esc.ESCChild(
+              qualifying = false,
+              childCareCost = 100,
+              childCareCostPeriod = Periods.Monthly
+            )
           )
         )
       )
@@ -293,6 +300,13 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
                                  "isPartner":false,
                                  "eligibleMonthsInPeriod":11,
                                  "vouchers":true
+                              }
+                           ],
+                           "children": [
+                              {
+                                "qualifying": false,
+                                "childCareCost": 100,
+                                "childCareCostPeriod": "Month"
                               }
                            ]
                         }

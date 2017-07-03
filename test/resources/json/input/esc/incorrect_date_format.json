@@ -15,6 +15,8 @@
         {
           "id": 0,
           "dob": "1999-01-12",
+          "childCareCost": 100,
+          "childCareCostPeriod": "Month",
           "disability": {
             "disabled": true,
             "severelyDisabled": true

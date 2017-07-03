@@ -17,6 +17,8 @@
         {
           "id": 0,
           "dob": "2000-07-12",
+          "childCareCost": 100,
+          "childCareCostPeriod": "Month",
           "disability": {
             "disabled": true,
             "severelyDisabled": false
@@ -25,6 +27,8 @@
         {
           "id": 1,
           "dob": "2016-09-01",
+          "childCareCost": 100,
+          "childCareCostPeriod": "Month",
           "disability": {
             "disabled": false,
             "severelyDisabled": false

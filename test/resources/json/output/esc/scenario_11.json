@@ -1,31 +1,38 @@
 {
-  "taxYears": [
+  "taxYears":[
     {
-      "from": "2016-08-27",
-      "until": "2017-04-06",
-      "periods": [
+      "from":"2016-08-27",
+      "until":"2017-04-06",
+      "periods":[
         {
-          "from": "2016-08-27",
-          "until": "2017-04-06",
-          "claimants": [
+          "from":"2016-08-27",
+          "until":"2017-04-06",
+          "claimants":[
             {
-              "qualifying": true,
-              "isPartner": false,
-              "eligibleMonthsInPeriod": 8,
-              "vouchers": true
+              "qualifying":true,
+              "isPartner":false,
+              "eligibleMonthsInPeriod":8,
+              "vouchers":true
             },
             {
-              "qualifying": false,
-              "isPartner": true,
-              "eligibleMonthsInPeriod": 0,
-              "vouchers": false
+              "qualifying":false,
+              "isPartner":true,
+              "eligibleMonthsInPeriod":0,
+              "vouchers":false
+            }
+          ],
+          "children":[
+            {
+              "qualifying":true,
+              "childCareCost":100,
+              "childCareCostPeriod":"Month"
             }
           ]
         }
       ]
     }
   ],
-   "eligibility":true,
-   "parentEligibility":true,
-   "partnerEligibility":false
+  "eligibility":true,
+  "parentEligibility":true,
+  "partnerEligibility":false
 }

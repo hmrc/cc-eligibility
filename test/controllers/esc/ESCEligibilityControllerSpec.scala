@@ -115,29 +115,36 @@ class ESCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityAp
       val outputJson = Json.parse(
         s"""
         {
-           "eligibility":false,
-           "parentEligibility":false,
-           "partnerEligibility":false,
-           "taxYears": [
+          "taxYears": [
               {
-                "from": "2016-08-27",
-                "until": "2017-04-06",
-                "periods": [
-                  {
-                    "from": "2016-08-27",
-                    "until": "2017-04-06",
-                    "claimants": [
+                  "from": "2016-08-27",
+                  "until": "2017-04-06",
+                  "periods": [
                       {
-                        "qualifying": false,
-                        "isPartner": false,
-                        "eligibleMonthsInPeriod": 0,
-                        "vouchers": false
+                          "from": "2016-08-27",
+                          "until": "2017-04-06",
+                          "claimants": [
+                              {
+                                  "qualifying": false,
+                                  "isPartner": false,
+                                  "eligibleMonthsInPeriod": 0,
+                                  "vouchers": false
+                              }
+                          ],
+                          "children":[
+                              {
+                                  "qualifying":true,
+                                  "childCareCost":100,
+                                  "childCareCostPeriod":"Month"
+                              }
+                          ]
                       }
-                    ]
-                  }
-                ]
+                  ]
               }
-           ]
+          ],
+          "eligibility":false,
+          "parentEligibility":false,
+          "partnerEligibility":false
         }
         """.stripMargin)
 

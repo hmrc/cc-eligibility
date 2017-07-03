@@ -19,149 +19,127 @@ package models.input
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
+import fixtures.ESCChildren
 import models.input.esc._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{JsSuccess, JsValue, Json}
 import spec.CCSpecConfig
 
-class ESCEligibilityInputSpec extends CCSpecConfig with FakeCCEligibilityApplication {
+class ESCEligibilityInputSpec extends CCSpecConfig with FakeCCEligibilityApplication with ESCChildren {
 
   "ESCInputEligibility" should {
 
     "read a valid JSON input and convert to a specific type" in {
-        val resource: JsonNode = JsonLoader.fromResource("/json/input/esc/eligibility_input_test.json")
-        val json: JsValue = Json.parse(resource.toString)
-        val result = json.validate[ESCEligibilityInput]
-        result match {
-          case JsSuccess(x, _) => {
-            x shouldBe a[ESCEligibilityInput]
-            x.escTaxYears.head.from shouldBe a[LocalDate]
-            x.escTaxYears.head.until shouldBe a[LocalDate]
-            x.escTaxYears.head.claimants.isInstanceOf[List[ESCClaimant]] shouldBe true
-            x.escTaxYears.head.children.isInstanceOf[List[ESCChild]] shouldBe true
+      val resource: JsonNode = JsonLoader.fromResource("/json/input/esc/eligibility_input_test.json")
+      val json: JsValue = Json.parse(resource.toString)
+      val result = json.validate[ESCEligibilityInput]
+      val taxYeaar = result.get.escTaxYears.head
 
-            //Claimant model
-            x.escTaxYears.head.claimants.head.isPartner.isInstanceOf[Boolean] shouldBe true
-            x.escTaxYears.head.claimants.head.employerProvidesESC.isInstanceOf[Boolean] shouldBe true
+      taxYeaar.from shouldBe a[LocalDate]
+      taxYeaar.until shouldBe a[LocalDate]
+      taxYeaar.claimants.isInstanceOf[List[ESCClaimant]] shouldBe true
+      taxYeaar.children.isInstanceOf[List[ESCChild]] shouldBe true
 
-            //Children model
-            x.escTaxYears.head.children.head.id.isInstanceOf[Short] shouldBe true
-            x.escTaxYears.head.children.head.dob shouldBe a[LocalDate]
-            x.escTaxYears.head.children.head.disability shouldBe a[ESCDisability]
+      //Claimant model
+      val claimant = taxYeaar.claimants.head
+      claimant.isPartner.isInstanceOf[Boolean] shouldBe true
+      claimant.employerProvidesESC.isInstanceOf[Boolean] shouldBe true
 
-            //Disability model
-            x.escTaxYears.head.children.head.disability.disabled.isInstanceOf[Boolean] shouldBe true
-            x.escTaxYears.head.children.head.disability.severelyDisabled.isInstanceOf[Boolean] shouldBe true
-          }
-          case _ => throw new Exception
-        }
-      }
+      //Children model
+      val child = taxYeaar.children.head
+      child.id.isInstanceOf[Short] shouldBe true
+      child.dob shouldBe a[LocalDate]
+      child.disability shouldBe a[ESCDisability]
+
+      //Disability model
+      child.disability.disabled.isInstanceOf[Boolean] shouldBe true
+      child.disability.severelyDisabled.isInstanceOf[Boolean] shouldBe true
+    }
   }
+
   "Child" should {
 
       "(ESC)(< 0) determine if the child is qualifying for esc" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2016-08-31", formatter)
         val today = LocalDate.parse("2015-09-10", formatter)
-  
-        val child = ESCChild(id = 0, dob = dateOfBirth, disability = ESCDisability(disabled = false, severelyDisabled = false))
+        val child = buildChild(dob = dateOfBirth)
         child.qualifiesForESC(now = today) shouldBe false
       }
 
       "(ESC)(< 15) determine if the child is qualifying for esc" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2004-08-31", formatter)
         val today = LocalDate.parse("2015-09-10", formatter)
-
-        val child = ESCChild(id = 0, dob = dateOfBirth, disability = ESCDisability(disabled = false, severelyDisabled = false))
+        val child = buildChild(dob = dateOfBirth)
         child.qualifiesForESC(now = today) shouldBe true
       }
 
       "(ESC)(15)(before september following their birthday) determine if the child is qualifying for esc" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2001-06-27", formatter)
         val today = LocalDate.parse("2016-08-10", formatter)
-  
-        val child = ESCChild(id = 0, dob = dateOfBirth, disability = ESCDisability(disabled = false, severelyDisabled = false))
+        val child = buildChild(dob = dateOfBirth)
         child.qualifiesForESC(now = today) shouldBe true
       }
-  
+
       "(ESC)(15)(after september following their birthday) determine if the child is qualifying for esc" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2000-06-27", formatter)
         val today = LocalDate.parse("2016-09-10", formatter)
-  
-        val child = ESCChild(id = 0, dob = dateOfBirth, disability = ESCDisability(disabled = false, severelyDisabled = false))
+        val child = buildChild(dob = dateOfBirth)
         child.qualifiesForESC(now = today) shouldBe false
       }
-  
+
       "(ESC)(15)(before september following their birthday, 1st September) determine if the child is qualifying for esc" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2001-09-01", formatter)
         val today = LocalDate.parse("2016-09-10", formatter)
-  
-        val child = ESCChild(id = 0, dob = dateOfBirth, disability = ESCDisability(disabled = false, severelyDisabled = false))
+        val child = buildChild(dob = dateOfBirth)
         child.qualifiesForESC(now = today) shouldBe true
       }
-  
+
       "(ESC)(16)(non disabled) determine if the child is qualifying for esc" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2000-06-27", formatter)
         val today = LocalDate.parse("2016-08-10", formatter)
-  
-        val child = ESCChild(id = 0, dob = dateOfBirth, disability = ESCDisability(disabled = false, severelyDisabled = false))
+        val child = buildChild(dob = dateOfBirth)
         child.qualifiesForESC(now = today) shouldBe false
       }
-  
+
       "(ESC)(16)(disabled)(before september following their birthday) determine if the child is qualifying for esc" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2000-06-27", formatter)
         val today = LocalDate.parse("2016-08-10", formatter)
-  
-        val child = ESCChild(id = 0, dob = dateOfBirth, disability = ESCDisability(disabled = true, severelyDisabled = false))
+        val child = buildChild(dob = dateOfBirth, disabled = true)
         child.qualifiesForESC(now = today) shouldBe true
       }
-  
+
       "(ESC)(16)(disabled)(before september following their birthday, 1st September) determine if the child is qualifying for esc" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2000-09-01", formatter)
         val today = LocalDate.parse("2016-09-10", formatter)
-  
-        val child = ESCChild(id = 0, dob = dateOfBirth, disability = ESCDisability(disabled = true, severelyDisabled = false))
+        val child = buildChild(dob = dateOfBirth, disabled = true)
         child.qualifiesForESC(now = today) shouldBe true
       }
-  
+
       "(ESC)(16)(non disabled)(before september following their birthday, 1st September) determine if the child is qualifying for esc" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2000-09-01", formatter)
         val today = LocalDate.parse("2016-09-10", formatter)
-  
-        val child = ESCChild(id = 0, dob = dateOfBirth, disability = ESCDisability(disabled = false, severelyDisabled = false))
+        val child = buildChild(dob = dateOfBirth)
         child.qualifiesForESC(now = today) shouldBe false
       }
-  
+
       "(ESC)(16)(disabled)(after september following birthday) determine if the child is qualifying for esc" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2000-06-27", formatter)
         val today = LocalDate.parse("2016-09-10", formatter)
-  
-        val child = ESCChild(id = 0, dob = dateOfBirth, disability = ESCDisability(disabled = true, severelyDisabled = false))
+        val child = buildChild(dob = dateOfBirth, disabled = true)
         child.qualifiesForESC(now = today) shouldBe false
       }
-  
+
       "(ESC)(> 16) determine if the child is qualifying for esc" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("1992-08-31", formatter)
         val today = LocalDate.parse("2015-09-10", formatter)
-  
-        val child = ESCChild(id = 0, dob = dateOfBirth, disability = ESCDisability(disabled = true, severelyDisabled = false))
+        val child = buildChild(dob = dateOfBirth, disabled = true)
         child.qualifiesForESC(now = today) shouldBe false
       }
   }
 
     "Claimant" should {
-  
+
       "Employer providing vouchers determine if claimants qualifies for esc (receives vouchers)" in {
         val claimant = ESCClaimant(isPartner = false, employerProvidesESC = true)
         claimant.isClaimantQualifyingForESC shouldBe true
@@ -173,5 +151,5 @@ class ESCEligibilityInputSpec extends CCSpecConfig with FakeCCEligibilityApplica
       }
 
     }
-  
+
 }
