@@ -45,7 +45,7 @@ case class ESCPeriod(
                       from: LocalDate,
                       until: LocalDate,
                       claimants: List[ESCClaimant],
-                      children: List[OutputChild]
+                      children: List[ESCChild]
                     )
 
 object ESCPeriod {

@@ -271,7 +271,7 @@ class JSONFactorySpec extends CCSpecConfig with FakeCCEligibilityApplication {
             outputClaimant1
           ),
           children = List(
-            models.output.esc.OutputChild(
+            models.output.esc.ESCChild(
               qualifying = false,
               childCareCost = 100,
               childCareCostPeriod = Periods.Monthly

@@ -17,6 +17,7 @@
 package eligibility
 
 import models.input.esc._
+import models.output
 import models.output.esc.ESCEligibilityOutput
 import org.joda.time.LocalDate
 import utils.MessagesObject
@@ -64,7 +65,7 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
     }
   }
 
-  def determineClaimantsEligibilityForPeriod(children: List[ESCChild], claimants: List[ESCClaimant], periodStart: LocalDate,
+  def determineClaimantsEligibilityForPeriod(children: List[output.esc.ESCChild], claimants: List[ESCClaimant], periodStart: LocalDate,
                                              periodEnd: LocalDate): List[models.output.esc.ESCClaimant] = {
     for (claimant <- claimants) yield {
       val claimantQualifying = claimant.isClaimantQualifyingForESC
@@ -84,7 +85,7 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
 
   def determineChildrensEligibilityForPeriod(children: List[ESCChild], periodStart: LocalDate): List[models.output.esc.ESCChild] = {
     for (child <- children) yield {
-      models.output.esc.OutputChild(
+      output.esc.ESCChild(
         qualifying = child.qualifiesForESC(periodStart),
         childCareCost = child.childCareCost,
         childCareCostPeriod = child.childCareCostPeriod
@@ -100,7 +101,7 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
 
       // determine child's qualification and claimants qualification
       val children = determineChildrensEligibilityForPeriod(ty.children, fromAndUntil._1)
-      val claimants = determineClaimantsEligibilityForPeriod(ty.children, ty.claimants, fromAndUntil._1, fromAndUntil._2)
+      val claimants = determineClaimantsEligibilityForPeriod(children, ty.claimants, fromAndUntil._1, fromAndUntil._2)
 
       models.output.esc.ESCPeriod(
         from = fromAndUntil._1,

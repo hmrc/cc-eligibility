@@ -16,8 +16,8 @@
 
 package fixtures
 
-import models.input.esc.{Child, Disability}
-import models.output.esc.OutputChild
+import models.input.esc.{ESCChild, ESCDisability}
+import models.output
 import org.joda.time.LocalDate
 import utils.Periods
 
@@ -29,12 +29,12 @@ trait ESCChildren {
                    childCareCost: BigDecimal = 0,
                    disabled: Boolean = false,
                    severelyDisabled: Boolean = false
-                     ) = Child (
+                     ) = ESCChild (
     id = id,
     dob = dob,
     childCareCost = childCareCost,
     childCareCostPeriod = Periods.Monthly,
-    disability = Disability(
+    disability = ESCDisability(
       disabled = disabled,
       severelyDisabled = severelyDisabled
     )
@@ -44,7 +44,7 @@ trait ESCChildren {
                         qualifying: Boolean = false,
                         childCareCost: BigDecimal = 0,
                         childCareCostPeriod: Periods.Period = Periods.Monthly
-                        ) = OutputChild(
+                        ) = output.esc.ESCChild(
     qualifying = qualifying,
     childCareCost = childCareCost,
     childCareCostPeriod = childCareCostPeriod
