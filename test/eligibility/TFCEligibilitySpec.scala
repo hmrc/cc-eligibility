@@ -1805,7 +1805,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
     "return a Future[TFCEligibilityOutput] result when min-earnings disabled" in {
       import org.mockito.Mockito.when
       val testEligiblity = new TFCEligibility{
-        override val tfcConfig = mock[TFCConfig]
+        override def tfcConfig = mock[TFCConfig]
       }
 
       when(testEligiblity.tfcConfig.minimumEarningsEnabled).thenReturn(false)

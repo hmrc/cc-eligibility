@@ -34,7 +34,7 @@ object FreeEntitlementService extends FreeEntitlementService{
 trait FreeEntitlementService extends CCConfig with ChildHelper {
 
   val tfcEligibility: TFCEligibility
-  val localDate = LocalDate.now()
+  def localDate = LocalDate.now()
 
   private def isChildDOBWithinRollout(dob: LocalDate): Boolean = {
 

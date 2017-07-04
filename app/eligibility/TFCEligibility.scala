@@ -31,7 +31,7 @@ object TFCEligibility extends TFCEligibility
 
 trait TFCEligibility extends TFCRolloutSchemeConfig {
 
-    val tfcConfig: TFCConfig = TFCConfig
+    def tfcConfig: TFCConfig = TFCConfig
 
     import scala.concurrent.ExecutionContext.Implicits.global
     val auditEvents: AuditEvents = AuditEvents

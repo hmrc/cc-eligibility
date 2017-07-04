@@ -166,7 +166,7 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
     implicit val hc = new HeaderCarrier()
     val freeEntitlementService: FreeEntitlementService = new FreeEntitlementService {
       val tfcEligibility = mock[TFCEligibility]
-      override val localDate = LocalDate.now().plusYears(1)
+      override def localDate = LocalDate.now().plusYears(1)
     }
 
     when(
