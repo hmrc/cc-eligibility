@@ -19,12 +19,12 @@ package utils
 import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import spec.CCSpecConfig
+import play.api.Configuration
+import spec.CCConfigSpec
+import org.mockito.Mockito._
+import org.scalatest.mock.MockitoSugar
 
-/**
- * Created by lakshmi on 27/01/16.
- */
-class SchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication {
+class SchemeConfigSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
 
   "SchemeConfig" should {
 
@@ -75,6 +75,22 @@ class SchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication {
 
       val taxYear = TCConfig.determineTaxYearFromNow(from = today)
       taxYear shouldBe 2015
+    }
+  }
+
+  "loadConfigByType" should {
+    "return config" when {
+      "configType is passed" in{
+
+        import org.mockito.Matchers._
+
+        val testConfig = new CCConfig{
+          override val conf: Configuration = mock[Configuration]
+        }
+        val configurationObject = Configuration(("rule-date", "2017-07-04"))
+        when(testConfig.conf.getConfigSeq(any())).thenReturn(Some(Seq(configurationObject, configurationObject)))
+        testConfig.loadConfigByType("tfc-rollout").isInstanceOf[Configuration] shouldBe true
+      }
     }
   }
 }

@@ -34,17 +34,18 @@ object FreeEntitlementService extends FreeEntitlementService{
 trait FreeEntitlementService extends CCConfig with ChildHelper {
 
   val tfcEligibility: TFCEligibility
+  def localDate = LocalDate.now()
 
   private def isChildDOBWithinRollout(dob: LocalDate): Boolean = {
 
-    val futureDate = LocalDate.now().plusWeeks(2)
+    val futureDate = localDate.plusWeeks(2)
     val freeHoursRollout: Configuration = loadConfigByType("free-hours-rollout")
     val bornOnOrAfter = dateFormat.parse(freeHoursRollout.getString("born-on-after").get)
 
     dob.isBefore(futureDate) && !bornOnOrAfter.after(dob.toDate)
   }
 
-  private def hasCildAtAge(configField: String, dobs: List[LocalDate], currentDate: LocalDate = LocalDate.now): Boolean = {
+  private def hasCildAtAge(configField: String, dobs: List[LocalDate], currentDate: LocalDate = localDate): Boolean = {
     val freeHours: Configuration = loadConfigByType("free-hours")
     val ageFilter: List[Int] = freeHours.getString(configField).getOrElse("").split(",").toList.filterNot(_.isEmpty).map(_.toInt)
 
@@ -63,11 +64,11 @@ trait FreeEntitlementService extends CCConfig with ChildHelper {
       val hasChild3Or4Sept2017: Boolean = hasCildAtAge(
         configField = s"thirty.${location}",
         dobs = tfcEligibilityInput.children.map(_.dob),
-        currentDate = if(LocalDate.now.isBefore(ConfigConstants.firstSept2017)) { // TODO: Use only LocalDate.now after 01.09.2017
+        currentDate = if(localDate.isBefore(ConfigConstants.firstSept2017)) { // TODO: Use only LocalDate.now after 01.09.2017
           ConfigConstants.firstSept2017
         }
         else {
-          LocalDate.now
+          localDate
         }
       )
 
@@ -89,7 +90,7 @@ trait FreeEntitlementService extends CCConfig with ChildHelper {
         eligibility = hasCildAtAge(
           configField = s"fifteen.${location}",
           dobs = request.childDOBList,
-          currentDate = LocalDate.now
+          currentDate = localDate
         )
       )
     }

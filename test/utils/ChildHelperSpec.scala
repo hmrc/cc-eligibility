@@ -19,9 +19,9 @@ package utils
 import org.joda.time.LocalDate
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
-import spec.CCSpecConfig
+import spec.CCConfigSpec
 
-class ChildHelperSpec extends CCSpecConfig {
+class ChildHelperSpec extends CCConfigSpec {
 
   class Test extends ChildHelper {}
 

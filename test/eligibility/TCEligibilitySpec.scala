@@ -28,12 +28,12 @@ import org.scalatest.mock.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
-import spec.CCSpecConfig
+import spec.CCConfigSpec
 import utils.Periods
 
 import scala.concurrent.Future
 
-class TCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar {
+class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar {
 
   "TCEligibility" should {
 

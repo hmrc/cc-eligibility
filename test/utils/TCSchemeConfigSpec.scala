@@ -20,9 +20,9 @@ import controllers.FakeCCEligibilityApplication
 import models.input.tc.TCTaxYear
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import spec.CCSpecConfig
+import spec.CCConfigSpec
 
-class TCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication {
+class TCSchemeConfigSpec extends CCConfigSpec with FakeCCEligibilityApplication {
 
   "TCSchemeConfig" should {
 

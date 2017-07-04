@@ -19,9 +19,9 @@ package utils
 import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import spec.CCSpecConfig
+import spec.CCConfigSpec
 
-class ESCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication {
+class ESCSchemeConfigSpec extends CCConfigSpec with FakeCCEligibilityApplication {
 
   "ESC Scheme Config" should {
 

@@ -31,11 +31,11 @@ import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
-import spec.CCSpecConfig
+import spec.CCConfigSpec
 
 import scala.concurrent.Future
 
-class TCEligibilityControllerSpec extends CCSpecConfig with FakeCCEligibilityApplication with MockitoSugar {
+class TCEligibilityControllerSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
 
   implicit val request = FakeRequest()
 

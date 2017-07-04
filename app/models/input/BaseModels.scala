@@ -21,23 +21,9 @@ import java.util.{Calendar, Date}
 import org.joda.time.LocalDate
 import utils.CCConfig
 
-trait BaseRequest {
-  def payload : BasePayload
-}
-
-trait BasePayload {
-  def taxYears : List[BaseTaxYear]
-}
-
 trait BaseTaxYear {
   def from : LocalDate
   def until : LocalDate
-  def claimants : List[BaseClaimant]
-  def children : List[BaseChild]
-}
-
-trait BaseClaimant {
-  def isPartner : Boolean
 }
 
 trait BaseChild {
@@ -49,13 +35,6 @@ trait BaseChild {
 
     val requiresSplit = dateOfBirth.after(taxYear.from.toDate) && dateOfBirth.before(taxYear.until.toDate)
     (requiresSplit, dob)
-  }
-
-  def isBeingBornOn1stSeptInTaxYear(taxYear: BaseTaxYear) : (Boolean) = {
-    val dateOfBirth = dob.toDate
-    val september1 = CCConfig.september1stForDate(taxYear.from)
-    val childBorn1stSept = dateOfBirth.equals(september1.toDate)
-    (childBorn1stSept)
   }
 
   private def isSplittingPeriod1stSeptBeforeEndDate(claimDate: LocalDate, years: Int, september1 : LocalDate) = {
@@ -76,11 +55,11 @@ trait BaseChild {
   }
 
   // TODO REMOVE THE BIRTHDAY IS AFTER PERIOD START DATE?
-  def isSplittingPeriodOn1stSeptemberForYear(claimDate: LocalDate, endDate : LocalDate, years: Int) : Tuple2[Boolean, LocalDate] = {
+  def isSplittingPeriodOn1stSeptemberForYear(claimDate: LocalDate, endDate : LocalDate, years: Int) : (Boolean, LocalDate) = {
     val september1 = CCConfig.september1stForDate(claimDate)
     val requiresSplit = september1 match {
       //if child's 15/16(if disabled) birthday after end date of current tax year no split is required
-      case september1 if september1.toDate.after(endDate.toDate) =>
+      case date if date.toDate.after(endDate.toDate) =>
         false
       case _ =>
         isSplittingPeriod1stSeptBeforeEndDate(claimDate, years, september1)
