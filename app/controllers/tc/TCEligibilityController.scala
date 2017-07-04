@@ -16,13 +16,13 @@
 
 package controllers.tc
 
-import controllers.EligibilityController
 import eligibility.TCEligibility
 import models.input.tc.TCEligibilityInput
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Action
 import service.AuditEvents
+import uk.gov.hmrc.play.microservice.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -32,12 +32,12 @@ object TCEligibilityController extends TCEligibilityController {
   override val auditEvent = AuditEvents
 }
 
-trait TCEligibilityController extends EligibilityController {
+trait TCEligibilityController extends BaseController {
   val tcEligibility: TCEligibility
 
   val auditEvent : AuditEvents
 
-  override def eligible : Action[JsValue] = Action.async(parse.json) {
+  def eligible : Action[JsValue] = Action.async(parse.json) {
     implicit request =>
       request.body.validate[TCEligibilityInput].fold(
         error => {

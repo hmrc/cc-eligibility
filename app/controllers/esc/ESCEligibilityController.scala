@@ -16,14 +16,13 @@
 
 package controllers.esc
 
-import controllers.EligibilityController
 import eligibility.ESCEligibility
 import models.input.esc.ESCEligibilityInput
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Action
 import service.AuditEvents
-
+import uk.gov.hmrc.play.microservice.controller.BaseController
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -32,11 +31,11 @@ object ESCEligibilityController extends ESCEligibilityController  {
   override val auditEvent = AuditEvents
 }
 
-trait ESCEligibilityController extends EligibilityController {
+trait ESCEligibilityController extends BaseController {
   val escEligibility: ESCEligibility
   val auditEvent : AuditEvents
 
-  override def eligible : Action[JsValue] = Action.async(parse.json) {
+  def eligible : Action[JsValue] = Action.async(parse.json) {
     implicit request =>
       request.body.validate[ESCEligibilityInput].fold(
         error => {
