@@ -37,7 +37,7 @@ import org.scalatestplus.play.OneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import uk.gov.hmrc.play.test.UnitSpec
 
-trait CCSpecConfig extends UnitSpec with OneAppPerSuite {
+trait CCConfigSpec extends UnitSpec with OneAppPerSuite {
 
   def getMessages = {
     val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]

@@ -18,17 +18,18 @@ package eligibility
 
 import controllers.FakeCCEligibilityApplication
 import models.input.tfc._
-import models.output.tfc.{TFCOutputChild, TFCOutputClaimant, TFCEligibilityOutput, TFCPeriod}
+import models.output.tfc.{TFCEligibilityOutput, TFCOutputChild, TFCOutputClaimant, TFCPeriod}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.mock.MockitoSugar
 import play.api.test.FakeRequest
-import spec.CCSpecConfig
+import spec.CCConfigSpec
 import uk.gov.hmrc.play.http.HeaderCarrier
-import utils.Periods
+import utils.{Periods, TFCConfig}
+
 import scala.concurrent.Future
 
-class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar {
+class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar {
 
   implicit val req = FakeRequest()
   implicit val hc = new HeaderCarrier()
@@ -1800,5 +1801,29 @@ class TFCEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication 
       val tfcEligibilityModel = TFCEligibilityOutput(from = from, until = tfcPeriods.last.until, householdEligibility = false, periods = tfcPeriods, tfcRollout = false)
       result shouldBe tfcEligibilityModel
     }
+
+    "return a Future[TFCEligibilityOutput] result when min-earnings disabled" in {
+      import org.mockito.Mockito.when
+      val testEligiblity = new TFCEligibility{
+        override val tfcConfig = mock[TFCConfig]
+      }
+
+      when(testEligiblity.tfcConfig.minimumEarningsEnabled).thenReturn(false)
+
+      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val dateOfBirth = LocalDate.parse("2013-08-27", formatter)
+      val today = LocalDate.parse("2016-08-27", formatter)
+      val untilDate = LocalDate.parse("2017-06-01", formatter)
+      val claimant = TFCClaimant(hoursPerWeek = 16.50, isPartner = false,
+        disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
+      val child = TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
+        disability = TFCDisability(disabled = false, severelyDisabled = false))
+      val tfcEligibilityInput = TFCEligibilityInput(from = today, numberOfPeriods = 3, location = "england",
+        claimants = List(claimant), children = List(child))
+      val result = testEligiblity.eligibility(tfcEligibilityInput)
+
+      result.isInstanceOf[Future[TFCEligibilityOutput]] shouldBe true
+    }
+
   }
 }

@@ -23,10 +23,10 @@ import models.input.tfc._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
-import spec.CCSpecConfig
+import spec.CCConfigSpec
 import utils.Periods
 
-class TFCInputEligibilitySpec extends CCSpecConfig with FakeCCEligibilityApplication {
+class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplication {
 
   "TFCInputEligibility" should {
 

@@ -122,7 +122,7 @@ case class TFCClaimant(
                         age: Option[String],
                         employmentStatus: Option[String] = None,
                         selfEmployedSelection: Option[Boolean] = None
-                     ) extends models.input.BaseClaimant {
+                     ) {
 
   def totalIncome: BigDecimal = {
     val (currentEmployment, currentvOther, currentPension) = getIncomeElements(previousIncome, currentIncome)

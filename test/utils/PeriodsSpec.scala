@@ -19,12 +19,12 @@ package utils
 import controllers.FakeCCEligibilityApplication
 import play.api.i18n.Messages
 import play.api.libs.json.{JsString, Json}
-import spec.CCSpecConfig
+import spec.CCConfigSpec
 
 /**
  * Created by adamconder on 09/06/15.
  */
-class PeriodsSpec extends CCSpecConfig with FakeCCEligibilityApplication {
+class PeriodsSpec extends CCConfigSpec with FakeCCEligibilityApplication {
 
   "Periods" should {
 

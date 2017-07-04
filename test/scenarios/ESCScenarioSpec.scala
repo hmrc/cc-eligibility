@@ -29,12 +29,12 @@ import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import service.AuditEvents
-import spec.CCSpecConfig
+import spec.CCConfigSpec
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import scala.concurrent.Future
 
-class ESCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with MockitoSugar {
+class ESCScenarioSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
 
   "ESCScenarioSpec" should {
     val testData = Table(

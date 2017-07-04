@@ -34,9 +34,13 @@ case class TFCTaxYearConfig(
                              nmw25Over: Int
                              )
 
-object TFCConfig extends CCConfig with LoadConfig {
+trait TFCConfig {
+  val minimumEarningsEnabled: Boolean
+}
 
-  val minimumEarningsEnabled: Boolean = Try(conf.getString("tfc-min-earnings").get.toBoolean).getOrElse(false)
+object TFCConfig extends TFCConfig with  CCConfig with LoadConfig {
+
+  override val minimumEarningsEnabled: Boolean = Try(conf.getString("tfc-min-earnings").get.toBoolean).getOrElse(false)
 
   def getTFCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
     configs.filter(x => {

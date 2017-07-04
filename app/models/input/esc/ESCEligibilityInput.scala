@@ -16,7 +16,7 @@
 
 package models.input.esc
 
-import models.input.{BaseClaimant, BaseTaxYear}
+import models.input.BaseTaxYear
 import org.joda.time.LocalDate
 import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
@@ -60,7 +60,7 @@ object ESCTaxYear extends CCFormat with MessagesObject {
 case class ESCClaimant(
                      isPartner: Boolean = false,
                      employerProvidesESC : Boolean = false
-                   ) extends BaseClaimant {
+                   ) {
   def isClaimantQualifyingForESC : Boolean = {
     employerProvidesESC
   }

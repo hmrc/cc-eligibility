@@ -176,7 +176,7 @@ case class TCClaimant(
                      isPartner: Boolean,
                      disability: TCDisability,
                      carersAllowance: Boolean
-                   ) extends models.input.BaseClaimant {
+                   ) {
 
   def getDisabilityElement(periodStart: LocalDate): Boolean = {
     isWorkingAtLeast16HoursPerWeek(periodStart) && (disability.disabled || disability.severelyDisabled)

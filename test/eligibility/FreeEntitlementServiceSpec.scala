@@ -160,4 +160,50 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
       }
     }
   }
+
+  "determine eligiblity correctly for thirtyHours when it's next year" in {
+    implicit val request = FakeRequest()
+    implicit val hc = new HeaderCarrier()
+    val freeEntitlementService: FreeEntitlementService = new FreeEntitlementService {
+      val tfcEligibility = mock[TFCEligibility]
+      override val localDate = LocalDate.now().plusYears(1)
+    }
+
+    when(
+      freeEntitlementService.tfcEligibility.eligibility(any[models.input.tfc.TFCEligibilityInput])(any[play.api.mvc.Request[_]], any[HeaderCarrier])
+    ).thenReturn(
+      Future.successful(
+        TFCEligibilityOutput(
+          from = now,
+          until = now.plusMonths(3),
+          householdEligibility = true,
+          tfcRollout = false,
+          periods = List.empty
+        )
+      )
+    )
+
+    val tfcRequest = TFCEligibilityInput(
+      from = now,
+      numberOfPeriods = 3,
+      location = "england",
+      claimants = List(
+        TFCClaimant(
+          disability = TFCDisability(),
+          minimumEarnings = TFCMinimumEarnings(),
+          age = None
+        )
+      ),
+      children = List(TFCChild(
+        id = 0,
+        childcareCostPeriod = Periods.Monthly,
+        dob = firstSept2017.minusYears(3),
+        disability = TFCDisability()
+      )
+    ))
+
+    val result = await(freeEntitlementService.thirtyHours(tfcRequest))
+    result.eligibility shouldBe true
+
+  }
 }

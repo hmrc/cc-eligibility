@@ -29,14 +29,14 @@ import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import service.AuditEvents
-import spec.CCSpecConfig
+import spec.CCConfigSpec
 
 import scala.concurrent.Future
 
 /**
 * Created by adamconder on 11/09/15.
 */
-class TCScenarioSpec extends CCSpecConfig with FakeCCEligibilityApplication with MockitoSugar {
+class TCScenarioSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
 
   "Scenarios" should {
 

@@ -19,11 +19,11 @@ package utils
 import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import spec.CCSpecConfig
+import spec.CCConfigSpec
 import org.scalatest.prop.TableDrivenPropertyChecks.forAll
 import org.scalatest.prop.Tables.Table
 
-class TFCSchemeConfigSpec extends CCSpecConfig with FakeCCEligibilityApplication {
+class TFCSchemeConfigSpec extends CCConfigSpec with FakeCCEligibilityApplication {
 
   "TFC Scheme Config" should {
 

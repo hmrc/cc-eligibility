@@ -22,7 +22,7 @@ import java.util.Calendar
 import org.joda.time.LocalDate
 import play.api.Configuration
 
-trait CCConfig extends LoadConfig{
+trait CCConfig extends LoadConfig {
 
   val dateFormat = new SimpleDateFormat("dd-MM-yyyy")
 
@@ -98,7 +98,7 @@ trait CCConfig extends LoadConfig{
     taxYear
   }
 
-  def loadConfigByType(configType: String, currentDate: LocalDate = LocalDate.now) = {
+  def loadConfigByType(configType: String, currentDate: LocalDate = LocalDate.now): Configuration = {
     val configs: Seq[Configuration] = conf.getConfigSeq(configType).get
     val configExcludingDefault: Seq[Configuration] = getConfigExcludingDefault(configs)
     configExcludingDefault.find(conf => {
