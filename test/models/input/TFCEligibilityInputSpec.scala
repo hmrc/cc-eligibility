@@ -44,7 +44,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
             x.numberOfPeriods.isInstanceOf[Short] shouldBe true
             x.claimants.isInstanceOf[List[TFCClaimant]] shouldBe true
             x.children.isInstanceOf[List[TFCChild]] shouldBe true
-            x.validHouseholdHours shouldBe true
+
             //Claimant model
             x.claimants.head.totalIncome shouldBe a[BigDecimal]
             x.claimants.head.hoursPerWeek.isInstanceOf[Double] shouldBe true
@@ -72,50 +72,6 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
           case JsError(e) => throw new IllegalArgumentException(e.toString)
         }
       }
-
-    "Check for valid household hours true when hoursPerWeek is 16 or more" in {
-      val claimant = TFCClaimant(hoursPerWeek = 16.01, isPartner = false, disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
-      val partner = TFCClaimant(hoursPerWeek = 18.01, isPartner = false, disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val fromDate = LocalDate.parse("2000-08-27", formatter)
-      val toDate = LocalDate.parse("2000-08-27", formatter)
-
-      val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
-      tfc.validHouseholdHours shouldBe true
-    }
-
-    "Check for valid household hours false when hoursPerWeek is 16 or more" in {
-      val claimant = TFCClaimant(hoursPerWeek = 15.01, isPartner = false, disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
-      val partner = TFCClaimant(hoursPerWeek = 14.01, isPartner = false, disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val fromDate = LocalDate.parse("2000-08-27", formatter)
-      val toDate = LocalDate.parse("2000-08-27", formatter)
-
-      val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
-      tfc.validHouseholdHours shouldBe false
-    }
-
-    "Check for valid household hours partner's carerAllowance when hoursPerWeek for parent is 16 or more" in {
-      val claimant = TFCClaimant(hoursPerWeek = 16.01, isPartner = false, disability = TFCDisability(), carersAllowance = true, minimumEarnings = TFCMinimumEarnings(), age = None)
-      val partner = TFCClaimant(hoursPerWeek = 15.50, isPartner = false, disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val fromDate = LocalDate.parse("2000-08-27", formatter)
-      val toDate = LocalDate.parse("2000-08-27", formatter)
-
-      val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
-      tfc.validHouseholdHours shouldBe partner.carersAllowance
-    }
-
-    "Check for valid household hours parent's carerAllowance when hoursPerWeek for partner is 16 or more" in {
-      val claimant = TFCClaimant(hoursPerWeek = 15.50, isPartner = false, disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
-      val partner = TFCClaimant(hoursPerWeek = 16.01, isPartner = false, disability = TFCDisability(), carersAllowance = true, minimumEarnings = TFCMinimumEarnings(), age = None)
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val fromDate = LocalDate.parse("2000-08-27", formatter)
-      val toDate = LocalDate.parse("2000-08-27", formatter)
-
-      val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
-      tfc.validHouseholdHours shouldBe claimant.carersAllowance
-    }
   }
 
 
