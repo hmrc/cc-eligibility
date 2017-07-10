@@ -20,11 +20,14 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 
 import org.joda.time.LocalDate
+import org.joda.time.format.DateTimeFormat
 import play.api.Configuration
 
 trait CCConfig extends LoadConfig {
 
   val dateFormat = new SimpleDateFormat("dd-MM-yyyy")
+
+  def StartDate: LocalDate = LocalDate.now()
 
   private def calendar(year: Int, month: Int, day: Int): Calendar = {
     val calendar  = Calendar.getInstance()
@@ -118,4 +121,8 @@ trait CCConfig extends LoadConfig {
   }
 }
 
-object CCConfig extends CCConfig
+object CCConfig extends CCConfig {
+  val local_Date: String = conf.getString("local-date").getOrElse("")
+  val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+  override def StartDate = if(local_Date.isEmpty) LocalDate.now() else LocalDate.parse(local_Date, formatter)
+}
