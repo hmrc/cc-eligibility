@@ -23,15 +23,13 @@ import models.output.tfc._
 import org.joda.time.LocalDate
 import service.AuditEvents
 import uk.gov.hmrc.play.http.HeaderCarrier
-import utils.{TFCRolloutSchemeConfig, TFCConfig}
+import utils.TFCRolloutSchemeConfig
 
 import scala.concurrent.Future
 
 object TFCEligibility extends TFCEligibility
 
 trait TFCEligibility extends TFCRolloutSchemeConfig {
-
-    def tfcConfig: TFCConfig = TFCConfig
 
     import scala.concurrent.ExecutionContext.Implicits.global
     val auditEvents: AuditEvents = AuditEvents
@@ -128,17 +126,13 @@ trait TFCEligibility extends TFCRolloutSchemeConfig {
       }
     }
 
-    def eligibility(tfcEligibilityInput : TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
-      val outputPeriods = determineTFCPeriods(tfcEligibilityInput)
-      val householdEligibility = if(tfcConfig.minimumEarningsEnabled) {
-        outputPeriods.exists(period => period.periodEligibility) && tfcEligibilityInput.validHouseholdMinimumEarnings
-      } else {
-        outputPeriods.exists(period => period.periodEligibility) && tfcEligibilityInput.validHouseholdHours
-      }
+    def eligibility(request : TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
+      val outputPeriods = determineTFCPeriods(request)
+      val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && request.validHouseholdMinimumEarnings
 
       Future {
             TFCEligibilityOutput(
-              from = tfcEligibilityInput.from,
+              from = request.from,
               until = outputPeriods.last.until,
               householdEligibility = householdEligibility,
               periods = outputPeriods,
