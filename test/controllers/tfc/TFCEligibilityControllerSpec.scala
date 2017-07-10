@@ -24,18 +24,29 @@ import models.output.tfc.TFCEligibilityOutput
 import org.joda.time.LocalDate
 import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
+import org.scalatest.BeforeAndAfter
 import org.scalatest.mock.MockitoSugar
 import play.api.http.Status
-import play.api.libs.json.Json
-import play.api.test.FakeRequest
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
+import play.api.test.{FakeHeaders, FakeRequest}
 import service.AuditEvents
 import spec.CCConfigSpec
 import uk.gov.hmrc.play.http.HeaderCarrier
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class TFCEligibilityControllerSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
+class TFCEligibilityControllerSpec extends CCConfigSpec
+  with FakeCCEligibilityApplication
+  with MockitoSugar
+  with BeforeAndAfter {
+
+  before{
+    when(SUT.tfcEligibility.eligibility(any[TFCEligibilityInput]())(any[play.api.mvc.Request[_]], any[HeaderCarrier])).
+      thenReturn(Future.successful(validTFCEligibilityOutput))
+  }
 
   "TFCEligibilityController" should {
     implicit val req = FakeRequest()
@@ -48,120 +59,17 @@ class TFCEligibilityControllerSpec extends CCConfigSpec with FakeCCEligibilityAp
     }
 
     "accept valid json should return Json body" in {
-      val controller = new TFCEligibilityController {
-        override val tfcEligibility = mock[TFCEligibility]
-        override val auditEvent = mock[AuditEvents]
-      }
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/eligibility_input_test.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.tfcEligibility.eligibility(any[TFCEligibilityInput]())(any[play.api.mvc.Request[_]], any[HeaderCarrier])).
-        thenReturn(Future.successful(TFCEligibilityOutput(LocalDate.now(), LocalDate.now, false, false, Nil)))
-      val result = await(controller.eligible(request))
+
+      val result = await(SUT.eligible(request))
       status(result) shouldBe Status.OK
-    }
-
-    "accept valid json scenario and return a valid response (TFC start date provided)" in {
-      val controller = new TFCEligibilityController {
-        override val tfcEligibility = mock[TFCEligibility]
-        override val auditEvent = mock[AuditEvents]
-      }
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/eligibility_input_test.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[TFCEligibilityInput]
-      val eligibilityResult = TFCEligibility.eligibility(JsonResult.get)
-
-      when(controller.tfcEligibility.eligibility(mockEq(JsonResult.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligibilityResult))
-      val result = await(controller.eligible(request))
-
-      val outputJson = Json.parse(
-        s"""
-        {
-                  "from": "2016-08-27",
-                  "until": "2017-05-27",
-                  "householdEligibility": true,
-                  "tfcRollout":true,
-                   "periods": [
-                    {
-                      "from" : "2016-08-27",
-                      "until" : "2016-11-27",
-                      "periodEligibility" : true,
-                      "claimants" : [
-                       {
-                        "qualifying" : true,
-                        "isPartner" : false
-                       }
-                      ],
-                      "children" : [
-                       {
-                        "id" : 0,
-                        "qualifying" : true,
-                        "from" : "2016-08-27",
-                        "until" : "2016-11-27",
-                        "tfcRollout":true
-                       }
-                      ]
-                    },
-                    {
-                      "from" : "2016-11-27",
-                      "until" : "2017-02-27",
-                      "periodEligibility" : true,
-                      "claimants" : [
-                       {
-                        "qualifying" : true,
-                        "isPartner" : false
-                       }
-                      ],
-                      "children" : [
-                       {
-                        "id" : 0,
-                        "qualifying" : true,
-                        "from" : "2016-11-27",
-                        "until" : "2017-02-27",
-                        "tfcRollout":true
-                       }
-                      ]
-                    },
-                    {
-                      "from" : "2017-02-27",
-                      "until" : "2017-05-27",
-                      "periodEligibility" : true,
-                      "claimants" : [
-                       {
-                        "qualifying" : true,
-                        "isPartner" : false
-                       }
-                      ],
-                      "children" : [
-                       {
-                        "id" : 0,
-                        "qualifying" : true,
-                        "from" : "2017-02-27",
-                        "until" : "2017-05-27",
-                        "tfcRollout":true
-                       }
-                      ]
-                    }
-                   ]
-        }
-        """.stripMargin)
-
-      status(result) shouldBe Status.OK
-      jsonBodyOf(result) shouldBe outputJson
+      jsonBodyOf(result) shouldBe Json.toJson(validTFCEligibilityOutput)
     }
 
     "return Internal Server Error with error message if an exception is thrown during eligibility" in {
-      val controller = new TFCEligibilityController {
-        override val tfcEligibility = mock[TFCEligibility]
-        override val auditEvent = mock[AuditEvents]
-      }
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/eligibility_input_test.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[TFCEligibilityInput]
-
-      when(controller.tfcEligibility.eligibility(mockEq(JsonResult.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).
+      when(SUT.tfcEligibility.eligibility(any[TFCEligibilityInput]())(any[play.api.mvc.Request[_]], any[HeaderCarrier])).
         thenReturn(Future.failed(new Exception("Something bad happened in Eligibility")))
-      val result = await(controller.eligible(request))
+
       val outputJSON = Json.parse(
         """
           |{
@@ -169,80 +77,50 @@ class TFCEligibilityControllerSpec extends CCConfigSpec with FakeCCEligibilityAp
           |    "error": "Something bad happened in Eligibility"
           |}
         """.stripMargin)
+      withCallToPOST(validTFCEligibilityInputJson){ result =>
 
-      status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-      jsonBodyOf(result) shouldBe outputJSON
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        result.flatMap{r => jsonBodyOf(r) shouldBe outputJSON}
+      }
     }
 
     "accept invalid json with incorrect from date format should return a bad request" in {
-      val controller = new TFCEligibilityController {
-        override val tfcEligibility = mock[TFCEligibility]
-        override val auditEvent = mock[AuditEvents]
-      }
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/incorrect_from_date_format.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.tfcEligibility.eligibility(any[TFCEligibilityInput]())(any[play.api.mvc.Request[_]], any[HeaderCarrier])).
-        thenReturn(Future.successful(TFCEligibilityOutput(LocalDate.now(), LocalDate.now, false, false, Nil)))
-      val result = await(controller.eligible(request))
-      status(result) shouldBe Status.BAD_REQUEST
+      val inputJson = JsonLoader.fromResource("/json/input/tfc/incorrect_from_date_format.json").toString
+
+      withCalltoPOSTInvalidPayload(inputJson){ result =>
+        status(result) shouldBe Status.BAD_REQUEST
+      }
     }
 
     "accept a valid json if number of claimant/s less than 1 should return 400" in {
-      val controller = new TFCEligibilityController {
-        override val tfcEligibility = mock[TFCEligibility]
-        override val auditEvent = mock[AuditEvents]
-      }
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/no_claimants.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.tfcEligibility.eligibility(any[TFCEligibilityInput]())(any[play.api.mvc.Request[_]], any[HeaderCarrier])).
-        thenReturn(Future.successful(TFCEligibilityOutput(LocalDate.now(), LocalDate.now, false, false, Nil)))
-      val result = await(controller.eligible(request))
-      status(result) shouldBe 400
+      val inputJson = JsonLoader.fromResource("/json/input/tfc/incorrect_from_date_format.json").toString
+
+      withCalltoPOSTInvalidPayload(inputJson){ result =>
+        status(result) shouldBe 400
+      }
     }
 
     "accept invalid json if child id has negative value should return 400" in {
-      val controller = new TFCEligibilityController {
-        override val tfcEligibility = mock[TFCEligibility]
-        override val auditEvent = mock[AuditEvents]
-      }
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/negative_child_id.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.tfcEligibility.eligibility(any[TFCEligibilityInput]())(any[play.api.mvc.Request[_]], any[HeaderCarrier])).
-        thenReturn(Future.successful(TFCEligibilityOutput(LocalDate.now(), LocalDate.now, false, false, Nil)))
-      val result = await(controller.eligible(request))
-      status(result) shouldBe 400
+      val inputJson = JsonLoader.fromResource("/json/input/tfc/negative_child_id.json").toString
+      withCalltoPOSTInvalidPayload(inputJson){ result =>
+        status(result) shouldBe 400
+      }
     }
 
     "accept a valid json if number of children more than 25 should return bad request" in {
-      val controller = new TFCEligibilityController {
-        override val tfcEligibility = mock[TFCEligibility]
-        override val auditEvent = mock[AuditEvents]
-      }
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/invalid_no_of_children.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.tfcEligibility.eligibility(any[TFCEligibilityInput]())(any[play.api.mvc.Request[_]], any[HeaderCarrier])).
-        thenReturn(Future.successful(TFCEligibilityOutput(LocalDate.now(), LocalDate.now, false, false, Nil)))
-      val result = await(controller.eligible(request))
-      status(result) shouldBe BAD_REQUEST
+      val inputJson = JsonLoader.fromResource("/json/input/tfc/invalid_no_of_children.json").toString
+      withCalltoPOSTInvalidPayload(inputJson){ result =>
+        status(result) shouldBe BAD_REQUEST
+      }
     }
 
     "accept valid json scenario when claimant selected carer's allowance and return a valid response (TFC start date provided)" in {
-      val controller = new TFCEligibilityController {
-        override val tfcEligibility = mock[TFCEligibility]
-        override val auditEvent = mock[AuditEvents]
-      }
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_parent.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[TFCEligibilityInput]
-      val eligibilityResult = TFCEligibility.eligibility(JsonResult.get)
 
-      when(controller.tfcEligibility.eligibility(mockEq(JsonResult.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).
-        thenReturn(Future.successful(eligibilityResult))
-      val result = await(controller.eligible(request))
+      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_parent.json").toString)
 
       val outputJson = Json.parse(
         s"""
@@ -328,22 +206,18 @@ class TFCEligibilityControllerSpec extends CCConfigSpec with FakeCCEligibilityAp
         }
         """.stripMargin)
 
-      status(result) shouldBe Status.OK
-      jsonBodyOf(result) shouldBe outputJson
+      withCallToPOST(inputJson){ res =>
+        res.flatMap{ result =>
+          status(result) shouldBe Status.OK
+          jsonBodyOf(result) shouldBe outputJson
+        }
+      }
+    }
     }
 
     "accept valid json scenario when partner selected carer's allowance and return a valid response (TFC start date provided)" in {
-      val controller = new TFCEligibilityController {
-        override val tfcEligibility = mock[TFCEligibility]
-        override val auditEvent = mock[AuditEvents]
-      }
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_partner.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[TFCEligibilityInput]
-      val eligibilityResult = TFCEligibility.eligibility(JsonResult.get)
 
-      when(controller.tfcEligibility.eligibility(mockEq(JsonResult.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligibilityResult))
-      val result = await(controller.eligible(request))
+      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_partner.json").toString)
 
       val outputJson = Json.parse(
         s"""
@@ -429,22 +303,17 @@ class TFCEligibilityControllerSpec extends CCConfigSpec with FakeCCEligibilityAp
         }
         """.stripMargin)
 
-      status(result) shouldBe Status.OK
-      jsonBodyOf(result) shouldBe outputJson
+      withCallToPOST(inputJson){  res =>
+        res.flatMap{ result =>
+          status(result) shouldBe Status.OK
+          jsonBodyOf(result) shouldBe outputJson
+        }
+      }
     }
 
     "accept valid json scenario when parent and partner selected carer's allowance with parent and partner do not qualify and return a valid response  (TFC start date provided)" in {
-      val controller = new TFCEligibilityController {
-        override val tfcEligibility = mock[TFCEligibility]
-        override val auditEvent = mock[AuditEvents]
-      }
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_both.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[TFCEligibilityInput]
-      val eligibilityResult = TFCEligibility.eligibility(JsonResult.get)
 
-      when(controller.tfcEligibility.eligibility(mockEq(JsonResult.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligibilityResult))
-      val result = await(controller.eligible(request))
+      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_both.json").toString)
 
       val outputJson = Json.parse(
         s"""
@@ -530,22 +399,17 @@ class TFCEligibilityControllerSpec extends CCConfigSpec with FakeCCEligibilityAp
         }
         """.stripMargin)
 
-      status(result) shouldBe Status.OK
-      jsonBodyOf(result) shouldBe outputJson
+      withCallToPOST(inputJson){  res =>
+        res.flatMap{ result =>
+          status(result) shouldBe Status.OK
+          jsonBodyOf(result) shouldBe outputJson
+        }
+      }
     }
 
     "accept valid json scenario when parent and partner selected carer's allowance with partner hours and return a valid response (TFC start date provided)" in {
-      val controller = new TFCEligibilityController {
-        override val tfcEligibility = mock[TFCEligibility]
-        override val auditEvent = mock[AuditEvents]
-      }
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_hours_both.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[TFCEligibilityInput]
-      val eligibilityResult = TFCEligibility.eligibility(JsonResult.get)
 
-      when(controller.tfcEligibility.eligibility(mockEq(JsonResult.get))(any[play.api.mvc.Request[_]], any[HeaderCarrier])).thenReturn(Future.successful(eligibilityResult))
-      val result = await(controller.eligible(request))
+      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_hours_both.json").toString)
 
       val outputJson = Json.parse(
         s"""
@@ -631,10 +495,35 @@ class TFCEligibilityControllerSpec extends CCConfigSpec with FakeCCEligibilityAp
         }
         """.stripMargin)
 
-      status(result) shouldBe Status.OK
-      jsonBodyOf(result) shouldBe outputJson
-    }
+      withCallToPOST(inputJson){  res =>
+        res.flatMap{ result =>
+          status(result) shouldBe Status.OK
+          jsonBodyOf(result) shouldBe outputJson
+        }
+      }
   }
 
+  val validTFCEligibilityInputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/input/tfc/eligibility_input_test.json").toString)
 
+  val validTFCEligibilityOutput: TFCEligibilityOutput = TFCEligibilityOutput(LocalDate.now(), LocalDate.now, false, false, Nil)
+
+  val SUT = new TFCEligibilityController {
+    override val tfcEligibility = mock[TFCEligibility]
+    override val auditEvent = mock[AuditEvents]
+  }
+  val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(validTFCEligibilityInputJson)
+
+  private def withCalltoPOSTInvalidPayload(payload: String)(handler: Future[Result] => Any) = {
+    handler(SUT.eligible.apply(registerRequestWithPayload(Json.parse(payload))))
+  }
+
+  private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {
+    handler(SUT.eligible.apply(registerRequestWithPayload(payload)))
+  }
+  private def registerRequestWithPayload(payload: JsValue): Request[JsValue] = FakeRequest(
+    "POST",
+    "",
+    FakeHeaders(),
+    payload
+  ).withHeaders(CONTENT_TYPE -> "application/json")
 }

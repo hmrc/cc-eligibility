@@ -18,7 +18,9 @@ trait MicroService {
   lazy val scoverageSettings = {
     import scoverage._
     Seq(
-      ScoverageKeys.coverageExcludedPackages :=  "<empty>;Reverse.*;.*Routes.*;routes_routing.*;uk.gov.hmrc;.*EnumUtils.*;models.output.*;config.*;",
+      //ScoverageKeys.coverageExcludedPackages :=  "Reverse.*;.*Routes.*;routes_routing.*;",
+
+      ScoverageKeys.coverageExcludedPackages :=  "<empty>;Reverse.*;.*Routes.*;routes_routing.*;uk.gov.hmrc;.*EnumUtils.*;config.*;",
       ScoverageKeys.coverageMinimum := 95,
       ScoverageKeys.coverageFailOnMinimum := true,
       ScoverageKeys.coverageHighlighting := true
