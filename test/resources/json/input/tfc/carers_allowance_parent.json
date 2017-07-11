@@ -12,8 +12,7 @@
           },
           "carersAllowance":true,
           "minimumEarnings": {
-            "selection": false,
-            "amount": 1
+            "selection": false
           }
         },
         {

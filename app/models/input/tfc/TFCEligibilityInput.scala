@@ -65,21 +65,6 @@ case class TFCEligibilityInput(
       parentSatisfy
     }
   }
-
-  def validHouseholdHours  : Boolean = {
-    val parent = claimants.head
-    if(claimants.length > 1) {
-      val partner = claimants.last
-      (parent.isWorkingAtLeast16HoursPerWeek(from, location), partner.isWorkingAtLeast16HoursPerWeek(from, location)) match {
-        case (true,true) => true
-        case (true, false) => partner.carersAllowance
-        case (false, true) => parent.carersAllowance
-        case _ =>   false
-      }
-    } else {
-      parent.isWorkingAtLeast16HoursPerWeek(from, location)
-    }
-  }
 }
 
 object TFCEligibilityInput extends CCFormat with MessagesObject {
@@ -168,17 +153,18 @@ case class TFCClaimant(
       isTotalIncomeLessThan100000(periodStart, location)
   }
 
+  def getNWMPerAge(taxYearConfig: TFCTaxYearConfig): (Int, String) = age match {
+    case Some("under-18") => (taxYearConfig.nmwUnder18, "under-18")
+    case Some("18-20") => (taxYearConfig.nmw18To20, "18-20")
+    case Some("21-24") => (taxYearConfig.nmw21To24, "21-24")
+    case _ => (taxYearConfig.nmw25Over, "25 or over") //25 or over
+  }
+
   def satisfyMinimumEarnings(periodStart: LocalDate, parent: Boolean, location:String)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
     val user = if(parent) {
       "Parent"
     } else {
       "Partner"
-    }
-    def getNWMPerAge(taxYearConfig: TFCTaxYearConfig): (Int, String) = age match {
-      case Some("under-18") => (taxYearConfig.nmwUnder18, "under-18")
-      case Some("18-20") => (taxYearConfig.nmw18To20, "18-20")
-      case Some("21-24") => (taxYearConfig.nmw21To24, "21-24")
-      case _ => (taxYearConfig.nmw25Over, "25 or over") //25 or over
     }
 
     val taxYearConfig = TFCConfig.getConfig(periodStart, location)
