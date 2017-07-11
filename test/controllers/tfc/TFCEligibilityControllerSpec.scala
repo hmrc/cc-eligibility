@@ -60,7 +60,6 @@ class TFCEligibilityControllerSpec extends CCConfigSpec
 
     "accept valid json should return Json body" in {
 
-
       val result = await(SUT.eligible(request))
       status(result) shouldBe Status.OK
       jsonBodyOf(result) shouldBe Json.toJson(validTFCEligibilityOutput)
