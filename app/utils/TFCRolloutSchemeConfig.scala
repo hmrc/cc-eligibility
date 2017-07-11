@@ -22,7 +22,7 @@ import play.api.Configuration
 
 trait TFCRolloutSchemeConfig extends CCConfig {
 
-  def futureDate = LocalDate.now().plusWeeks(2)
+  def futureDate = StartDate.plusWeeks(2)
 
   def isChildEligibleForTFCRollout(child: TFCChild, isEligibleForTFC: Boolean): Boolean = {
     val tfcRollout: Configuration = loadConfigByType("tfc-rollout")

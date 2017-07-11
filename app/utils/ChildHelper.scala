@@ -20,7 +20,7 @@ import org.joda.time.LocalDate
 
 trait ChildHelper {
 
-  def age(dob: LocalDate, currentDate: LocalDate = LocalDate.now()): Int = {
+  def age(dob: LocalDate, currentDate: LocalDate = CCConfig.StartDate): Int = {
     if (dob.isAfter(currentDate)) {
       -1
     } else {
