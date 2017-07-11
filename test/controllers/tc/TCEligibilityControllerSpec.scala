@@ -54,7 +54,7 @@ class TCEligibilityControllerSpec extends CCConfigSpec with FakeCCEligibilityApp
         override val auditEvent = mock[AuditEvents]
       }
 
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/scenario_1.json").toString)
+      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/eligibility_input_test.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.successful(TCEligibilityOutput(taxYears = Nil)))
@@ -174,93 +174,16 @@ class TCEligibilityControllerSpec extends CCConfigSpec with FakeCCEligibilityApp
       status(result) shouldBe 400
     }
 
-    "Accept json for scenario 1 and return a valid response" in {
-      val controller = new TCEligibilityController {
-        override val tcEligibility = mock[TCEligibility]
-        override val auditEvent = mock[AuditEvents]
-      }
-
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/scenario_1.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[TCEligibilityInput]
-      val eligibilityResult = TCEligibility.eligibility(JsonResult.get)
-
-      when(controller.tcEligibility.eligibility(mockEq(JsonResult.get))).thenReturn(Future.successful(eligibilityResult))
-      val result = await(controller.eligible(request))
-
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val periodStartDate = LocalDate.parse("2016-08-27", formatter)
-      val periodEndDate = LocalDate.parse("2017-04-06", formatter)
-      val outputJson = Json.parse(
-        s"""
-          {
-                "eligible": false,
-                "taxYears": [
-                  {
-                    "from": "${periodStartDate.toString("yyyy-MM-dd")}",
-                    "until": "${periodEndDate.toString("yyyy-MM-dd")}",
-                    "periods": [
-                      {
-                        "from": "${periodStartDate.toString("yyyy-MM-dd")}",
-                        "until": "${periodEndDate.toString("yyyy-MM-dd")}",
-                        "householdElements": {
-                          "basic": false,
-                          "hours30": false,
-                          "childcare": false,
-                          "loneParent": false,
-                          "secondParent": false,
-                          "family": false,
-                          "wtc": true,
-                          "ctc": false
-                        },
-                        "claimants": [
-                          {
-                            "qualifying": true,
-                            "isPartner": false,
-                            "claimantDisability": {
-                              "disability": false,
-                              "severeDisability": false
-                            }
-                          }
-                        ],
-                        "children": [
-                          {
-                            "childcareCost": 3000.00,
-                            "childcareCostPeriod": "Month",
-                            "qualifying": false,
-                            "childElements": {
-                              "child": false,
-                              "youngAdult": false,
-                              "disability": false,
-                              "severeDisability": false,
-                              "childcare": false
-                            }
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ],
-                "wtc": true,
-                "ctc": false
-              }
-        """.stripMargin)
-
-      status(result) shouldBe Status.OK
-      jsonBodyOf(result) shouldBe outputJson
-    }
-
     "Return Internal Server Error with error message if an exception is thrown during eligibility" in {
       val controller = new TCEligibilityController {
         override val tcEligibility = mock[TCEligibility]
         override val auditEvent = mock[AuditEvents]
       }
 
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/scenario_1.json").toString)
+      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tc/eligibility_input_test.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
-      val JsonResult = inputJson.validate[TCEligibilityInput]
 
-      when(controller.tcEligibility.eligibility(mockEq(JsonResult.get))).thenReturn(Future.failed(new Exception("Something bad happened in Eligibility")))
+      when(controller.tcEligibility.eligibility(any[TCEligibilityInput]())).thenReturn(Future.failed(new Exception("Something bad happened in Eligibility")))
       val result = await(controller.eligible(request))
       val outputJSON = Json.parse(
         """

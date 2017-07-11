@@ -18,7 +18,7 @@ package utils
 
 import controllers.FakeCCEligibilityApplication
 import play.api.i18n.Messages
-import play.api.libs.json.{JsString, Json}
+import play.api.libs.json.{JsError, JsString, Json}
 import spec.CCConfigSpec
 
 /**
@@ -78,6 +78,16 @@ class PeriodsSpec extends CCConfigSpec with FakeCCEligibilityApplication {
       Periods.toString(invalid) shouldBe getMessages("cc.period.invalid")
     }
 
+  }
+
+  "Enumutils" should {
+    "return JsError" in {
+      class test extends Enumeration
+
+      val utilRes = EnumUtils.enumFormat(new test).reads(Json.obj("periods" -> "0"))
+
+      utilRes shouldBe JsError("String value expected")
+    }
   }
 
 }
