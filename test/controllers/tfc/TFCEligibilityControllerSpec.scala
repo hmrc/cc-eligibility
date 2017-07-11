@@ -60,9 +60,11 @@ class TFCEligibilityControllerSpec extends CCConfigSpec
 
     "accept valid json should return Json body" in {
 
-      val result = await(SUT.eligible(request))
-      status(result) shouldBe Status.OK
-      jsonBodyOf(result) shouldBe Json.toJson(validTFCEligibilityOutput)
+      withCallToPOST(validTFCEligibilityInputJson){ result =>
+        result.flatMap{r =>
+          jsonBodyOf(r) shouldBe Json.toJson(validTFCEligibilityOutput)
+        }
+      }
     }
 
     "return Internal Server Error with error message if an exception is thrown during eligibility" in {
@@ -510,7 +512,6 @@ class TFCEligibilityControllerSpec extends CCConfigSpec
     override val tfcEligibility = mock[TFCEligibility]
     override val auditEvent = mock[AuditEvents]
   }
-  val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(validTFCEligibilityInputJson)
 
   private def withCalltoPOSTInvalidPayload(payload: String)(handler: Future[Result] => Any) = {
     handler(SUT.eligible.apply(registerRequestWithPayload(Json.parse(payload))))
