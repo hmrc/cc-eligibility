@@ -176,7 +176,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
     }
 
     "(single tax year - 1 period) return a tax year with entitlement periods" in {
-      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_2.json")
+      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/single_tax_year.json")
       val json: JsValue = Json.parse(resource.toString)
       val txYrStartDate = LocalDate.parse("2016-08-27", formatter)
       val txYrEndDate = LocalDate.parse("2017-04-06", formatter)
@@ -202,7 +202,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
     }
 
     "(single tax year - 2 periods) return a tax year with entitlement periods" in {
-      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_13.json")
+      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/single_tax_year_2periods.json")
       val json: JsValue = Json.parse(resource.toString)
 
       val txYrStartDate = LocalDate.parse("2016-08-10", formatter)
@@ -239,7 +239,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
     }
 
     "(multiple tax year - 1 period each) return a tax year with entitlement periods" in {
-      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_19.json")
+      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/multi_tax_year_1period_each.json")
       val json: JsValue = Json.parse(resource.toString)
 
       val txYrStartDate = LocalDate.parse("2016-07-27", formatter)
@@ -286,7 +286,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
     }
 
     "(multiple tax year - (1st TY 2 periods) (2nd TY 1 period)) return a tax year with entitlement periods" in {
-      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_15.json")
+      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/multi_tax_year.json")
       val json: JsValue = Json.parse(resource.toString)
 
       val txYrStartDate = LocalDate.parse("2016-05-27", formatter)
@@ -339,7 +339,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
     }
 
     "(multiple tax year - (1st TY 2 periods) (2nd TY 3 period) (higher education) return a tax year with entitlement periods" in {
-      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_18.json")
+      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/multi_tax_year_multi_periods.json")
       val json: JsValue = Json.parse(resource.toString)
 
       val txYrStartDate = LocalDate.parse("2016-10-27", formatter)
@@ -398,67 +398,8 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
       }
     }
 
-    "(multiple tax year - (1st TY 2 periods) (2nd TY 2 period)) return a tax year with entitlement periods" in {
-      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_20.json")
-      val json: JsValue = Json.parse(resource.toString)
-
-      val txYrStartDate = LocalDate.parse("2016-07-27", formatter)
-      val txYrEndDate = LocalDate.parse("2017-04-06", formatter)
-      val txYr2StartDate = LocalDate.parse("2017-04-06", formatter)
-      val txYr2EndDate = LocalDate.parse("2018-04-06", formatter)
-
-      val period1StartDate = LocalDate.parse("2016-07-27", formatter)
-      val period1EndDate = LocalDate.parse("2016-09-01", formatter)
-
-      val period2StartDate = LocalDate.parse("2016-09-01", formatter)
-      val period2EndDate = LocalDate.parse("2017-04-06", formatter)
-
-      val TxYr2period1StartDate = LocalDate.parse("2017-04-06", formatter)
-      val TxYr2period1EndDate = LocalDate.parse("2017-09-01", formatter)
-
-      val TxYr2period2StartDate = LocalDate.parse("2017-09-01", formatter)
-      val TxYr2period2EndDate = LocalDate.parse("2018-04-06", formatter)
-
-      val result = json.validate[TCEligibilityInput]
-      result match {
-        case JsSuccess(x, _) =>
-          x shouldBe a[TCEligibilityInput]
-
-          val response = TCEligibility.eligibility(x)
-
-          response.isInstanceOf[Future[TCEligibilityOutput]] shouldBe true
-          response.taxYears.length shouldBe 2
-          response.taxYears.head.periods.length shouldBe 2
-          response.taxYears.tail.head.periods.length shouldBe 2
-
-          //taxYear start/end dates
-          response.taxYears.head.from shouldBe txYrStartDate
-          response.taxYears.head.until shouldBe txYrEndDate
-
-          response.taxYears.tail.head.from shouldBe txYr2StartDate
-          response.taxYears.tail.head.until shouldBe txYr2EndDate
-
-          //1st Tax Year period start/end dates
-          response.taxYears.head.periods.head.from shouldBe period1StartDate
-          response.taxYears.head.periods.head.until shouldBe period1EndDate
-
-          response.taxYears.head.periods.tail.head.from shouldBe period2StartDate
-          response.taxYears.head.periods.tail.head.until shouldBe period2EndDate
-
-          //2nd Tax Year period start/end dates
-          response.taxYears.tail.head.periods.head.from shouldBe TxYr2period1StartDate
-          response.taxYears.tail.head.periods.head.until shouldBe TxYr2period1EndDate
-
-          response.taxYears.tail.head.periods.tail.head.from shouldBe TxYr2period2StartDate
-          response.taxYears.tail.head.periods.tail.head.until shouldBe TxYr2period2EndDate
-
-        case JsError(e) =>
-          throw new RuntimeException(e.toList.toString())
-      }
-    }
-
     "(multiple tax year - (1st TY 2 periods split on 15th birthday) (2nd TY 2 period)) return a tax year with entitlement periods" in {
-      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_21.json")
+      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/multi_tax_year_split_periods_onbirthday.json")
       val json: JsValue = Json.parse(resource.toString)
 
       val txYrStartDate = LocalDate.parse("2016-07-27", formatter)
@@ -517,61 +458,8 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
       }
     }
 
-    "(multiple tax year - (1st TY 1 period) (2nd TY 2 period)) return a tax year with entitlement periods" in {
-      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_22.json")
-      val json: JsValue = Json.parse(resource.toString)
-
-      val txYrStartDate = LocalDate.parse("2016-09-10", formatter)
-      val txYrEndDate = LocalDate.parse("2017-04-06", formatter)
-      val txYr2StartDate = LocalDate.parse("2017-04-06", formatter)
-      val txYr2EndDate = LocalDate.parse("2018-04-06", formatter)
-
-      val TxYr1period1StartDate = LocalDate.parse("2016-09-10", formatter)
-      val TxYr1period1EndDate = LocalDate.parse("2017-04-06", formatter)
-
-      val TxYr2period1StartDate = LocalDate.parse("2017-04-06", formatter)
-      val TxYr2period1EndDate = LocalDate.parse("2017-09-01", formatter)
-
-      val TxYr2period2StartDate = LocalDate.parse("2017-09-01", formatter)
-      val TxYr2period2EndDate = LocalDate.parse("2018-04-06", formatter)
-
-      val result = json.validate[TCEligibilityInput]
-      result match {
-        case JsSuccess(x, _) =>
-          x shouldBe a[TCEligibilityInput]
-
-          val response = TCEligibility.eligibility(x)
-
-          response.isInstanceOf[Future[TCEligibilityOutput]] shouldBe true
-          response.taxYears.length shouldBe 2
-          response.taxYears.head.periods.length shouldBe 1
-          response.taxYears.tail.head.periods.length shouldBe 2
-
-          //taxYear start/end dates
-          response.taxYears.head.from shouldBe txYrStartDate
-          response.taxYears.head.until shouldBe txYrEndDate
-
-          response.taxYears.tail.head.from shouldBe txYr2StartDate
-          response.taxYears.tail.head.until shouldBe txYr2EndDate
-
-          //1st Tax Year period 1 start/end dates
-          response.taxYears.head.periods.head.from shouldBe TxYr1period1StartDate
-          response.taxYears.head.periods.head.until shouldBe TxYr1period1EndDate
-
-          //2nd Tax Year period start/end dates
-          response.taxYears.tail.head.periods.head.from shouldBe TxYr2period1StartDate
-          response.taxYears.tail.head.periods.head.until shouldBe TxYr2period1EndDate
-
-          response.taxYears.tail.head.periods.tail.head.from shouldBe TxYr2period2StartDate
-          response.taxYears.tail.head.periods.tail.head.until shouldBe TxYr2period2EndDate
-
-        case JsError(e) =>
-          throw new RuntimeException(e.toList.toString())
-      }
-    }
-
     "(multiple tax years - (1st TY 1 periods) (2nd TY 2 period - split on a child being born)) return a tax year with entitlement periods" in {
-      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_23.json")
+      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/multi_tax_year_split_2ndtaxyear.json")
       val json: JsValue = Json.parse(resource.toString)
 
       val txYrStartDate = LocalDate.parse("2016-09-10", formatter)
@@ -624,7 +512,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
     }
 
     "(multiple tax year - (1st TY 1 period) (2nd TY 3 periods)(child being born in second tax year)) return a tax year with entitlement periods" in {
-      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/scenario_24.json")
+      val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/multi_tax_year_childBorn_2ndtaxyear.json")
       val json: JsValue = Json.parse(resource.toString)
 
       val txYrStartDate = LocalDate.parse("2016-09-10", formatter)
