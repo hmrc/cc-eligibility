@@ -23,6 +23,7 @@ import play.api.Configuration
 import spec.CCConfigSpec
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
+import org.mockito.Matchers._
 
 class SchemeConfigSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
 
@@ -82,7 +83,6 @@ class SchemeConfigSpec extends CCConfigSpec with FakeCCEligibilityApplication wi
     "return config" when {
       "configType is passed" in{
 
-        import org.mockito.Matchers._
 
         val testConfig = new CCConfig{
           override val conf: Configuration = mock[Configuration]
@@ -93,4 +93,35 @@ class SchemeConfigSpec extends CCConfigSpec with FakeCCEligibilityApplication wi
       }
     }
   }
+
+  "determine the current date" in  {
+    val testObj = new CCConfig {
+      override val conf: Configuration = mock[Configuration]
+    }
+
+    when(
+      testObj.conf.getString(anyString(), any())
+    ).thenReturn(
+      None
+    )
+
+    val result = testObj.StartDate
+    result shouldBe LocalDate.now()
+  }
+
+  "determine the current date from config" in  {
+    val testObj = new CCConfig {
+      override val conf = mock[Configuration]
+    }
+
+    when(
+      testObj.conf.getString(anyString(), any())
+    ).thenReturn(
+      Some("2017-02-06")
+    )
+
+    val result = testObj.StartDate
+    result shouldBe LocalDate.parse("2017-02-06")
+  }
+
 }
