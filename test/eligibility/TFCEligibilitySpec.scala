@@ -22,6 +22,7 @@ import models.output.tfc.{TFCEligibilityOutput, TFCOutputChild, TFCOutputClaiman
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.mock.MockitoSugar
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import spec.CCConfigSpec
 import uk.gov.hmrc.play.http.HeaderCarrier
@@ -130,7 +131,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
 
     "determine periods(4 periods) based on from (claim date) and until date of TFC for eligible claimant" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val dateOfBirth = LocalDate.parse("2013-08-27", formatter)
+      val dateOfBirth = LocalDate.parse("2013-01-27", formatter)
       val from = LocalDate.parse("2016-10-15", formatter)
       val until = LocalDate.parse("2017-08-31", formatter)
       val claimant = TFCClaimant(hoursPerWeek = 16.50, isPartner = false,
@@ -157,7 +158,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val outputChild3 = TFCOutputChild(id = 0, qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), tfcRollout = false)
       val outputChild4 = TFCOutputChild(id = 0, qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), tfcRollout = false)
 
-      result shouldBe List(
+      Json.toJson(result) shouldBe Json.toJson(List(
         TFCPeriod(
           from = startPeriod1,
           until = untilPeriod1,
@@ -186,7 +187,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
           claimants = List(outputClaimant),
           children = List(outputChild4)
         )
-      )
+      ))
     }
 
     "determine periods(2 periods) based on from (claim date) and until date of TFC for eligible claimant" in {
