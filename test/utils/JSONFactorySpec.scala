@@ -217,7 +217,12 @@ class JSONFactorySpec extends CCConfigSpec with FakeCCEligibilityApplication {
                         "qualifying" : true,
                         "from" : "2015-06-30",
                         "until" : "2015-09-30",
-                        "tfcRollout":false
+                        "tfcRollout":false,
+                        "childcareCost":0,
+                        "disability": {
+                          "disabled":false,
+                          "severelyDisabled":false
+                          }
                        }
                       ]
                     },
@@ -237,7 +242,12 @@ class JSONFactorySpec extends CCConfigSpec with FakeCCEligibilityApplication {
                         "qualifying" : true,
                         "from" : "2015-09-30",
                         "until" : "2015-12-30",
-                        "tfcRollout":false
+                        "tfcRollout":false,
+                        "childcareCost":0,
+                        "disability": {
+                          "disabled":false,
+                          "severelyDisabled":false
+                          }
                        }
                       ]
                     }

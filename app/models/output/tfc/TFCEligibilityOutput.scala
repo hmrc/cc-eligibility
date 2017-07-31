@@ -57,9 +57,20 @@ case class TFCOutputChild(
                         qualifying: Boolean,
                         from: Option[LocalDate],
                         until: Option[LocalDate],
-                        tfcRollout: Boolean //Not required in frontend
+                        tfcRollout: Boolean, //Not required in frontend
+                        childcareCost: BigDecimal = BigDecimal(0),
+                        disability: TFCDisability = TFCDisability()
                         )
 
 object TFCOutputChild {
-  implicit val childWrites : Writes[TFCOutputChild] = Json.writes[TFCOutputChild]
+  implicit val childWrites: Writes[TFCOutputChild] = Json.writes[TFCOutputChild]
+}
+
+case class TFCDisability(
+                          disabled: Boolean = false,
+                          severelyDisabled: Boolean = false
+                          )
+
+object TFCDisability  {
+  implicit val disability: Writes[TFCDisability] = Json.writes[TFCDisability]
 }
