@@ -299,7 +299,8 @@ class JSONFactorySpec extends CCConfigSpec with FakeCCEligibilityApplication {
                                  "qualifying":true,
                                  "isPartner":false,
                                  "eligibleMonthsInPeriod":11,
-                                 "vouchers":true
+                                 "vouchers":true,
+                                 "escStartDate":"${LocalDate.now().toString()}"
                               }
                            ],
                            "children": [
@@ -315,7 +316,8 @@ class JSONFactorySpec extends CCConfigSpec with FakeCCEligibilityApplication {
                ],
                 "eligibility":false,
                 "parentEligibility":false,
-                "partnerEligibility":false
+                "partnerEligibility":false,
+                "location": ""
       }
         """.stripMargin)
 

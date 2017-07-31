@@ -24,7 +24,8 @@ case class ESCEligibilityOutput(
                                  taxYears: List[ESCTaxYear],
                                  eligibility: Boolean = false,
                                  parentEligibility: Boolean = false,
-                                 partnerEligibility: Boolean = false
+                                 partnerEligibility: Boolean = false,
+                                 location: String = ""
                               )
 
 object ESCEligibilityOutput {
@@ -56,12 +57,24 @@ case class ESCClaimant(
                            qualifying: Boolean = false,
                            isPartner: Boolean = false,
                            eligibleMonthsInPeriod: Int = 0,
-                           vouchers: Boolean = false
+                           previousIncome: Option[ESCIncome] = None,
+                           currentIncome: Option[ESCIncome] = None,
+                           vouchers: Boolean = false,
+                           escStartDate: LocalDate = LocalDate.now
                          )
 
 //escAmount can be a voucher amount, childcare bursary amount or directly contracted amount
 object ESCClaimant {
   implicit val claimantWrites: Writes[ESCClaimant] = Json.writes[ESCClaimant]
+}
+
+case class ESCIncome(
+                      employmentIncome : Option[BigDecimal] = None,
+                      pension : Option[BigDecimal] = None
+                      )
+
+object ESCIncome {
+  implicit val incomeWrite: Writes[ESCIncome] = Json.writes[ESCIncome]
 }
 
 case class ESCChild(

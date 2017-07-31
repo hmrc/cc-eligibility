@@ -21,6 +21,7 @@ import controllers.FakeCCEligibilityApplication
 import eligibility.ESCEligibility
 import models.input.esc.ESCEligibilityInput
 import models.output.esc.ESCEligibilityOutput
+import org.joda.time.LocalDate
 import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
@@ -128,7 +129,8 @@ class ESCEligibilityControllerSpec extends CCConfigSpec with FakeCCEligibilityAp
                                   "qualifying": false,
                                   "isPartner": false,
                                   "eligibleMonthsInPeriod": 0,
-                                  "vouchers": false
+                                  "vouchers": false,
+                                  "escStartDate":"${LocalDate.now().toString()}"
                               }
                           ],
                           "children":[
@@ -144,7 +146,8 @@ class ESCEligibilityControllerSpec extends CCConfigSpec with FakeCCEligibilityAp
           ],
           "eligibility":false,
           "parentEligibility":false,
-          "partnerEligibility":false
+          "partnerEligibility":false,
+          "location": ""
         }
         """.stripMargin)
 
