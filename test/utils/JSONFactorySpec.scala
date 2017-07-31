@@ -115,6 +115,8 @@ class JSONFactorySpec extends CCConfigSpec with FakeCCEligibilityApplication {
                   {
                     "from": "${periodStartDate.toString("yyyy-MM-dd")}",
                     "until": "${periodEndDate.toString("yyyy-MM-dd")}",
+                    "currentHouseholdIncome": {},
+                    "previousHouseholdIncome": {},
                     "periods": [
                       {
                         "from": "${periodStartDate.toString("yyyy-MM-dd")}",
@@ -136,7 +138,8 @@ class JSONFactorySpec extends CCConfigSpec with FakeCCEligibilityApplication {
                             "claimantDisability": {
                               "disability": false,
                               "severeDisability": false
-                            }
+                            },
+                            "doesNotTaper": false
                           }
                         ],
                         "children": [
