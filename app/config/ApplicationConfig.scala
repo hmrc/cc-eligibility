@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package models.output
+package config
 
-import models.output.esc.ESCEligibilityOutput
-import models.output.tc.TCEligibilityOutput
-import models.output.tfc.TFCEligibilityOutput
-import play.api.libs.json.{Json, Writes}
+import uk.gov.hmrc.play.config.ServicesConfig
 
-case class CalculatorInput(tc: Option[TCEligibilityOutput], tfc: Option[TFCEligibilityOutput], esc: Option[ESCEligibilityOutput])
+object ApplicationConfig extends ApplicationConfig
 
-object CalculatorInput {
-  implicit val calculatorInput: Writes[CalculatorInput] = Json.writes[CalculatorInput]
+trait ApplicationConfig extends ServicesConfig {
+
+  lazy val calculatorUrl = baseUrl("cc-calculator") + getString("microservice.services.cc-calculator.url")
+
 }

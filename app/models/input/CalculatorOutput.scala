@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package models.output
+package models.input
 
-import models.output.esc.ESCEligibilityOutput
-import models.output.tc.TCEligibilityOutput
-import models.output.tfc.TFCEligibilityOutput
-import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.{Reads, Json}
 
-case class CalculatorInput(tc: Option[TCEligibilityOutput], tfc: Option[TFCEligibilityOutput], esc: Option[ESCEligibilityOutput])
+case class CalculatorOutput(tcAmount: Option[BigDecimal], tfcAmount: Option[BigDecimal], escAmount: Option[BigDecimal])
 
-object CalculatorInput {
-  implicit val calculatorInput: Writes[CalculatorInput] = Json.writes[CalculatorInput]
+object CalculatorOutput {
+  implicit val calculatorOutput: Reads[CalculatorOutput] = Json.reads[CalculatorOutput]
 }

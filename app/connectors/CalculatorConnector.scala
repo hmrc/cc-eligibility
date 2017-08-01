@@ -14,15 +14,23 @@
  * limitations under the License.
  */
 
-package models.output
+package connectors
 
-import models.output.esc.ESCEligibilityOutput
-import models.output.tc.TCEligibilityOutput
-import models.output.tfc.TFCEligibilityOutput
-import play.api.libs.json.{Json, Writes}
+import config.{WSHttp, ApplicationConfig}
+import models.input.CalculatorOutput
+import models.output.CalculatorInput
+import uk.gov.hmrc.play.http.{HeaderCarrier, HttpPost}
+import scala.concurrent.Future
 
-case class CalculatorInput(tc: Option[TCEligibilityOutput], tfc: Option[TFCEligibilityOutput], esc: Option[ESCEligibilityOutput])
+object CalculatorConnector extends CalculatorConnector {
+  override val httpPost: HttpPost = WSHttp
+}
 
-object CalculatorInput {
-  implicit val calculatorInput: Writes[CalculatorInput] = Json.writes[CalculatorInput]
+trait CalculatorConnector {
+
+  val httpPost: HttpPost
+
+  def getCalculatorResult(calculatorInput: CalculatorInput)(implicit hc: HeaderCarrier): Future[CalculatorOutput] = {
+    httpPost.POST[CalculatorInput, CalculatorOutput](ApplicationConfig.calculatorUrl, calculatorInput)
+  }
 }
