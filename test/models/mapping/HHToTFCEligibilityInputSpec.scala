@@ -64,7 +64,7 @@ val SUT = HHToTFCEligibilityInput
           statutoryIncome = None
         )),
         hours = Some(4567),
-        minimumEarnings = None,
+        minimumEarnings = Some(MinimumEarnings(BigDecimal(2313),Some(EmploymentStatusEnum.SELFEMPLOYED),Some(true))),
         escVouchers = Some(YesNoUnsureBothEnum.YES)
       )
       val partner = Claimant(
@@ -90,7 +90,8 @@ val SUT = HHToTFCEligibilityInput
       val hhModel = Household(None, Some(LocationEnum.ENGLAND), true, List(hhChild1, hhChild2), parent, Some(partner))
 
       val expectedOutput = TFCEligibilityInput(LocalDate.parse("2017-08-02", formatter),4,"england",
-        List(TFCClaimant(None,Some(TFCIncome(Some(12212),Some(47674),Some(647864),Some(546))),4567.0,false,TFCDisability(false,false),false,TFCMinimumEarnings(true,0.0),Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString),None,None),
+        List(TFCClaimant(None,Some(TFCIncome(Some(12212),Some(47674),Some(647864),Some(546))),4567.0,false,TFCDisability(false,false),false,
+          TFCMinimumEarnings(true,2313),Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString),Some(Some(EmploymentStatusEnum.SELFEMPLOYED).toString),Some(true)),
             TFCClaimant(None,Some(TFCIncome(Some(12212),Some(47674),Some(647864),Some(546))),4567.0,true,TFCDisability(false,false),false,TFCMinimumEarnings(true,0.0),Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString),None,None)),
         List(TFCChild(0,350,Periods.Monthly,LocalDate.parse("2016-08-31", formatter),TFCDisability(true,false)),
               TFCChild(1,1000,Periods.Monthly,LocalDate.parse("2016-08-31", formatter),TFCDisability(true,false))))

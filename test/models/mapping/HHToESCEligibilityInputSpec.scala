@@ -32,6 +32,8 @@ class HHToESCEligibilityInputSpec extends UnitSpec
   with FakeCCEligibilityApplication
   with CCConfigSpec {
 
+  val SUT = HHToESCEligibilityInput
+
   "ESCMapping" should {
 
     val mockObject = new HHToESCEligibilityInput {
@@ -218,10 +220,6 @@ class HHToESCEligibilityInputSpec extends UnitSpec
         mockObject.convert(household) shouldBe res
       }
     }
-  }
-  val SUT = HHToESCEligibilityInput
-
-  "HHToESCEligibilityInput" should {
 
     "accept a valid Household model and return a valid ESCEligibilityInput model" in {
 
