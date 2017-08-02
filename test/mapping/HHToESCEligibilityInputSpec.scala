@@ -30,7 +30,7 @@ class HHToESCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApp
 
 val SUT = HHToESCEligibilityInput
 
-  "ESCInputEligibility" should {
+  "HHToESCEligibilityInput" should {
 
     "accept a valid Household model and return a valid ESCEligibilityInput model" in {
 
@@ -64,8 +64,7 @@ val SUT = HHToESCEligibilityInput
           otherIncome = Some(647864),
           benefits = Some(546),
           statutoryIncome = None
-        )
-        ),
+        )),
         hours = Some(4567),
         minimumEarnings = None,
         escVouchers = Some(YesNoUnsureBothEnum.YES)
@@ -84,24 +83,23 @@ val SUT = HHToESCEligibilityInput
           otherIncome = Some(647864),
           benefits = Some(546),
           statutoryIncome = None
-        )
-        ),
+        )),
         hours = Some(4567),
         minimumEarnings = None,
         escVouchers = Some(YesNoUnsureBothEnum.NOTSURE)
       )
+
       val hhModel = Household(None, Some(LocationEnum.ENGLAND), true, List(hhChild1, hhChild2), parent, Some(partner))
 
       val expectedOutput = ESCEligibilityInput(List(
-        ESCTaxYear(LocalDate.parse("2016-08-31", formatter), LocalDate.parse("2016-08-31", formatter),
+        ESCTaxYear(LocalDate.parse("2017-08-02", formatter), LocalDate.parse("2018-04-06", formatter),
       List(ESCClaimant(false,true), ESCClaimant(true,true)),List(ESCChild(1,LocalDate.parse("2016-08-31", formatter),350,Periods.Monthly,ESCDisability(true,false)),
           ESCChild(1,LocalDate.parse("2016-08-31", formatter),1000,Periods.Monthly,ESCDisability(true,false)))),
-        ESCTaxYear(LocalDate.parse("2016-08-31", formatter),LocalDate.parse("2016-08-31", formatter),
+        ESCTaxYear(LocalDate.parse("2018-04-06", formatter),LocalDate.parse("2018-08-02", formatter),
       List(ESCClaimant(false,true), ESCClaimant(true,true)),List(ESCChild(1,LocalDate.parse("2016-08-31", formatter),350,Periods.Monthly,ESCDisability(true,false)),
             ESCChild(1,LocalDate.parse("2016-08-31", formatter),1000,Periods.Monthly,ESCDisability(true,false))))))
 
       val output = SUT.convert(hhModel)
-      println(output)
       output.isInstanceOf[ESCEligibilityInput] shouldBe true
       output shouldBe expectedOutput
     }
