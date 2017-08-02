@@ -26,6 +26,8 @@ import scala.util.Try
 
 object ApplicationConfig extends ServicesConfig {
 
+  lazy val tfcNoOfPeriods: Short = getInt("tfc.number.of.periods").toShort
+
   val localDate: String = Try(getString("local-date")).getOrElse("")
   val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
   def startDate: LocalDate = if(localDate.isEmpty) LocalDate.now() else LocalDate.parse(localDate, formatter)

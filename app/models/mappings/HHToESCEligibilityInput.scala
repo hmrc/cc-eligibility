@@ -64,7 +64,7 @@ object HHToESCEligibilityInput {
   private def hhChildToESCEligibilityInputChild(hhChildren: List[Child]): List[ESCChild] = {
     hhChildren map (child => {
       ESCChild(
-        id = 1,
+        id = child.id,
         dob = child.dob.get,
         childCareCost = child.childcareCost match {
           case Some(childcareCost) => childcareCost.amount.getOrElse(BigDecimal(0.00))
