@@ -127,7 +127,7 @@ object Claimant {
 case class Household(
                       tcUcBenefits: Option[TcUcBenefitsEnum] =   None,
                       location: Option[LocationEnum] =   None,
-                      hasPartner: Boolean =   false,
+                      hasPartner: Boolean = false,
                       children: List[Child],
                       parent: Claimant,
                       partner: Option[Claimant]

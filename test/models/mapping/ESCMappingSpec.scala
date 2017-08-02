@@ -58,17 +58,12 @@ class ESCMappingSpec extends UnitSpec with MockitoSugar with FakeCCEligibilityAp
       "periodEnum is invalid"in {
         ESCMapping.periodEnumToPeriods(PeriodEnum.INVALID) shouldBe Periods.INVALID
       }
-
-      "periodEnum is daily"in {
-        ESCMapping.periodEnumToPeriods(PeriodEnum.DAILY) shouldBe Periods.INVALID
-      }
-
     }
 
     "convert Household into ESCEligibilityInput" when {
       "given a household with parent and no partner no children" in {
 
-        val household = Household( children = Nil,
+        val household = Household( children = Nil, hasPartner = false,
           parent = Claimant(escVouchers = Some(YesNoUnsureBothEnum.YES)),
           partner = None)
 
@@ -87,7 +82,7 @@ class ESCMappingSpec extends UnitSpec with MockitoSugar with FakeCCEligibilityAp
 
       "given a household with parent and a partner with no children" in {
 
-        val household = Household( children = Nil,
+        val household = Household(children = Nil, hasPartner = true,
           parent = Claimant(escVouchers = Some(YesNoUnsureBothEnum.NOTSURE)),
           partner = Some(Claimant(escVouchers = Some(YesNoUnsureBothEnum.NO))))
 
@@ -120,6 +115,7 @@ class ESCMappingSpec extends UnitSpec with MockitoSugar with FakeCCEligibilityAp
 
         val household = Household(
           children = children,
+          hasPartner = true,
           parent = Claimant(
             escVouchers = Some(YesNoUnsureBothEnum.YES)
           ),
@@ -190,6 +186,7 @@ class ESCMappingSpec extends UnitSpec with MockitoSugar with FakeCCEligibilityAp
 
         val household = Household(
           children = children,
+          hasPartner = true,
           parent = Claimant(escVouchers = Some(YesNoUnsureBothEnum.YES)),
           partner = Some(
             Claimant(escVouchers = Some(YesNoUnsureBothEnum.NO))

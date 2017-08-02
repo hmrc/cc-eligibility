@@ -16,8 +16,6 @@
 
 package models.mappings
 
-import java.util.{Calendar, Date}
-
 import models.input.esc._
 import org.joda.time.LocalDate
 import utils.{CCConfig, Periods}
@@ -27,10 +25,11 @@ trait ESCMapping {
   val cCConfig: CCConfig
 
   def convert(household: Household): ESCEligibilityInput = {
-    ESCEligibilityInput(createTaxYears(household.parent, household.partner, household.children))
+    ESCEligibilityInput(createTaxYears(household.hasPartner, household.parent, household.partner, household.children))
   }
 
   private def createTaxYears(
+                              hasPartner: Boolean,
                               parent: Claimant,
                               partner: Option[Claimant],
                               children: List[Child]
@@ -38,7 +37,7 @@ trait ESCMapping {
 
     val now = cCConfig.StartDate
     val april6thCurrentYear = determineApril6DateFromNow(now)
-    val claimantList = createClaimants(parent, partner)
+    val claimantList = createClaimants(hasPartner, parent, partner)
     val childList = createChildren(children)
 
     List(
@@ -59,7 +58,7 @@ trait ESCMapping {
 
   private def determineApril6DateFromNow(from: LocalDate): LocalDate = {
     val periodYear = from.getYear
-    val january1st =  LocalDate.parse(s"${periodYear}-01-01")
+    val january1st = LocalDate.parse(s"${periodYear}-01-01")
     val april6CurrentYear = LocalDate.parse(s"${periodYear}-04-06")
 
     if ((from.compareTo(january1st) == 0 || (from.isAfter(january1st)) && from.isBefore(april6CurrentYear))) {
@@ -69,14 +68,15 @@ trait ESCMapping {
     }
   }
 
-  private def createClaimants(parent: Claimant,
+  private def createClaimants(hasPartner: Boolean,
+                              parent: Claimant,
                               partner: Option[Claimant]): List[ESCClaimant] = {
 
     val newParent = ESCClaimant(
       employerProvidesESC = escVouchersAvailable(parent)
     )
 
-    if (partner.isDefined) {
+    if (hasPartner) {
       List(newParent, ESCClaimant(isPartner = true,
         employerProvidesESC = escVouchersAvailable(partner.get)))
     }
@@ -116,7 +116,6 @@ trait ESCMapping {
       case PeriodEnum.QUARTERLY => Periods.Quarterly
       case PeriodEnum.YEARLY => Periods.Yearly
       case PeriodEnum.INVALID => Periods.INVALID
-      case PeriodEnum.DAILY => Periods.INVALID
     }
   }
 

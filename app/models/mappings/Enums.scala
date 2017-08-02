@@ -77,7 +77,7 @@ object YesNoUnsureBothEnum extends Enumeration {
 
 object PeriodEnum extends Enumeration {
   type PeriodEnum = Value
-  val DAILY, WEEKLY, FORTNIGHTLY, MONTHLY, QUARTERLY, YEARLY, INVALID = Value
+  val WEEKLY, FORTNIGHTLY, MONTHLY, QUARTERLY, YEARLY, INVALID = Value
   val enumReads: Reads[PeriodEnum] = EnumUtils.enumReads(PeriodEnum)
 
   val enumWrites: Writes[PeriodEnum] = EnumUtils.enumWrites
