@@ -16,24 +16,30 @@
 
 package models.mappings
 
-import java.util.{Calendar, Date}
-
-import config.ApplicationConfig
 import models._
 import models.input.esc._
 import org.joda.time.LocalDate
+import utils.{CCConfig, Periods}
 
-object HHToESCEligibilityInput {
+trait HHToESCEligibilityInput {
 
-  def convert(hh:Household):ESCEligibilityInput = {
-    ESCEligibilityInput(escTaxYears = createTaxYears(hh))
+  val cCConfig: CCConfig
+
+  def convert(household: Household): ESCEligibilityInput = {
+    ESCEligibilityInput(createTaxYears(household.hasPartner, household.parent, household.partner, household.children))
   }
 
-  private def createTaxYears(hh:Household):List[ESCTaxYear] = {
-    val now = ApplicationConfig.startDate
+  private def createTaxYears(
+                              hasPartner: Boolean,
+                              parent: Claimant,
+                              partner: Option[Claimant],
+                              children: List[Child]
+                            ): List[ESCTaxYear] = {
+
+    val now = cCConfig.StartDate
     val april6thCurrentYear = determineApril6DateFromNow(now)
-    val claimantList = hhClaimantToESCEligibilityInputClaimant(hh.parent, hh.partner)
-    val childList = hhChildToESCEligibilityInputChild(hh.children)
+    val claimantList = createClaimants(hasPartner, parent, partner)
+    val childList = createChildren(children)
 
     List(
       ESCTaxYear(
@@ -51,78 +57,59 @@ object HHToESCEligibilityInput {
     )
   }
 
-  private def hhClaimantToESCEligibilityInputClaimant(hhParent: Claimant, hhPartner: Option[Claimant]): List[ESCClaimant] = {
+  private def determineApril6DateFromNow(from: LocalDate): LocalDate = {
+    val periodYear = from.getYear
+    val january1st = LocalDate.parse(s"${periodYear}-01-01")
+    val april6CurrentYear = LocalDate.parse(s"${periodYear}-04-06")
 
-    val parent: ESCClaimant = ESCClaimant(isPartner = false, employerProvidesESC = convertVouchers(hhParent))
-
-    hhPartner match {
-      case Some(hhPartner) => List(parent, ESCClaimant(isPartner = true, employerProvidesESC = convertVouchers(hhParent)))
-      case None => List(parent)
+    if ((from.compareTo(january1st) == 0 || (from.isAfter(january1st)) && from.isBefore(april6CurrentYear))) {
+      april6CurrentYear
+    } else {
+      april6CurrentYear.plusYears(1)
     }
   }
 
-  private def hhChildToESCEligibilityInputChild(hhChildren: List[Child]): List[ESCChild] = {
-    hhChildren map (child => {
+  private def createClaimants(hasPartner: Boolean,
+                              parent: Claimant,
+                              partner: Option[Claimant]): List[ESCClaimant] = {
+
+    val newParent = ESCClaimant(
+      employerProvidesESC = escVouchersAvailable(parent)
+    )
+
+    if (hasPartner) {
+      List(newParent, ESCClaimant(isPartner = true,
+        employerProvidesESC = escVouchersAvailable(partner.get)))
+    }
+    else {
+      List(newParent)
+    }
+  }
+
+  private def escVouchersAvailable(claimant: Claimant): Boolean = {
+    claimant.escVouchers match {
+      case Some(YesNoUnsureBothEnum.YES) => true
+      case Some(YesNoUnsureBothEnum.NOTSURE) => true
+      case _ => false
+    }
+  }
+
+  private def createChildren(children: List[Child]): List[ESCChild] = {
+    for (child <- children) yield {
       ESCChild(
         id = child.id,
         dob = child.dob.get,
-        childCareCost = child.childcareCost match {
-          case Some(childcareCost) => childcareCost.amount.getOrElse(BigDecimal(0.00))
-          case None => BigDecimal(0.00)
-        }
-      ,
-        childCareCostPeriod = PeriodEnumToPeriod.convert(child.childcareCost match {
-          case Some(childcareCost) => childcareCost.period.get
-          case None => PeriodEnum.INVALID
-        }),
+        childCareCost = child.childcareCost.flatMap(_.amount).getOrElse(BigDecimal(0)),
+        childCareCostPeriod = PeriodEnumToPeriod.convert(child.childcareCost.flatMap(_.period).getOrElse(PeriodEnum.MONTHLY)),
         disability = ESCDisability(
-                                  disabled = child.disability.get.disabled || child.disability.get.blind,
-                                  severelyDisabled = child.disability.get.severelyDisabled)
+          disabled = child.disability.exists(d => d.blind || d.disabled),
+          severelyDisabled = child.disability.exists(_.severelyDisabled)
         )
-    })
-  }
-
-
-  private def determineApril6DateFromNow(from: LocalDate) : LocalDate = {
-    val currentCalendar = Calendar.getInstance()
-    currentCalendar.clear()
-    currentCalendar.setTime(from.toDate)
-    val periodYear = currentCalendar.get(Calendar.YEAR)
-    val periodStart = from.toDate
-    val january1st = getCalendarMonth(periodYear, Calendar.JANUARY, 1)
-    val april6CurrentYear = getCalendarMonth(periodYear, Calendar.APRIL, 6)
-
-    val aprilCalendarNextYear = Calendar.getInstance()
-    aprilCalendarNextYear.clear()
-    currentCalendar.setTime(april6CurrentYear)
-    aprilCalendarNextYear.set(Calendar.YEAR, periodYear + 1)
-    aprilCalendarNextYear.set(Calendar.MONTH, Calendar.APRIL)
-    aprilCalendarNextYear.set(Calendar.DAY_OF_MONTH, 6)
-    val april6NextYear = aprilCalendarNextYear.getTime
-
-    if ((periodStart.compareTo(january1st) == 0 || periodStart.after(january1st)) && periodStart.before(april6CurrentYear)) {
-      LocalDate.fromDateFields(april6CurrentYear)
-    } else {
-      LocalDate.fromDateFields(april6NextYear)
+      )
     }
   }
+}
 
-  private def getCalendarMonth(periodYear: Int, calendarMonth: Int, dayOfMonth: Int): Date = {
-    val monthCalendar = Calendar.getInstance()
-    monthCalendar.clear()
-    monthCalendar.set(Calendar.YEAR, periodYear)
-    monthCalendar.set(Calendar.MONTH, calendarMonth)
-    monthCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-    monthCalendar.getTime
-  }
-
-  private def convertVouchers(hhClaimant: Claimant): Boolean = {
-    hhClaimant.escVouchers match {
-      case YesNoUnsureBothEnum.BOTH => true
-      case YesNoUnsureBothEnum.NO => false
-      case YesNoUnsureBothEnum.NOTSURE => true
-      case YesNoUnsureBothEnum.YES => true
-      case _ => true
-    }
-  }
+object HHToESCEligibilityInput extends HHToESCEligibilityInput {
+  override val cCConfig = CCConfig
 }

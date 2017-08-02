@@ -17,22 +17,26 @@
 package models.mappings
 
 
-import config.ApplicationConfig
 import models._
 import models.input.tfc._
 import org.joda.time.LocalDate
+import utils.{CCConfig, TFCConfig}
 
-object HHToTFCEligibilityInput {
+object HHToTFCEligibilityInput extends HHToTFCEligibilityInput {
+  override val tFCConfig = TFCConfig
+}
+
+trait HHToTFCEligibilityInput {
+
+  val tFCConfig = TFCConfig
 
   def convert(hh:Household):TFCEligibilityInput = {
-    val stuff = TFCEligibilityInput(from = LocalDate.now(),
-      numberOfPeriods = ApplicationConfig.tfcNoOfPeriods,
+    TFCEligibilityInput(from = LocalDate.now(),
+      numberOfPeriods = tFCConfig.tfcNoOfPeriods,
       location = hh.location.getOrElse(LocationEnum.ENGLAND.toString).toString,
       claimants = hhClaimantToTFCEligibilityInputClaimant(hh.parent, hh.partner),
       children =  hhChildToTFCEligibilityInputChild(hh.children)
     )
-    println(stuff)
-    stuff
   }
 
   private def hhClaimantToTFCEligibilityInputClaimant(hhParent: Claimant, hhPartner: Option[Claimant]): List[TFCClaimant] = {

@@ -16,76 +16,7 @@
 
 package utils
 
-import play.api.Logger
 import play.api.libs.json._
-
-object EnumUtils {
-  def enumReads[E <: Enumeration](enum: E): Reads[E#Value] =
-    new Reads[E#Value] {
-      def reads(json: JsValue): JsResult[E#Value] = json match {
-        case JsString(s) => {
-          try {
-            JsSuccess(enum.withName(s))
-          } catch {
-            case _: NoSuchElementException =>
-              Logger.warn(s"EnumUtils.enumReads - Enumeration expected of type: '${enum.getClass}', but it does not appear to contain the value: '$s'")
-              JsError(s"Enumeration expected of type: '${enum.getClass}', but it does not appear to contain the value: '$s'")
-          }
-        }
-        case _ =>
-          Logger.warn("EnumUtils.enumReads - String value expected")
-          JsError("String value expected")
-      }
-    }
-
-  implicit def enumWrites[E <: Enumeration]: Writes[E#Value] =
-    new Writes[E#Value] {
-      def writes(v: E#Value): JsValue = JsString(v.toString)
-    }
-
-  implicit def enumFormat[E <: Enumeration](enum: E): Format[E#Value] = {
-    Format(enumReads(enum), enumWrites)
-  }
-}
-
-//object EnumUtils {
-//
-//  def enumReads[E <: Enumeration](enum: E): Reads[E#Value] =
-//    new Reads[E#Value] {
-//      def reads(json: JsValue): JsResult[E#Value] = json match {
-//        case JsString(s) => {
-//          try {
-//            JsSuccess(enum.withName(s))
-//          } catch {
-//            case _: NoSuchElementException =>
-//              Logger.warn(s"EnumUtils.enumReads - Enumeration expected of type: '${enum.getClass}', but it does not appear to contain the value: '$s'")
-//              JsError(s"Enumeration expected of type: '${enum.getClass}', but it does not appear to contain the value: '$s'")
-//          }
-//        }
-//        case _ =>
-//          Logger.warn("EnumUtils.enumReads - String value expected")
-//          JsError("String value expected")
-//      }
-//    }
-//
-//  implicit def enumFormat[E <: Enumeration](enum: E): Format[E#Value] = {
-//    Format(enumReads(enum), enumWrites)
-//  }
-//
-//  implicit def enumWrites[E <: Enumeration]: Writes[E#Value] =
-//    new Writes[E#Value] {
-//      def writes(v: E#Value): JsValue = JsString(v.toString)
-//    }
-//
-//}
-
-
-
-
-
-
-
-
 
 object Periods extends Enumeration with MessagesObject {
   type Period = Value

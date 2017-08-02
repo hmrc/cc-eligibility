@@ -17,11 +17,11 @@
 package models
 
 import models.AgeRangeEnum.AgeRangeEnum
-import models.EmploymentStatusEnum.EmploymentStatusEnum
 import models.LocationEnum.LocationEnum
-import models.PeriodEnum.PeriodEnum
 import models.TcUcBenefitsEnum.TcUcBenefitsEnum
 import models.YesNoUnsureBothEnum.YesNoUnsureBothEnum
+import models.EmploymentStatusEnum.EmploymentStatusEnum
+import models.PeriodEnum.PeriodEnum
 import org.joda.time.LocalDate
 import play.api.libs.json.Json
 

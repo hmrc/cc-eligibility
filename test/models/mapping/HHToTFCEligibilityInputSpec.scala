@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
-package mapping
-
-import java.time.Month
+package models.mapping
 
 import controllers.FakeCCEligibilityApplication
 import models._
-import models.input.esc._
-import models.mappings.HHToESCEligibilityInput
+import models.input.tfc._
+import models.mappings._
 import org.joda.time.LocalDate
 import spec.CCConfigSpec
 import utils.Periods
 
-class HHToESCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplication{
+class HHToTFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplication{
 
-val SUT = HHToESCEligibilityInput
+val SUT = HHToTFCEligibilityInput
 
-  "HHToESCEligibilityInput" should {
+  "HHToTFCEligibilityInput" should {
 
-    "accept a valid Household model and return a valid ESCEligibilityInput model" in {
+    "accept a valid Household model and return a valid HHToTFCEligibilityInput model" in {
 
       val hhChild1 = Child(
         id = 0,
@@ -91,16 +89,14 @@ val SUT = HHToESCEligibilityInput
 
       val hhModel = Household(None, Some(LocationEnum.ENGLAND), true, List(hhChild1, hhChild2), parent, Some(partner))
 
-      val expectedOutput = ESCEligibilityInput(List(
-        ESCTaxYear(LocalDate.parse("2017-08-02", formatter), LocalDate.parse("2018-04-06", formatter),
-      List(ESCClaimant(false,true), ESCClaimant(true,true)),List(ESCChild(0,LocalDate.parse("2016-08-31", formatter),350,Periods.Monthly,ESCDisability(true,false)),
-          ESCChild(1,LocalDate.parse("2016-08-31", formatter),1000,Periods.Monthly,ESCDisability(true,false)))),
-        ESCTaxYear(LocalDate.parse("2018-04-06", formatter),LocalDate.parse("2018-08-02", formatter),
-      List(ESCClaimant(false,true), ESCClaimant(true,true)),List(ESCChild(0,LocalDate.parse("2016-08-31", formatter),350,Periods.Monthly,ESCDisability(true,false)),
-            ESCChild(1,LocalDate.parse("2016-08-31", formatter),1000,Periods.Monthly,ESCDisability(true,false))))))
+      val expectedOutput = TFCEligibilityInput(LocalDate.parse("2017-08-02", formatter),4,"england",
+        List(TFCClaimant(None,Some(TFCIncome(Some(12212),Some(47674),Some(647864),Some(546))),4567.0,false,TFCDisability(false,false),false,TFCMinimumEarnings(true,0.0),Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString),None,None),
+            TFCClaimant(None,Some(TFCIncome(Some(12212),Some(47674),Some(647864),Some(546))),4567.0,true,TFCDisability(false,false),false,TFCMinimumEarnings(true,0.0),Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString),None,None)),
+        List(TFCChild(0,350,Periods.Monthly,LocalDate.parse("2016-08-31", formatter),TFCDisability(true,false)),
+              TFCChild(1,1000,Periods.Monthly,LocalDate.parse("2016-08-31", formatter),TFCDisability(true,false))))
 
       val output = SUT.convert(hhModel)
-      output.isInstanceOf[ESCEligibilityInput] shouldBe true
+      output.isInstanceOf[TFCEligibilityInput] shouldBe true
       output shouldBe expectedOutput
     }
   }

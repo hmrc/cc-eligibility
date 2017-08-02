@@ -24,9 +24,8 @@ import utils.Periods
 
 object PeriodEnumToPeriod {
 
-  def convert(inputPeriod: PeriodEnum): Periods.Value = {
+  def convert(inputPeriod: PeriodEnum): Periods.Period = {
     inputPeriod match {
-      case PeriodEnum.DAILY => Periods.INVALID
       case PeriodEnum.FORTNIGHTLY => Periods.Fortnightly
       case PeriodEnum.INVALID => Periods.INVALID
       case PeriodEnum.MONTHLY => Periods.Monthly
@@ -37,5 +36,4 @@ object PeriodEnumToPeriod {
       case _  => Periods.INVALID
     }
   }
-
 }

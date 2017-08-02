@@ -84,6 +84,8 @@ object TFCConfig extends CCConfig with LoadConfig {
     )
   }
 
+  lazy val tfcNoOfPeriods: Short = conf.getInt("tfc.number.of.periods").getOrElse(4).toShort
+
   def getConfig(currentDate: LocalDate, location: String): TFCTaxYearConfig = {
     val configs: Seq[play.api.Configuration] = conf.getConfigSeq("tfc.rule-change").get
     val configsExcludingDefault = getTFCConfigExcludingDefault(configs)

@@ -17,46 +17,50 @@
 package models.mapping
 
 import controllers.FakeCCEligibilityApplication
+import models._
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
 import models.input.esc._
 import models.mappings._
 import org.joda.time.LocalDate
-import play.api.libs.json.Json
+import spec.CCConfigSpec
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.{CCConfig, Periods}
 
-class ESCMappingSpec extends UnitSpec with MockitoSugar with FakeCCEligibilityApplication {
+class HHToESCEligibilityInputSpec extends UnitSpec
+  with MockitoSugar
+  with FakeCCEligibilityApplication
+  with CCConfigSpec {
 
   "ESCMapping" should {
 
-    val mockObject = new ESCMapping {
+    val mockObject = new HHToESCEligibilityInput {
       override val cCConfig: CCConfig = mock[CCConfig]
     }
 
     "have reference to CCConfig" in {
-      ESCMapping.cCConfig.isInstanceOf[CCConfig] shouldBe true
+      HHToESCEligibilityInput.cCConfig.isInstanceOf[CCConfig] shouldBe true
     }
 
     "convert periodEnum to Periods for ESCEligibilityInput" when {
       "periodEnum is weekly"in {
-        ESCMapping.periodEnumToPeriods(PeriodEnum.WEEKLY) shouldBe Periods.Weekly
+        PeriodEnumToPeriod.convert(PeriodEnum.WEEKLY) shouldBe Periods.Weekly
       }
 
       "periodEnum is fortnightly"in {
-        ESCMapping.periodEnumToPeriods(PeriodEnum.FORTNIGHTLY) shouldBe Periods.Fortnightly
+        PeriodEnumToPeriod.convert(PeriodEnum.FORTNIGHTLY) shouldBe Periods.Fortnightly
       }
 
       "periodEnum is yearly"in {
-        ESCMapping.periodEnumToPeriods(PeriodEnum.YEARLY) shouldBe Periods.Yearly
+        PeriodEnumToPeriod.convert(PeriodEnum.YEARLY) shouldBe Periods.Yearly
       }
 
       "periodEnum is quarterly"in {
-        ESCMapping.periodEnumToPeriods(PeriodEnum.QUARTERLY) shouldBe Periods.Quarterly
+        PeriodEnumToPeriod.convert(PeriodEnum.QUARTERLY) shouldBe Periods.Quarterly
       }
 
       "periodEnum is invalid"in {
-        ESCMapping.periodEnumToPeriods(PeriodEnum.INVALID) shouldBe Periods.INVALID
+        PeriodEnumToPeriod.convert(PeriodEnum.INVALID) shouldBe Periods.INVALID
       }
     }
 
@@ -213,6 +217,82 @@ class ESCMappingSpec extends UnitSpec with MockitoSugar with FakeCCEligibilityAp
 
         mockObject.convert(household) shouldBe res
       }
+    }
+  }
+  val SUT = HHToESCEligibilityInput
+
+  "HHToESCEligibilityInput" should {
+
+    "accept a valid Household model and return a valid ESCEligibilityInput model" in {
+
+      val hhChild1 = Child(
+        id = 0,
+        name = "child1",
+        dob = Some(LocalDate.parse("2016-08-31", formatter)),
+        disability = Some(Disability(disabled = true, severelyDisabled = false, blind = true)),
+        childcareCost = Some(ChildCareCost(amount = Some(350), Some(PeriodEnum.MONTHLY))),
+        education = Some(Education(inEducation = false, startDate = Some(LocalDate.now())))
+      )
+      val hhChild2 = Child(
+        id = 1,
+        name = "child2",
+        dob = Some(LocalDate.parse("2016-08-31", formatter)),
+        disability = Some(Disability(disabled = false, severelyDisabled = false, blind = true)),
+        childcareCost = Some(ChildCareCost(amount = Some(1000), Some(PeriodEnum.MONTHLY))),
+        education = Some(Education(inEducation = false, startDate = Some(LocalDate.now())))
+      )
+      val parent = Claimant(
+        ageRange = Some(AgeRangeEnum.EIGHTEENTOTWENTY),
+        benefits = Some(Benefits(
+          disabilityBenefits = false,
+          highRateDisabilityBenefits = false,
+          incomeBenefits = false,
+          carersAllowance = false
+        )),
+        lastYearlyIncome = None,
+        currentYearlyIncome = Some(Income(employmentIncome = Some(12212),
+          pension = Some(47674),
+          otherIncome = Some(647864),
+          benefits = Some(546),
+          statutoryIncome = None
+        )),
+        hours = Some(4567),
+        minimumEarnings = None,
+        escVouchers = Some(YesNoUnsureBothEnum.YES)
+      )
+      val partner = Claimant(
+        ageRange = Some(AgeRangeEnum.EIGHTEENTOTWENTY),
+        benefits = Some(Benefits(
+          disabilityBenefits = false,
+          highRateDisabilityBenefits = false,
+          incomeBenefits = false,
+          carersAllowance = false
+        )),
+        lastYearlyIncome = None,
+        currentYearlyIncome = Some(Income(employmentIncome = Some(12212),
+          pension = Some(47674),
+          otherIncome = Some(647864),
+          benefits = Some(546),
+          statutoryIncome = None
+        )),
+        hours = Some(4567),
+        minimumEarnings = None,
+        escVouchers = Some(YesNoUnsureBothEnum.NOTSURE)
+      )
+
+      val hhModel = Household(None, Some(LocationEnum.ENGLAND), true, List(hhChild1, hhChild2), parent, Some(partner))
+
+      val expectedOutput = ESCEligibilityInput(List(
+        ESCTaxYear(LocalDate.parse("2017-08-02", formatter), LocalDate.parse("2018-04-06", formatter),
+          List(ESCClaimant(false,true), ESCClaimant(true,true)),List(ESCChild(0,LocalDate.parse("2016-08-31", formatter),350,Periods.Monthly,ESCDisability(true,false)),
+            ESCChild(1,LocalDate.parse("2016-08-31", formatter),1000,Periods.Monthly,ESCDisability(true,false)))),
+        ESCTaxYear(LocalDate.parse("2018-04-06", formatter),LocalDate.parse("2018-08-02", formatter),
+          List(ESCClaimant(false,true), ESCClaimant(true,true)),List(ESCChild(0,LocalDate.parse("2016-08-31", formatter),350,Periods.Monthly,ESCDisability(true,false)),
+            ESCChild(1,LocalDate.parse("2016-08-31", formatter),1000,Periods.Monthly,ESCDisability(true,false))))))
+
+      val output = SUT.convert(hhModel)
+      output.isInstanceOf[ESCEligibilityInput] shouldBe true
+      output shouldBe expectedOutput
     }
   }
 }
