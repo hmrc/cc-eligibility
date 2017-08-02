@@ -63,7 +63,6 @@ case class ESCClaimant(
                            escStartDate: LocalDate = LocalDate.now
                          )
 
-//escAmount can be a voucher amount, childcare bursary amount or directly contracted amount
 object ESCClaimant {
   implicit val claimantWrites: Writes[ESCClaimant] = Json.writes[ESCClaimant]
 }
