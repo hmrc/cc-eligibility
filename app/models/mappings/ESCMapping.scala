@@ -58,36 +58,15 @@ trait ESCMapping {
   }
 
   private def determineApril6DateFromNow(from: LocalDate): LocalDate = {
-    val currentCalendar = Calendar.getInstance()
-    currentCalendar.clear()
-    currentCalendar.setTime(from.toDate)
-    val periodYear = currentCalendar.get(Calendar.YEAR)
-    val periodStart = from.toDate
-    val january1st = getCalendarMonth(periodYear, Calendar.JANUARY, 1)
-    val april6CurrentYear = getCalendarMonth(periodYear, Calendar.APRIL, 6)
+    val periodYear = from.getYear
+    val january1st =  LocalDate.parse(s"${periodYear}-01-01")
+    val april6CurrentYear = LocalDate.parse(s"${periodYear}-04-06")
 
-    val aprilCalendarNextYear = Calendar.getInstance()
-    aprilCalendarNextYear.clear()
-    currentCalendar.setTime(april6CurrentYear)
-    aprilCalendarNextYear.set(Calendar.YEAR, periodYear + 1)
-    aprilCalendarNextYear.set(Calendar.MONTH, Calendar.APRIL)
-    aprilCalendarNextYear.set(Calendar.DAY_OF_MONTH, 6)
-    val april6NextYear = aprilCalendarNextYear.getTime
-
-    if ((periodStart.compareTo(january1st) == 0 || periodStart.after(january1st)) && periodStart.before(april6CurrentYear)) {
-      LocalDate.fromDateFields(april6CurrentYear)
+    if ((from.compareTo(january1st) == 0 || (from.isAfter(january1st)) && from.isBefore(april6CurrentYear))) {
+      april6CurrentYear
     } else {
-      LocalDate.fromDateFields(april6NextYear)
+      april6CurrentYear.plusYears(1)
     }
-  }
-
-  private def getCalendarMonth(periodYear: Int, calendarMonth: Int, dayOfMonth: Int): Date = {
-    val monthCalendar = Calendar.getInstance()
-    monthCalendar.clear()
-    monthCalendar.set(Calendar.YEAR, periodYear)
-    monthCalendar.set(Calendar.MONTH, calendarMonth)
-    monthCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-    monthCalendar.getTime
   }
 
   private def createClaimants(parent: Claimant,
