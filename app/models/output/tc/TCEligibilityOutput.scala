@@ -34,11 +34,33 @@ object TCEligibilityOutput {
 case class TCTaxYear(
                     from: LocalDate,
                     until: LocalDate,
+                    previousHouseholdIncome: TCIncome = TCIncome(),
+                    currentHouseholdIncome: TCIncome = TCIncome(),
                     periods: List[TCPeriod]
                   )
 
 object TCTaxYear {
   implicit val taxYearWrites: Writes[TCTaxYear] = Json.writes[TCTaxYear]
+}
+
+case class TCIncome(
+                     employment: Option[List[BigDecimal]] = None,
+                     pension: Option[List[BigDecimal]] = None,
+                     other: Option[List[BigDecimal]] = None,
+                     benefits: Option[List[BigDecimal]] = None,
+                     statutory: Option[List[TCStatutoryIncome]] = None
+                     )
+
+object TCIncome {
+  implicit val incomeFormat: Writes[TCIncome] = Json.writes[TCIncome]
+}
+
+case class TCStatutoryIncome(
+                              weeks: Double = 0,
+                              amount: BigDecimal = 0
+                              )
+object TCStatutoryIncome {
+  implicit val statutoryIncomeFormat: Writes[TCStatutoryIncome] = Json.writes[TCStatutoryIncome]
 }
 
 case class TCPeriod(
@@ -72,7 +94,8 @@ object TCHouseHoldElements {
 case class TCOutputClaimant(
                            qualifying: Boolean = false,
                            isPartner: Boolean = false,
-                           claimantDisability: TCDisability
+                           claimantDisability: TCDisability,
+                           doesNotTaper: Boolean = false
                          )
 
 object TCOutputClaimant {

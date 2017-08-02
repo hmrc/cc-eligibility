@@ -19,6 +19,7 @@ package controllers
 import akka.stream.Materializer
 import org.scalatest.Suite
 import play.api.test.FakeApplication
+import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.WithFakeApplication
 
 trait FakeCCEligibilityApplication extends WithFakeApplication {
@@ -28,6 +29,9 @@ trait FakeCCEligibilityApplication extends WithFakeApplication {
     "csrf.sign.tokens" -> false,
     "govuk-tax.Test.services.contact-frontend.host" -> "localhost",
     "govuk-tax.Test.services.contact-frontend.port" -> "9250",
+    "microservice.services.cc-calculator.host" -> "localhost",
+    "microservice.services.cc-calculator.port" -> "9372",
+    "microservice.services.cc-calculator.url" -> "/cc-calculator/calculate",
     "tfc-rollout.0.rule-date" -> "default",
     "tfc-rollout.0.all-disabled" -> true,
     "tfc-rollout.0.born-on-after" -> "01-09-2013",
@@ -41,5 +45,6 @@ trait FakeCCEligibilityApplication extends WithFakeApplication {
 
   override lazy val fakeApplication = FakeApplication(additionalConfiguration = config)
   implicit lazy val mat: Materializer = fakeApplication.materializer
+  implicit val hc: HeaderCarrier = new HeaderCarrier()
 
 }
