@@ -20,7 +20,7 @@ package models.mappings
 import models._
 import models.input.tfc._
 import org.joda.time.LocalDate
-import utils.{CCConfig, TFCConfig}
+import utils.TFCConfig
 
 object HHToTFCEligibilityInput extends HHToTFCEligibilityInput {
   override val tFCConfig = TFCConfig
@@ -28,7 +28,7 @@ object HHToTFCEligibilityInput extends HHToTFCEligibilityInput {
 
 trait HHToTFCEligibilityInput {
 
-  val tFCConfig = TFCConfig
+  val tFCConfig: TFCConfig
 
   def convert(hh:Household):TFCEligibilityInput = {
     TFCEligibilityInput(from = LocalDate.now(),

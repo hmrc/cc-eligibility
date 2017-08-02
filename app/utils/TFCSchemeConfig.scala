@@ -34,7 +34,9 @@ case class TFCTaxYearConfig(
                              nmw25Over: Int
                              )
 
-object TFCConfig extends CCConfig with LoadConfig {
+object TFCConfig extends TFCConfig
+
+trait TFCConfig extends CCConfig with LoadConfig {
 
   def getTFCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
     configs.filter(x => {
