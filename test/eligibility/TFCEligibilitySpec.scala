@@ -33,7 +33,6 @@ import scala.concurrent.Future
 class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar {
 
   implicit val req = FakeRequest()
-  implicit val hc = new HeaderCarrier()
 
   "TFCEligibility" should {
 

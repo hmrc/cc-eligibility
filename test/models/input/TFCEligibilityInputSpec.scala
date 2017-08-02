@@ -37,7 +37,6 @@ class TFCEligibilityInputSpec extends CCConfigSpec
   with MockitoSugar {
 
   implicit val req = FakeRequest()
-  implicit val hc = new HeaderCarrier()
 
   "TFCInputEligibility" should {
 

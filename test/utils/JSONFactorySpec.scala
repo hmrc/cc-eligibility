@@ -115,6 +115,8 @@ class JSONFactorySpec extends CCConfigSpec with FakeCCEligibilityApplication {
                   {
                     "from": "${periodStartDate.toString("yyyy-MM-dd")}",
                     "until": "${periodEndDate.toString("yyyy-MM-dd")}",
+                    "currentHouseholdIncome": {},
+                    "previousHouseholdIncome": {},
                     "periods": [
                       {
                         "from": "${periodStartDate.toString("yyyy-MM-dd")}",
@@ -136,7 +138,8 @@ class JSONFactorySpec extends CCConfigSpec with FakeCCEligibilityApplication {
                             "claimantDisability": {
                               "disability": false,
                               "severeDisability": false
-                            }
+                            },
+                            "doesNotTaper": false
                           }
                         ],
                         "children": [
@@ -217,7 +220,12 @@ class JSONFactorySpec extends CCConfigSpec with FakeCCEligibilityApplication {
                         "qualifying" : true,
                         "from" : "2015-06-30",
                         "until" : "2015-09-30",
-                        "tfcRollout":false
+                        "tfcRollout":false,
+                        "childcareCost":0,
+                        "disability": {
+                          "disabled":false,
+                          "severelyDisabled":false
+                          }
                        }
                       ]
                     },
@@ -237,7 +245,12 @@ class JSONFactorySpec extends CCConfigSpec with FakeCCEligibilityApplication {
                         "qualifying" : true,
                         "from" : "2015-09-30",
                         "until" : "2015-12-30",
-                        "tfcRollout":false
+                        "tfcRollout":false,
+                        "childcareCost":0,
+                        "disability": {
+                          "disabled":false,
+                          "severelyDisabled":false
+                          }
                        }
                       ]
                     }
@@ -299,7 +312,8 @@ class JSONFactorySpec extends CCConfigSpec with FakeCCEligibilityApplication {
                                  "qualifying":true,
                                  "isPartner":false,
                                  "eligibleMonthsInPeriod":11,
-                                 "vouchers":true
+                                 "vouchers":true,
+                                 "escStartDate":"${LocalDate.now().toString()}"
                               }
                            ],
                            "children": [
@@ -315,7 +329,8 @@ class JSONFactorySpec extends CCConfigSpec with FakeCCEligibilityApplication {
                ],
                 "eligibility":false,
                 "parentEligibility":false,
-                "partnerEligibility":false
+                "partnerEligibility":false,
+                "location": ""
       }
         """.stripMargin)
 
