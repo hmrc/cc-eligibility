@@ -35,15 +35,17 @@ val SUT = new HHToTFCEligibilityInput {
   "HHToTFCEligibilityInput" should {
 
     "have reference to TFCConfig" in {
-      HHToTFCEligibilityInput.tFCConfig.isInstanceOf[TFCConfig] shouldBe true
+      SUT.tFCConfig.isInstanceOf[TFCConfig] shouldBe true
     }
 
     "accept a valid Household model and return a valid HHToTFCEligibilityInput model" in {
+      val currentDate = LocalDate.now()
+      val dob = LocalDate.now().minusYears(2)
 
       val hhChild1 = Child(
         id = 0,
         name = "child1",
-        dob = Some(LocalDate.parse("2016-08-31", formatter)),
+        dob = Some(dob),
         disability = Some(Disability(disabled = true, severelyDisabled = false, blind = true)),
         childcareCost = Some(ChildCareCost(amount = Some(350), Some(PeriodEnum.MONTHLY))),
         education = Some(Education(inEducation = false, startDate = Some(LocalDate.now())))
@@ -51,7 +53,7 @@ val SUT = new HHToTFCEligibilityInput {
       val hhChild2 = Child(
         id = 1,
         name = "child2",
-        dob = Some(LocalDate.parse("2016-08-31", formatter)),
+        dob = Some(dob),
         disability = Some(Disability(disabled = false, severelyDisabled = false, blind = true)),
         childcareCost = Some(ChildCareCost(amount = Some(1000), Some(PeriodEnum.MONTHLY))),
         education = Some(Education(inEducation = false, startDate = Some(LocalDate.now())))
@@ -97,15 +99,16 @@ val SUT = new HHToTFCEligibilityInput {
 
       val hhModel = Household(None, Some(LocationEnum.ENGLAND), true, List(hhChild1, hhChild2), parent, Some(partner))
 
-      val expectedOutput = TFCEligibilityInput(LocalDate.parse("2017-08-02", formatter),4,"england",
+      val expectedOutput = TFCEligibilityInput(currentDate,4,"england",
         List(TFCClaimant(None,Some(TFCIncome(Some(12212),Some(47674),Some(647864),Some(546))),4567.0,false,TFCDisability(false,false),false,
           TFCMinimumEarnings(true,2313),Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString),Some(Some(EmploymentStatusEnum.SELFEMPLOYED).toString),Some(true)),
             TFCClaimant(None,Some(TFCIncome(Some(12212),Some(47674),Some(647864),Some(546))),4567.0,true,TFCDisability(false,false),false,
               TFCMinimumEarnings(true,0.0),Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString),None,None)),
-        List(TFCChild(0,350,Periods.Monthly,LocalDate.parse("2016-08-31", formatter),TFCDisability(true,false)),
-              TFCChild(1,1000,Periods.Monthly,LocalDate.parse("2016-08-31", formatter),TFCDisability(true,false))))
+        List(TFCChild(0,350,Periods.Monthly,dob,TFCDisability(true,false)),
+              TFCChild(1,1000,Periods.Monthly,dob,TFCDisability(true,false))))
 
       when(SUT.tFCConfig.tfcNoOfPeriods).thenReturn(4.toShort)
+      when(SUT.tFCConfig.StartDate).thenReturn(currentDate)
 
       val output = SUT.convert(hhModel)
       output.isInstanceOf[TFCEligibilityInput] shouldBe true

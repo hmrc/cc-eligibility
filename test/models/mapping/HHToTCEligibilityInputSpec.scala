@@ -18,43 +18,48 @@ package models.mapping
 
 import controllers.FakeCCEligibilityApplication
 import models._
-import org.mockito.Mockito.when
-import org.scalatest.mock.MockitoSugar
-import models.input.esc._
+import models.input.tc._
 import models.mappings._
 import org.joda.time.LocalDate
+import org.mockito.Mockito.when
+import org.scalatest.mock.MockitoSugar
 import spec.CCConfigSpec
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.{CCConfig, Periods}
 
-class HHToESCEligibilityInputSpec extends UnitSpec
+class HHToTCEligibilityInputSpec extends UnitSpec
   with MockitoSugar
   with FakeCCEligibilityApplication
   with CCConfigSpec {
 
-  val SUT = new HHToESCEligibilityInput {
+  val SUT = new HHToTCEligibilityInput {
     override val cCConfig: CCConfig = mock[CCConfig]
   }
-  "HHToESCEligibilityInput" should {
+
+  "HHToTCEligibilityInput" should {
 
     "have reference to CCConfig" in {
-      HHToESCEligibilityInput.cCConfig.isInstanceOf[CCConfig] shouldBe true
+      SUT.cCConfig.isInstanceOf[CCConfig] shouldBe true
     }
 
-    "convert Household into ESCEligibilityInput" when {
+    "convert Household into TCEligibilityInput" when {
       "given a household with parent and no partner no children" in {
 
-        val household = Household( children = Nil, hasPartner = false,
-          parent = Claimant(escVouchers = Some(YesNoUnsureBothEnum.YES)),
-          partner = None)
+        val benefits: Benefits = Benefits(disabilityBenefits = false, highRateDisabilityBenefits =   false, incomeBenefits =   false, carersAllowance = true)
 
-        val res = ESCEligibilityInput(List(
-          ESCTaxYear(LocalDate.now(),
-            LocalDate.parse("2018-04-06"),
-            List(ESCClaimant(false,true)),List()),
-          ESCTaxYear(LocalDate.parse("2018-04-06"),
-            LocalDate.now().plusYears(1),
-            List(ESCClaimant(false,true)),List())))
+        val household = Household( children = Nil, hasPartner = false, parent = Claimant(benefits = Some(benefits)), partner = None)
+
+        val res = TCEligibilityInput(List(
+          TCTaxYear(from = LocalDate.now(),
+                    until = LocalDate.parse("2018-04-06"),
+                    claimants = List(TCClaimant(0, false, TCDisability(false,false), carersAllowance = true)),
+                    children = List[TCChild]()
+                   ),
+          TCTaxYear(from = LocalDate.parse("2018-04-06"),
+                    until = LocalDate.now().plusYears(1),
+                    claimants = List(TCClaimant(0, false, TCDisability(false,false),carersAllowance = true)),
+                    children = List()))
+                    )
 
         when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
 
@@ -62,18 +67,21 @@ class HHToESCEligibilityInputSpec extends UnitSpec
       }
 
       "given a household with parent and a partner with no children" in {
+        val benefits: Benefits = Benefits(disabilityBenefits = false, highRateDisabilityBenefits =   false, incomeBenefits =   false, carersAllowance = true)
 
         val household = Household(children = Nil, hasPartner = true,
-          parent = Claimant(escVouchers = Some(YesNoUnsureBothEnum.NOTSURE)),
-          partner = Some(Claimant(escVouchers = Some(YesNoUnsureBothEnum.NO))))
+          parent = Claimant(benefits = Some(benefits)),
+          partner = Some(Claimant(benefits = Some(benefits))))
 
-        val res = ESCEligibilityInput(List(
-          ESCTaxYear(LocalDate.now(),
+        val res = TCEligibilityInput(List(
+          TCTaxYear(LocalDate.now(),
             LocalDate.parse("2018-04-06"),
-            List(ESCClaimant(false,true), ESCClaimant(true,false)),List()),
-          ESCTaxYear(LocalDate.parse("2018-04-06"),
+            List(TCClaimant(0, false, TCDisability(false,false), carersAllowance = true),
+              TCClaimant(0, true, TCDisability(false,false), carersAllowance = true)),List()),
+          TCTaxYear(LocalDate.parse("2018-04-06"),
             LocalDate.now().plusYears(1),
-            List(ESCClaimant(false,true), ESCClaimant(true,false)),List())))
+            List(TCClaimant(0, false, TCDisability(false,false), carersAllowance = true),
+              TCClaimant(0, true, TCDisability(false,false), carersAllowance = true)),List())))
 
         when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
 
@@ -83,7 +91,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
       "given a household with parent, a partner and children with startDate after April 6" in {
         val currentDate = LocalDate.parse("2017-08-01")
         val dob = LocalDate.now().minusYears(2)
-
+        val benefits: Benefits = Benefits(disabilityBenefits = false, highRateDisabilityBenefits =   false, incomeBenefits =   false, carersAllowance = true)
         val children = List(
           Child(
             1,
@@ -97,49 +105,45 @@ class HHToESCEligibilityInputSpec extends UnitSpec
         val household = Household(
           children = children,
           hasPartner = true,
-          parent = Claimant(
-            escVouchers = Some(YesNoUnsureBothEnum.YES)
-          ),
-          partner = Some(
-            Claimant(
-              escVouchers = Some(YesNoUnsureBothEnum.NO)
-            )
-          )
+          parent = Claimant(benefits = Some(benefits)),
+          partner = Some(Claimant(benefits = Some(benefits)))
         )
 
-        val res = ESCEligibilityInput(
+        val res = TCEligibilityInput(
           List(
-            ESCTaxYear(
+            TCTaxYear(
               currentDate,
               LocalDate.parse("2018-04-06"),
               List(
-                ESCClaimant(false,true),
-                ESCClaimant(true,false)
+                TCClaimant(0, false, TCDisability(false,false), carersAllowance = true),
+                TCClaimant(0, true, TCDisability(false,false), carersAllowance = true)
               ),
               List(
-                ESCChild(
+                TCChild(
                   1,
-                  dob,
                   0,
                   Periods.Monthly,
-                  ESCDisability(true,false)
+                  dob,
+                  TCDisability(true,false),
+                  Some(TCEducation(false,LocalDate.now()))
                 )
               )
             ),
-            ESCTaxYear(
+            TCTaxYear(
               LocalDate.parse("2018-04-06"),
               currentDate.plusYears(1),
               List(
-                ESCClaimant(false,true),
-                ESCClaimant(true,false)
+                TCClaimant(0, false, TCDisability(false,false), carersAllowance = true),
+                TCClaimant(0, true, TCDisability(false,false), carersAllowance = true)
               ),
               List(
-                ESCChild(
+                TCChild(
                   1,
-                  dob,
                   0,
                   Periods.Monthly,
-                  ESCDisability(true,false)
+                  dob,
+                  TCDisability(true,false),
+                  Some(TCEducation(false,LocalDate.now()))
                 )
               )
             )
@@ -155,6 +159,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
         val currentDate = LocalDate.parse("2017-03-06")
         val dob = LocalDate.now().minusYears(2)
 
+        val benefits: Benefits = Benefits(disabilityBenefits = false, highRateDisabilityBenefits =   false, incomeBenefits =   false, carersAllowance = true)
         val children = List(
           Child(
             1,
@@ -168,25 +173,39 @@ class HHToESCEligibilityInputSpec extends UnitSpec
         val household = Household(
           children = children,
           hasPartner = true,
-          parent = Claimant(escVouchers = Some(YesNoUnsureBothEnum.YES)),
-          partner = Some(
-            Claimant(escVouchers = Some(YesNoUnsureBothEnum.NO))
-          )
+          parent = Claimant(benefits = Some(benefits)),
+          partner = Some(Claimant(benefits = Some(benefits)))
         )
 
-        val res = ESCEligibilityInput(
+        val res = TCEligibilityInput(
           List(
-            ESCTaxYear(
+            TCTaxYear(
               currentDate,
               LocalDate.parse("2017-04-06"),
-              List(ESCClaimant(false,true),ESCClaimant(true,false)),
-              List(ESCChild(1, dob, 0, Periods.Monthly, ESCDisability(true,false)))
+              List(TCClaimant(0, false, TCDisability(false,false), carersAllowance = true),
+                TCClaimant(0, true, TCDisability(false,false), carersAllowance = true)),
+              List(TCChild(
+                1,
+                0.0,
+                Periods.INVALID,
+                dob,
+                TCDisability(true,false),
+                Some(TCEducation(false,LocalDate.now()))
+              ))
             ),
-            ESCTaxYear(
+            TCTaxYear(
               LocalDate.parse("2017-04-06"),
               currentDate.plusYears(1),
-              List(ESCClaimant(false,true), ESCClaimant(true,false)),
-              List(ESCChild(1, dob, 0, Periods.Monthly, ESCDisability(true,false))))
+              List(TCClaimant(0, false, TCDisability(false,false), carersAllowance = true),
+                TCClaimant(0, true, TCDisability(false,false), carersAllowance = true)),
+              List(TCChild(
+                1,
+                0.0,
+                Periods.INVALID,
+                dob,
+                TCDisability(true,false),
+                Some(TCEducation(false,LocalDate.now()))
+              )))
           )
         )
 
@@ -196,8 +215,9 @@ class HHToESCEligibilityInputSpec extends UnitSpec
       }
     }
 
-    "accept a valid Household model and return a valid ESCEligibilityInput model" in {
-      val currentDate = LocalDate.parse("2017-03-06")
+    "accept a valid Household model and return a valid TCEligibilityInput model" in {
+
+      val currentDate = LocalDate.parse("2017-08-01")
       val dob = LocalDate.now().minusYears(2)
 
       val hhChild1 = Child(
@@ -222,7 +242,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
           disabilityBenefits = false,
           highRateDisabilityBenefits = false,
           incomeBenefits = false,
-          carersAllowance = false
+          carersAllowance = true
         )),
         lastYearlyIncome = None,
         currentYearlyIncome = Some(Income(employmentIncome = Some(12212),
@@ -231,7 +251,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
           benefits = Some(546),
           statutoryIncome = None
         )),
-        hours = Some(4567),
+        hours = Some(40),
         minimumEarnings = None,
         escVouchers = Some(YesNoUnsureBothEnum.YES)
       )
@@ -241,7 +261,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
           disabilityBenefits = false,
           highRateDisabilityBenefits = false,
           incomeBenefits = false,
-          carersAllowance = false
+          carersAllowance = true
         )),
         lastYearlyIncome = None,
         currentYearlyIncome = Some(Income(employmentIncome = Some(12212),
@@ -250,29 +270,59 @@ class HHToESCEligibilityInputSpec extends UnitSpec
           benefits = Some(546),
           statutoryIncome = None
         )),
-        hours = Some(4567),
+        hours = Some(40),
         minimumEarnings = None,
         escVouchers = Some(YesNoUnsureBothEnum.NOTSURE)
       )
 
       val hhModel = Household(None, Some(LocationEnum.ENGLAND), true, List(hhChild1, hhChild2), parent, Some(partner))
 
-      val expectedOutput = ESCEligibilityInput(List(
-        ESCTaxYear(currentDate,
-          LocalDate.parse("2017-04-06"),
-          List(ESCClaimant(false,true), ESCClaimant(true,true)),
-          List(ESCChild(0,dob,350,Periods.Monthly,ESCDisability(true,false)),
-            ESCChild(1,dob,1000,Periods.Monthly,ESCDisability(true,false)))),
-        ESCTaxYear(LocalDate.parse("2017-04-06"),
+      val expectedOutput = TCEligibilityInput(List(
+        TCTaxYear(currentDate,
+          LocalDate.parse("2018-04-06"),
+          List(TCClaimant(40, false, TCDisability(false,false), carersAllowance = true),
+            TCClaimant(40, true, TCDisability(false,false), carersAllowance = true)),
+          List(TCChild(
+            0,
+            350,
+            Periods.Monthly,
+            dob,
+            TCDisability(true,false),
+            Some(TCEducation(false,LocalDate.now()))
+          ),
+            TCChild(
+              1,
+              1000,
+              Periods.Monthly,
+              dob,
+              TCDisability(true,false),
+              Some(TCEducation(false,LocalDate.now()))
+            ))),
+        TCTaxYear(LocalDate.parse("2018-04-06"),
           currentDate.plusYears(1),
-          List(ESCClaimant(false,true), ESCClaimant(true,true)),
-          List(ESCChild(0,dob,350,Periods.Monthly,ESCDisability(true,false)),
-            ESCChild(1,dob,1000,Periods.Monthly,ESCDisability(true,false))))))
+          List(TCClaimant(40, false, TCDisability(false,false), carersAllowance = true),
+            TCClaimant(40, true, TCDisability(false,false), carersAllowance = true)),
+          List(TCChild(
+            0,
+            350,
+            Periods.Monthly,
+            dob,
+            TCDisability(true,false),
+            Some(TCEducation(false,LocalDate.now()))
+          ),
+            TCChild(
+              1,
+              1000,
+              Periods.Monthly,
+              dob,
+              TCDisability(true,false),
+              Some(TCEducation(false,LocalDate.now()))
+            )))))
 
       when(SUT.cCConfig.StartDate).thenReturn(currentDate)
 
       val output = SUT.convert(hhModel)
-      output.isInstanceOf[ESCEligibilityInput] shouldBe true
+      output.isInstanceOf[TCEligibilityInput] shouldBe true
       output shouldBe expectedOutput
     }
   }
