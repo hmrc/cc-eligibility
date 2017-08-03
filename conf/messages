@@ -6,9 +6,3 @@ cc.elig.income.less.than.0 = Gross or Net Income should not be less than 0.00
 cc.elig.blank = ""
 cc.elig.tax.year.min = At least one tax year required
 cc.elig.wrong.type = Wrong type of Request
-
-#### LOCATION STRING ####
-cc.location.england = england
-cc.location.scotland = scotland
-cc.location.wales = wales
-cc.location.northern-ireland = northern-ireland
