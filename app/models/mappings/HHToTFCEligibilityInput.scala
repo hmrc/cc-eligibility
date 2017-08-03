@@ -61,10 +61,6 @@ trait HHToTFCEligibilityInput extends PeriodEnumToPeriod {
     } else {
       List(parent)
     }
-//    hhPartner match {
-//      case Some(hhPartner) => List(parent, createClaimant(hhParent, true))
-//      case None => List(parent)
-//    }
   }
 
   private def hhMinimumEarningsToTFCMinimumEarnings(hhMinimumEarnings: Option[MinimumEarnings]): TFCMinimumEarnings = {
