@@ -20,9 +20,9 @@ import models.PeriodEnum
 import models.PeriodEnum.PeriodEnum
 import utils.Periods
 
+object PeriodEnumToPeriod extends PeriodEnumToPeriod
 
-
-object PeriodEnumToPeriod {
+trait PeriodEnumToPeriod {
 
   def convert(inputPeriod: PeriodEnum): Periods.Period = {
     inputPeriod match {

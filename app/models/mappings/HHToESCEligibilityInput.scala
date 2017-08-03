@@ -19,9 +19,9 @@ package models.mappings
 import models._
 import models.input.esc._
 import org.joda.time.LocalDate
-import utils.{CCConfig, Periods}
+import utils.CCConfig
 
-trait HHToESCEligibilityInput {
+trait HHToESCEligibilityInput  extends PeriodEnumToPeriod {
 
   val cCConfig: CCConfig
 
@@ -100,7 +100,7 @@ trait HHToESCEligibilityInput {
         id = child.id,
         dob = child.dob.get,
         childCareCost = child.childcareCost.flatMap(_.amount).getOrElse(BigDecimal(0)),
-        childCareCostPeriod = PeriodEnumToPeriod.convert(child.childcareCost.flatMap(_.period).getOrElse(PeriodEnum.MONTHLY)),
+        childCareCostPeriod = convert(child.childcareCost.flatMap(_.period).getOrElse(PeriodEnum.MONTHLY)),
         disability = ESCDisability(
           disabled = child.disability.exists(d => d.blind || d.disabled),
           severelyDisabled = child.disability.exists(_.severelyDisabled)

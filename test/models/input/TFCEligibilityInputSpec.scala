@@ -211,8 +211,8 @@ class TFCEligibilityInputSpec extends CCConfigSpec
     }
 
     "claimant and partner both not qualify (claimant fails maximum earnings rule)" in {
-      val claimantIncome = Some(TFCIncome(Some(1199999.0), Some(100.0), Some(100.0), None))
-      val partnerIncome = Some(TFCIncome(Some(99999.0), Some(100.0), Some(100.0), None))
+      val claimantIncome = Some(TFCIncome(Some(1199999.0), Some(100.0), Some(100.0)))
+      val partnerIncome = Some(TFCIncome(Some(99999.0), Some(100.0), Some(100.0)))
       val claimant = TFCClaimant(currentIncome = claimantIncome,
         hoursPerWeek = 9.50,
         isPartner = false,
@@ -237,8 +237,8 @@ class TFCEligibilityInputSpec extends CCConfigSpec
     }
 
     "claimant qualify and partner not qualify (partner fails maximum earnings rule)" in {
-      val claimantIncome = Some(TFCIncome(Some(99999.0), Some(100.0), Some(100.0), None))
-      val partnerIncome = Some(TFCIncome(Some(9999999.0), Some(100.0), Some(100.0), None))
+      val claimantIncome = Some(TFCIncome(Some(99999.0), Some(100.0), Some(100.0)))
+      val partnerIncome = Some(TFCIncome(Some(9999999.0), Some(100.0), Some(100.0)))
       val claimant = TFCClaimant(previousIncome = claimantIncome,
         hoursPerWeek = 16.50,
         isPartner = false,
@@ -263,8 +263,8 @@ class TFCEligibilityInputSpec extends CCConfigSpec
     }
 
     "claimant not qualify and partner qualify (claimant fails totalIncome)" in {
-      val claimantIncome = Some(TFCIncome(Some(1199999.0), Some(100.0), Some(100.0), None))
-      val partnerIncome = Some(TFCIncome(Some(99999.0), Some(100.0), Some(100.0), None))
+      val claimantIncome = Some(TFCIncome(Some(1199999.0), Some(100.0), Some(100.0)))
+      val partnerIncome = Some(TFCIncome(Some(99999.0), Some(100.0), Some(100.0)))
       val claimant = TFCClaimant(currentIncome = claimantIncome,
         hoursPerWeek = 9.50,
         isPartner = false,
