@@ -20,6 +20,10 @@ import models._
 import models.input.esc._
 import utils.{CCConfig, HelperManager}
 
+object HHToESCEligibilityInput extends HHToESCEligibilityInput {
+  override val cCConfig = CCConfig
+}
+
 trait HHToESCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
 
   val cCConfig: CCConfig
@@ -95,8 +99,5 @@ trait HHToESCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
       )
     }
   }
-}
 
-object HHToESCEligibilityInput extends HHToESCEligibilityInput {
-  override val cCConfig = CCConfig
 }
