@@ -23,8 +23,7 @@ import models.mappings._
 import org.joda.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
-import spec.CCConfigSpec
-import utils.{Periods, TFCConfig}
+import utils.{CCConfigSpec, Periods, TFCConfig}
 
 class HHToTFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
 

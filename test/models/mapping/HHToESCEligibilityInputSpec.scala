@@ -23,9 +23,8 @@ import org.scalatest.mock.MockitoSugar
 import models.input.esc._
 import models.mappings._
 import org.joda.time.LocalDate
-import spec.CCConfigSpec
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.{CCConfig, Periods}
+import utils.{CCConfig, CCConfigSpec, Periods}
 
 class HHToESCEligibilityInputSpec extends UnitSpec
   with MockitoSugar

@@ -32,8 +32,8 @@ import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import play.api.test.{FakeHeaders, FakeRequest}
 import service.AuditEvents
-import spec.CCConfigSpec
 import uk.gov.hmrc.play.http.HeaderCarrier
+import utils.CCConfigSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

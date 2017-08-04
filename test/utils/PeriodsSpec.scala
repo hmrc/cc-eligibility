@@ -19,7 +19,6 @@ package utils
 import controllers.FakeCCEligibilityApplication
 import play.api.i18n.Messages
 import play.api.libs.json.{JsError, JsString, Json}
-import spec.CCConfigSpec
 
 /**
  * Created by adamconder on 09/06/15.
