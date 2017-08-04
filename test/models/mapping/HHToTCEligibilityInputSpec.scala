@@ -294,7 +294,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
         dob = Some(dob),
         disability = Some(Disability(disabled = true, severelyDisabled = false, blind = true)),
         childcareCost = Some(ChildCareCost(amount = Some(350), Some(PeriodEnum.MONTHLY))),
-        education = Some(Education(inEducation = false, startDate = Some(LocalDate.now())))
+        education = Some(Education(inEducation = true, startDate = Some(LocalDate.now())))
       )
       val hhChild2 = Child(
         id = 1,
@@ -356,7 +356,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
             Periods.Monthly,
             dob,
             TCDisability(true, false),
-            Some(TCEducation(false, LocalDate.now()))
+            Some(TCEducation(true, LocalDate.now()))
           ),
             TCChild(
               1,
@@ -376,7 +376,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
             Periods.Monthly,
             dob,
             TCDisability(true, false),
-            Some(TCEducation(false, LocalDate.now()))
+            Some(TCEducation(true, LocalDate.now()))
           ),
             TCChild(
               1,

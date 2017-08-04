@@ -32,9 +32,7 @@ object TCEligibilityInput extends MessagesObject {
 
   implicit val tcEligibilityReads: Reads[TCEligibilityInput] =
     (JsPath \ "taxYears").read[List[TCTaxYear]].filter(ValidationError(messages("cc.elig.tax.year.min")))(x => validateTaxYear(x)).map { ty => TCEligibilityInput(ty) }
-
 }
-
 
 case class TCTaxYear(
                       from: LocalDate,
@@ -166,8 +164,8 @@ object TCTaxYear extends MessagesObject {
   implicit val taxYearReads: Reads[TCTaxYear] = (
     (JsPath \ "from").read[LocalDate] and
       (JsPath \ "until").read[LocalDate] and
-      (JsPath \ "claimants").read[List[TCClaimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
-      (JsPath \ "children").read[List[TCChild]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
+        (JsPath \ "claimants").read[List[TCClaimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
+          (JsPath \ "children").read[List[TCChild]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
     ) (TCTaxYear.apply _)
 }
 
@@ -195,8 +193,8 @@ object TCClaimant {
   implicit val claimantReads: Reads[TCClaimant] = (
     (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
       (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "disability").read[TCDisability] and
-      (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false))
+        (JsPath \ "disability").read[TCDisability] and
+          (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false))
     ) (TCClaimant.apply _)
 }
 
@@ -333,10 +331,10 @@ object TCChild extends MessagesObject {
   implicit val childReads: Reads[TCChild] = (
     (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
       (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(messages("cc.elig.childcare.spend.too.low")))(x => childSpendValidation(x)) and
-      (JsPath \ "childcareCostPeriod").read[Periods.Period] and
-      (JsPath \ "dob").read[LocalDate] and
-      (JsPath \ "disability").read[TCDisability] and
-      (JsPath \ "education").readNullable[TCEducation]
+        (JsPath \ "childcareCostPeriod").read[Periods.Period] and
+          (JsPath \ "dob").read[LocalDate] and
+            (JsPath \ "disability").read[TCDisability] and
+              (JsPath \ "education").readNullable[TCEducation]
     ) (TCChild.apply _)
 }
 
