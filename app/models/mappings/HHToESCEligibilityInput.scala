@@ -16,11 +16,11 @@
 
 package models.mappings
 
+import models._
 import models.input.esc._
-import org.joda.time.LocalDate
-import utils.{CCConfig, Periods}
+import utils.{CCConfig, HelperManager}
 
-trait ESCMapping {
+trait HHToESCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
 
   val cCConfig: CCConfig
 
@@ -56,18 +56,6 @@ trait ESCMapping {
     )
   }
 
-  private def determineApril6DateFromNow(from: LocalDate): LocalDate = {
-    val periodYear = from.getYear
-    val january1st = LocalDate.parse(s"${periodYear}-01-01")
-    val april6CurrentYear = LocalDate.parse(s"${periodYear}-04-06")
-
-    if ((from.compareTo(january1st) == 0 || (from.isAfter(january1st)) && from.isBefore(april6CurrentYear))) {
-      april6CurrentYear
-    } else {
-      april6CurrentYear.plusYears(1)
-    }
-  }
-
   private def createClaimants(hasPartner: Boolean,
                               parent: Claimant,
                               partner: Option[Claimant]): List[ESCClaimant] = {
@@ -99,7 +87,7 @@ trait ESCMapping {
         id = child.id,
         dob = child.dob.get,
         childCareCost = child.childcareCost.flatMap(_.amount).getOrElse(BigDecimal(0)),
-        childCareCostPeriod = periodEnumToPeriods(child.childcareCost.flatMap(_.period).getOrElse(PeriodEnum.MONTHLY)),
+        childCareCostPeriod = convert(child.childcareCost.flatMap(_.period).getOrElse(PeriodEnum.MONTHLY)),
         disability = ESCDisability(
           disabled = child.disability.exists(d => d.blind || d.disabled),
           severelyDisabled = child.disability.exists(_.severelyDisabled)
@@ -107,20 +95,8 @@ trait ESCMapping {
       )
     }
   }
-
-  def periodEnumToPeriods(period: PeriodEnum.PeriodEnum): Periods.Period = {
-    period match {
-      case PeriodEnum.WEEKLY => Periods.Weekly
-      case PeriodEnum.FORTNIGHTLY => Periods.Fortnightly
-      case PeriodEnum.MONTHLY => Periods.Monthly
-      case PeriodEnum.QUARTERLY => Periods.Quarterly
-      case PeriodEnum.YEARLY => Periods.Yearly
-      case PeriodEnum.INVALID => Periods.INVALID
-    }
-  }
-
 }
 
-object ESCMapping extends ESCMapping {
+object HHToESCEligibilityInput extends HHToESCEligibilityInput {
   override val cCConfig = CCConfig
 }

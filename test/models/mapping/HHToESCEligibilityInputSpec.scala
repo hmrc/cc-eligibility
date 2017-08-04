@@ -17,46 +17,51 @@
 package models.mapping
 
 import controllers.FakeCCEligibilityApplication
+import models._
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
 import models.input.esc._
 import models.mappings._
 import org.joda.time.LocalDate
-import play.api.libs.json.Json
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.{CCConfig, Periods}
+import utils.{CCConfig, CCConfigSpec, Periods}
 
-class ESCMappingSpec extends UnitSpec with MockitoSugar with FakeCCEligibilityApplication {
+class HHToESCEligibilityInputSpec extends UnitSpec
+  with MockitoSugar
+  with FakeCCEligibilityApplication
+  with CCConfigSpec {
+
+  val SUT = HHToESCEligibilityInput
 
   "ESCMapping" should {
 
-    val mockObject = new ESCMapping {
+    val mockObject = new HHToESCEligibilityInput {
       override val cCConfig: CCConfig = mock[CCConfig]
     }
 
     "have reference to CCConfig" in {
-      ESCMapping.cCConfig.isInstanceOf[CCConfig] shouldBe true
+      HHToESCEligibilityInput.cCConfig.isInstanceOf[CCConfig] shouldBe true
     }
 
     "convert periodEnum to Periods for ESCEligibilityInput" when {
       "periodEnum is weekly"in {
-        ESCMapping.periodEnumToPeriods(PeriodEnum.WEEKLY) shouldBe Periods.Weekly
+        PeriodEnumToPeriod.convert(PeriodEnum.WEEKLY) shouldBe Periods.Weekly
       }
 
       "periodEnum is fortnightly"in {
-        ESCMapping.periodEnumToPeriods(PeriodEnum.FORTNIGHTLY) shouldBe Periods.Fortnightly
+        PeriodEnumToPeriod.convert(PeriodEnum.FORTNIGHTLY) shouldBe Periods.Fortnightly
       }
 
       "periodEnum is yearly"in {
-        ESCMapping.periodEnumToPeriods(PeriodEnum.YEARLY) shouldBe Periods.Yearly
+        PeriodEnumToPeriod.convert(PeriodEnum.YEARLY) shouldBe Periods.Yearly
       }
 
       "periodEnum is quarterly"in {
-        ESCMapping.periodEnumToPeriods(PeriodEnum.QUARTERLY) shouldBe Periods.Quarterly
+        PeriodEnumToPeriod.convert(PeriodEnum.QUARTERLY) shouldBe Periods.Quarterly
       }
 
       "periodEnum is invalid"in {
-        ESCMapping.periodEnumToPeriods(PeriodEnum.INVALID) shouldBe Periods.INVALID
+        PeriodEnumToPeriod.convert(PeriodEnum.INVALID) shouldBe Periods.INVALID
       }
     }
 
@@ -214,5 +219,6 @@ class ESCMappingSpec extends UnitSpec with MockitoSugar with FakeCCEligibilityAp
         mockObject.convert(household) shouldBe res
       }
     }
+
   }
 }

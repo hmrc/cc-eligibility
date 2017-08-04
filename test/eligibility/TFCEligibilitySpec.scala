@@ -24,9 +24,8 @@ import org.joda.time.format.DateTimeFormat
 import org.scalatest.mock.MockitoSugar
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import spec.CCConfigSpec
 import uk.gov.hmrc.play.http.HeaderCarrier
-import utils.{Periods, TFCConfig}
+import utils.{CCConfigSpec, Periods, TFCConfig}
 
 import scala.concurrent.Future
 
@@ -86,7 +85,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
     "determine claimant's eligibility if claimant fails maximum earnings rule" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2016-08-27", formatter)
-      val claimantIncome = Some(TFCIncome(Some(1199999.0),Some(100.0),Some(100.0),None))
+      val claimantIncome = Some(TFCIncome(Some(1199999.0),Some(100.0),Some(100.0)))
       val claimant = TFCClaimant(currentIncome = claimantIncome,
         hoursPerWeek = 9.50, isPartner = false,
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
@@ -105,8 +104,8 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2003-08-27", formatter)
       val current = LocalDate.parse("2017-08-01", formatter)
-      val claimantIncome = Some(TFCIncome(Some(99999.0),Some(100.0),Some(100.0),None))
-      val claimant2Income = Some(TFCIncome(Some(1199999.0),Some(100.0),Some(100.0),None))
+      val claimantIncome = Some(TFCIncome(Some(99999.0),Some(100.0),Some(100.0)))
+      val claimant2Income = Some(TFCIncome(Some(1199999.0),Some(100.0),Some(100.0)))
 
       val claimant = TFCClaimant(currentIncome = claimantIncome,
         hoursPerWeek = 5.50, isPartner = false,
@@ -1663,7 +1662,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
       val from = LocalDate.parse("2016-03-30", formatter)
-      val claimantIncome = Some(TFCIncome(Some(1199999.0),Some(100.0),Some(100.0),None))
+      val claimantIncome = Some(TFCIncome(Some(1199999.0),Some(100.0),Some(100.0)))
       val claimant = TFCClaimant(currentIncome = claimantIncome,
         hoursPerWeek = 16.50, isPartner = false,
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)

@@ -17,7 +17,7 @@
 package models.mapping
 
 import controllers.FakeCCEligibilityApplication
-import models.mappings.LocationEnum
+import models.LocationEnum
 import uk.gov.hmrc.play.test.UnitSpec
 
 class LocationEnumSpec extends UnitSpec with FakeCCEligibilityApplication {

@@ -19,7 +19,6 @@ package utils
 import java.text.SimpleDateFormat
 import org.joda.time.LocalDate
 import play.api.Configuration
-import scala.util.Try
 
 case class TFCTaxYearConfig(
                              childAgeLimit: Int,
@@ -34,7 +33,9 @@ case class TFCTaxYearConfig(
                              nmw25Over: Int
                              )
 
-object TFCConfig extends CCConfig with LoadConfig {
+object TFCConfig extends TFCConfig
+
+trait TFCConfig extends CCConfig {
 
   def getTFCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
     configs.filter(x => {
@@ -83,6 +84,8 @@ object TFCConfig extends CCConfig with LoadConfig {
       nmw25Over = configuration.getInt("nmw.over-25").get
     )
   }
+
+  def tfcNoOfPeriods: Short = conf.getInt("tfc.number.of.periods").getOrElse(4).toShort
 
   def getConfig(currentDate: LocalDate, location: String): TFCTaxYearConfig = {
     val configs: Seq[play.api.Configuration] = conf.getConfigSeq("tfc.rule-change").get

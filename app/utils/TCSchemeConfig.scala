@@ -33,8 +33,9 @@ case class TCTaxYearConfig(
                              currentIncomeRiseDifferenceAmount : Int
                              )
 
+object TCConfig extends TCConfig
 
-object TCConfig extends CCConfig with LoadConfig {
+trait TCConfig extends CCConfig with LoadConfig {
 
   val childElementLimit = conf.getInt("tc.child-element-limit").get
   val childDate6thApril2017 = DateTimeFormat.forPattern("dd-MM-yyyy").parseLocalDate(conf.getString("tc.child-element-date-constraint").get)

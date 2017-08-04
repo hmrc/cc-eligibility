@@ -16,18 +16,22 @@
 
 package models.mappings
 
-import models.{Household, LocationEnum}
-import models.input.freeEntitlement.FreeEntitlementPayload
+import models.PeriodEnum
+import models.PeriodEnum.PeriodEnum
+import utils.Periods
 
-trait HHToFreeEntitlementPayload {
+object PeriodEnumToPeriod extends PeriodEnumToPeriod
 
-  def convert(household: Household): FreeEntitlementPayload = {
-    val location = household.location.getOrElse(LocationEnum.ENGLAND)
-    val childDOBList = household.children.map(_.dob).flatten
+trait PeriodEnumToPeriod {
 
-    FreeEntitlementPayload(location.toString, childDOBList)
+  def convert(inputPeriod: PeriodEnum): Periods.Period = {
+    inputPeriod match {
+      case PeriodEnum.FORTNIGHTLY => Periods.Fortnightly
+      case PeriodEnum.INVALID => Periods.INVALID
+      case PeriodEnum.MONTHLY => Periods.Monthly
+      case PeriodEnum.QUARTERLY => Periods.Quarterly
+      case PeriodEnum.WEEKLY => Periods.Weekly
+      case PeriodEnum.YEARLY => Periods.Yearly
+    }
   }
-
 }
-
-object HHToFreeEntitlementPayload extends HHToFreeEntitlementPayload

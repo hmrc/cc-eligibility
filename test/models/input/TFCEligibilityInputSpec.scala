@@ -25,9 +25,8 @@ import org.joda.time.format.DateTimeFormat
 import org.scalatest.mock.MockitoSugar
 import org.mockito.Matchers._
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
-import spec.CCConfigSpec
 import uk.gov.hmrc.play.http.HeaderCarrier
-import utils.{Periods, TFCConfig}
+import utils.{CCConfigSpec, Periods, TFCConfig}
 import org.mockito.Mockito._
 import play.api.mvc.Request
 import play.api.test.FakeRequest
@@ -211,8 +210,8 @@ class TFCEligibilityInputSpec extends CCConfigSpec
     }
 
     "claimant and partner both not qualify (claimant fails maximum earnings rule)" in {
-      val claimantIncome = Some(TFCIncome(Some(1199999.0), Some(100.0), Some(100.0), None))
-      val partnerIncome = Some(TFCIncome(Some(99999.0), Some(100.0), Some(100.0), None))
+      val claimantIncome = Some(TFCIncome(Some(1199999.0), Some(100.0), Some(100.0)))
+      val partnerIncome = Some(TFCIncome(Some(99999.0), Some(100.0), Some(100.0)))
       val claimant = TFCClaimant(currentIncome = claimantIncome,
         hoursPerWeek = 9.50,
         isPartner = false,
@@ -237,8 +236,8 @@ class TFCEligibilityInputSpec extends CCConfigSpec
     }
 
     "claimant qualify and partner not qualify (partner fails maximum earnings rule)" in {
-      val claimantIncome = Some(TFCIncome(Some(99999.0), Some(100.0), Some(100.0), None))
-      val partnerIncome = Some(TFCIncome(Some(9999999.0), Some(100.0), Some(100.0), None))
+      val claimantIncome = Some(TFCIncome(Some(99999.0), Some(100.0), Some(100.0)))
+      val partnerIncome = Some(TFCIncome(Some(9999999.0), Some(100.0), Some(100.0)))
       val claimant = TFCClaimant(previousIncome = claimantIncome,
         hoursPerWeek = 16.50,
         isPartner = false,
@@ -263,8 +262,8 @@ class TFCEligibilityInputSpec extends CCConfigSpec
     }
 
     "claimant not qualify and partner qualify (claimant fails totalIncome)" in {
-      val claimantIncome = Some(TFCIncome(Some(1199999.0), Some(100.0), Some(100.0), None))
-      val partnerIncome = Some(TFCIncome(Some(99999.0), Some(100.0), Some(100.0), None))
+      val claimantIncome = Some(TFCIncome(Some(1199999.0), Some(100.0), Some(100.0)))
+      val partnerIncome = Some(TFCIncome(Some(99999.0), Some(100.0), Some(100.0)))
       val claimant = TFCClaimant(currentIncome = claimantIncome,
         hoursPerWeek = 9.50,
         isPartner = false,

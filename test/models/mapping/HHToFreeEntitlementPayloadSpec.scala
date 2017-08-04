@@ -17,7 +17,7 @@
 package models.mapping
 
 import controllers.FakeCCEligibilityApplication
-import models.mappings._
+import models._
 import models.input.freeEntitlement.FreeEntitlementPayload
 import models.mappings.HHToFreeEntitlementPayload
 import org.joda.time.LocalDate

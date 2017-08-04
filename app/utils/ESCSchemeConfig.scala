@@ -26,7 +26,9 @@ case class ESCTaxYearConfig(
                              childAgeLimitDisabled: Int
                              )
 
-object ESCConfig extends CCConfig with LoadConfig {
+object ESCConfig extends ESCConfig
+
+trait ESCConfig extends CCConfig with LoadConfig {
 
     def getESCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
     configs.filter(x => {

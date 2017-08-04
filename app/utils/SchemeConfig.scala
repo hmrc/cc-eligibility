@@ -125,3 +125,4 @@ trait CCConfig extends LoadConfig {
 }
 
 object CCConfig extends CCConfig
+

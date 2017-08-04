@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package models.mappings
+package utils
 
-import models.{Household, LocationEnum}
-import models.input.freeEntitlement.FreeEntitlementPayload
+import org.joda.time.LocalDate
 
-trait HHToFreeEntitlementPayload {
+trait HelperManager {
 
-  def convert(household: Household): FreeEntitlementPayload = {
-    val location = household.location.getOrElse(LocationEnum.ENGLAND)
-    val childDOBList = household.children.map(_.dob).flatten
+  def determineApril6DateFromNow(from: LocalDate): LocalDate = {
+    val periodYear = from.getYear
+    val january1st = LocalDate.parse(s"${periodYear}-01-01")
+    val april6CurrentYear = LocalDate.parse(s"${periodYear}-04-06")
 
-    FreeEntitlementPayload(location.toString, childDOBList)
+    if ((from.compareTo(january1st) == 0 || (from.isAfter(january1st)) && from.isBefore(april6CurrentYear))) {
+      april6CurrentYear
+    } else {
+      april6CurrentYear.plusYears(1)
+    }
   }
 
 }
 
-object HHToFreeEntitlementPayload extends HHToFreeEntitlementPayload
+object HelperManager extends HelperManager

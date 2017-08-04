@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package models.mappings
+package models
 
-import models.mappings.AgeRangeEnum.AgeRangeEnum
-import models.mappings.EmploymentStatusEnum.EmploymentStatusEnum
-import models.mappings.LocationEnum.LocationEnum
-import models.mappings.PeriodEnum.PeriodEnum
-import models.mappings.TcUcBenefitsEnum.TcUcBenefitsEnum
-import models.mappings.YesNoUnsureBothEnum.YesNoUnsureBothEnum
+import models.AgeRangeEnum.AgeRangeEnum
+import models.LocationEnum.LocationEnum
+import models.TcUcBenefitsEnum.TcUcBenefitsEnum
+import models.YesNoUnsureBothEnum.YesNoUnsureBothEnum
+import models.EmploymentStatusEnum.EmploymentStatusEnum
+import models.PeriodEnum.PeriodEnum
 import org.joda.time.LocalDate
 import play.api.libs.json.Json
 
 //Note :- The order of these classes need to preserved to ensure json formatters are prepared in the correct order
+//Should also match childcarecalculatorfrontend.models.Household
 case class StatutoryIncome(
                             statutoryWeeks: Double = 0.00,
                             statutoryAmount: BigDecimal =   0.00
@@ -127,7 +128,7 @@ object Claimant {
 case class Household(
                       tcUcBenefits: Option[TcUcBenefitsEnum] =   None,
                       location: Option[LocationEnum] =   None,
-                      hasPartner: Boolean = false,
+                      hasPartner: Boolean =   false,
                       children: List[Child],
                       parent: Claimant,
                       partner: Option[Claimant]

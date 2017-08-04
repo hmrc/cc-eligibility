@@ -89,8 +89,7 @@ object TFCEligibilityInput extends CCFormat with MessagesObject {
 case class TFCIncome(
                    employmentIncome : Option[BigDecimal],
                    pension : Option[BigDecimal],
-                   otherIncome : Option[BigDecimal],
-                   benefits : Option[BigDecimal]
+                   otherIncome : Option[BigDecimal]
                  )
 object TFCIncome {
   implicit val formats = Json.format[TFCIncome]
@@ -309,9 +308,9 @@ object TFCChild extends CCFormat with MessagesObject {
 
   implicit val childReads: Reads[TFCChild] = (
     (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
-        (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(messages("cc.elig.childcare.spend.too.low")))(x => childSpendValidation(x)) and
-          (JsPath \ "childcareCostPeriod").read[Periods.Period] and
-            (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
-              (JsPath \ "disability").read[TFCDisability]
+      (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(messages("cc.elig.childcare.spend.too.low")))(x => childSpendValidation(x)) and
+        (JsPath \ "childcareCostPeriod").read[Periods.Period] and
+          (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
+            (JsPath \ "disability").read[TFCDisability]
     )(TFCChild.apply _)
 }
