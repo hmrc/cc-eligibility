@@ -23,16 +23,15 @@ import models.mappings._
 import org.joda.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
-import spec.CCConfigSpec
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.{CCConfig, Periods}
+import utils.{CCConfig, CCConfigSpec, Periods}
 
 class HHToESCEligibilityInputSpec extends UnitSpec
   with MockitoSugar
   with FakeCCEligibilityApplication
   with CCConfigSpec {
 
-  val SUT =  new HHToESCEligibilityInput {
+  val SUT = new HHToESCEligibilityInput {
     override val cCConfig: CCConfig = mock[CCConfig]
   }
 
@@ -45,17 +44,17 @@ class HHToESCEligibilityInputSpec extends UnitSpec
     "convert Household into ESCEligibilityInput" when {
       "given a household with parent and no partner no children" in {
 
-        val household = Household( children = Nil, hasPartner = false,
+        val household = Household(children = Nil, hasPartner = false,
           parent = Claimant(escVouchers = Some(YesNoUnsureBothEnum.YES)),
           partner = None)
 
         val res = ESCEligibilityInput(List(
           ESCTaxYear(LocalDate.now(),
             LocalDate.parse("2018-04-06"),
-            List(ESCClaimant(false,true)),List()),
+            List(ESCClaimant(false, true)), List()),
           ESCTaxYear(LocalDate.parse("2018-04-06"),
             LocalDate.now().plusYears(1),
-            List(ESCClaimant(false,true)),List())))
+            List(ESCClaimant(false, true)), List())))
 
         when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
 
@@ -71,10 +70,10 @@ class HHToESCEligibilityInputSpec extends UnitSpec
         val res = ESCEligibilityInput(List(
           ESCTaxYear(LocalDate.now(),
             LocalDate.parse("2018-04-06"),
-            List(ESCClaimant(false,true), ESCClaimant(true,false)),List()),
+            List(ESCClaimant(false, true), ESCClaimant(true, false)), List()),
           ESCTaxYear(LocalDate.parse("2018-04-06"),
             LocalDate.now().plusYears(1),
-            List(ESCClaimant(false,true), ESCClaimant(true,false)),List())))
+            List(ESCClaimant(false, true), ESCClaimant(true, false)), List())))
 
         when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
 
@@ -114,8 +113,8 @@ class HHToESCEligibilityInputSpec extends UnitSpec
               currentDate,
               LocalDate.parse("2018-04-06"),
               List(
-                ESCClaimant(false,true),
-                ESCClaimant(true,false)
+                ESCClaimant(false, true),
+                ESCClaimant(true, false)
               ),
               List(
                 ESCChild(
@@ -123,7 +122,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
                   dob,
                   0,
                   Periods.Monthly,
-                  ESCDisability(true,false)
+                  ESCDisability(true, false)
                 )
               )
             ),
@@ -131,8 +130,8 @@ class HHToESCEligibilityInputSpec extends UnitSpec
               LocalDate.parse("2018-04-06"),
               currentDate.plusYears(1),
               List(
-                ESCClaimant(false,true),
-                ESCClaimant(true,false)
+                ESCClaimant(false, true),
+                ESCClaimant(true, false)
               ),
               List(
                 ESCChild(
@@ -140,7 +139,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
                   dob,
                   0,
                   Periods.Monthly,
-                  ESCDisability(true,false)
+                  ESCDisability(true, false)
                 )
               )
             )
@@ -180,14 +179,14 @@ class HHToESCEligibilityInputSpec extends UnitSpec
             ESCTaxYear(
               currentDate,
               LocalDate.parse("2017-04-06"),
-              List(ESCClaimant(false,true),ESCClaimant(true,false)),
-              List(ESCChild(1, dob, 0, Periods.Monthly, ESCDisability(true,false)))
+              List(ESCClaimant(false, true), ESCClaimant(true, false)),
+              List(ESCChild(1, dob, 0, Periods.Monthly, ESCDisability(true, false)))
             ),
             ESCTaxYear(
               LocalDate.parse("2017-04-06"),
               currentDate.plusYears(1),
-              List(ESCClaimant(false,true), ESCClaimant(true,false)),
-              List(ESCChild(1, dob, 0, Periods.Monthly, ESCDisability(true,false))))
+              List(ESCClaimant(false, true), ESCClaimant(true, false)),
+              List(ESCChild(1, dob, 0, Periods.Monthly, ESCDisability(true, false))))
           )
         )
 

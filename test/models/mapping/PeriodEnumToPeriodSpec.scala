@@ -21,7 +21,7 @@ import models.mappings.PeriodEnumToPeriod
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.Periods
 
-class PeriodEnumToPeriodSpec  extends UnitSpec {
+class PeriodEnumToPeriodSpec extends UnitSpec {
 
   val SUT = PeriodEnumToPeriod
 

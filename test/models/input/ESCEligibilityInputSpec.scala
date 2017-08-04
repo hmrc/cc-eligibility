@@ -24,7 +24,7 @@ import models.input.esc._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.libs.json.{JsSuccess, JsValue, Json}
-import spec.CCConfigSpec
+import utils.CCConfigSpec
 
 class ESCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplication with ESCChildren {
 

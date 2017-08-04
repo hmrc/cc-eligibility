@@ -25,18 +25,29 @@ object HHToTFCEligibilityInput extends HHToTFCEligibilityInput {
   override val tFCConfig = TFCConfig
 }
 
-trait HHToTFCEligibilityInput extends PeriodEnumToPeriod{
+trait HHToTFCEligibilityInput extends PeriodEnumToPeriod {
 
   val tFCConfig: TFCConfig
 
-  def convert(hh: Household):TFCEligibilityInput = {
+  def convert(hh: Household): TFCEligibilityInput = {
     TFCEligibilityInput(
       from = tFCConfig.StartDate,
       numberOfPeriods = tFCConfig.tfcNoOfPeriods,
       location = hh.location.getOrElse(LocationEnum.ENGLAND.toString).toString,
       claimants = hhClaimantToTFCEligibilityInputClaimant(hh.hasPartner, hh.parent, hh.partner),
-      children =  hhChildToTFCEligibilityInputChild(hh.children)
+      children = hhChildToTFCEligibilityInputChild(hh.children)
     )
+  }
+
+  private def hhClaimantToTFCEligibilityInputClaimant(hasPartner: Boolean, hhParent: Claimant, hhPartner: Option[Claimant]): List[TFCClaimant] = {
+
+    val parent: TFCClaimant = createClaimant(hhParent, false)
+
+    if (hasPartner) {
+      List(parent, createClaimant(hhPartner.get, hasPartner))
+    } else {
+      List(parent)
+    }
   }
 
   private def createClaimant(claimant: Claimant, isPartner: Boolean): TFCClaimant = {
@@ -52,16 +63,6 @@ trait HHToTFCEligibilityInput extends PeriodEnumToPeriod{
       employmentStatus = claimant.minimumEarnings.map(x => x.employmentStatus.toString),
       selfEmployedSelection = claimant.minimumEarnings.flatMap(x => x.selfEmployedIn12Months))
   }
-  private def hhClaimantToTFCEligibilityInputClaimant(hasPartner: Boolean, hhParent: Claimant, hhPartner: Option[Claimant]): List[TFCClaimant] = {
-
-    val parent: TFCClaimant = createClaimant(hhParent, false)
-
-    if(hasPartner) {
-      List(parent, createClaimant(hhPartner.get, hasPartner))
-    } else {
-      List(parent)
-    }
-  }
 
   private def hhMinimumEarningsToTFCMinimumEarnings(hhMinimumEarnings: Option[MinimumEarnings]): TFCMinimumEarnings = {
 
@@ -70,7 +71,7 @@ trait HHToTFCEligibilityInput extends PeriodEnumToPeriod{
         selection = true, //true by default if selected
         amount = hhMinimumEarnings.amount
       )
-      case None =>TFCMinimumEarnings(
+      case None => TFCMinimumEarnings(
         selection = false, //false is no minimum earnings selected
         amount = BigDecimal(0.00))
     }
@@ -97,4 +98,5 @@ trait HHToTFCEligibilityInput extends PeriodEnumToPeriod{
         )
       )
     })
-  }}
+  }
+}

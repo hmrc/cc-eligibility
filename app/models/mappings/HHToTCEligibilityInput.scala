@@ -25,12 +25,12 @@ object HHToTCEligibilityInput extends HHToTCEligibilityInput {
   override val cCConfig = CCConfig
 }
 
-trait HHToTCEligibilityInput extends PeriodEnumToPeriod{
+trait HHToTCEligibilityInput extends PeriodEnumToPeriod {
 
   val cCConfig: CCConfig
 
-  def convert(household:Household):TCEligibilityInput = {
-    TCEligibilityInput(taxYears = createTaxYears(household.hasPartner, household.parent, household.partner, household.children)    )
+  def convert(household: Household): TCEligibilityInput = {
+    TCEligibilityInput(taxYears = createTaxYears(household.hasPartner, household.parent, household.partner, household.children))
   }
 
   private def createTaxYears(
@@ -77,33 +77,31 @@ trait HHToTCEligibilityInput extends PeriodEnumToPeriod{
   private def hhClaimantToTCEligibilityInputClaimant(hhParent: Claimant, hhPartner: Option[Claimant]): List[TCClaimant] = {
 
     val parent: TCClaimant = TCClaimant(
-                                          hours = hhParent.hours.getOrElse(BigDecimal(0.0)).doubleValue(),
-                                          isPartner  = false,
-                                          disability = hhBenefitsToTCDisability(hhParent.benefits),
-                                          carersAllowance = hhParent.benefits.map(x => x.carersAllowance).getOrElse(false)
+      hours = hhParent.hours.getOrElse(BigDecimal(0.0)).doubleValue(),
+      isPartner = false,
+      disability = hhBenefitsToTCDisability(hhParent.benefits),
+      carersAllowance = hhParent.benefits.map(x => x.carersAllowance).getOrElse(false)
     )
 
     hhPartner match {
       case Some(hhPartner) => List(parent, TCClaimant(
-                                                      hours = hhPartner.hours.getOrElse(BigDecimal(0.0)).doubleValue(),
-                                                      isPartner  = true,
-                                                      disability = hhBenefitsToTCDisability(hhPartner.benefits),
-                                                      carersAllowance = hhPartner.benefits.map(x => x.carersAllowance).getOrElse(false)
-                                                    )
+        hours = hhPartner.hours.getOrElse(BigDecimal(0.0)).doubleValue(),
+        isPartner = true,
+        disability = hhBenefitsToTCDisability(hhPartner.benefits),
+        carersAllowance = hhPartner.benefits.map(x => x.carersAllowance).getOrElse(false)
+      )
       )
       case None => List(parent)
     }
   }
 
   private def hhBenefitsToTCDisability(hhBenefits: Option[Benefits]): TCDisability = {
-    if(hhBenefits.isDefined && hhBenefits.get.disabilityBenefits)
-      {
-        TCDisability(disabled = true, severelyDisabled = true)
-      }
-    else
-      {
-        TCDisability(disabled = false, severelyDisabled = false)
-      }
+    if (hhBenefits.isDefined && hhBenefits.get.disabilityBenefits) {
+      TCDisability(disabled = true, severelyDisabled = true)
+    }
+    else {
+      TCDisability(disabled = false, severelyDisabled = false)
+    }
   }
 
   private def hhChildToTEligibilityInputChild(hhChildren: List[Child]): List[TCChild] = {
@@ -111,18 +109,18 @@ trait HHToTCEligibilityInput extends PeriodEnumToPeriod{
       TCChild(
         id = child.id,
         childcareCost = child.childcareCost match {
-        case Some(childcareCost) => childcareCost.amount.getOrElse(BigDecimal(0.00))
-        case None => BigDecimal(0.00)
-      },
+          case Some(childcareCost) => childcareCost.amount.getOrElse(BigDecimal(0.00))
+          case None => BigDecimal(0.00)
+        },
         childcareCostPeriod = convert(child.childcareCost match {
-        case Some(childcareCost) => childcareCost.period.getOrElse(PeriodEnum.INVALID)
-        case None => PeriodEnum.INVALID
-      }),
-      dob = child.dob.get,
-      disability = TCDisability(
-        disabled = child.disability.map(x => x.disabled).getOrElse(false) || child.disability.map(x => x.blind).getOrElse(false),
-        severelyDisabled = child.disability.map(x => x.severelyDisabled).getOrElse(false)
-      ),
+          case Some(childcareCost) => childcareCost.period.getOrElse(PeriodEnum.INVALID)
+          case None => PeriodEnum.INVALID
+        }),
+        dob = child.dob.get,
+        disability = TCDisability(
+          disabled = child.disability.map(x => x.disabled).getOrElse(false) || child.disability.map(x => x.blind).getOrElse(false),
+          severelyDisabled = child.disability.map(x => x.severelyDisabled).getOrElse(false)
+        ),
         education = Some(TCEducation(child.education.map(x => x.inEducation).getOrElse(false),
           startDate = child.education.flatMap(x => x.startDate).getOrElse(LocalDate.now()))))
     })

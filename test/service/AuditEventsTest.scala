@@ -19,11 +19,12 @@ package service
 import controllers.FakeCCEligibilityApplication
 import org.scalatest.mock.MockitoSugar
 import play.api.test.FakeRequest
-import spec.CCConfigSpec
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.{AuditEvent, DataEvent}
 import uk.gov.hmrc.play.http.HeaderCarrier
+import utils.CCConfigSpec
+
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 

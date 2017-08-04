@@ -24,9 +24,8 @@ import org.joda.time.format.DateTimeFormat
 import org.scalatest.mock.MockitoSugar
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import spec.CCConfigSpec
 import uk.gov.hmrc.play.http.HeaderCarrier
-import utils.{Periods, TFCConfig}
+import utils.{CCConfigSpec, Periods, TFCConfig}
 
 import scala.concurrent.Future
 

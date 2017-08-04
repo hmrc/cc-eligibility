@@ -25,9 +25,8 @@ import org.joda.time.format.DateTimeFormat
 import org.scalatest.mock.MockitoSugar
 import org.mockito.Matchers._
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
-import spec.CCConfigSpec
 import uk.gov.hmrc.play.http.HeaderCarrier
-import utils.{Periods, TFCConfig}
+import utils.{CCConfigSpec, Periods, TFCConfig}
 import org.mockito.Mockito._
 import play.api.mvc.Request
 import play.api.test.FakeRequest

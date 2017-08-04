@@ -23,14 +23,13 @@ import models.mappings._
 import org.joda.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
-import spec.CCConfigSpec
-import utils.{Periods, TFCConfig}
+import utils.{CCConfigSpec, Periods, TFCConfig}
 
 class HHToTFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
 
-val SUT = new HHToTFCEligibilityInput {
-  override val tFCConfig = mock[TFCConfig]
-}
+  val SUT = new HHToTFCEligibilityInput {
+    override val tFCConfig = mock[TFCConfig]
+  }
 
   "HHToTFCEligibilityInput" should {
 
@@ -157,7 +156,7 @@ val SUT = new HHToTFCEligibilityInput {
 
         val expectedOutput = TFCEligibilityInput(currentDate, 4, "england",
           List(TFCClaimant(None, Some(TFCIncome(Some(12212), Some(47674), Some(647864))), 34.0, false, TFCDisability(false, false), false,
-              TFCMinimumEarnings(true, 2313), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), Some(Some(EmploymentStatusEnum.SELFEMPLOYED).toString), Some(true)),
+            TFCMinimumEarnings(true, 2313), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), Some(Some(EmploymentStatusEnum.SELFEMPLOYED).toString), Some(true)),
             TFCClaimant(None, Some(TFCIncome(Some(12212), Some(47674), Some(647864))), 21.0, true, TFCDisability(false, false), false,
               TFCMinimumEarnings(false, 0.0), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), None, None)),
           List(TFCChild(0, 0, Periods.Monthly, dob, TFCDisability(true, false)),

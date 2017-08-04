@@ -18,15 +18,13 @@ package models.mappings
 
 import models._
 import models.input.esc._
-import org.joda.time.LocalDate
-import utils.CCConfig
-
+import utils.{CCConfig, HelperManager}
 
 object HHToESCEligibilityInput extends HHToESCEligibilityInput {
   override val cCConfig = CCConfig
 }
 
-trait HHToESCEligibilityInput extends PeriodEnumToPeriod {
+trait HHToESCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
 
   val cCConfig: CCConfig
 
@@ -60,18 +58,6 @@ trait HHToESCEligibilityInput extends PeriodEnumToPeriod {
         children = childList
       )
     )
-  }
-
-  private def determineApril6DateFromNow(from: LocalDate): LocalDate = {
-    val periodYear = from.getYear
-    val january1st = LocalDate.parse(s"${periodYear}-01-01")
-    val april6CurrentYear = LocalDate.parse(s"${periodYear}-04-06")
-
-    if ((from.compareTo(january1st) == 0 || (from.isAfter(january1st)) && from.isBefore(april6CurrentYear))) {
-      april6CurrentYear
-    } else {
-      april6CurrentYear.plusYears(1)
-    }
   }
 
   private def createClaimants(hasPartner: Boolean,
@@ -113,4 +99,5 @@ trait HHToESCEligibilityInput extends PeriodEnumToPeriod {
       )
     }
   }
+
 }
