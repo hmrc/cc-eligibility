@@ -16,6 +16,7 @@
 
 package models.mappings
 
+import models.{Household, LocationEnum}
 import models.input.freeEntitlement.FreeEntitlementPayload
 
 trait HHToFreeEntitlementPayload {
