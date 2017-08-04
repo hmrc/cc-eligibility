@@ -161,7 +161,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
         val benefits: Benefits = Benefits(disabilityBenefits = false, highRateDisabilityBenefits = false, incomeBenefits = false, carersAllowance = true)
         val children = List(
           Child(
-            1,
+            0,
             "Child1",
             Some(dob),
             Some(Disability(true, false, false)),
@@ -184,9 +184,9 @@ class HHToTCEligibilityInputSpec extends UnitSpec
               List(TCClaimant(0, false, TCDisability(false, false), carersAllowance = true),
                 TCClaimant(0, true, TCDisability(false, false), carersAllowance = true)),
               List(TCChild(
-                1,
+                0,
                 0.0,
-                Periods.INVALID,
+                Periods.Monthly,
                 dob,
                 TCDisability(true, false),
                 Some(TCEducation(false, LocalDate.now()))
@@ -198,9 +198,9 @@ class HHToTCEligibilityInputSpec extends UnitSpec
               List(TCClaimant(0, false, TCDisability(false, false), carersAllowance = true),
                 TCClaimant(0, true, TCDisability(false, false), carersAllowance = true)),
               List(TCChild(
-                1,
+                0,
                 0.0,
-                Periods.INVALID,
+                Periods.Monthly,
                 dob,
                 TCDisability(true, false),
                 Some(TCEducation(false, LocalDate.now()))
@@ -249,7 +249,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
               TCChild(
                 1,
                 0.0,
-                Periods.INVALID,
+                Periods.Monthly,
                 dob,
                 TCDisability(false, false),
                 Some(TCEducation(false, LocalDate.now()))
@@ -267,7 +267,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
               TCChild(
                 1,
                 0.0,
-                Periods.INVALID,
+                Periods.Monthly,
                 dob,
                 TCDisability(false, false),
                 Some(TCEducation(false, LocalDate.now()))

@@ -19,13 +19,13 @@ package models.mappings
 import models._
 import models.input.tc._
 import org.joda.time.LocalDate
-import utils.CCConfig
+import utils.{CCConfig, HelperManager}
 
 object HHToTCEligibilityInput extends HHToTCEligibilityInput {
   override val cCConfig = CCConfig
 }
 
-trait HHToTCEligibilityInput extends PeriodEnumToPeriod {
+trait HHToTCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
 
   val cCConfig: CCConfig
 
@@ -42,7 +42,7 @@ trait HHToTCEligibilityInput extends PeriodEnumToPeriod {
 
     val now = cCConfig.StartDate
     val april6thCurrentYear = determineApril6DateFromNow(now)
-    val claimantList = hhClaimantToTCEligibilityInputClaimant(parent, partner)
+    val claimantList = hhClaimantToTCEligibilityInputClaimant(hasPartner, parent, partner)
     val childList = hhChildToTEligibilityInputChild(children)
 
     List(
@@ -61,46 +61,22 @@ trait HHToTCEligibilityInput extends PeriodEnumToPeriod {
     )
   }
 
-  //this code is duplicated in HHToESCEligibilityInput and should be refactored out
-  private def determineApril6DateFromNow(from: LocalDate): LocalDate = {
-    val periodYear = from.getYear
-    val january1st = LocalDate.parse(s"${periodYear}-01-01")
-    val april6CurrentYear = LocalDate.parse(s"${periodYear}-04-06")
-
-    if ((from.compareTo(january1st) == 0 || (from.isAfter(january1st)) && from.isBefore(april6CurrentYear))) {
-      april6CurrentYear
-    } else {
-      april6CurrentYear.plusYears(1)
-    }
-  }
-
-  private def hhClaimantToTCEligibilityInputClaimant(hhParent: Claimant, hhPartner: Option[Claimant]): List[TCClaimant] = {
-
-    val parent: TCClaimant = TCClaimant(
-      hours = hhParent.hours.getOrElse(BigDecimal(0.0)).doubleValue(),
-      isPartner = false,
-      disability = hhBenefitsToTCDisability(hhParent.benefits),
-      carersAllowance = hhParent.benefits.map(x => x.carersAllowance).getOrElse(false)
+  private def createClaimant(claimant: Claimant, isPartner: Boolean): TCClaimant = {
+    TCClaimant(
+      hours = claimant.hours.getOrElse(BigDecimal(0.0)).doubleValue(),
+      isPartner = isPartner,
+      disability = TCDisability(claimant.benefits.exists(_.disabilityBenefits), claimant.benefits.exists(_.highRateDisabilityBenefits)),
+      carersAllowance = claimant.benefits.exists(_.carersAllowance)
     )
 
-    hhPartner match {
-      case Some(hhPartner) => List(parent, TCClaimant(
-        hours = hhPartner.hours.getOrElse(BigDecimal(0.0)).doubleValue(),
-        isPartner = true,
-        disability = hhBenefitsToTCDisability(hhPartner.benefits),
-        carersAllowance = hhPartner.benefits.map(x => x.carersAllowance).getOrElse(false)
-      )
-      )
-      case None => List(parent)
-    }
   }
+  private def hhClaimantToTCEligibilityInputClaimant(hasPartner: Boolean, hhParent: Claimant, hhPartner: Option[Claimant]): List[TCClaimant] = {
 
-  private def hhBenefitsToTCDisability(hhBenefits: Option[Benefits]): TCDisability = {
-    if (hhBenefits.isDefined && hhBenefits.get.disabilityBenefits) {
-      TCDisability(disabled = true, severelyDisabled = true)
-    }
-    else {
-      TCDisability(disabled = false, severelyDisabled = false)
+    val parent: TCClaimant = createClaimant(hhParent, false)
+    if(hasPartner) {
+      List(parent, createClaimant(hhPartner.get, true))
+    } else {
+      List(parent)
     }
   }
 
@@ -108,20 +84,14 @@ trait HHToTCEligibilityInput extends PeriodEnumToPeriod {
     hhChildren map (child => {
       TCChild(
         id = child.id,
-        childcareCost = child.childcareCost match {
-          case Some(childcareCost) => childcareCost.amount.getOrElse(BigDecimal(0.00))
-          case None => BigDecimal(0.00)
-        },
-        childcareCostPeriod = convert(child.childcareCost match {
-          case Some(childcareCost) => childcareCost.period.getOrElse(PeriodEnum.INVALID)
-          case None => PeriodEnum.INVALID
-        }),
+        childcareCost = child.childcareCost.flatMap(_.amount).getOrElse(BigDecimal(0)),
+        childcareCostPeriod = convert(child.childcareCost.flatMap(_.period).getOrElse(PeriodEnum.MONTHLY)),
         dob = child.dob.get,
         disability = TCDisability(
-          disabled = child.disability.map(x => x.disabled).getOrElse(false) || child.disability.map(x => x.blind).getOrElse(false),
-          severelyDisabled = child.disability.map(x => x.severelyDisabled).getOrElse(false)
+          disabled = child.disability.exists(d => d.blind || d.disabled),
+          severelyDisabled = child.disability.exists(_.severelyDisabled)
         ),
-        education = Some(TCEducation(child.education.map(x => x.inEducation).getOrElse(false),
+        education = Some(TCEducation(child.education.exists(_.inEducation),
           startDate = child.education.flatMap(x => x.startDate).getOrElse(LocalDate.now()))))
     })
   }
