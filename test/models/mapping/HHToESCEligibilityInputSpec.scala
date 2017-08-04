@@ -18,11 +18,11 @@ package models.mapping
 
 import controllers.FakeCCEligibilityApplication
 import models._
-import org.mockito.Mockito.when
-import org.scalatest.mock.MockitoSugar
 import models.input.esc._
 import models.mappings._
 import org.joda.time.LocalDate
+import org.mockito.Mockito.when
+import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.{CCConfig, CCConfigSpec, Periods}
 
@@ -31,58 +31,34 @@ class HHToESCEligibilityInputSpec extends UnitSpec
   with FakeCCEligibilityApplication
   with CCConfigSpec {
 
-  val SUT = HHToESCEligibilityInput
+  val SUT = new HHToESCEligibilityInput {
+    override val cCConfig: CCConfig = mock[CCConfig]
+  }
 
-  "ESCMapping" should {
-
-    val mockObject = new HHToESCEligibilityInput {
-      override val cCConfig: CCConfig = mock[CCConfig]
-    }
+  "HHToESCEligibilityInput" should {
 
     "have reference to CCConfig" in {
       HHToESCEligibilityInput.cCConfig.isInstanceOf[CCConfig] shouldBe true
     }
 
-    "convert periodEnum to Periods for ESCEligibilityInput" when {
-      "periodEnum is weekly"in {
-        PeriodEnumToPeriod.convert(PeriodEnum.WEEKLY) shouldBe Periods.Weekly
-      }
-
-      "periodEnum is fortnightly"in {
-        PeriodEnumToPeriod.convert(PeriodEnum.FORTNIGHTLY) shouldBe Periods.Fortnightly
-      }
-
-      "periodEnum is yearly"in {
-        PeriodEnumToPeriod.convert(PeriodEnum.YEARLY) shouldBe Periods.Yearly
-      }
-
-      "periodEnum is quarterly"in {
-        PeriodEnumToPeriod.convert(PeriodEnum.QUARTERLY) shouldBe Periods.Quarterly
-      }
-
-      "periodEnum is invalid"in {
-        PeriodEnumToPeriod.convert(PeriodEnum.INVALID) shouldBe Periods.INVALID
-      }
-    }
-
     "convert Household into ESCEligibilityInput" when {
       "given a household with parent and no partner no children" in {
 
-        val household = Household( children = Nil, hasPartner = false,
+        val household = Household(children = Nil, hasPartner = false,
           parent = Claimant(escVouchers = Some(YesNoUnsureBothEnum.YES)),
           partner = None)
 
         val res = ESCEligibilityInput(List(
           ESCTaxYear(LocalDate.now(),
             LocalDate.parse("2018-04-06"),
-            List(ESCClaimant(false,true)),List()),
+            List(ESCClaimant(false, true)), List()),
           ESCTaxYear(LocalDate.parse("2018-04-06"),
             LocalDate.now().plusYears(1),
-            List(ESCClaimant(false,true)),List())))
+            List(ESCClaimant(false, true)), List())))
 
-        when(mockObject.cCConfig.StartDate).thenReturn(LocalDate.now())
+        when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
 
-        mockObject.convert(household) shouldBe res
+        SUT.convert(household) shouldBe res
       }
 
       "given a household with parent and a partner with no children" in {
@@ -94,14 +70,14 @@ class HHToESCEligibilityInputSpec extends UnitSpec
         val res = ESCEligibilityInput(List(
           ESCTaxYear(LocalDate.now(),
             LocalDate.parse("2018-04-06"),
-            List(ESCClaimant(false,true), ESCClaimant(true,false)),List()),
+            List(ESCClaimant(false, true), ESCClaimant(true, false)), List()),
           ESCTaxYear(LocalDate.parse("2018-04-06"),
             LocalDate.now().plusYears(1),
-            List(ESCClaimant(false,true), ESCClaimant(true,false)),List())))
+            List(ESCClaimant(false, true), ESCClaimant(true, false)), List())))
 
-        when(mockObject.cCConfig.StartDate).thenReturn(LocalDate.now())
+        when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
 
-        mockObject.convert(household) shouldBe res
+        SUT.convert(household) shouldBe res
       }
 
       "given a household with parent, a partner and children with startDate after April 6" in {
@@ -137,8 +113,8 @@ class HHToESCEligibilityInputSpec extends UnitSpec
               currentDate,
               LocalDate.parse("2018-04-06"),
               List(
-                ESCClaimant(false,true),
-                ESCClaimant(true,false)
+                ESCClaimant(false, true),
+                ESCClaimant(true, false)
               ),
               List(
                 ESCChild(
@@ -146,7 +122,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
                   dob,
                   0,
                   Periods.Monthly,
-                  ESCDisability(true,false)
+                  ESCDisability(true, false)
                 )
               )
             ),
@@ -154,8 +130,8 @@ class HHToESCEligibilityInputSpec extends UnitSpec
               LocalDate.parse("2018-04-06"),
               currentDate.plusYears(1),
               List(
-                ESCClaimant(false,true),
-                ESCClaimant(true,false)
+                ESCClaimant(false, true),
+                ESCClaimant(true, false)
               ),
               List(
                 ESCChild(
@@ -163,16 +139,16 @@ class HHToESCEligibilityInputSpec extends UnitSpec
                   dob,
                   0,
                   Periods.Monthly,
-                  ESCDisability(true,false)
+                  ESCDisability(true, false)
                 )
               )
             )
           )
         )
 
-        when(mockObject.cCConfig.StartDate).thenReturn(currentDate)
+        when(SUT.cCConfig.StartDate).thenReturn(currentDate)
 
-        mockObject.convert(household) shouldBe res
+        SUT.convert(household) shouldBe res
       }
 
       "given a household with parent, a partner and children with startDate as before April 6" in {
@@ -203,20 +179,20 @@ class HHToESCEligibilityInputSpec extends UnitSpec
             ESCTaxYear(
               currentDate,
               LocalDate.parse("2017-04-06"),
-              List(ESCClaimant(false,true),ESCClaimant(true,false)),
-              List(ESCChild(1, dob, 0, Periods.Monthly, ESCDisability(true,false)))
+              List(ESCClaimant(false, true), ESCClaimant(true, false)),
+              List(ESCChild(1, dob, 0, Periods.Monthly, ESCDisability(true, false)))
             ),
             ESCTaxYear(
               LocalDate.parse("2017-04-06"),
               currentDate.plusYears(1),
-              List(ESCClaimant(false,true), ESCClaimant(true,false)),
-              List(ESCChild(1, dob, 0, Periods.Monthly, ESCDisability(true,false))))
+              List(ESCClaimant(false, true), ESCClaimant(true, false)),
+              List(ESCChild(1, dob, 0, Periods.Monthly, ESCDisability(true, false))))
           )
         )
 
-        when(mockObject.cCConfig.StartDate).thenReturn(currentDate)
+        when(SUT.cCConfig.StartDate).thenReturn(currentDate)
 
-        mockObject.convert(household) shouldBe res
+        SUT.convert(household) shouldBe res
       }
     }
 

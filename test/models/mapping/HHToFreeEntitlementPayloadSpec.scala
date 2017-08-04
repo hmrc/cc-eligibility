@@ -68,7 +68,7 @@ class HHToFreeEntitlementPayloadSpec extends UnitSpec with FakeCCEligibilityAppl
 
         val childDOBList = List(dob1, dob2)
 
-        SUT.convert(household) shouldBe  FreeEntitlementPayload("england", childDOBList)
+        SUT.convert(household) shouldBe FreeEntitlementPayload("england", childDOBList)
       }
 
       "given a household with no location and children having no DOB" in {
@@ -102,7 +102,7 @@ class HHToFreeEntitlementPayloadSpec extends UnitSpec with FakeCCEligibilityAppl
           )
         )
 
-        SUT.convert(household) shouldBe  FreeEntitlementPayload("england", Nil)
+        SUT.convert(household) shouldBe FreeEntitlementPayload("england", Nil)
       }
     }
   }
