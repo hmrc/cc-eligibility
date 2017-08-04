@@ -1,0 +1,25 @@
+{
+  "hasPartner": true,
+  "parent": {
+    "escVouchers": "YES"
+  },
+  "partner": {
+    "escVouchers": "YES"
+  },
+  "children": [
+    {
+      "id": 0,
+      "name": "child1",
+      "dob": "20-05-1999",
+      "childCareCost": {
+        "amount": 100,
+        "period": "MONTHLY"
+      },
+      "disability": {
+        "disabled": false,
+        "severelyDisabled": false,
+        "blind": false
+      }
+    }
+  ]
+}

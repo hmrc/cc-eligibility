@@ -28,37 +28,39 @@ import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
- * Created by user on 25/04/16.
- */
+  * Created by user on 25/04/16.
+  */
 class AuditEventsTest extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
 
-  trait ObservableAuditConnector extends AuditConnector {
-    var events : ListBuffer[DataEvent] = new ListBuffer[DataEvent]
+  def createObservableAuditConnector = new ObservableAuditConnector {}
 
-    def observedEvents : ListBuffer[DataEvent] = events
-
-    def addEvent(auditEvent : DataEvent): Unit = {
-      events = events += auditEvent
-    }
-
-    override def auditingConfig: AuditingConfig = ???
-    override def sendEvent(event: AuditEvent)(implicit hc: HeaderCarrier = HeaderCarrier(), ec : ExecutionContext): Future[AuditResult] = {
-      addEvent(event.asInstanceOf[DataEvent])
-      Future.successful(AuditResult.Success)
-    }
-  }
-
-  def createObservableAuditConnector = new ObservableAuditConnector{}
-
-  def createAuditor(observableAuditConnector : ObservableAuditConnector) = {
+  def createAuditor(observableAuditConnector: ObservableAuditConnector) = {
 
     val testAuditService = new AuditService {
       override lazy val auditSource = "cc-eligibility"
+
       override def auditConnector = observableAuditConnector
     }
 
     new AuditEvents {
-      override val auditService : AuditService = testAuditService
+      override val auditService: AuditService = testAuditService
+    }
+  }
+
+  trait ObservableAuditConnector extends AuditConnector {
+    var events: ListBuffer[DataEvent] = new ListBuffer[DataEvent]
+
+    def observedEvents: ListBuffer[DataEvent] = events
+
+    override def auditingConfig: AuditingConfig = ???
+
+    override def sendEvent(event: AuditEvent)(implicit hc: HeaderCarrier = HeaderCarrier(), ec: ExecutionContext): Future[AuditResult] = {
+      addEvent(event.asInstanceOf[DataEvent])
+      Future.successful(AuditResult.Success)
+    }
+
+    def addEvent(auditEvent: DataEvent): Unit = {
+      events = events += auditEvent
     }
   }
 
@@ -72,7 +74,7 @@ class AuditEventsTest extends CCConfigSpec with FakeCCEligibilityApplication wit
 
       auditor.auditTFCRequest("Data")
 
-      val event =  observableAuditConnector.events.head
+      val event = observableAuditConnector.events.head
 
       event.auditType should equal("TFCRequest")
       event.detail("TFCRequest") should startWith("Data")
@@ -86,7 +88,7 @@ class AuditEventsTest extends CCConfigSpec with FakeCCEligibilityApplication wit
 
       auditor.auditTFCResponse("Data")
 
-      val event =  observableAuditConnector.events.head
+      val event = observableAuditConnector.events.head
 
       event.auditType should equal("TFCResponse")
       event.detail("TFCResponse") should startWith("Data")
@@ -100,7 +102,7 @@ class AuditEventsTest extends CCConfigSpec with FakeCCEligibilityApplication wit
 
       auditor.auditTCRequest("Data")
 
-      val event =  observableAuditConnector.events.head
+      val event = observableAuditConnector.events.head
 
       event.auditType should equal("TCRequest")
       event.detail("TCRequest") should startWith("Data")
@@ -114,7 +116,7 @@ class AuditEventsTest extends CCConfigSpec with FakeCCEligibilityApplication wit
 
       auditor.auditTCResponse("Data")
 
-      val event =  observableAuditConnector.events.head
+      val event = observableAuditConnector.events.head
 
       event.auditType should equal("TCResponse")
       event.detail("TCResponse") should startWith("Data")
@@ -128,7 +130,7 @@ class AuditEventsTest extends CCConfigSpec with FakeCCEligibilityApplication wit
 
       auditor.auditESCRequest("Data")
 
-      val event =  observableAuditConnector.events.head
+      val event = observableAuditConnector.events.head
 
       event.auditType should equal("ESCRequest")
       event.detail("ESCRequest") should startWith("Data")
@@ -142,7 +144,7 @@ class AuditEventsTest extends CCConfigSpec with FakeCCEligibilityApplication wit
 
       auditor.auditESCResponse("Data")
 
-      val event =  observableAuditConnector.events.head
+      val event = observableAuditConnector.events.head
 
       event.auditType should equal("ESCResponse")
       event.detail("ESCResponse") should startWith("Data")
@@ -156,7 +158,7 @@ class AuditEventsTest extends CCConfigSpec with FakeCCEligibilityApplication wit
 
       auditor.auditFreeEntitlementRequest("Data")
 
-      val event =  observableAuditConnector.events.head
+      val event = observableAuditConnector.events.head
 
       event.auditType should equal("FreeEntitlmentRequest")
       event.detail("FreeEntitlmentRequest") should startWith("Data")
@@ -170,10 +172,38 @@ class AuditEventsTest extends CCConfigSpec with FakeCCEligibilityApplication wit
 
       auditor.auditFreeEntitlementResponse("Data")
 
-      val event =  observableAuditConnector.events.head
+      val event = observableAuditConnector.events.head
 
       event.auditType should equal("FreeEntitlmentResponse")
       event.detail("FreeEntitlmentResponse") should startWith("Data")
+
+    }
+
+    "audit request received for household eligibility - success " in {
+
+      val observableAuditConnector = createObservableAuditConnector
+      val auditor = createAuditor(observableAuditConnector)
+
+      auditor.auditHouseholdRequest("Data")
+
+      val event = observableAuditConnector.events.head
+
+      event.auditType should equal("HouseholdRequest")
+      event.detail("HouseholdRequest") should startWith("Data")
+
+    }
+
+    "audit response processed for Household eligibility - success " in {
+
+      val observableAuditConnector = createObservableAuditConnector
+      val auditor = createAuditor(observableAuditConnector)
+
+      auditor.auditHouseholdResponse("Data")
+
+      val event = observableAuditConnector.events.head
+
+      event.auditType should equal("HouseholdResponse")
+      event.detail("HouseholdResponse") should startWith("Data")
 
     }
   }
