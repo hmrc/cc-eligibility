@@ -31,7 +31,7 @@ import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
-import spec.CCConfigSpec
+import utils.CCConfigSpec
 
 import scala.concurrent.Future
 

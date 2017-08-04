@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package models.mappings
+package models
 
 import play.api.libs.json.{Format, Reads, Writes}
 import utils.EnumUtils
-
 
 object TcUcBenefitsEnum extends Enumeration {
   type TcUcBenefitsEnum = Value

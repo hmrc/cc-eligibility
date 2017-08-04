@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package spec
+package utils
 
 /*
  * Copyright 2016 HM Revenue & Customs

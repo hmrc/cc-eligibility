@@ -19,11 +19,14 @@ package utils
 import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import spec.CCConfigSpec
+import org.mockito.Matchers.{any, anyString}
+import org.mockito.Mockito.when
+import org.scalatest.mock.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks.forAll
 import org.scalatest.prop.Tables.Table
+import play.api.Configuration
 
-class TFCSchemeConfigSpec extends CCConfigSpec with FakeCCEligibilityApplication {
+class TFCSchemeConfigSpec extends CCConfigSpec with FakeCCEligibilityApplication  with MockitoSugar {
 
   "TFC Scheme Config" should {
 
@@ -39,6 +42,22 @@ class TFCSchemeConfigSpec extends CCConfigSpec with FakeCCEligibilityApplication
       val from = LocalDate.parse("2016-06-20", formatter)
 
       TFCConfig.previousSeptember1stForDate(from) shouldBe LocalDate.parse("2015-09-01", formatter)
+    }
+
+    "determine number of periods for TFC" in {
+
+      val testObj = new TFCConfig {
+        override val conf: Configuration = mock[Configuration]
+      }
+
+      when(
+        testObj.conf.getInt(anyString())
+      ).thenReturn(
+        None
+      )
+
+      val result = testObj.tfcNoOfPeriods
+      result shouldBe 4
     }
 
     "get default Tax Year Config" in {

@@ -19,12 +19,12 @@ package eligibility
 import controllers.FakeCCEligibilityApplication
 import fixtures.ESCChildren
 import models.input.esc._
-
-import models.output.esc.{ESCEligibilityOutput,ESCPeriod}
+import models.output.esc.{ESCEligibilityOutput, ESCPeriod}
 import org.joda.time.LocalDate
 import org.scalatest.mock.MockitoSugar
 import play.api.libs.json.Json
-import spec.CCConfigSpec
+import utils.CCConfigSpec
+
 import scala.concurrent.Future
 
 class ESCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar with ESCChildren {

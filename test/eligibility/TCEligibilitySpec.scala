@@ -28,8 +28,7 @@ import org.scalatest.mock.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
-import spec.CCConfigSpec
-import utils.Periods
+import utils.{CCConfigSpec, Periods}
 
 import scala.concurrent.Future
 
