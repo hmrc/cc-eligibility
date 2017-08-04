@@ -16,7 +16,7 @@
 
 package service
 
-import models.mappings.{Claimant, Household}
+import models.{Claimant, Household}
 import uk.gov.hmrc.play.test.UnitSpec
 
 class EligibilityServiceSpec extends UnitSpec {

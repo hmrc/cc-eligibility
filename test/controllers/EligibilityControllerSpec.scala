@@ -17,7 +17,7 @@
 package controllers
 
 import com.github.fge.jackson.JsonLoader
-import models.mappings.Household
+import models.Household
 import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
@@ -26,7 +26,7 @@ import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.{AuditEvents, EligibilityService}
-import spec.CCConfigSpec
+import utils.CCConfigSpec
 
 import scala.concurrent.Future
 

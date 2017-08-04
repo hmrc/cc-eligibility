@@ -16,7 +16,7 @@
 
 package controllers
 
-import models.mappings.Household
+import models.Household
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Action
