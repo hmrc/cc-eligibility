@@ -25,7 +25,7 @@ object HHToTCEligibilityInput extends HHToTCEligibilityInput {
   override val cCConfig = CCConfig
 }
 
-trait HHToTCEligibilityInput {
+trait HHToTCEligibilityInput extends PeriodEnumToPeriod{
 
   val cCConfig: CCConfig
 
@@ -114,7 +114,7 @@ trait HHToTCEligibilityInput {
         case Some(childcareCost) => childcareCost.amount.getOrElse(BigDecimal(0.00))
         case None => BigDecimal(0.00)
       },
-        childcareCostPeriod = PeriodEnumToPeriod.convert(child.childcareCost match {
+        childcareCostPeriod = convert(child.childcareCost match {
         case Some(childcareCost) => childcareCost.period.getOrElse(PeriodEnum.INVALID)
         case None => PeriodEnum.INVALID
       }),

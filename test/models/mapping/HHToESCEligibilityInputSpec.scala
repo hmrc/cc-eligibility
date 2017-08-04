@@ -18,11 +18,11 @@ package models.mapping
 
 import controllers.FakeCCEligibilityApplication
 import models._
-import org.mockito.Mockito.when
-import org.scalatest.mock.MockitoSugar
 import models.input.esc._
 import models.mappings._
 import org.joda.time.LocalDate
+import org.mockito.Mockito.when
+import org.scalatest.mock.MockitoSugar
 import spec.CCConfigSpec
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.{CCConfig, Periods}
@@ -32,9 +32,10 @@ class HHToESCEligibilityInputSpec extends UnitSpec
   with FakeCCEligibilityApplication
   with CCConfigSpec {
 
-  val SUT = new HHToESCEligibilityInput {
+  val SUT =  new HHToESCEligibilityInput {
     override val cCConfig: CCConfig = mock[CCConfig]
   }
+
   "HHToESCEligibilityInput" should {
 
     "have reference to CCConfig" in {
@@ -196,84 +197,5 @@ class HHToESCEligibilityInputSpec extends UnitSpec
       }
     }
 
-    "accept a valid Household model and return a valid ESCEligibilityInput model" in {
-      val currentDate = LocalDate.parse("2017-03-06")
-      val dob = LocalDate.now().minusYears(2)
-
-      val hhChild1 = Child(
-        id = 0,
-        name = "child1",
-        dob = Some(dob),
-        disability = Some(Disability(disabled = true, severelyDisabled = false, blind = true)),
-        childcareCost = Some(ChildCareCost(amount = Some(350), Some(PeriodEnum.MONTHLY))),
-        education = Some(Education(inEducation = false, startDate = Some(LocalDate.now())))
-      )
-      val hhChild2 = Child(
-        id = 1,
-        name = "child2",
-        dob = Some(dob),
-        disability = Some(Disability(disabled = false, severelyDisabled = false, blind = true)),
-        childcareCost = Some(ChildCareCost(amount = Some(1000), Some(PeriodEnum.MONTHLY))),
-        education = Some(Education(inEducation = false, startDate = Some(LocalDate.now())))
-      )
-      val parent = Claimant(
-        ageRange = Some(AgeRangeEnum.EIGHTEENTOTWENTY),
-        benefits = Some(Benefits(
-          disabilityBenefits = false,
-          highRateDisabilityBenefits = false,
-          incomeBenefits = false,
-          carersAllowance = false
-        )),
-        lastYearlyIncome = None,
-        currentYearlyIncome = Some(Income(employmentIncome = Some(12212),
-          pension = Some(47674),
-          otherIncome = Some(647864),
-          benefits = Some(546),
-          statutoryIncome = None
-        )),
-        hours = Some(4567),
-        minimumEarnings = None,
-        escVouchers = Some(YesNoUnsureBothEnum.YES)
-      )
-      val partner = Claimant(
-        ageRange = Some(AgeRangeEnum.EIGHTEENTOTWENTY),
-        benefits = Some(Benefits(
-          disabilityBenefits = false,
-          highRateDisabilityBenefits = false,
-          incomeBenefits = false,
-          carersAllowance = false
-        )),
-        lastYearlyIncome = None,
-        currentYearlyIncome = Some(Income(employmentIncome = Some(12212),
-          pension = Some(47674),
-          otherIncome = Some(647864),
-          benefits = Some(546),
-          statutoryIncome = None
-        )),
-        hours = Some(4567),
-        minimumEarnings = None,
-        escVouchers = Some(YesNoUnsureBothEnum.NOTSURE)
-      )
-
-      val hhModel = Household(None, Some(LocationEnum.ENGLAND), true, List(hhChild1, hhChild2), parent, Some(partner))
-
-      val expectedOutput = ESCEligibilityInput(List(
-        ESCTaxYear(currentDate,
-          LocalDate.parse("2017-04-06"),
-          List(ESCClaimant(false,true), ESCClaimant(true,true)),
-          List(ESCChild(0,dob,350,Periods.Monthly,ESCDisability(true,false)),
-            ESCChild(1,dob,1000,Periods.Monthly,ESCDisability(true,false)))),
-        ESCTaxYear(LocalDate.parse("2017-04-06"),
-          currentDate.plusYears(1),
-          List(ESCClaimant(false,true), ESCClaimant(true,true)),
-          List(ESCChild(0,dob,350,Periods.Monthly,ESCDisability(true,false)),
-            ESCChild(1,dob,1000,Periods.Monthly,ESCDisability(true,false))))))
-
-      when(SUT.cCConfig.StartDate).thenReturn(currentDate)
-
-      val output = SUT.convert(hhModel)
-      output.isInstanceOf[ESCEligibilityInput] shouldBe true
-      output shouldBe expectedOutput
-    }
   }
 }

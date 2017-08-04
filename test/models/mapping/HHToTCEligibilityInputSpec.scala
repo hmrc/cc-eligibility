@@ -39,7 +39,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
   "HHToTCEligibilityInput" should {
 
     "have reference to CCConfig" in {
-      SUT.cCConfig.isInstanceOf[CCConfig] shouldBe true
+      HHToTCEligibilityInput.cCConfig.isInstanceOf[CCConfig] shouldBe true
     }
 
     "convert Household into TCEligibilityInput" when {
@@ -91,7 +91,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
       "given a household with parent, a partner and children with startDate after April 6" in {
         val currentDate = LocalDate.parse("2017-08-01")
         val dob = LocalDate.now().minusYears(2)
-        val benefits: Benefits = Benefits(disabilityBenefits = false, highRateDisabilityBenefits =   false, incomeBenefits =   false, carersAllowance = true)
+        val benefits: Benefits = Benefits(disabilityBenefits = true, highRateDisabilityBenefits =   true, incomeBenefits =   false, carersAllowance = true)
         val children = List(
           Child(
             1,
@@ -115,8 +115,8 @@ class HHToTCEligibilityInputSpec extends UnitSpec
               currentDate,
               LocalDate.parse("2018-04-06"),
               List(
-                TCClaimant(0, false, TCDisability(false,false), carersAllowance = true),
-                TCClaimant(0, true, TCDisability(false,false), carersAllowance = true)
+                TCClaimant(0, false, TCDisability(true,true), carersAllowance = true),
+                TCClaimant(0, true, TCDisability(true,true), carersAllowance = true)
               ),
               List(
                 TCChild(
@@ -133,8 +133,8 @@ class HHToTCEligibilityInputSpec extends UnitSpec
               LocalDate.parse("2018-04-06"),
               currentDate.plusYears(1),
               List(
-                TCClaimant(0, false, TCDisability(false,false), carersAllowance = true),
-                TCClaimant(0, true, TCDisability(false,false), carersAllowance = true)
+                TCClaimant(0, false, TCDisability(true,true), carersAllowance = true),
+                TCClaimant(0, true, TCDisability(true,true), carersAllowance = true)
               ),
               List(
                 TCChild(
@@ -214,6 +214,80 @@ class HHToTCEligibilityInputSpec extends UnitSpec
         SUT.convert(household) shouldBe res
       }
     }
+
+
+    "given a household with parent, a partner and children (no childcare costs) with startDate after April 6 " in {
+      val currentDate = LocalDate.parse("2017-08-01")
+      val dob = LocalDate.now().minusYears(2)
+      val benefits: Benefits = Benefits(disabilityBenefits = true, highRateDisabilityBenefits =   true, incomeBenefits =   false, carersAllowance = true)
+      val children = List(
+        Child(
+          1,
+          "Child1",
+          Some(dob),
+          None,
+          None
+        )
+      )
+
+      val household = Household(
+        children = children,
+        hasPartner = true,
+        parent = Claimant(benefits = Some(benefits)),
+        partner = Some(Claimant(benefits = Some(benefits)))
+      )
+
+      val res = TCEligibilityInput(
+        List(
+          TCTaxYear(
+            currentDate,
+            LocalDate.parse("2018-04-06"),
+            List(
+              TCClaimant(0, false, TCDisability(true,true), carersAllowance = true),
+              TCClaimant(0, true, TCDisability(true,true), carersAllowance = true)
+            ),
+            List(
+              TCChild(
+                1,
+                0.0,
+                Periods.INVALID,
+                dob,
+                TCDisability(false,false),
+                Some(TCEducation(false,LocalDate.now()))
+              )
+            )
+          ),
+          TCTaxYear(
+            LocalDate.parse("2018-04-06"),
+            currentDate.plusYears(1),
+            List(
+              TCClaimant(0, false, TCDisability(true,true), carersAllowance = true),
+              TCClaimant(0, true, TCDisability(true,true), carersAllowance = true)
+            ),
+            List(
+              TCChild(
+                1,
+                0.0,
+                Periods.INVALID,
+                dob,
+                TCDisability(false,false),
+                Some(TCEducation(false,LocalDate.now()))
+              )
+            )
+          )
+        )
+      )
+
+      when(SUT.cCConfig.StartDate).thenReturn(currentDate)
+
+      SUT.convert(household) shouldBe res
+    }
+
+
+
+
+
+
 
     "accept a valid Household model and return a valid TCEligibilityInput model" in {
 

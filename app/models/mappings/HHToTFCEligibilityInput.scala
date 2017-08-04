@@ -19,66 +19,59 @@ package models.mappings
 
 import models._
 import models.input.tfc._
-import org.joda.time.LocalDate
 import utils.TFCConfig
 
 object HHToTFCEligibilityInput extends HHToTFCEligibilityInput {
   override val tFCConfig = TFCConfig
 }
 
-trait HHToTFCEligibilityInput {
+trait HHToTFCEligibilityInput extends PeriodEnumToPeriod{
 
   val tFCConfig: TFCConfig
 
-  def convert(hh:Household):TFCEligibilityInput = {
-    TFCEligibilityInput(from = LocalDate.now(),
+  def convert(hh: Household):TFCEligibilityInput = {
+    TFCEligibilityInput(
+      from = tFCConfig.StartDate,
       numberOfPeriods = tFCConfig.tfcNoOfPeriods,
       location = hh.location.getOrElse(LocationEnum.ENGLAND.toString).toString,
-      claimants = hhClaimantToTFCEligibilityInputClaimant(hh.parent, hh.partner),
+      claimants = hhClaimantToTFCEligibilityInputClaimant(hh.hasPartner, hh.parent, hh.partner),
       children =  hhChildToTFCEligibilityInputChild(hh.children)
     )
   }
 
-  private def hhClaimantToTFCEligibilityInputClaimant(hhParent: Claimant, hhPartner: Option[Claimant]): List[TFCClaimant] = {
+  private def createClaimant(claimant: Claimant, isPartner: Boolean): TFCClaimant = {
+    TFCClaimant(
+      previousIncome = hhIncomeToTFCIncome(claimant.lastYearlyIncome),
+      currentIncome = hhIncomeToTFCIncome(claimant.currentYearlyIncome),
+      hoursPerWeek = claimant.hours.getOrElse(BigDecimal(0.0)).doubleValue(),
+      isPartner = isPartner,
+      disability = TFCDisability(claimant.benefits.exists(_.disabilityBenefits), claimant.benefits.exists(_.highRateDisabilityBenefits)),
+      carersAllowance = claimant.benefits.exists(_.carersAllowance),
+      minimumEarnings = hhMinimumEarningsToTFCMinimumEarnings(claimant.minimumEarnings),
+      age = claimant.ageRange.map(x => x.toString),
+      employmentStatus = claimant.minimumEarnings.map(x => x.employmentStatus.toString),
+      selfEmployedSelection = claimant.minimumEarnings.flatMap(x => x.selfEmployedIn12Months))
+  }
+  private def hhClaimantToTFCEligibilityInputClaimant(hasPartner: Boolean, hhParent: Claimant, hhPartner: Option[Claimant]): List[TFCClaimant] = {
 
-    val parent: TFCClaimant = TFCClaimant(
-                                          previousIncome = hhIncomeToTFCIncome(hhParent.lastYearlyIncome),
-                                          currentIncome = hhIncomeToTFCIncome(hhParent.currentYearlyIncome),
-                                          hoursPerWeek = hhParent.hours.getOrElse(BigDecimal(0.0)).doubleValue(),
-                                          isPartner = false,
-                                          disability = hhBenefitsToTFCDisability(hhParent.benefits),
-                                          carersAllowance = hhParent.benefits.map(x => x.carersAllowance).getOrElse(false),
-                                          minimumEarnings = hhMinimumEarningsToTFCMinimumEarnings(hhParent.minimumEarnings),
-                                          age = hhParent.ageRange.map(x => x.toString),
-                                          employmentStatus = hhParent.minimumEarnings.map(x => x.employmentStatus.toString),
-                                          selfEmployedSelection = hhParent.minimumEarnings.flatMap(x => x.selfEmployedIn12Months)
-    )
+    val parent: TFCClaimant = createClaimant(hhParent, false)
 
-    hhPartner match {
-      case Some(hhPartner) => List(parent, TFCClaimant(previousIncome = hhIncomeToTFCIncome(hhPartner.lastYearlyIncome),
-                                                        currentIncome = hhIncomeToTFCIncome(hhPartner.currentYearlyIncome),
-                                                        hoursPerWeek = hhPartner.hours.getOrElse(BigDecimal(0.0)).doubleValue(),
-                                                        isPartner = true,
-                                                        disability = hhBenefitsToTFCDisability(hhPartner.benefits),
-                                                        carersAllowance = hhPartner.benefits.map(x => x.carersAllowance).getOrElse(false),
-                                                        minimumEarnings = hhMinimumEarningsToTFCMinimumEarnings(hhPartner.minimumEarnings),
-                                                        age = hhPartner.ageRange.map(x => x.toString),
-                                                        employmentStatus = hhPartner.minimumEarnings.map(x => x.employmentStatus.toString),
-                                                        selfEmployedSelection = hhPartner.minimumEarnings.flatMap(x => x.selfEmployedIn12Months)
-                                                      )
-      )
-      case None => List(parent)
+    if(hasPartner) {
+      List(parent, createClaimant(hhPartner.get, hasPartner))
+    } else {
+      List(parent)
     }
   }
 
   private def hhMinimumEarningsToTFCMinimumEarnings(hhMinimumEarnings: Option[MinimumEarnings]): TFCMinimumEarnings = {
+
     hhMinimumEarnings match {
       case Some(hhMinimumEarnings) => TFCMinimumEarnings(
-        selection = true, //True by default
+        selection = true, //true by default if selected
         amount = hhMinimumEarnings.amount
       )
       case None =>TFCMinimumEarnings(
-        selection = true, //True by default
+        selection = false, //false is no minimum earnings selected
         amount = BigDecimal(0.00))
     }
   }
@@ -87,38 +80,21 @@ trait HHToTFCEligibilityInput {
     hhIncome.map(x => TFCIncome(
       employmentIncome = x.employmentIncome,
       pension = x.pension,
-      otherIncome = x.otherIncome,
-      benefits = x.benefits)
+      otherIncome = x.otherIncome)
     )
   }
 
-  private def hhBenefitsToTFCDisability(hhBenefits: Option[Benefits]): TFCDisability = {
-    if(hhBenefits.isDefined && hhBenefits.get.disabilityBenefits)
-      {
-        TFCDisability(true, true)
-      }
-    else
-      {
-        TFCDisability(false, false)
-      }
-
-  }
   private def hhChildToTFCEligibilityInputChild(hhChildren: List[Child]): List[TFCChild] = {
     hhChildren map (child => {
       TFCChild(
         id = child.id,
-        childcareCost = child.childcareCost match {
-        case Some(childcareCost) => childcareCost.amount.getOrElse(BigDecimal(0.00))
-        case None => BigDecimal(0.00)
-      },
-        childcareCostPeriod = PeriodEnumToPeriod.convert(child.childcareCost match {
-        case Some(childcareCost) => childcareCost.period.getOrElse(PeriodEnum.INVALID)
-        case None => PeriodEnum.INVALID
-      }),
-      dob = child.dob.get,
-      disability = TFCDisability(
-        disabled = child.disability.map(x => x.disabled).getOrElse(false) || child.disability.map(x => x.blind).getOrElse(false),
-        severelyDisabled = child.disability.map(x => x.severelyDisabled).getOrElse(false)
-      ))
+        childcareCost = child.childcareCost.flatMap(_.amount).getOrElse(BigDecimal(0)),
+        childcareCostPeriod = convert(child.childcareCost.flatMap(_.period).getOrElse(PeriodEnum.MONTHLY)),
+        dob = child.dob.get,
+        disability = TFCDisability(
+          disabled = child.disability.exists(d => d.blind || d.disabled),
+          severelyDisabled = child.disability.exists(_.severelyDisabled)
+        )
+      )
     })
   }}
