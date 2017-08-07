@@ -16,9 +16,10 @@
 
 package models.mappings
 
-import models.{EscClaimantEligibility, Scheme, SchemeEnum, SchemeResults}
+import models._
 import models.input.CalculatorOutput
 import models.output.esc.ESCEligibilityOutput
+import models.output.tc.TCEligibilityOutput
 
 trait SchemeResultsBuilder{
 
@@ -39,5 +40,26 @@ trait SchemeResultsBuilder{
 
     schemeResultsIn.copy(schemes = newList)
   }
+
+  def buildTCResults(tcEligibilityOutput: TCEligibilityOutput, calculatorOutput: CalculatorOutput, schemeResultsIn: SchemeResults): SchemeResults = {
+
+    val wtcEligibility = tcEligibilityOutput.wtc
+    val ctcEligibility = tcEligibilityOutput.ctc
+    val tcAmount = calculatorOutput.tcAmount
+
+    val newScheme = Scheme(name = SchemeEnum.TCELIGIBILITY,
+      amount = tcAmount.getOrElse(BigDecimal(0.00)),
+      taxCreditsEligibility = Some(TaxCreditsEligibility(wtcEligibility,ctcEligibility))
+    )
+    val isTCSchemaPresent = schemeResultsIn.schemes.map(scheme => scheme.name).contains(SchemeEnum.TCELIGIBILITY)
+
+    val newList = if(isTCSchemaPresent) { schemeResultsIn.schemes.map(scheme =>
+      if(scheme.name == SchemeEnum.TCELIGIBILITY) newScheme else scheme)
+    } else newScheme :: schemeResultsIn.schemes
+
+    schemeResultsIn.copy(schemes = newList)
+  }
 }
+
 object SchemeResultsBuilder extends SchemeResultsBuilder
+
