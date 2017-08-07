@@ -32,8 +32,7 @@ trait SchemeResultsBuilder{
 
     val newScheme = Scheme(name = SchemeEnum.ESCELIGIBILITY,
                           amount = escAmount.getOrElse(BigDecimal(0.00)),
-                          escClaimantEligibility = Some(EscClaimantEligibility(parentEligibility,partnerEligibility)),
-                          taxCreditsEligibility = None
+                          escClaimantEligibility = Some(EscClaimantEligibility(parentEligibility,partnerEligibility))
     )
     val isESCSchemaPresent = schemeResultsIn.schemes.map(scheme => scheme.name).contains(SchemeEnum.ESCELIGIBILITY)
 
@@ -48,10 +47,8 @@ trait SchemeResultsBuilder{
     val tfcAmount = calculatorOutput.tfcAmount
 
     val newScheme = Scheme(name = SchemeEnum.TFCELIGIBILITY,
-      amount = tfcAmount.getOrElse(BigDecimal(0.00)),
-      escClaimantEligibility = None,
-      taxCreditsEligibility = None
-    )
+      amount = tfcAmount.getOrElse(BigDecimal(0.00)))
+    
     val isTFCSchemaPresent = schemeResultsIn.schemes.map(scheme => scheme.name).contains(SchemeEnum.TFCELIGIBILITY)
 
     val newList = if(isTFCSchemaPresent) schemeResultsIn.schemes.map(scheme => if(scheme.name == SchemeEnum.TFCELIGIBILITY) newScheme else scheme)
