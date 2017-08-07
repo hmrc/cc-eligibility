@@ -78,9 +78,6 @@ class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
   val escEligibilityOutputAllFalse = ESCEligibilityOutput(taxYears =List[ESCTaxYear](), eligibility  = false, parentEligibility  = false, partnerEligibility  = false, location = "england")
   val escEligibilityOutputAllTrue = ESCEligibilityOutput(taxYears =List[ESCTaxYear](), eligibility  = true, parentEligibility  = true, partnerEligibility  = true, location = "england")
 
-//  val escEligibilityOutputAllFalse = ESCEligibilityOutput(taxYears =List[ESCTaxYear](), eligibility  = false, parentEligibility  = false, partnerEligibility  = false, location = "england")
-//  val escEligibilityOutputAllFalse = ESCEligibilityOutput(taxYears =List[ESCTaxYear](), eligibility  = false, parentEligibility  = false, partnerEligibility  = false, location = "england")
-//  val escEligibilityOutputAllFalse = ESCEligibilityOutput(taxYears =List[ESCTaxYear](), eligibility  = false, parentEligibility  = false, partnerEligibility  = false, location = "england")
 
   val escSchemeInput = Scheme(name = SchemeEnum.ESCELIGIBILITY, amount = BigDecimal(10), escClaimantEligibility = Some(EscClaimantEligibility(true,true)), taxCreditsEligibility = None)
   val tcSchemeInput = Scheme(name = SchemeEnum.TCELIGIBILITY, amount = BigDecimal(10), escClaimantEligibility = None, taxCreditsEligibility = Some(TaxCreditsEligibility(true,true)))
@@ -91,7 +88,7 @@ class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
   val tcSchemeOutput = Scheme(name = SchemeEnum.TCELIGIBILITY, amount = BigDecimal(1000), escClaimantEligibility = None, taxCreditsEligibility = Some(TaxCreditsEligibility(true,true)))
   val tfcSchemeOutput = Scheme(name = SchemeEnum.TFCELIGIBILITY, amount = BigDecimal(1000))
 
-  val schemeResultsEmptyInput = SchemeResults(schemes = List[Scheme](), tfcRollout = false, threeHrsRollout = false)
-  val schemeResultsESCOnlyExistsInput = SchemeResults(schemes = List[Scheme](escSchemeInput), tfcRollout = false, threeHrsRollout = false)
-  val schemeResultsFullInput = SchemeResults(schemes = List[Scheme](escSchemeInput, tcSchemeInput, tfcSchemeInput), tfcRollout = false, threeHrsRollout = false)
+  val schemeResultsEmptyInput = SchemeResults(schemes = List[Scheme](), tfcRollout = false, thirtyHrsRollout = false)
+  val schemeResultsESCOnlyExistsInput = SchemeResults(schemes = List[Scheme](escSchemeInput), tfcRollout = false, thirtyHrsRollout = false)
+  val schemeResultsFullInput = SchemeResults(schemes = List[Scheme](escSchemeInput, tcSchemeInput, tfcSchemeInput), tfcRollout = false, thirtyHrsRollout = false)
 }
