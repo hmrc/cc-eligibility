@@ -16,8 +16,9 @@
 
 package models.mappings
 
-import models.{EscClaimantEligibility, Scheme, SchemeEnum, SchemeResults}
+import models.SchemeEnum
 import models.input.CalculatorOutput
+import models.output.{EscClaimantEligibility, Scheme, SchemeResults}
 import models.output.esc.ESCEligibilityOutput
 import models.output.tfc.TFCEligibilityOutput
 

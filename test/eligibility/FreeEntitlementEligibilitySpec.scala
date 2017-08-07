@@ -17,7 +17,7 @@
 package eligibility
 
 import controllers.FakeCCEligibilityApplication
-import models.input.freeEntitlement.FreeEntitlementPayload
+import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.input.tfc._
 
 import models.output.tfc.TFCEligibilityOutput
@@ -35,7 +35,7 @@ import utils.Periods
 
 import scala.concurrent.Future
 
-class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplication with MockitoSugar {
+class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityApplication with MockitoSugar {
 
   val now = LocalDate.now
 
@@ -80,11 +80,11 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
 
     forAll(testCases) { case (location, dobs, isEligible) =>
       s"for ${location} and children dobs = ${dobs} eligibility should be ${isEligible}" in {
-        val freeEntitlementService: FreeEntitlementService = new FreeEntitlementService {
+        val freeEntitlementService: FreeEntitlementEligibility = new FreeEntitlementEligibility {
           override val tfcEligibility: TFCEligibility = mock[TFCEligibility]
         }
 
-        val data = FreeEntitlementPayload(
+        val data = FreeEntitlementEligibilityInput(
           claimantLocation = location,
           childDOBList = dobs
         )
@@ -117,7 +117,7 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
         implicit val request = FakeRequest()
         implicit val hc = new HeaderCarrier()
 
-        val freeEntitlementService: FreeEntitlementService = new FreeEntitlementService {
+        val freeEntitlementService: FreeEntitlementEligibility = new FreeEntitlementEligibility {
           val tfcEligibility = mock[TFCEligibility]
         }
 
@@ -164,7 +164,7 @@ class FreeEntitlementServiceSpec extends UnitSpec with FakeCCEligibilityApplicat
   "determine eligiblity correctly for thirtyHours when it's next year" in {
     implicit val request = FakeRequest()
     implicit val hc = new HeaderCarrier()
-    val freeEntitlementService: FreeEntitlementService = new FreeEntitlementService {
+    val freeEntitlementService: FreeEntitlementEligibility = new FreeEntitlementEligibility {
       val tfcEligibility = mock[TFCEligibility]
       override def localDate = LocalDate.now().plusYears(1)
     }

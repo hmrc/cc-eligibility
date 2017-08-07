@@ -19,6 +19,7 @@ package models.mapping
 import models._
 import models.input.CalculatorOutput
 import models.mappings.SchemeResultsBuilder
+import models.output.{EscClaimantEligibility, Scheme, SchemeResults, TaxCreditsEligibility}
 import models.output.esc.{ESCEligibilityOutput, ESCTaxYear}
 import models.output.tfc._
 import org.joda.time.LocalDate
