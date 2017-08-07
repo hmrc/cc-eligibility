@@ -90,12 +90,18 @@ class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
       }
       "other results exists" in {
         val test = SUT.buildTFCResults(tfcEligibilityOutput, calcOutputValueAll, schemeResultsFullInput)
-        val expectedResult = SchemeResults(List(escSchemeOutput, tcSchemeInput, tfcSchemeInput),false,false)
+        val expectedResult = SchemeResults(List(escSchemeInput, tcSchemeInput, tfcSchemeOutput),false,false)
         test shouldBe expectedResult
       }
       "amount is missing" in {
         val test = SUT.buildTFCResults(tfcEligibilityOutput, calcOutputNoTFCValue, schemeResultsFullInput)
-        val expectedResult = SchemeResults(List(escSchemeOutputZero, tcSchemeInput, tfcSchemeInput),false,false)
+        val expectedResult = SchemeResults(List(escSchemeInput, tcSchemeInput, tfcSchemeOutput),false,false)
+        test shouldBe expectedResult
+      }
+
+      "tfcRollout is true"in {
+        val test = SUT.buildTFCResults(tfcEligibilityOutputRolloutTrue, calcOutputValueAll, schemeResultsFullInput)
+        val expectedResult = SchemeResults(List(escSchemeInput, tcSchemeInput, tfcSchemeOutput),true,false)
         test shouldBe expectedResult
       }
     }
@@ -110,7 +116,6 @@ class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
 
 
 //Values from eligibility
-  //val escEligibilityOutputAllFalse = ESCEligibilityOutput(taxYears = List[ESCTaxYear](), eligibility  = false, parentEligibility  = false, partnerEligibility  = false, location = "england")
   val escEligibilityOutputAllTrue = ESCEligibilityOutput(taxYears = List[ESCTaxYear](), eligibility  = true, parentEligibility  = true, partnerEligibility  = true, location = "england")
 
   val tfcOutputparent = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -133,16 +138,26 @@ class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
       claimants = List(tfcOutputparent, tfcOutputpartner),
       children = List(tfcOutputCChild))))
 
+  val tfcEligibilityOutputRolloutTrue = TFCEligibilityOutput(from = LocalDate.now(),
+    until  = LocalDate.now(),
+    householdEligibility  = true,
+    tfcRollout  = true,
+    periods = List(TFCPeriod(from = LocalDate.now(),
+      until  = LocalDate.now(),
+      periodEligibility = true,
+      claimants = List(tfcOutputparent, tfcOutputpartner),
+      children = List(tfcOutputCChild))))
+
 
 //Values for schemeResults that have already been calculated
   val escSchemeInput = Scheme(name = SchemeEnum.ESCELIGIBILITY, amount = BigDecimal(10), escClaimantEligibility = Some(EscClaimantEligibility(true,true)), taxCreditsEligibility = None)
   val tcSchemeInput = Scheme(name = SchemeEnum.TCELIGIBILITY, amount = BigDecimal(10), escClaimantEligibility = None, taxCreditsEligibility = Some(TaxCreditsEligibility(true,true)))
   val tfcSchemeInput = Scheme(name = SchemeEnum.TFCELIGIBILITY, amount = BigDecimal(10))
 
-  val schemeResultsEmptyInput = SchemeResults(schemes = List[Scheme](), tfcRollout = false, threeHrsRollout = false)
-  val schemeResultsESCOnlyExistsInput = SchemeResults(schemes = List[Scheme](escSchemeInput), tfcRollout = false, threeHrsRollout = false)
-  val schemeResultsTFCCOnlyExistsInput = SchemeResults(schemes = List[Scheme](tfcSchemeInput), tfcRollout = false, threeHrsRollout = false)
-  val schemeResultsFullInput = SchemeResults(schemes = List[Scheme](escSchemeInput, tcSchemeInput, tfcSchemeInput), tfcRollout = false, threeHrsRollout = false)
+  val schemeResultsEmptyInput = SchemeResults(schemes = List[Scheme](), tfcRollout = false, thirtyHrsRollout = false)
+  val schemeResultsESCOnlyExistsInput = SchemeResults(schemes = List[Scheme](escSchemeInput), tfcRollout = false, thirtyHrsRollout = false)
+  val schemeResultsTFCCOnlyExistsInput = SchemeResults(schemes = List[Scheme](tfcSchemeInput), tfcRollout = false, thirtyHrsRollout = false)
+  val schemeResultsFullInput = SchemeResults(schemes = List[Scheme](escSchemeInput, tcSchemeInput, tfcSchemeInput), tfcRollout = false, thirtyHrsRollout = false)
 
 //values for expected outputs
   val escSchemeOutputZero = Scheme(name = SchemeEnum.ESCELIGIBILITY, amount = BigDecimal(0.0), escClaimantEligibility = Some(EscClaimantEligibility(true,true)), taxCreditsEligibility = None)

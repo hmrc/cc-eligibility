@@ -25,7 +25,6 @@ trait SchemeResultsBuilder{
 
   def buildESCResults(escEligibilityOutput: ESCEligibilityOutput, calculatorOutput: CalculatorOutput, schemeResultsIn: SchemeResults): SchemeResults = {
 
-    //val eligibility = escEligibilityOutput.eligibility
     val parentEligibility = escEligibilityOutput.parentEligibility
     val partnerEligibility = escEligibilityOutput.partnerEligibility
     val escAmount = calculatorOutput.escAmount
@@ -42,11 +41,9 @@ trait SchemeResultsBuilder{
 
     schemeResultsIn.copy(schemes = newList)
   }
-}
-object SchemeResultsBuilder extends SchemeResultsBuilder {
+
   def buildTFCResults(tfcEligibilityOutput: TFCEligibilityOutput, calculatorOutput: CalculatorOutput, schemeResultsIn: SchemeResults): SchemeResults = {
 
-    //val eligibility = tfcEligibilityOutput.householdEligibility
     val escAmount = calculatorOutput.escAmount
 
     val newScheme = Scheme(name = SchemeEnum.TFCELIGIBILITY,
@@ -59,7 +56,9 @@ object SchemeResultsBuilder extends SchemeResultsBuilder {
     val newList = if(isTFCSchemaPresent) schemeResultsIn.schemes.map(scheme => if(scheme.name == SchemeEnum.TFCELIGIBILITY) newScheme else scheme)
     else  newScheme :: schemeResultsIn.schemes
 
-    schemeResultsIn.copy(schemes = newList)
+    val rollout = tfcEligibilityOutput.tfcRollout
+    schemeResultsIn.copy(schemes = newList, tfcRollout = rollout)
   }
 
 }
+object SchemeResultsBuilder extends SchemeResultsBuilder
