@@ -19,19 +19,21 @@ package models.mappings
 import models.{EscClaimantEligibility, Scheme, SchemeEnum, SchemeResults}
 import models.input.CalculatorOutput
 import models.output.esc.ESCEligibilityOutput
+import models.output.tfc.TFCEligibilityOutput
 
 trait SchemeResultsBuilder{
 
   def buildESCResults(escEligibilityOutput: ESCEligibilityOutput, calculatorOutput: CalculatorOutput, schemeResultsIn: SchemeResults): SchemeResults = {
 
-    val eligibility = escEligibilityOutput.eligibility
+    //val eligibility = escEligibilityOutput.eligibility
     val parentEligibility = escEligibilityOutput.parentEligibility
     val partnerEligibility = escEligibilityOutput.partnerEligibility
     val escAmount = calculatorOutput.escAmount
 
     val newScheme = Scheme(name = SchemeEnum.ESCELIGIBILITY,
                           amount = escAmount.getOrElse(BigDecimal(0.00)),
-                          escClaimantEligibility = Some(EscClaimantEligibility(parentEligibility,partnerEligibility))
+                          escClaimantEligibility = Some(EscClaimantEligibility(parentEligibility,partnerEligibility)),
+                          taxCreditsEligibility = None
     )
     val isESCSchemaPresent = schemeResultsIn.schemes.map(scheme => scheme.name).contains(SchemeEnum.ESCELIGIBILITY)
 
@@ -41,4 +43,23 @@ trait SchemeResultsBuilder{
     schemeResultsIn.copy(schemes = newList)
   }
 }
-object SchemeResultsBuilder extends SchemeResultsBuilder
+object SchemeResultsBuilder extends SchemeResultsBuilder {
+  def buildTFCResults(tfcEligibilityOutput: TFCEligibilityOutput, calculatorOutput: CalculatorOutput, schemeResultsIn: SchemeResults): SchemeResults = {
+
+    //val eligibility = tfcEligibilityOutput.householdEligibility
+    val escAmount = calculatorOutput.escAmount
+
+    val newScheme = Scheme(name = SchemeEnum.TFCELIGIBILITY,
+      amount = escAmount.getOrElse(BigDecimal(0.00)),
+      escClaimantEligibility = None,
+      taxCreditsEligibility = None
+    )
+    val isTFCSchemaPresent = schemeResultsIn.schemes.map(scheme => scheme.name).contains(SchemeEnum.TFCELIGIBILITY)
+
+    val newList = if(isTFCSchemaPresent) schemeResultsIn.schemes.map(scheme => if(scheme.name == SchemeEnum.TFCELIGIBILITY) newScheme else scheme)
+    else  newScheme :: schemeResultsIn.schemes
+
+    schemeResultsIn.copy(schemes = newList)
+  }
+
+}
