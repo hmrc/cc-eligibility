@@ -19,6 +19,7 @@ package models.mappings
 import models.{EscClaimantEligibility, Scheme, SchemeEnum, SchemeResults}
 import models.input.CalculatorOutput
 import models.output.esc.ESCEligibilityOutput
+import models.output.tfc.TFCEligibilityOutput
 
 trait SchemeResultsBuilder{
 
@@ -30,7 +31,8 @@ trait SchemeResultsBuilder{
 
     val newScheme = Scheme(name = SchemeEnum.ESCELIGIBILITY,
                           amount = escAmount.getOrElse(BigDecimal(0.00)),
-                          escClaimantEligibility = Some(EscClaimantEligibility(parentEligibility,partnerEligibility))
+                          escClaimantEligibility = Some(EscClaimantEligibility(parentEligibility,partnerEligibility)),
+                          taxCreditsEligibility = None
     )
     val isESCSchemaPresent = schemeResultsIn.schemes.map(scheme => scheme.name).contains(SchemeEnum.ESCELIGIBILITY)
 
@@ -39,5 +41,24 @@ trait SchemeResultsBuilder{
 
     schemeResultsIn.copy(schemes = newList)
   }
+
+  def buildTFCResults(tfcEligibilityOutput: TFCEligibilityOutput, calculatorOutput: CalculatorOutput, schemeResultsIn: SchemeResults): SchemeResults = {
+
+    val tfcAmount = calculatorOutput.tfcAmount
+
+    val newScheme = Scheme(name = SchemeEnum.TFCELIGIBILITY,
+      amount = tfcAmount.getOrElse(BigDecimal(0.00)),
+      escClaimantEligibility = None,
+      taxCreditsEligibility = None
+    )
+    val isTFCSchemaPresent = schemeResultsIn.schemes.map(scheme => scheme.name).contains(SchemeEnum.TFCELIGIBILITY)
+
+    val newList = if(isTFCSchemaPresent) schemeResultsIn.schemes.map(scheme => if(scheme.name == SchemeEnum.TFCELIGIBILITY) newScheme else scheme)
+    else  newScheme :: schemeResultsIn.schemes
+
+    val rollout = tfcEligibilityOutput.tfcRollout
+    schemeResultsIn.copy(schemes = newList, tfcRollout = rollout)
+  }
+
 }
 object SchemeResultsBuilder extends SchemeResultsBuilder
