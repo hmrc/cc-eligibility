@@ -17,21 +17,7 @@
 package models
 
 import models.SchemeEnum.SchemeEnum
-import play.api.libs.json.{Format, Json, Reads, Writes}
-import utils.EnumUtils
-
-object SchemeEnum extends Enumeration {
-  type SchemeEnum = Value
-  val TFCELIGIBILITY = Value("tfcEligibility")
-  val TCELIGIBILITY = Value("tcEligibility")
-  val ESCELIGIBILITY = Value("escEligibility")
-
-  val enumReads: Reads[SchemeEnum] = EnumUtils.enumReads(SchemeEnum)
-
-  val enumWrites: Writes[SchemeEnum] = EnumUtils.enumWrites
-
-  implicit def enumFormats: Format[SchemeEnum] = EnumUtils.enumFormat(SchemeEnum)
-}
+import play.api.libs.json.Json
 
 case class EscClaimantEligibility(
                                    parent: Boolean = false,

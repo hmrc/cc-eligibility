@@ -18,8 +18,8 @@ package controllers.freeEntitlement
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
-import eligibility.FreeEntitlementService
-import models.input.freeEntitlement.FreeEntitlementPayload
+import eligibility.FreeEntitlementEligibility
+import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.output.freeEntitlement.{ThirtyHoursEligibilityModel, FifteenHoursEligibilityModel}
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite
@@ -46,7 +46,7 @@ class FreeEntitlementControllerSpec extends UnitSpec with OneAppPerSuite with Mo
 
     "return Bad Request if invalid data is sent" in {
       val testController = new FreeEntitlementController {
-        override val freeHoursService = mock[FreeEntitlementService]
+        override val freeHoursService = mock[FreeEntitlementEligibility]
         override val auditEvent: AuditEvents = mock[AuditEvents]
       }
 
@@ -65,11 +65,11 @@ class FreeEntitlementControllerSpec extends UnitSpec with OneAppPerSuite with Mo
 
     "accept valid request" in {
       val testController = new FreeEntitlementController {
-        override val freeHoursService = mock[FreeEntitlementService]
+        override val freeHoursService = mock[FreeEntitlementEligibility]
         override val auditEvent: AuditEvents = mock[AuditEvents]
       }
 
-      val inputJson = Json.toJson(FreeEntitlementPayload("england", List()))
+      val inputJson = Json.toJson(FreeEntitlementEligibilityInput("england", List()))
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(
@@ -84,11 +84,11 @@ class FreeEntitlementControllerSpec extends UnitSpec with OneAppPerSuite with Mo
 
     "return InternalServer error if exception is thrown" in {
       val testController = new FreeEntitlementController {
-        override val freeHoursService = mock[FreeEntitlementService]
+        override val freeHoursService = mock[FreeEntitlementEligibility]
         override val auditEvent: AuditEvents = mock[AuditEvents]
       }
 
-      val inputJson = Json.toJson(FreeEntitlementPayload("england", List()))
+      val inputJson = Json.toJson(FreeEntitlementEligibilityInput("england", List()))
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(
@@ -113,7 +113,7 @@ class FreeEntitlementControllerSpec extends UnitSpec with OneAppPerSuite with Mo
 
     "return Bad Request if invalid data is sent" in {
       val testController = new FreeEntitlementController {
-        override val freeHoursService = mock[FreeEntitlementService]
+        override val freeHoursService = mock[FreeEntitlementEligibility]
         override val auditEvent: AuditEvents = mock[AuditEvents]
       }
 
@@ -132,7 +132,7 @@ class FreeEntitlementControllerSpec extends UnitSpec with OneAppPerSuite with Mo
 
     "accept valid request" in {
       val testController = new FreeEntitlementController {
-        override val freeHoursService = mock[FreeEntitlementService]
+        override val freeHoursService = mock[FreeEntitlementEligibility]
         override val auditEvent: AuditEvents = mock[AuditEvents]
       }
 
@@ -152,7 +152,7 @@ class FreeEntitlementControllerSpec extends UnitSpec with OneAppPerSuite with Mo
 
     "return InternalServer error if exception is thrown" in {
       val testController = new FreeEntitlementController {
-        override val freeHoursService = mock[FreeEntitlementService]
+        override val freeHoursService = mock[FreeEntitlementEligibility]
         override val auditEvent: AuditEvents = mock[AuditEvents]
       }
 

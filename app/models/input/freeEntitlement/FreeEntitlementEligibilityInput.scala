@@ -19,9 +19,9 @@ package models.input.freeEntitlement
 import org.joda.time.LocalDate
 import play.api.libs.json.Json
 
-case class FreeEntitlementPayload(claimantLocation: String,
-                                  childDOBList: List[LocalDate])
+case class FreeEntitlementEligibilityInput(claimantLocation: String,
+                                           childDOBList: List[LocalDate])
 
-object FreeEntitlementPayload {
-  implicit val format = Json.format[FreeEntitlementPayload]
+object FreeEntitlementEligibilityInput {
+  implicit val format = Json.format[FreeEntitlementEligibilityInput]
 }

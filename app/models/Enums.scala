@@ -83,3 +83,16 @@ object PeriodEnum extends Enumeration {
 
   implicit def enumFormats: Format[PeriodEnum] = EnumUtils.enumFormat(PeriodEnum)
 }
+
+object SchemeEnum extends Enumeration {
+  type SchemeEnum = Value
+  val TFCELIGIBILITY = Value("tfcEligibility")
+  val TCELIGIBILITY = Value("tcEligibility")
+  val ESCELIGIBILITY = Value("escEligibility")
+
+  val enumReads: Reads[SchemeEnum] = EnumUtils.enumReads(SchemeEnum)
+
+  val enumWrites: Writes[SchemeEnum] = EnumUtils.enumWrites
+
+  implicit def enumFormats: Format[SchemeEnum] = EnumUtils.enumFormat(SchemeEnum)
+}
