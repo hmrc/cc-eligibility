@@ -95,7 +95,7 @@ class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
       }
       "amount is missing" in {
         val test = SUT.buildTFCResults(tfcEligibilityOutput, calcOutputNoTFCValue, schemeResultsFullInput)
-        val expectedResult = SchemeResults(List(escSchemeInput, tcSchemeInput, tfcSchemeOutput),false,false)
+        val expectedResult = SchemeResults(List(escSchemeInput, tcSchemeInput, tfcSchemeOutputZero),false,false)
         test shouldBe expectedResult
       }
 
@@ -163,5 +163,6 @@ class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
   val escSchemeOutputZero = Scheme(name = SchemeEnum.ESCELIGIBILITY, amount = BigDecimal(0.0), escClaimantEligibility = Some(EscClaimantEligibility(true,true)), taxCreditsEligibility = None)
   val escSchemeOutput = Scheme(name = SchemeEnum.ESCELIGIBILITY, amount = BigDecimal(1000), escClaimantEligibility = Some(EscClaimantEligibility(true,true)), taxCreditsEligibility = None)
 
+  val tfcSchemeOutputZero = Scheme(name = SchemeEnum.TFCELIGIBILITY, amount = BigDecimal(0.0), None, None)
   val tfcSchemeOutput = Scheme(name = SchemeEnum.TFCELIGIBILITY, amount = BigDecimal(1000), None, None)
 }

@@ -44,10 +44,10 @@ trait SchemeResultsBuilder{
 
   def buildTFCResults(tfcEligibilityOutput: TFCEligibilityOutput, calculatorOutput: CalculatorOutput, schemeResultsIn: SchemeResults): SchemeResults = {
 
-    val escAmount = calculatorOutput.escAmount
+    val tfcAmount = calculatorOutput.tfcAmount
 
     val newScheme = Scheme(name = SchemeEnum.TFCELIGIBILITY,
-      amount = escAmount.getOrElse(BigDecimal(0.00)),
+      amount = tfcAmount.getOrElse(BigDecimal(0.00)),
       escClaimantEligibility = None,
       taxCreditsEligibility = None
     )
