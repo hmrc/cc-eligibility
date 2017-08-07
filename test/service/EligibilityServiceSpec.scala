@@ -19,9 +19,11 @@ package service
 import connectors.CalculatorConnector
 import controllers.FakeCCEligibilityApplication
 import eligibility.{ESCEligibility, FreeEntitlementEligibility, TCEligibility, TFCEligibility}
+import models.input.CalculatorOutput
 import models.mappings.{HHToESCEligibilityInput, HHToFree30hoursEligibilityInput, HHToTCEligibilityInput, HHToTFCEligibilityInput}
 import models.output.{EscClaimantEligibility, Scheme, SchemeResults, TaxCreditsEligibility}
 import models.output.esc.{ESCEligibilityOutput, ESCTaxYear}
+import models.output.freeEntitlement.ThirtyHoursEligibilityModel
 import models.output.tc.{TCEligibilityOutput, TCTaxYear}
 import models.output.tfc._
 import models.{Claimant, Household, SchemeEnum}
@@ -67,12 +69,42 @@ class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication 
 
         val request = Household(children = Nil, parent = Claimant(), partner = None)
 
+        val tfcSchemeOutput = Scheme(SchemeEnum.TFCELIGIBILITY, 1000, None, None)
+        val tcSchemeOutput = Scheme(SchemeEnum.TCELIGIBILITY, 1000, None, Some(TaxCreditsEligibility(true,true)))
+        val escSchemeOutput = Scheme(SchemeEnum.ESCELIGIBILITY, 1000, Some(EscClaimantEligibility(true,true)), None)
+
+        val expectedResult = SchemeResults(List(tfcSchemeOutput, tcSchemeOutput, escSchemeOutput), true, true)
+
         when(SUT.esc.eligibility(any())).thenReturn(Future(escEligibilityOutputAllTrue))
-        Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe escSchemeOutput
+        when(SUT.tc.eligibility(any())).thenReturn(Future(tcEligibilityOutputAllTrue))
+        when(SUT.tfc.eligibility(any())(any(), any())).thenReturn(Future(tfcEligibilityOutputRolloutTrue))
+        when(SUT.thirtyHours.thirtyHours(any())(any(), any())).thenReturn(Future(thirtyHoursEligibilityOutput))
+        when(SUT.calcConnector.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueAll))
+
+        Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
+      }
+
+      "household request is received and only ESC Eligibility is true" in {
+
+        implicit val req = FakeRequest()
+
+        val request = Household(children = Nil, parent = Claimant(), partner = None)
+        val tfcSchemeOutput = Scheme(SchemeEnum.TFCELIGIBILITY, 0, None, None)
+        val tcSchemeOutput = Scheme(SchemeEnum.TCELIGIBILITY, 0, None, Some(TaxCreditsEligibility(false,false)))
+        val escSchemeOutput = Scheme(SchemeEnum.ESCELIGIBILITY, 1000, Some(EscClaimantEligibility(true,true)), None)
+
+        val expectedResult = SchemeResults(List(tfcSchemeOutput, tcSchemeOutput, escSchemeOutput), false, false)
+
+        when(SUT.esc.eligibility(any())).thenReturn(Future(escEligibilityOutputAllTrue))
+        when(SUT.tc.eligibility(any())).thenReturn(Future(mock[TCEligibilityOutput]))
+        when(SUT.tfc.eligibility(any())(any(), any())).thenReturn(Future(mock[TFCEligibilityOutput]))
+        when(SUT.thirtyHours.thirtyHours(any())(any(), any())).thenReturn(Future(mock[ThirtyHoursEligibilityModel]))
+        when(SUT.calcConnector.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueOnlyESC))
+
+        Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
       }
     }
   }
-
 
   //Values from eligibility
   val escEligibilityOutputAllTrue = ESCEligibilityOutput(taxYears = List[ESCTaxYear](), eligibility  = true, parentEligibility  = true, partnerEligibility  = true, location = "england")
@@ -84,7 +116,7 @@ class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication 
     qualifying = true,
     from = None,
     until = None,
-    tfcRollout = false, //Not required in frontend
+    tfcRollout = false,
     childcareCost = BigDecimal(0),
     disability = TFCDisability())
 
@@ -108,15 +140,12 @@ class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication 
       claimants = List(tfcOutputparent, tfcOutputpartner),
       children = List(tfcOutputCChild))))
 
-  //values for expected outputs
-  val escSchemeOutputZero = Scheme(name = SchemeEnum.ESCELIGIBILITY, amount = BigDecimal(0.0), escClaimantEligibility = Some(EscClaimantEligibility(true,true)))
-  val escSchemeOutput = Scheme(name = SchemeEnum.ESCELIGIBILITY, amount = BigDecimal(1000), escClaimantEligibility = Some(EscClaimantEligibility(true,true)))
+  val thirtyHoursEligibilityOutput = ThirtyHoursEligibilityModel(true, true)
 
-  val tfcSchemeOutputZero = Scheme(name = SchemeEnum.TFCELIGIBILITY, amount = BigDecimal(0.0), None, None)
-  val tfcSchemeOutput = Scheme(name = SchemeEnum.TFCELIGIBILITY, amount = BigDecimal(1000), None, None)
+  val calcOutputValueAll: CalculatorOutput = CalculatorOutput(Some(BigDecimal(1000)),
+    Some(BigDecimal(1000)), Some(BigDecimal(1000)))
 
-  val tcSchemeOutputZero = Scheme(name = SchemeEnum.TCELIGIBILITY, amount = BigDecimal(0.0), taxCreditsEligibility = Some(TaxCreditsEligibility(true,true)))
-  val tcSchemeOutput = Scheme(name = SchemeEnum.TCELIGIBILITY, amount = BigDecimal(1000), taxCreditsEligibility = Some(TaxCreditsEligibility(true,true)))
-
+  val calcOutputValueOnlyESC: CalculatorOutput = CalculatorOutput(None,
+    None, Some(BigDecimal(1000)))
 
 }
