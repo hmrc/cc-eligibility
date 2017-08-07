@@ -53,7 +53,6 @@ class TCSchemeConfigSpec extends CCConfigSpec with FakeCCEligibilityApplication 
       TCConfig.previousSeptember1stForDate(ty.from) shouldBe LocalDate.parse("2014-09-01", formatter)
     }
 
-
     "(child birthday is before september 1st) return September 1st following child's birthday" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val birthday = LocalDate.parse("2015-06-20", formatter)

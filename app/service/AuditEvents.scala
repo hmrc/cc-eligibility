@@ -79,6 +79,14 @@ trait AuditEvents {
     auditEvent("FreeEntitlmentResponse", Map("FreeEntitlmentResponse" -> data.toString))
   }
 
+  def auditHouseholdRequest(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+    auditEvent("HouseholdRequest", Map("HouseholdRequest" -> data.toString))
+  }
+
+  def auditHouseholdResponse(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
+    auditEvent("HouseholdResponse", Map("HouseholdResponse" -> data.toString))
+  }
+
   private def auditEvent(auditEventType : String, data: Map[String, String]) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
     auditService.sendEvent(auditEventType, data)
   }
