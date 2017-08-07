@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package models
+package models.output
 
+import models.SchemeEnum
 import models.SchemeEnum.SchemeEnum
 import play.api.libs.json.Json
 
@@ -42,8 +43,8 @@ case class Scheme(name: SchemeEnum,
                   escClaimantEligibility: Option[EscClaimantEligibility] = None,
                   taxCreditsEligibility: Option[TaxCreditsEligibility] = None
                  ) {
-  val missingEscClaimantEligibility = name == SchemeEnum.ESCELIGIBILITY && escClaimantEligibility == None
-  val missingTaxCreditsEligibility = name == SchemeEnum.TCELIGIBILITY && taxCreditsEligibility == None
+  val missingEscClaimantEligibility = (name == SchemeEnum.ESCELIGIBILITY && escClaimantEligibility == None)
+  val missingTaxCreditsEligibility = (name == SchemeEnum.TCELIGIBILITY && taxCreditsEligibility == None)
   require(!missingEscClaimantEligibility,"Missing values for escClaimantEligibility")
   require(!missingTaxCreditsEligibility,"Missing values for taxCreditsEligibility")
 }
