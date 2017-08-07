@@ -148,7 +148,6 @@ class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
       claimants = List(tfcOutputparent, tfcOutputpartner),
       children = List(tfcOutputCChild))))
 
-
 //Values for schemeResults that have already been calculated
   val escSchemeInput = Scheme(name = SchemeEnum.ESCELIGIBILITY, amount = BigDecimal(10), escClaimantEligibility = Some(EscClaimantEligibility(true,true)), taxCreditsEligibility = None)
   val tcSchemeInput = Scheme(name = SchemeEnum.TCELIGIBILITY, amount = BigDecimal(10), escClaimantEligibility = None, taxCreditsEligibility = Some(TaxCreditsEligibility(true,true)))
@@ -165,4 +164,5 @@ class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
 
   val tfcSchemeOutputZero = Scheme(name = SchemeEnum.TFCELIGIBILITY, amount = BigDecimal(0.0), None, None)
   val tfcSchemeOutput = Scheme(name = SchemeEnum.TFCELIGIBILITY, amount = BigDecimal(1000), None, None)
+
 }

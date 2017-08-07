@@ -10,6 +10,8 @@ POST    /fifteen-hours-entitlement/eligibility      controllers.freeEntitlement.
 
 POST    /thirty-hours-entitlement/eligibility       controllers.freeEntitlement.FreeEntitlementController.thirtyHours
 
+POST    /eligibility                                controllers.EligibilityController.eligible
+
 ##########################################################################################################
 
 
