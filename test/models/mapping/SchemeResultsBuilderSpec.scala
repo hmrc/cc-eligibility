@@ -21,6 +21,7 @@ import models.input.CalculatorOutput
 import models.mappings.SchemeResultsBuilder
 import models.output.{EscClaimantEligibility, Scheme, SchemeResults, TaxCreditsEligibility}
 import models.output.esc.{ESCEligibilityOutput, ESCTaxYear}
+import models.output.tc.{TCEligibilityOutput, TCTaxYear}
 import models.output.tfc._
 import org.joda.time.LocalDate
 import org.scalatest.mock.MockitoSugar
@@ -107,6 +108,32 @@ class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
       }
     }
 
+    "build a SchemaResults Object for TC" when {
+      "result already exists" in {
+        val test = SUT.buildTCResults(tcEligibilityOutputAllTrue, calcOutputValueAll, schemeResultsTCOnlyExistsInput)
+        val expectedResult = SchemeResults(List(tcSchemeOutput),false,false)
+        test shouldBe expectedResult
+      }
+
+      "no result exists" in {
+        val test = SUT.buildTCResults(tcEligibilityOutputAllTrue, calcOutputValueAll, schemeResultsEmptyInput)
+        val expectedResult = SchemeResults(List(tcSchemeOutput),false,false)
+        test shouldBe expectedResult
+      }
+
+      "other results exists" in {
+        val test = SUT.buildTCResults(tcEligibilityOutputAllTrue, calcOutputValueAll, schemeResultsFullInput)
+        val expectedResult = SchemeResults(List(escSchemeInput, tcSchemeOutput, tfcSchemeInput),false,false)
+        test shouldBe expectedResult
+      }
+
+      "amount is missing" in {
+        val test = SUT.buildTCResults(tcEligibilityOutputAllTrue, calcOutputNoTCValue, schemeResultsFullInput)
+        val expectedResult = SchemeResults(List(escSchemeInput, tcSchemeOutputZero, tfcSchemeInput),false,false)
+        test shouldBe expectedResult
+      }
+    }
+
   }
 
   //Values from the calculator
@@ -115,9 +142,9 @@ class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
   val calcOutputNoESCValue: CalculatorOutput = CalculatorOutput(Some(BigDecimal(1000)), Some(BigDecimal(1000)), None)
   val calcOutputValueAll: CalculatorOutput = CalculatorOutput(Some(BigDecimal(1000)), Some(BigDecimal(1000)), Some(BigDecimal(1000)))
 
-
 //Values from eligibility
   val escEligibilityOutputAllTrue = ESCEligibilityOutput(taxYears = List[ESCTaxYear](), eligibility  = true, parentEligibility  = true, partnerEligibility  = true, location = "england")
+  val tcEligibilityOutputAllTrue = TCEligibilityOutput(taxYears =List[TCTaxYear](), eligible  = true, wtc  = true, ctc  = true)
 
   val tfcOutputparent = TFCOutputClaimant(qualifying = true, isPartner = false)
   val tfcOutputpartner = TFCOutputClaimant(qualifying = true, isPartner = true)
@@ -150,20 +177,24 @@ class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
       children = List(tfcOutputCChild))))
 
 //Values for schemeResults that have already been calculated
-  val escSchemeInput = Scheme(name = SchemeEnum.ESCELIGIBILITY, amount = BigDecimal(10), escClaimantEligibility = Some(EscClaimantEligibility(true,true)), taxCreditsEligibility = None)
-  val tcSchemeInput = Scheme(name = SchemeEnum.TCELIGIBILITY, amount = BigDecimal(10), escClaimantEligibility = None, taxCreditsEligibility = Some(TaxCreditsEligibility(true,true)))
+  val escSchemeInput = Scheme(name = SchemeEnum.ESCELIGIBILITY, amount = BigDecimal(10), escClaimantEligibility = Some(EscClaimantEligibility(true,true)))
+  val tcSchemeInput = Scheme(name = SchemeEnum.TCELIGIBILITY, amount = BigDecimal(10), taxCreditsEligibility = Some(TaxCreditsEligibility(true,true)))
   val tfcSchemeInput = Scheme(name = SchemeEnum.TFCELIGIBILITY, amount = BigDecimal(10))
 
   val schemeResultsEmptyInput = SchemeResults(schemes = List[Scheme](), tfcRollout = false, thirtyHrsRollout = false)
   val schemeResultsESCOnlyExistsInput = SchemeResults(schemes = List[Scheme](escSchemeInput), tfcRollout = false, thirtyHrsRollout = false)
   val schemeResultsTFCCOnlyExistsInput = SchemeResults(schemes = List[Scheme](tfcSchemeInput), tfcRollout = false, thirtyHrsRollout = false)
+  val schemeResultsTCOnlyExistsInput = SchemeResults(schemes = List[Scheme](tcSchemeInput), tfcRollout = false, thirtyHrsRollout = false)
   val schemeResultsFullInput = SchemeResults(schemes = List[Scheme](escSchemeInput, tcSchemeInput, tfcSchemeInput), tfcRollout = false, thirtyHrsRollout = false)
 
 //values for expected outputs
-  val escSchemeOutputZero = Scheme(name = SchemeEnum.ESCELIGIBILITY, amount = BigDecimal(0.0), escClaimantEligibility = Some(EscClaimantEligibility(true,true)), taxCreditsEligibility = None)
-  val escSchemeOutput = Scheme(name = SchemeEnum.ESCELIGIBILITY, amount = BigDecimal(1000), escClaimantEligibility = Some(EscClaimantEligibility(true,true)), taxCreditsEligibility = None)
+  val escSchemeOutputZero = Scheme(name = SchemeEnum.ESCELIGIBILITY, amount = BigDecimal(0.0), escClaimantEligibility = Some(EscClaimantEligibility(true,true)))
+  val escSchemeOutput = Scheme(name = SchemeEnum.ESCELIGIBILITY, amount = BigDecimal(1000), escClaimantEligibility = Some(EscClaimantEligibility(true,true)))
 
   val tfcSchemeOutputZero = Scheme(name = SchemeEnum.TFCELIGIBILITY, amount = BigDecimal(0.0), None, None)
   val tfcSchemeOutput = Scheme(name = SchemeEnum.TFCELIGIBILITY, amount = BigDecimal(1000), None, None)
+
+  val tcSchemeOutputZero = Scheme(name = SchemeEnum.TCELIGIBILITY, amount = BigDecimal(0.0), taxCreditsEligibility = Some(TaxCreditsEligibility(true,true)))
+  val tcSchemeOutput = Scheme(name = SchemeEnum.TCELIGIBILITY, amount = BigDecimal(1000), taxCreditsEligibility = Some(TaxCreditsEligibility(true,true)))
 
 }
