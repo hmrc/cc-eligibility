@@ -16,7 +16,7 @@
 
 package service
 
-import models.{Household, SchemesResult}
+import models.{Household}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
