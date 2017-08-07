@@ -25,14 +25,14 @@ import models.output.tc.TCEligibilityOutput
 
 trait SchemeResultsBuilder{
 
-  def buildESCResults(escEligibilityOutput: ESCEligibilityOutput, calculatorOutput: CalculatorOutput, schemeResultsIn: SchemeResults): SchemeResults = {
+  def buildESCResults(escEligibilityOutput: ESCEligibilityOutput, calculatorOutput: Option[CalculatorOutput] = None, schemeResultsIn: SchemeResults): SchemeResults = {
 
     val parentEligibility = escEligibilityOutput.parentEligibility
     val partnerEligibility = escEligibilityOutput.partnerEligibility
-    val escAmount = calculatorOutput.escAmount
+    val escAmount: BigDecimal = calculatorOutput.flatMap(_.escAmount).getOrElse(BigDecimal(0))
 
     val newScheme = Scheme(name = SchemeEnum.ESCELIGIBILITY,
-                          amount = escAmount.getOrElse(BigDecimal(0.00)),
+                          amount = escAmount,
                           escClaimantEligibility = Some(EscClaimantEligibility(parentEligibility,partnerEligibility))
     )
     val isESCSchemaPresent = schemeResultsIn.schemes.map(scheme => scheme.name).contains(SchemeEnum.ESCELIGIBILITY)
@@ -43,13 +43,13 @@ trait SchemeResultsBuilder{
     schemeResultsIn.copy(schemes = newList)
   }
 
-  def buildTFCResults(tfcEligibilityOutput: TFCEligibilityOutput, calculatorOutput: CalculatorOutput, schemeResultsIn: SchemeResults): SchemeResults = {
+  def buildTFCResults(tfcEligibilityOutput: TFCEligibilityOutput, calculatorOutput: Option[CalculatorOutput] = None, schemeResultsIn: SchemeResults): SchemeResults = {
 
-    val tfcAmount = calculatorOutput.tfcAmount
+    val tfcAmount = calculatorOutput.flatMap(_.tfcAmount).getOrElse(BigDecimal(0))
 
     val newScheme = Scheme(name = SchemeEnum.TFCELIGIBILITY,
-      amount = tfcAmount.getOrElse(BigDecimal(0.00)))
-    
+      amount = tfcAmount)
+
     val isTFCSchemaPresent = schemeResultsIn.schemes.map(scheme => scheme.name).contains(SchemeEnum.TFCELIGIBILITY)
 
     val newList = if(isTFCSchemaPresent) schemeResultsIn.schemes.map(scheme => if(scheme.name == SchemeEnum.TFCELIGIBILITY) newScheme else scheme)
@@ -59,14 +59,14 @@ trait SchemeResultsBuilder{
     schemeResultsIn.copy(schemes = newList, tfcRollout = rollout)
   }
 
-  def buildTCResults(tcEligibilityOutput: TCEligibilityOutput, calculatorOutput: CalculatorOutput, schemeResultsIn: SchemeResults): SchemeResults = {
+  def buildTCResults(tcEligibilityOutput: TCEligibilityOutput, calculatorOutput: Option[CalculatorOutput] = None, schemeResultsIn: SchemeResults): SchemeResults = {
 
     val wtcEligibility = tcEligibilityOutput.wtc
     val ctcEligibility = tcEligibilityOutput.ctc
-    val tcAmount = calculatorOutput.tcAmount
+    val tcAmount = calculatorOutput.flatMap(_.tcAmount).getOrElse(BigDecimal(0))
 
     val newScheme = Scheme(name = SchemeEnum.TCELIGIBILITY,
-      amount = tcAmount.getOrElse(BigDecimal(0.00)),
+      amount = tcAmount,
       taxCreditsEligibility = Some(TaxCreditsEligibility(wtcEligibility,ctcEligibility))
     )
     val isTCSchemaPresent = schemeResultsIn.schemes.map(scheme => scheme.name).contains(SchemeEnum.TCELIGIBILITY)

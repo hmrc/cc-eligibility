@@ -16,18 +16,74 @@
 
 package service
 
-import models.{Household}
+import connectors.CalculatorConnector
+import eligibility.{ESCEligibility, FreeEntitlementEligibility, TCEligibility, TFCEligibility}
+import models.Household
+import models.input.CalculatorOutput
+import models.mappings._
+import models.output.{CalculatorInput, SchemeResults}
+import uk.gov.hmrc.play.http.HeaderCarrier
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 trait EligibilityService {
 
-  def eligibility(request: Household): Future[String]
+  val calcConnector: CalculatorConnector
+
+  val esc: ESCEligibility
+  val tc: TCEligibility
+  val tfc: TFCEligibility
+  val thirtyHours: FreeEntitlementEligibility
+
+  val TCEligibilityInput: HHToTCEligibilityInput
+  val TFCEligibilityInput: HHToTFCEligibilityInput
+  val ESCEligibilityInput: HHToESCEligibilityInput
+  val FreeEntitlementEligibilityInput: HHToFree30hoursEligibilityInput
+
+  def eligibility(request: Household)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[SchemeResults]
 }
 
-object EligibilityService extends EligibilityService {
-  override def eligibility(request: Household): Future[String] = {
-    //SchemesResult
-    Future("SchemesResultImplementation")
+object EligibilityService extends EligibilityService
+{
+  override val calcConnector: CalculatorConnector = CalculatorConnector
+
+  override val esc: ESCEligibility = ESCEligibility
+  override val tc: TCEligibility = TCEligibility
+  override val tfc: TFCEligibility = TFCEligibility
+  override val thirtyHours: FreeEntitlementEligibility = FreeEntitlementEligibility
+
+  override val TCEligibilityInput: HHToTCEligibilityInput = HHToTCEligibilityInput
+  override val TFCEligibilityInput: HHToTFCEligibilityInput = HHToTFCEligibilityInput
+  override val ESCEligibilityInput: HHToESCEligibilityInput = HHToESCEligibilityInput
+  override val FreeEntitlementEligibilityInput: HHToFree30hoursEligibilityInput = HHToFree30hoursEligibilityInput
+
+  override def eligibility(request: Household)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[SchemeResults] = {
+    for {
+      tcEligibility <- tc.eligibility(TCEligibilityInput.convert(request))
+      tfcEligibility <- tfc.eligibility(TFCEligibilityInput.convert(request))
+      escEligibility <- esc.eligibility(ESCEligibilityInput.convert(request))
+      thirtyHoursEligiblity <- thirtyHours.thirtyHours(TFCEligibilityInput.convert(request))
+
+      calcInput = CalculatorInput(if (tcEligibility.eligible) Some(tcEligibility) else None,
+        if (tfcEligibility.householdEligibility) Some(tfcEligibility) else None,
+        if (escEligibility.eligibility) Some(escEligibility) else None)
+
+      calcOutput <- {
+        if (calcInput.esc.isDefined || calcInput.tc.isDefined || calcInput.tfc.isDefined)
+          calcConnector.getCalculatorResult(calcInput)
+        else Future(CalculatorOutput())
+      }
+
+    } yield {
+
+      val escresult: SchemeResults = SchemeResultsBuilder.buildESCResults(escEligibility, Some(calcOutput), SchemeResults(List()))
+      val tcresult: SchemeResults = SchemeResultsBuilder.buildTCResults(tcEligibility, Some(calcOutput), escresult)
+      val tfcresult: SchemeResults = SchemeResultsBuilder.buildTFCResults(tfcEligibility, Some(calcOutput), tcresult)
+
+      tfcresult.copy(thirtyHrsRollout = thirtyHoursEligiblity.rollout)
+    }
+
   }
+
 }
