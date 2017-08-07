@@ -18,20 +18,20 @@ package models.mapping
 
 import controllers.FakeCCEligibilityApplication
 import models._
-import models.input.freeEntitlement.FreeEntitlementPayload
-import models.mappings.HHToFreeEntitlementPayload
+import models.input.freeEntitlement.FreeEntitlementEligibilityInput
+import models.mappings.HHToFree30hoursEligibilityInput
 import org.joda.time.LocalDate
 import uk.gov.hmrc.play.test.UnitSpec
 
-class HHToFreeEntitlementPayloadSpec extends UnitSpec with FakeCCEligibilityApplication {
+class HHToFree30hoursEligibilityInputSpec extends UnitSpec with FakeCCEligibilityApplication {
 
-  val SUT = new HHToFreeEntitlementPayload {
+  val SUT = new HHToFree30hoursEligibilityInput {
 
   }
 
-  "HHToFreeEntitlementPayload" should {
+  "HHToFree30hoursEligibilityInput" should {
 
-    "convert Household into FreeEntitlementPayload" when {
+    "convert Household into FreeEntitlementEligibilityInput" when {
       "given a household with location and children having DOB" in {
         val dob1 = LocalDate.parse("2017-08-01")
         val dob2 = LocalDate.parse("2016-08-01")
@@ -68,7 +68,7 @@ class HHToFreeEntitlementPayloadSpec extends UnitSpec with FakeCCEligibilityAppl
 
         val childDOBList = List(dob1, dob2)
 
-        SUT.convert(household) shouldBe FreeEntitlementPayload("england", childDOBList)
+        SUT.convert(household) shouldBe FreeEntitlementEligibilityInput("england", childDOBList)
       }
 
       "given a household with no location and children having no DOB" in {
@@ -102,7 +102,7 @@ class HHToFreeEntitlementPayloadSpec extends UnitSpec with FakeCCEligibilityAppl
           )
         )
 
-        SUT.convert(household) shouldBe FreeEntitlementPayload("england", Nil)
+        SUT.convert(household) shouldBe FreeEntitlementEligibilityInput("england", Nil)
       }
     }
   }

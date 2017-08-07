@@ -17,7 +17,7 @@
 package eligibility
 
 import config.ConfigConstants
-import models.input.freeEntitlement.FreeEntitlementPayload
+import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.input.tfc.{TFCEligibilityInput}
 import models.output.freeEntitlement.{FifteenHoursEligibilityModel, ThirtyHoursEligibilityModel}
 import org.joda.time.LocalDate
@@ -27,11 +27,11 @@ import utils.{ChildHelper, CCConfig}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object FreeEntitlementService extends FreeEntitlementService{
+object FreeEntitlementEligibility extends FreeEntitlementEligibility{
   override val tfcEligibility: TFCEligibility = TFCEligibility
 }
 
-trait FreeEntitlementService extends CCConfig with ChildHelper {
+trait FreeEntitlementEligibility extends CCConfig with ChildHelper {
 
   val tfcEligibility: TFCEligibility
   def localDate = StartDate
@@ -45,7 +45,7 @@ trait FreeEntitlementService extends CCConfig with ChildHelper {
     dob.isBefore(futureDate) && !bornOnOrAfter.after(dob.toDate)
   }
 
-  private def hasCildAtAge(configField: String, dobs: List[LocalDate], currentDate: LocalDate = localDate): Boolean = {
+  private def hasChildAtAge(configField: String, dobs: List[LocalDate], currentDate: LocalDate = localDate): Boolean = {
     val freeHours: Configuration = loadConfigByType("free-hours")
     val ageFilter: List[Int] = freeHours.getString(configField).getOrElse("").split(",").toList.filterNot(_.isEmpty).map(_.toInt)
 
@@ -61,7 +61,7 @@ trait FreeEntitlementService extends CCConfig with ChildHelper {
       val location = tfcEligibilityInput.location
 
 
-      val hasChild3Or4Sept2017: Boolean = hasCildAtAge(
+      val hasChild3Or4Sept2017: Boolean = hasChildAtAge(
         configField = s"thirty.${location}",
         dobs = tfcEligibilityInput.children.map(_.dob),
         currentDate = if(localDate.isBefore(ConfigConstants.firstSept2017)) { // TODO: Use only LocalDate.now after 01.09.2017
@@ -83,11 +83,11 @@ trait FreeEntitlementService extends CCConfig with ChildHelper {
     }
   }
 
-  def fifteenHours(request: FreeEntitlementPayload): Future[FifteenHoursEligibilityModel] = {
+  def fifteenHours(request: FreeEntitlementEligibilityInput): Future[FifteenHoursEligibilityModel] = {
     val location = request.claimantLocation
     Future {
       FifteenHoursEligibilityModel(
-        eligibility = hasCildAtAge(
+        eligibility = hasChildAtAge(
           configField = s"fifteen.${location}",
           dobs = request.childDOBList,
           currentDate = localDate

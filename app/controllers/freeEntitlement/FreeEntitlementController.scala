@@ -16,8 +16,8 @@
 
 package controllers.freeEntitlement
 
-import eligibility.FreeEntitlementService
-import models.input.freeEntitlement.FreeEntitlementPayload
+import eligibility.FreeEntitlementEligibility
+import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.input.tfc.TFCEligibilityInput
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
@@ -31,18 +31,18 @@ import scala.concurrent.Future
 object FreeEntitlementController extends FreeEntitlementController {
   override val auditEvent = AuditEvents
 
-  override val freeHoursService: FreeEntitlementService = FreeEntitlementService
+  override val freeHoursService: FreeEntitlementEligibility = FreeEntitlementEligibility
 }
 
 trait FreeEntitlementController extends BaseController {
 
   val auditEvent: AuditEvents
 
-  val freeHoursService: FreeEntitlementService
+  val freeHoursService: FreeEntitlementEligibility
 
   def fifteenHours: Action[JsValue] = Action.async(parse.json) {
     implicit request =>
-      request.body.validate[FreeEntitlementPayload].fold(
+      request.body.validate[FreeEntitlementEligibilityInput].fold(
         error => {
           Logger.warn(s"FreeEntitlement Validation JsError *****\n")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))

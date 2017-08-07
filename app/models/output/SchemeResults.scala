@@ -14,24 +14,11 @@
  * limitations under the License.
  */
 
-package models
+package models.output
 
+import models.SchemeEnum
 import models.SchemeEnum.SchemeEnum
-import play.api.libs.json.{Format, Json, Reads, Writes}
-import utils.EnumUtils
-
-object SchemeEnum extends Enumeration {
-  type SchemeEnum = Value
-  val TFCELIGIBILITY = Value("tfcEligibility")
-  val TCELIGIBILITY = Value("tcEligibility")
-  val ESCELIGIBILITY = Value("escEligibility")
-
-  val enumReads: Reads[SchemeEnum] = EnumUtils.enumReads(SchemeEnum)
-
-  val enumWrites: Writes[SchemeEnum] = EnumUtils.enumWrites
-
-  implicit def enumFormats: Format[SchemeEnum] = EnumUtils.enumFormat(SchemeEnum)
-}
+import play.api.libs.json.Json
 
 case class EscClaimantEligibility(
                                    parent: Boolean = false,
@@ -56,8 +43,8 @@ case class Scheme(name: SchemeEnum,
                   escClaimantEligibility: Option[EscClaimantEligibility] = None,
                   taxCreditsEligibility: Option[TaxCreditsEligibility] = None
                  ) {
-  val missingEscClaimantEligibility = name == SchemeEnum.ESCELIGIBILITY && escClaimantEligibility == None
-  val missingTaxCreditsEligibility = name == SchemeEnum.TCELIGIBILITY && taxCreditsEligibility == None
+  val missingEscClaimantEligibility = (name == SchemeEnum.ESCELIGIBILITY && escClaimantEligibility == None)
+  val missingTaxCreditsEligibility = (name == SchemeEnum.TCELIGIBILITY && taxCreditsEligibility == None)
   require(!missingEscClaimantEligibility,"Missing values for escClaimantEligibility")
   require(!missingTaxCreditsEligibility,"Missing values for taxCreditsEligibility")
 }
