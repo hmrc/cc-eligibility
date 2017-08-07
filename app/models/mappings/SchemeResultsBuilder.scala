@@ -24,7 +24,6 @@ trait SchemeResultsBuilder{
 
   def buildESCResults(escEligibilityOutput: ESCEligibilityOutput, calculatorOutput: CalculatorOutput, schemeResultsIn: SchemeResults): SchemeResults = {
 
-    val eligibility = escEligibilityOutput.eligibility
     val parentEligibility = escEligibilityOutput.parentEligibility
     val partnerEligibility = escEligibilityOutput.partnerEligibility
     val escAmount = calculatorOutput.escAmount

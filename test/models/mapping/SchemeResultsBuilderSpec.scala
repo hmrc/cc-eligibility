@@ -29,6 +29,29 @@ class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
 
   "SchemeResultsBuilder" should {
 
+    " throw an exception" when {
+      "trying to build a scheme object and ESC claimant is missing" in {
+
+        intercept[Exception] {
+          Scheme(name =  SchemeEnum.ESCELIGIBILITY,
+            amount = BigDecimal(0.00) ,
+            escClaimantEligibility = None,
+            taxCreditsEligibility = None
+          )
+        }
+      }
+      "trying to build a scheme object and tax credits claimant is missing" in {
+
+        intercept[Exception] {
+          Scheme(name =  SchemeEnum.TCELIGIBILITY,
+            amount = BigDecimal(0.00) ,
+            escClaimantEligibility = None,
+            taxCreditsEligibility = None
+          )
+        }
+      }
+    }
+
     "build a SchemaResults Object for ESC" when {
       "result already exists" in {
         SUT.buildESCResults(escEligibilityOutputAllTrue, calcOutputValueAll, schemeResultsESCOnlyExistsInput) shouldBe SchemeResults(List(escSchemeOutput),false,false)
