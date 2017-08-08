@@ -26,7 +26,7 @@ import models.output.esc.{ESCEligibilityOutput, ESCTaxYear}
 import models.output.freeEntitlement.ThirtyHoursEligibilityModel
 import models.output.tc.{TCEligibilityOutput, TCTaxYear}
 import models.output.tfc._
-import models.{Claimant, Household, SchemeEnum}
+import models.{Claimant, Household, LocationEnum, SchemeEnum}
 import org.joda.time.LocalDate
 import org.scalatest.mock.MockitoSugar
 import org.mockito.Matchers.any
@@ -167,7 +167,7 @@ class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication 
   }
 
   //Values from eligibility
-  val escEligibilityOutputAllTrue = ESCEligibilityOutput(taxYears = List[ESCTaxYear](), eligibility  = true, parentEligibility  = true, partnerEligibility  = true, location = "england")
+  val escEligibilityOutputAllTrue = ESCEligibilityOutput(taxYears = List[ESCTaxYear](), eligibility  = true, parentEligibility  = true, partnerEligibility  = true, location = Some(LocationEnum.ENGLAND))
   val tcEligibilityOutputAllTrue = TCEligibilityOutput(taxYears =List[TCTaxYear](), eligible  = true, wtc  = true, ctc  = true)
 
   val tfcOutputparent = TFCOutputClaimant(qualifying = true, isPartner = false)

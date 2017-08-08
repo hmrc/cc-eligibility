@@ -146,8 +146,7 @@ class ESCEligibilityControllerSpec extends CCConfigSpec with FakeCCEligibilityAp
           ],
           "eligibility":false,
           "parentEligibility":false,
-          "partnerEligibility":false,
-          "location": ""
+          "partnerEligibility":false
         }
         """.stripMargin)
 

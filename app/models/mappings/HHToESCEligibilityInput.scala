@@ -29,7 +29,8 @@ trait HHToESCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
   val cCConfig: CCConfig
 
   def convert(household: Household): ESCEligibilityInput = {
-    ESCEligibilityInput(createTaxYears(household.hasPartner, household.parent, household.partner, household.children))
+    ESCEligibilityInput(createTaxYears(household.hasPartner, household.parent, household.partner, household.children),
+      household.location)
   }
 
   private def createTaxYears(

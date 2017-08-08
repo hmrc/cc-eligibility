@@ -328,8 +328,7 @@ class JSONFactorySpec extends CCConfigSpec with FakeCCEligibilityApplication {
                ],
                 "eligibility":false,
                 "parentEligibility":false,
-                "partnerEligibility":false,
-                "location": ""
+                "partnerEligibility":false
       }
         """.stripMargin)
 
