@@ -34,17 +34,17 @@ trait HHToTFCEligibilityInput extends PeriodEnumToPeriod {
       from = tFCConfig.StartDate,
       numberOfPeriods = tFCConfig.tfcNoOfPeriods,
       location = hh.location.getOrElse(LocationEnum.ENGLAND.toString).toString,
-      claimants = hhClaimantToTFCEligibilityInputClaimant(hh.hasPartner, hh.parent, hh.partner),
+      claimants = hhClaimantToTFCEligibilityInputClaimant(hh.parent, hh.partner),
       children = hhChildToTFCEligibilityInputChild(hh.children)
     )
   }
 
-  private def hhClaimantToTFCEligibilityInputClaimant(hasPartner: Boolean, hhParent: Claimant, hhPartner: Option[Claimant]): List[TFCClaimant] = {
+  private def hhClaimantToTFCEligibilityInputClaimant(hhParent: Claimant, hhPartner: Option[Claimant]): List[TFCClaimant] = {
 
     val parent: TFCClaimant = createClaimant(hhParent, false)
 
-    if (hasPartner) {
-      List(parent, createClaimant(hhPartner.get, hasPartner))
+    if (hhPartner.isDefined) {
+      List(parent, createClaimant(hhPartner.get, true))
     } else {
       List(parent)
     }

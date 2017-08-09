@@ -44,7 +44,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
     "convert Household into ESCEligibilityInput" when {
       "given a household with parent and no partner no children" in {
 
-        val household = Household(children = Nil, hasPartner = false,
+        val household = Household(children = Nil,
           parent = Claimant(escVouchers = Some(YesNoUnsureBothEnum.YES)),
           partner = None)
 
@@ -63,7 +63,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
 
       "given a household with parent and a partner with no children" in {
 
-        val household = Household(children = Nil, hasPartner = true,
+        val household = Household(children = Nil,
           parent = Claimant(escVouchers = Some(YesNoUnsureBothEnum.NOTSURE)),
           partner = Some(Claimant(escVouchers = Some(YesNoUnsureBothEnum.NO))))
 
@@ -96,7 +96,6 @@ class HHToESCEligibilityInputSpec extends UnitSpec
 
         val household = Household(
           children = children,
-          hasPartner = true,
           parent = Claimant(
             escVouchers = Some(YesNoUnsureBothEnum.YES)
           ),
@@ -167,7 +166,6 @@ class HHToESCEligibilityInputSpec extends UnitSpec
 
         val household = Household(
           children = children,
-          hasPartner = true,
           parent = Claimant(escVouchers = Some(YesNoUnsureBothEnum.YES)),
           partner = Some(
             Claimant(escVouchers = Some(YesNoUnsureBothEnum.NO))
