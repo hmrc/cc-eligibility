@@ -46,7 +46,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
 
         val benefits: Benefits = Benefits(disabilityBenefits = false, highRateDisabilityBenefits = false, incomeBenefits = false, carersAllowance = true)
 
-        val household = Household(children = Nil, hasPartner = false, parent = Claimant(benefits = Some(benefits)), partner = None)
+        val household = Household(children = Nil, parent = Claimant(benefits = Some(benefits)), partner = None)
 
         val res = TCEligibilityInput(List(
           TCTaxYear(from = LocalDate.now(),
@@ -68,7 +68,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
       "given a household with parent and a partner with no children" in {
         val benefits: Benefits = Benefits(disabilityBenefits = false, highRateDisabilityBenefits = false, incomeBenefits = false, carersAllowance = true)
 
-        val household = Household(children = Nil, hasPartner = true,
+        val household = Household(children = Nil,
           parent = Claimant(benefits = Some(benefits)),
           partner = Some(Claimant(benefits = Some(benefits))))
 
@@ -103,7 +103,6 @@ class HHToTCEligibilityInputSpec extends UnitSpec
 
         val household = Household(
           children = children,
-          hasPartner = true,
           parent = Claimant(benefits = Some(benefits)),
           partner = Some(Claimant(benefits = Some(benefits)))
         )
@@ -171,7 +170,6 @@ class HHToTCEligibilityInputSpec extends UnitSpec
 
         val household = Household(
           children = children,
-          hasPartner = true,
           parent = Claimant(benefits = Some(benefits)),
           partner = Some(Claimant(benefits = Some(benefits)))
         )
@@ -231,7 +229,6 @@ class HHToTCEligibilityInputSpec extends UnitSpec
 
       val household = Household(
         children = children,
-        hasPartner = true,
         parent = Claimant(benefits = Some(benefits)),
         partner = Some(Claimant(benefits = Some(benefits)))
       )
@@ -343,7 +340,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
         escVouchers = Some(YesNoUnsureBothEnum.NOTSURE)
       )
 
-      val hhModel = Household(None, Some(LocationEnum.ENGLAND), true, List(hhChild1, hhChild2), parent, Some(partner))
+      val hhModel = Household(None, Some(LocationEnum.ENGLAND), List(hhChild1, hhChild2), parent, Some(partner))
 
       val expectedOutput = TCEligibilityInput(List(
         TCTaxYear(currentDate,

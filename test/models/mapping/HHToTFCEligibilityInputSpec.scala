@@ -79,7 +79,7 @@ class HHToTFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApp
           escVouchers = Some(YesNoUnsureBothEnum.YES)
         )
 
-        val hhModel = Household(None, Some(LocationEnum.ENGLAND), false, List(hhChild1, hhChild2), parent, None)
+        val hhModel = Household(None, Some(LocationEnum.ENGLAND), List(hhChild1, hhChild2), parent, None)
 
         val expectedOutput = TFCEligibilityInput(currentDate, 4, "england",
           List(TFCClaimant(None, Some(TFCIncome(Some(25000), Some(1200), Some(6000))), 32.0, false, TFCDisability(false, false), false,
@@ -152,7 +152,7 @@ class HHToTFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApp
           escVouchers = Some(YesNoUnsureBothEnum.NOTSURE)
         )
 
-        val hhModel = Household(None, Some(LocationEnum.ENGLAND), true, List(hhChild1, hhChild2), parent, Some(partner))
+        val hhModel = Household(None, Some(LocationEnum.ENGLAND), List(hhChild1, hhChild2), parent, Some(partner))
 
         val expectedOutput = TFCEligibilityInput(currentDate, 4, "england",
           List(TFCClaimant(None, Some(TFCIncome(Some(12212), Some(47674), Some(647864))), 34.0, false, TFCDisability(false, false), false,

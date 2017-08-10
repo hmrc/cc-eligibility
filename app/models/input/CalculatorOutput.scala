@@ -18,7 +18,9 @@ package models.input
 
 import play.api.libs.json.{Reads, Json}
 
-case class CalculatorOutput(tcAmount: Option[BigDecimal], tfcAmount: Option[BigDecimal], escAmount: Option[BigDecimal])
+case class CalculatorOutput(tcAmount: Option[BigDecimal] = None,
+                            tfcAmount: Option[BigDecimal] = None,
+                            escAmount: Option[BigDecimal] = None)
 
 object CalculatorOutput {
   implicit val calculatorOutput: Reads[CalculatorOutput] = Json.reads[CalculatorOutput]

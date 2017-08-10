@@ -137,13 +137,13 @@ class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
   }
 
   //Values from the calculator
-  val calcOutputNoTCValue: CalculatorOutput = CalculatorOutput(None, Some(BigDecimal(1000)), Some(BigDecimal(1000)))
-  val calcOutputNoTFCValue: CalculatorOutput = CalculatorOutput(Some(BigDecimal(1000)), None, Some(BigDecimal(1000)))
-  val calcOutputNoESCValue: CalculatorOutput = CalculatorOutput(Some(BigDecimal(1000)), Some(BigDecimal(1000)), None)
-  val calcOutputValueAll: CalculatorOutput = CalculatorOutput(Some(BigDecimal(1000)), Some(BigDecimal(1000)), Some(BigDecimal(1000)))
+  val calcOutputNoTCValue: Option[CalculatorOutput] = Some(CalculatorOutput(None, Some(BigDecimal(1000)), Some(BigDecimal(1000))))
+  val calcOutputNoTFCValue: Option[CalculatorOutput] = Some(CalculatorOutput(Some(BigDecimal(1000)), None, Some(BigDecimal(1000))))
+  val calcOutputNoESCValue: Option[CalculatorOutput] = Some(CalculatorOutput(Some(BigDecimal(1000)), Some(BigDecimal(1000)), None))
+  val calcOutputValueAll: Option[CalculatorOutput] = Some(CalculatorOutput(Some(BigDecimal(1000)), Some(BigDecimal(1000)), Some(BigDecimal(1000))))
 
 //Values from eligibility
-  val escEligibilityOutputAllTrue = ESCEligibilityOutput(taxYears = List[ESCTaxYear](), eligibility  = true, parentEligibility  = true, partnerEligibility  = true, location = "england")
+  val escEligibilityOutputAllTrue = ESCEligibilityOutput(taxYears = List[ESCTaxYear](), eligibility  = true, parentEligibility  = true, partnerEligibility  = true, location = Some(LocationEnum.ENGLAND))
   val tcEligibilityOutputAllTrue = TCEligibilityOutput(taxYears =List[TCTaxYear](), eligible  = true, wtc  = true, ctc  = true)
 
   val tfcOutputparent = TFCOutputClaimant(qualifying = true, isPartner = false)

@@ -16,16 +16,18 @@
 
 package models.input.esc
 
+import models.LocationEnum.LocationEnum
 import models.input.BaseTaxYear
 import org.joda.time.LocalDate
 import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
-import utils.{Periods, CCFormat, ESCConfig, MessagesObject}
+import utils.{CCFormat, ESCConfig, MessagesObject, Periods}
 
 case class ESCEligibilityInput(
-                                escTaxYears: List[ESCTaxYear]
+                                escTaxYears: List[ESCTaxYear],
+                                location: Option[LocationEnum] = None
                   )
 
 object ESCEligibilityInput {

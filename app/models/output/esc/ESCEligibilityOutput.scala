@@ -16,6 +16,7 @@
 
 package models.output.esc
 
+import models.LocationEnum.LocationEnum
 import org.joda.time.LocalDate
 import play.api.libs.json.{Json, Writes}
 import utils.Periods
@@ -25,7 +26,7 @@ case class ESCEligibilityOutput(
                                  eligibility: Boolean = false,
                                  parentEligibility: Boolean = false,
                                  partnerEligibility: Boolean = false,
-                                 location: String = ""
+                                 location: Option[LocationEnum] = None
                               )
 
 object ESCEligibilityOutput {

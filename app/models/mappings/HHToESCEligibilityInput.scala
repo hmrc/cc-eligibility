@@ -29,11 +29,11 @@ trait HHToESCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
   val cCConfig: CCConfig
 
   def convert(household: Household): ESCEligibilityInput = {
-    ESCEligibilityInput(createTaxYears(household.hasPartner, household.parent, household.partner, household.children))
+    ESCEligibilityInput(createTaxYears(household.parent, household.partner, household.children),
+      household.location)
   }
 
   private def createTaxYears(
-                              hasPartner: Boolean,
                               parent: Claimant,
                               partner: Option[Claimant],
                               children: List[Child]
@@ -41,7 +41,7 @@ trait HHToESCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
 
     val now = cCConfig.StartDate
     val april6thCurrentYear = determineApril6DateFromNow(now)
-    val claimantList = createClaimants(hasPartner, parent, partner)
+    val claimantList = createClaimants(parent, partner)
     val childList = createChildren(children)
 
     List(
@@ -60,15 +60,14 @@ trait HHToESCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
     )
   }
 
-  private def createClaimants(hasPartner: Boolean,
-                              parent: Claimant,
+  private def createClaimants(parent: Claimant,
                               partner: Option[Claimant]): List[ESCClaimant] = {
 
     val newParent = ESCClaimant(
       employerProvidesESC = escVouchersAvailable(parent)
     )
 
-    if (hasPartner) {
+    if (partner.isDefined) {
       List(newParent, ESCClaimant(isPartner = true,
         employerProvidesESC = escVouchersAvailable(partner.get)))
     }

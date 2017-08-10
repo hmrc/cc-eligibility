@@ -23,12 +23,12 @@ import uk.gov.hmrc.play.http.{HeaderCarrier, HttpPost}
 import scala.concurrent.Future
 
 object CalculatorConnector extends CalculatorConnector {
-  override val httpPost: HttpPost = WSHttp
+  override def httpPost: HttpPost = WSHttp
 }
 
 trait CalculatorConnector {
 
-  val httpPost: HttpPost
+  def httpPost: HttpPost
 
   def getCalculatorResult(calculatorInput: CalculatorInput)(implicit hc: HeaderCarrier): Future[CalculatorOutput] = {
     httpPost.POST[CalculatorInput, CalculatorOutput](ApplicationConfig.calculatorUrl, calculatorInput)

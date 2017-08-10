@@ -17,10 +17,11 @@
 package eligibility
 
 import models.input.esc._
-import models.output
+import models.{LocationEnum, output}
 import models.output.esc.ESCEligibilityOutput
 import org.joda.time.LocalDate
 import utils.MessagesObject
+
 import scala.annotation.tailrec
 import scala.concurrent.Future
 
@@ -165,7 +166,8 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
         constructTaxYears,
         eligibility,
         parentEligibility,
-        partnerEligibility
+        partnerEligibility,
+        request.location
       )
     }
   }
