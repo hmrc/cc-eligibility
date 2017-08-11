@@ -1,18 +1,30 @@
 {
-  "location": "england",
   "parent": {
+    "ageRange": "TWENTYONETOTWENTYFOUR",
+    "benefits": {
+      "disabilityBenefits": true,
+      "highRateDisabilityBenefits": false,
+      "incomeBenefits": true,
+      "carersAllowance": false
+    },
+    "currentYearlyIncome": {
+      "employmentIncome": 40000.00,
+      "otherIncome": 10000.00
+    },
+    "hours": 37.5,
     "escVouchers": "YES"
   },
   "partner": {
     "escVouchers": "YES"
   },
+  "location": "england",
   "children": [
     {
       "id": 0,
       "name": "child1",
-      "dob": "2014-05-12",
-      "childCareCost": {
-        "amount": 100,
+      "dob": "2015-06-12",
+      "childcareCost": {
+        "amount": 300,
         "period": "MONTHLY"
       },
       "disability": {
