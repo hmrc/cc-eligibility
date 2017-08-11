@@ -59,9 +59,20 @@ object ESCTaxYear extends CCFormat with MessagesObject {
     )(ESCTaxYear.apply _)
 }
 
+case class ESCIncome(
+                      employmentIncome : Option[BigDecimal] = None,
+                      pension : Option[BigDecimal] = None
+                    )
+
+object ESCIncome {
+  implicit val incomeFormat = Json.format[ESCIncome]
+}
+
 case class ESCClaimant(
                      isPartner: Boolean = false,
-                     employerProvidesESC : Boolean = false
+                     employerProvidesESC : Boolean = false,
+                     previousIncome: Option[ESCIncome] = None,
+                     currentIncome: Option[ESCIncome] = None
                    ) {
   def isClaimantQualifyingForESC : Boolean = {
     employerProvidesESC
@@ -71,7 +82,9 @@ case class ESCClaimant(
 object ESCClaimant extends CCFormat {
   implicit val claimantReads: Reads[ESCClaimant] = (
     (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "employerProvidesESC").read[Boolean].orElse(Reads.pure(false))
+      (JsPath \ "employerProvidesESC").read[Boolean].orElse(Reads.pure(false)) and
+      (JsPath \ "previousIncome").readNullable[ESCIncome] and
+      (JsPath \ "currentIncome").readNullable[ESCIncome]
     )(ESCClaimant.apply _)
 }
 

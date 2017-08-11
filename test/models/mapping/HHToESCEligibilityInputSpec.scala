@@ -45,16 +45,20 @@ class HHToESCEligibilityInputSpec extends UnitSpec
       "given a household with parent and no partner no children" in {
 
         val household = Household(children = Nil,
-          parent = Claimant(escVouchers = Some(YesNoUnsureBothEnum.YES)),
+          parent = Claimant(lastYearlyIncome = Some(Income(Some(20000.00), Some(200.00), Some(500.00))),
+            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00))),
+            escVouchers = Some(YesNoUnsureBothEnum.YES)),
           partner = None)
 
         val res = ESCEligibilityInput(List(
           ESCTaxYear(LocalDate.now(),
             LocalDate.parse("2018-04-06"),
-            List(ESCClaimant(false, true)), List()),
+            List(ESCClaimant(false, true,
+              Some(ESCIncome(Some(20000.0),Some(200.0))),Some(ESCIncome(Some(30000.0),Some(200.0))))), List()),
           ESCTaxYear(LocalDate.parse("2018-04-06"),
             LocalDate.now().plusYears(1),
-            List(ESCClaimant(false, true)), List())))
+            List(ESCClaimant(false, true,
+              Some(ESCIncome(Some(20000.0),Some(200.0))),Some(ESCIncome(Some(30000.0),Some(200.0))))), List())))
 
         when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
 
@@ -64,16 +68,26 @@ class HHToESCEligibilityInputSpec extends UnitSpec
       "given a household with parent and a partner with no children" in {
 
         val household = Household(children = Nil,
-          parent = Claimant(escVouchers = Some(YesNoUnsureBothEnum.NOTSURE)),
-          partner = Some(Claimant(escVouchers = Some(YesNoUnsureBothEnum.NO))))
+          parent = Claimant(lastYearlyIncome = Some(Income(Some(20000.00), Some(200.00), Some(500.00))),
+            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00))),
+            escVouchers = Some(YesNoUnsureBothEnum.NOTSURE)),
+          partner = Some(Claimant(lastYearlyIncome = Some(Income(Some(20000.00), Some(200.00), Some(500.00))),
+            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00))),
+            escVouchers = Some(YesNoUnsureBothEnum.NO))))
 
         val res = ESCEligibilityInput(List(
           ESCTaxYear(LocalDate.now(),
             LocalDate.parse("2018-04-06"),
-            List(ESCClaimant(false, true), ESCClaimant(true, false)), List()),
+            List(ESCClaimant(false, true,
+              Some(ESCIncome(Some(20000.0),Some(200.0))),Some(ESCIncome(Some(30000.0),Some(200.0)))),
+              ESCClaimant(true, false,
+                Some(ESCIncome(Some(20000.0),Some(200.0))),Some(ESCIncome(Some(30000.0),Some(200.0))))), List()),
           ESCTaxYear(LocalDate.parse("2018-04-06"),
             LocalDate.now().plusYears(1),
-            List(ESCClaimant(false, true), ESCClaimant(true, false)), List())))
+            List(ESCClaimant(false, true,
+              Some(ESCIncome(Some(20000.0),Some(200.0))),Some(ESCIncome(Some(30000.0),Some(200.0)))),
+              ESCClaimant(true, false,
+                Some(ESCIncome(Some(20000.0),Some(200.0))),Some(ESCIncome(Some(30000.0),Some(200.0))))), List())))
 
         when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
 
