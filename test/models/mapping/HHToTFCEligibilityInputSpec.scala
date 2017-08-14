@@ -129,7 +129,7 @@ class HHToTFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApp
             statutoryIncome = None
           )),
           hours = Some(34),
-          minimumEarnings = Some(MinimumEarnings(BigDecimal(2313), Some(EmploymentStatusEnum.SELFEMPLOYED), Some(true))),
+          minimumEarnings = Some(MinimumEarnings(BigDecimal(0), Some(EmploymentStatusEnum.SELFEMPLOYED), Some(true))),
           escVouchers = Some(YesNoUnsureBothEnum.YES)
         )
         val partner = Claimant(
@@ -156,9 +156,9 @@ class HHToTFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApp
 
         val expectedOutput = TFCEligibilityInput(currentDate, 4, "england",
           List(TFCClaimant(None, Some(TFCIncome(Some(12212), Some(47674), Some(647864))), 34.0, false, TFCDisability(false, false), false,
-            TFCMinimumEarnings(true, 2313), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), Some(Some(EmploymentStatusEnum.SELFEMPLOYED).toString), Some(true)),
+            TFCMinimumEarnings(false, 0.0), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), Some(Some(EmploymentStatusEnum.SELFEMPLOYED).toString), Some(true)),
             TFCClaimant(None, Some(TFCIncome(Some(12212), Some(47674), Some(647864))), 21.0, true, TFCDisability(false, false), false,
-              TFCMinimumEarnings(false, 0.0), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), None, None)),
+              TFCMinimumEarnings(true, 0.0), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), None, None)),
           List(TFCChild(0, 0, Periods.Monthly, dob, TFCDisability(true, false)),
             TFCChild(1, 1000, Periods.Monthly, dob, TFCDisability(true, false))))
 

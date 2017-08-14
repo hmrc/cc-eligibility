@@ -67,13 +67,14 @@ trait HHToTFCEligibilityInput extends PeriodEnumToPeriod {
   private def hhMinimumEarningsToTFCMinimumEarnings(hhMinimumEarnings: Option[MinimumEarnings]): TFCMinimumEarnings = {
 
     hhMinimumEarnings match {
-      case Some(hhMinimumEarnings) => TFCMinimumEarnings(
-        selection = true, //true by default if selected
-        amount = hhMinimumEarnings.amount
-      )
-      case None => TFCMinimumEarnings(
-        selection = false, //false is no minimum earnings selected
-        amount = BigDecimal(0.00))
+      case Some(hhMinimumEarnings) => {
+        if (hhMinimumEarnings.amount <= BigDecimal(0.00)) {
+          TFCMinimumEarnings(selection = false, amount = BigDecimal(0.00))
+        } else {
+          TFCMinimumEarnings(selection = true, amount = hhMinimumEarnings.amount)
+        }
+      }
+      case None => TFCMinimumEarnings() //default values will be used
     }
   }
 
