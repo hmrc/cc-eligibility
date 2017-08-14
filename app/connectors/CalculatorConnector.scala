@@ -33,7 +33,6 @@ trait CalculatorConnector {
   def httpPost: HttpPost
 
   def getCalculatorResult(calculatorInput: CalculatorInput)(implicit hc: HeaderCarrier): Future[CalculatorOutput] = {
-    println(Json.toJson(calculatorInput))
     httpPost.POST[CalculatorInput, CalculatorOutput](ApplicationConfig.calculatorUrl, calculatorInput)
   }
 }

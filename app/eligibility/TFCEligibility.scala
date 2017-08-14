@@ -112,7 +112,9 @@ trait TFCEligibility extends TFCRolloutSchemeConfig {
           qualifying = childEligibility,
           from = qualifyStartDate,
           until = qualifyEndDate,
-          tfcRollout = isChildEligibleForTFCRollout(child, childEligibility)
+          tfcRollout = isChildEligibleForTFCRollout(child, childEligibility),
+          childcareCost = child.childcareCost,
+          disability = models.output.tfc.TFCDisability(child.disability.disabled,child.disability.severelyDisabled)
         )
       }
     }
@@ -128,6 +130,7 @@ trait TFCEligibility extends TFCRolloutSchemeConfig {
 
     def eligibility(request : TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
       val outputPeriods = determineTFCPeriods(request)
+
       val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && request.validHouseholdMinimumEarnings
 
       Future {
