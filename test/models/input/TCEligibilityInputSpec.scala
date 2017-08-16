@@ -34,6 +34,7 @@ class TCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplicat
       val resource: JsonNode = JsonLoader.fromResource("/json/input/tc/eligibility_input_test.json")
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TCEligibilityInput]
+
       result.get shouldBe a[TCEligibilityInput]
       result.get.taxYears should not be null
 

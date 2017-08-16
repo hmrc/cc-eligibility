@@ -23,150 +23,16 @@ import play.api.libs.json.Reads._
 import play.api.libs.json._
 import utils.{MessagesObject, Periods, TCConfig}
 
-case class TCEligibilityInput(
-                               taxYears: List[TCTaxYear]
-                             )
+case class TCDisability(
+                         disabled: Boolean,
+                         severelyDisabled: Boolean
+                         )
 
-object TCEligibilityInput extends MessagesObject {
-  def validateTaxYear(taxYears: List[TCTaxYear]): Boolean = taxYears.length >= 1
-
-  implicit val tcEligibilityReads: Reads[TCEligibilityInput] =
-    (JsPath \ "taxYears").read[List[TCTaxYear]].filter(ValidationError(messages("cc.elig.tax.year.min")))(x => validateTaxYear(x)).map { ty => TCEligibilityInput(ty) }
-}
-
-case class TCTaxYear(
-                      from: LocalDate,
-                      until: LocalDate,
-                      claimants: List[TCClaimant],
-                      children: List[TCChild]
-                  ) extends models.input.BaseTaxYear {
-
-  def isHouseholdQualifyingForCTC(periodStart: LocalDate): Boolean = {
-    children.exists(child => child.isChild(periodStart) || child.getsYoungAdultElement(periodStart))
-  }
-
-  def householdGetsChildcareElement(periodStart: LocalDate): Boolean = {
-    claimantsGetChildcareElement(periodStart) && children.exists(_.getsChildcareElement(periodStart))
-  }
-
-  def claimantsGetChildcareElement(periodStart: LocalDate): Boolean = {
-    def isClaimantDisabledOrCarer(person: TCClaimant) = {
-      determineClaimantDisabilityOrSeverity(person) || person.carersAllowance
-    }
-
-    val parent = claimants.head
-    if (isCouple) {
-      val partner = claimants.last
-      (
-        parent.isWorkingAtLeast16HoursPerWeek(periodStart) && (partner.isWorkingAtLeast16HoursPerWeek(periodStart) || isClaimantDisabledOrCarer(partner))
-        ) || (
-        partner.isWorkingAtLeast16HoursPerWeek(periodStart) && isClaimantDisabledOrCarer(parent)
-        )
-    } else {
-      parent.isWorkingAtLeast16HoursPerWeek(periodStart)
-    }
-  }
-
-  def gets2ndAdultElement(now: LocalDate = LocalDate.now): Boolean = isCouple && getBasicElement(now)
-
-  def isCouple: Boolean = claimants.length > 1 && claimants.length < 3
-
-  def getBasicElement(periodStart: LocalDate): Boolean = {
-    isHouseholdQualifyingForWTC(periodStart) && householdHasChildOrYoungPerson(periodStart)
-  }
-
-  def isHouseholdQualifyingForWTC(periodStart: LocalDate): Boolean = {
-    if (isCouple) {
-      doesHouseHoldQualify(periodStart)
-    } else {
-      claimants.head.isWorkingAtLeast16HoursPerWeek(periodStart)
-    }
-  }
-
-  private def doesHouseHoldQualify(periodStart: LocalDate): Boolean = {
-
-    def determineWorking16hours(person: TCClaimant): Boolean =
-      person.isWorkingAtLeast16HoursPerWeek(periodStart)
-
-    val minimumHours: Double = TCConfig.getConfig(periodStart).minimumHoursWorkedIfCouple
-
-    val parent = claimants.head
-    val partner = claimants.last
-
-    def isCoupleWorking24Hours: Boolean = getTotalHouseholdWorkingHours >= minimumHours
-
-    def isOneOfCoupleWorking16h = determineWorking16hours(parent) || determineWorking16hours(partner)
-
-    def isOneOfCoupleDisabled = determineClaimantDisabilityOrSeverity(parent) || determineClaimantDisabilityOrSeverity(partner)
-
-    def isOneOfCoupleCarer = parent.carersAllowance || partner.carersAllowance
-
-    isOneOfCoupleWorking16h && (isOneOfCoupleDisabled || isOneOfCoupleCarer || isCoupleWorking24Hours)
-  }
-
-  private def determineClaimantDisabilityOrSeverity(claimant: TCClaimant): Boolean = {
-    claimant.disability.disabled || claimant.disability.severelyDisabled
-  }
-
-  def getTotalHouseholdWorkingHours: Double = {
-    if (isCouple) {
-      claimants.head.hours + claimants.tail.head.hours
-    } else {
-      claimants.head.hours
-    }
-  }
-
-  def householdHasChildOrYoungPerson(now: LocalDate = LocalDate.now, isFamily: Boolean = false): Boolean = {
-    //if called from getsFamilyElement isFamily is true and also checks for the period start date is before 6th April 2017
-    children.exists(child => (isFamily && child.dob.isBefore(TCConfig.childDate6thApril2017) && (child.isChild(now) || child.getsYoungAdultElement(now)))
-      || (!isFamily && (child.isChild(now) || child.getsYoungAdultElement(now))))
-  }
-
-  def getsLoneParentElement(now: LocalDate = LocalDate.now): Boolean = !isCouple && householdHasChildOrYoungPerson(now)
-
-  def gets30HoursElement(periodStart: LocalDate): Boolean = {
-    val taxYearConfig = TCConfig.getConfig(periodStart)
-    val hours30: Double = taxYearConfig.hours30Worked
-
-    (householdHasChildOrYoungPerson(periodStart) && getTotalHouseholdWorkingHours >= hours30) && (
-      if (isCouple) {
-        claimants.head.isWorkingAtLeast16HoursPerWeek(periodStart) || claimants.tail.head.isWorkingAtLeast16HoursPerWeek(periodStart)
-      } else {
-        true
-      }
-      )
-  }
-
-  def getsFamilyElement(now: LocalDate = LocalDate.now): Boolean = {
-    householdHasChildOrYoungPerson(now, isFamily = true)
-  }
-
-  def isOneOfClaimantsWorking16h(periodStart: LocalDate): Boolean = {
-    if (isCouple) {
-      claimants.head.isWorkingAtLeast16HoursPerWeek(periodStart) || claimants.last.isWorkingAtLeast16HoursPerWeek(periodStart)
-    } else {
-      claimants.head.isWorkingAtLeast16HoursPerWeek(periodStart)
-    }
-  }
-
-}
-
-object TCTaxYear extends MessagesObject {
-
-  def maxChildValidation(noOfChild: List[TCChild]): Boolean = {
-    noOfChild.length <= 25
-  }
-
-  def claimantValidation(noOfClaimant: List[TCClaimant]): Boolean = {
-    noOfClaimant.nonEmpty && noOfClaimant.length < 3
-  }
-
-  implicit val taxYearReads: Reads[TCTaxYear] = (
-    (JsPath \ "from").read[LocalDate] and
-      (JsPath \ "until").read[LocalDate] and
-        (JsPath \ "claimants").read[List[TCClaimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
-          (JsPath \ "children").read[List[TCChild]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
-    ) (TCTaxYear.apply _)
+object TCDisability {
+  implicit val disabilityReads: Reads[TCDisability] = (
+    (JsPath \ "disabled").read[Boolean].orElse(Reads.pure(false)) and
+      (JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false))
+    ) (TCDisability.apply _)
 }
 
 case class TCClaimant(
@@ -196,20 +62,20 @@ object TCClaimant {
         (JsPath \ "disability").read[TCDisability] and
           (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false))
     ) (TCClaimant.apply _)
+
 }
 
-case class TCDisability(
-                       disabled: Boolean,
-                       severelyDisabled: Boolean
-                     )
+case class TCEducation(
+                        inEducation: Boolean,
+                        startDate: LocalDate
+                        )
 
-object TCDisability {
-  implicit val disabilityReads: Reads[TCDisability] = (
-    (JsPath \ "disabled").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false))
-    ) (TCDisability.apply _)
+object TCEducation {
+  implicit val educationReads: Reads[TCEducation] = (
+    (JsPath \ "inEducation").read[Boolean].orElse(Reads.pure(false)) and
+      (JsPath \ "startDate").read[LocalDate]
+    ) (TCEducation.apply _)
 }
-
 
 case class TCChild(
                     id: Short,
@@ -338,14 +204,172 @@ object TCChild extends MessagesObject {
     ) (TCChild.apply _)
 }
 
-case class TCEducation(
-                      inEducation: Boolean,
-                      startDate: LocalDate
-                    )
+case class TCIncome(
+                     employment: Option[List[BigDecimal]] = None,
+                     pension: Option[List[BigDecimal]] = None,
+                     other: Option[List[BigDecimal]] = None,
+                     benefits: Option[List[BigDecimal]] = None,
+                     statutory: Option[List[TCStatutoryIncome]] = None
+                     )
 
-object TCEducation {
-  implicit val educationReads: Reads[TCEducation] = (
-    (JsPath \ "inEducation").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "startDate").read[LocalDate]
-    ) (TCEducation.apply _)
+object TCIncome {
+  implicit val incomeFormat: Format[TCIncome] = Json.format[TCIncome]
+}
+
+case class TCStatutoryIncome(
+                              weeks: Double = 0,
+                              amount: BigDecimal = 0
+                              )
+object TCStatutoryIncome {
+  implicit val statutoryIncomeFormat: Format[TCStatutoryIncome] = Json.format[TCStatutoryIncome]
+}
+
+case class TCTaxYear(
+                      from: LocalDate,
+                      until: LocalDate,
+                      previousHouseholdIncome: Option[TCIncome] = None,
+                      currentHouseholdIncome: Option[TCIncome] = None,
+                      claimants: List[TCClaimant],
+                      children: List[TCChild]
+                      ) extends models.input.BaseTaxYear {
+
+  def isHouseholdQualifyingForCTC(periodStart: LocalDate): Boolean = {
+    children.exists(child => child.isChild(periodStart) || child.getsYoungAdultElement(periodStart))
+  }
+
+  def householdGetsChildcareElement(periodStart: LocalDate): Boolean = {
+    claimantsGetChildcareElement(periodStart) && children.exists(_.getsChildcareElement(periodStart))
+  }
+
+  def claimantsGetChildcareElement(periodStart: LocalDate): Boolean = {
+    def isClaimantDisabledOrCarer(person: TCClaimant) = {
+      determineClaimantDisabilityOrSeverity(person) || person.carersAllowance
+    }
+
+    val parent = claimants.head
+    if (isCouple) {
+      val partner = claimants.last
+      (
+        parent.isWorkingAtLeast16HoursPerWeek(periodStart) && (partner.isWorkingAtLeast16HoursPerWeek(periodStart) || isClaimantDisabledOrCarer(partner))
+        ) || (
+        partner.isWorkingAtLeast16HoursPerWeek(periodStart) && isClaimantDisabledOrCarer(parent)
+        )
+    } else {
+      parent.isWorkingAtLeast16HoursPerWeek(periodStart)
+    }
+  }
+
+  def gets2ndAdultElement(now: LocalDate = LocalDate.now): Boolean = isCouple && getBasicElement(now)
+
+  def isCouple: Boolean = claimants.length > 1 && claimants.length < 3
+
+  def getBasicElement(periodStart: LocalDate): Boolean = {
+    isHouseholdQualifyingForWTC(periodStart) && householdHasChildOrYoungPerson(periodStart)
+  }
+
+  def isHouseholdQualifyingForWTC(periodStart: LocalDate): Boolean = {
+    if (isCouple) {
+      doesHouseHoldQualify(periodStart)
+    } else {
+      claimants.head.isWorkingAtLeast16HoursPerWeek(periodStart)
+    }
+  }
+
+  private def doesHouseHoldQualify(periodStart: LocalDate): Boolean = {
+
+    def determineWorking16hours(person: TCClaimant): Boolean =
+      person.isWorkingAtLeast16HoursPerWeek(periodStart)
+
+    val minimumHours: Double = TCConfig.getConfig(periodStart).minimumHoursWorkedIfCouple
+
+    val parent = claimants.head
+    val partner = claimants.last
+
+    def isCoupleWorking24Hours: Boolean = getTotalHouseholdWorkingHours >= minimumHours
+
+    def isOneOfCoupleWorking16h = determineWorking16hours(parent) || determineWorking16hours(partner)
+
+    def isOneOfCoupleDisabled = determineClaimantDisabilityOrSeverity(parent) || determineClaimantDisabilityOrSeverity(partner)
+
+    def isOneOfCoupleCarer = parent.carersAllowance || partner.carersAllowance
+
+    isOneOfCoupleWorking16h && (isOneOfCoupleDisabled || isOneOfCoupleCarer || isCoupleWorking24Hours)
+  }
+
+  private def determineClaimantDisabilityOrSeverity(claimant: TCClaimant): Boolean = {
+    claimant.disability.disabled || claimant.disability.severelyDisabled
+  }
+
+  def getTotalHouseholdWorkingHours: Double = {
+    if (isCouple) {
+      claimants.head.hours + claimants.tail.head.hours
+    } else {
+      claimants.head.hours
+    }
+  }
+
+  def householdHasChildOrYoungPerson(now: LocalDate = LocalDate.now, isFamily: Boolean = false): Boolean = {
+    //if called from getsFamilyElement isFamily is true and also checks for the period start date is before 6th April 2017
+    children.exists(child => (isFamily && child.dob.isBefore(TCConfig.childDate6thApril2017) && (child.isChild(now) || child.getsYoungAdultElement(now)))
+      || (!isFamily && (child.isChild(now) || child.getsYoungAdultElement(now))))
+  }
+
+  def getsLoneParentElement(now: LocalDate = LocalDate.now): Boolean = !isCouple && householdHasChildOrYoungPerson(now)
+
+  def gets30HoursElement(periodStart: LocalDate): Boolean = {
+    val taxYearConfig = TCConfig.getConfig(periodStart)
+    val hours30: Double = taxYearConfig.hours30Worked
+
+    (householdHasChildOrYoungPerson(periodStart) && getTotalHouseholdWorkingHours >= hours30) && (
+      if (isCouple) {
+        claimants.head.isWorkingAtLeast16HoursPerWeek(periodStart) || claimants.tail.head.isWorkingAtLeast16HoursPerWeek(periodStart)
+      } else {
+        true
+      }
+      )
+  }
+
+  def getsFamilyElement(now: LocalDate = LocalDate.now): Boolean = {
+    householdHasChildOrYoungPerson(now, isFamily = true)
+  }
+
+  def isOneOfClaimantsWorking16h(periodStart: LocalDate): Boolean = {
+    if (isCouple) {
+      claimants.head.isWorkingAtLeast16HoursPerWeek(periodStart) || claimants.last.isWorkingAtLeast16HoursPerWeek(periodStart)
+    } else {
+      claimants.head.isWorkingAtLeast16HoursPerWeek(periodStart)
+    }
+  }
+
+}
+
+object TCTaxYear extends MessagesObject {
+
+  def maxChildValidation(noOfChild: List[TCChild]): Boolean = {
+    noOfChild.length <= 25
+  }
+
+  def claimantValidation(noOfClaimant: List[TCClaimant]): Boolean = {
+    noOfClaimant.nonEmpty && noOfClaimant.length < 3
+  }
+
+  implicit val taxYearReads: Reads[TCTaxYear] = (
+    (JsPath \ "from").read[LocalDate] and
+      (JsPath \ "until").read[LocalDate] and
+        (JsPath \ "previousHouseholdIncome").readNullable[TCIncome] and
+          (JsPath \ "currentHouseholdIncome").readNullable[TCIncome] and
+            (JsPath \ "claimants").read[List[TCClaimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
+              (JsPath \ "children").read[List[TCChild]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
+    ) (TCTaxYear.apply _)
+}
+
+case class TCEligibilityInput(
+                               taxYears: List[TCTaxYear]
+                               )
+
+object TCEligibilityInput extends MessagesObject {
+  def validateTaxYear(taxYears: List[TCTaxYear]): Boolean = taxYears.length >= 1
+
+  implicit val tcEligibilityReads: Reads[TCEligibilityInput] =
+    (JsPath \ "taxYears").read[List[TCTaxYear]].filter(ValidationError(messages("cc.elig.tax.year.min")))(x => validateTaxYear(x)).map { ty => TCEligibilityInput(ty) }
 }

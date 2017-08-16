@@ -29,7 +29,7 @@ import play.api.libs.json.Json
 //Should also match childcarecalculatorfrontend.models.Household
 case class StatutoryIncome(
                             statutoryWeeks: Double = 0.00,
-                            statutoryAmount: BigDecimal =   0.00
+                            statutoryAmount: BigDecimal = 0.00
                           )
 
 object StatutoryIncome {
@@ -38,10 +38,10 @@ object StatutoryIncome {
 
 case class Income(
                    employmentIncome: Option[BigDecimal] = None,
-                   pension: Option[BigDecimal] =   None,
+                   pension: Option[BigDecimal] = None,
                    otherIncome: Option[BigDecimal] = None,
-                   benefits: Option[BigDecimal] =   None,
-                   statutoryIncome: Option[StatutoryIncome]=None
+                   benefits: Option[BigDecimal] = None,
+                   statutoryIncome: Option[StatutoryIncome] = None
                  )
 
 object Income {
@@ -50,8 +50,8 @@ object Income {
 
 case class Benefits(
                     disabilityBenefits: Boolean = false,
-                    highRateDisabilityBenefits: Boolean =   false,
-                    incomeBenefits: Boolean =   false,
+                    highRateDisabilityBenefits: Boolean = false,
+                    incomeBenefits: Boolean = false,
                     carersAllowance: Boolean = false
                    )
 
