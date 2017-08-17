@@ -763,7 +763,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
     "populate the claimant's elements model for a period (1 claimant, non-disabled, qualifying)" in {
       val periodStartDate = LocalDate.parse("2017-08-31", formatter)
 
-      val claimant = TCClaimant(isPartner = false, hours = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
+      val claimant = TCClaimant(isPartner = false, hoursPerWeek = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
       val ty = TCTaxYear(from = periodStartDate, until = periodStartDate, claimants = List(claimant), children = List())
 
       val outputClaimant = output.tc.TCOutputClaimant(qualifying = true, isPartner = false, claimantDisability = output.tc.TCDisability(disability = false, severeDisability = false))
@@ -775,7 +775,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
     "populate the claimant's elements model for a period (1 claimant, disabled, working > 16h, qualifying)" in {
       val periodStartDate = LocalDate.parse("2017-08-31", formatter)
 
-      val claimant = TCClaimant(isPartner = false, hours = 17, disability = TCDisability(disabled = true, severelyDisabled = false), carersAllowance = false)
+      val claimant = TCClaimant(isPartner = false, hoursPerWeek = 17, disability = TCDisability(disabled = true, severelyDisabled = false), carersAllowance = false)
       val ty = TCTaxYear(from = periodStartDate, until = periodStartDate, claimants = List(claimant), children = List())
 
       val outputClaimant = output.tc.TCOutputClaimant(qualifying = true, isPartner = false, claimantDisability = output.tc.TCDisability(disability = true, severeDisability = false))
@@ -787,7 +787,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
     "populate the claimant's elements model for a period (1 claimant, disabled, working < 16h, qualifying)" in {
       val periodStartDate = LocalDate.parse("2017-08-31", formatter)
 
-      val claimant = TCClaimant(isPartner = false, hours = 14, disability = TCDisability(disabled = true, severelyDisabled = false), carersAllowance = false)
+      val claimant = TCClaimant(isPartner = false, hoursPerWeek = 14, disability = TCDisability(disabled = true, severelyDisabled = false), carersAllowance = false)
 
       val ty = TCTaxYear(from = periodStartDate, until = periodStartDate, claimants = List(claimant), children = List())
       val outputClaimant = output.tc.TCOutputClaimant(qualifying = true, isPartner = false, claimantDisability = output.tc.TCDisability(disability = false, severeDisability = false))
@@ -799,7 +799,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
     "populate the claimant's elements model for a period (1 claimant, severely disabled, working < 16h, qualifying)" in {
       val periodStartDate = LocalDate.parse("2017-08-31", formatter)
 
-      val claimant = TCClaimant(isPartner = false, hours = 14, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
+      val claimant = TCClaimant(isPartner = false, hoursPerWeek = 14, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
 
       val ty = TCTaxYear(from = periodStartDate, until = periodStartDate, claimants = List(claimant), children = List())
       val outputClaimant = output.tc.TCOutputClaimant(qualifying = true, isPartner = false, claimantDisability = output.tc.TCDisability(disability = false, severeDisability = false))
@@ -811,7 +811,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
     "populate the claimant's elements model for a period (1 claimant, severely disabled, working > 16h, qualifying)" in {
       val periodStartDate = LocalDate.parse("2017-08-31", formatter)
 
-      val claimant = TCClaimant(isPartner = false, hours = 16, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
+      val claimant = TCClaimant(isPartner = false, hoursPerWeek = 16, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
 
       val ty = TCTaxYear(from = periodStartDate, until = periodStartDate, claimants = List(claimant), children = List())
       val outputClaimant = output.tc.TCOutputClaimant(qualifying = true, isPartner = false, claimantDisability = output.tc.TCDisability(disability = true, severeDisability = true))
@@ -823,8 +823,8 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
     "populate the claimant's elements model for a period (couple, 1 non-disabled, 2nd disabled, qualifying)" in {
       val periodStartDate = LocalDate.parse("2017-08-31", formatter)
 
-      val claimant = TCClaimant(isPartner = false, hours = 14, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
-      val claimant1 = TCClaimant(isPartner = true, hours = 20, disability = TCDisability(disabled = true, severelyDisabled = false), carersAllowance = false)
+      val claimant = TCClaimant(isPartner = false, hoursPerWeek = 14, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = true, hoursPerWeek = 20, disability = TCDisability(disabled = true, severelyDisabled = false), carersAllowance = false)
 
       val ty = TCTaxYear(from = periodStartDate, until = periodStartDate, claimants = List(claimant, claimant1), children = List())
 
@@ -838,8 +838,8 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
     "populate the claimant's elements model for a period (couple, 1 non-disabled > 16h, 2nd severely disabled <16h, qualifying)" in {
       val periodStartDate = LocalDate.parse("2017-08-31", formatter)
 
-      val claimant = TCClaimant(isPartner = false, hours = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
-      val claimant1 = TCClaimant(isPartner = true, hours = 0, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
+      val claimant = TCClaimant(isPartner = false, hoursPerWeek = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = true, hoursPerWeek = 0, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
 
       val ty = TCTaxYear(from = periodStartDate, until = periodStartDate, claimants = List(claimant, claimant1), children = List())
 
@@ -853,8 +853,8 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
     "populate the claimant's elements model for a period (couple, 1 severely disabled, 2nd non-disabled, qualifying)" in {
       val periodStartDate = LocalDate.parse("2017-08-31", formatter)
 
-      val claimant = TCClaimant(isPartner = false, hours = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
-      val claimant1 = TCClaimant(isPartner = true, hours = 10, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
+      val claimant = TCClaimant(isPartner = false, hoursPerWeek = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = true, hoursPerWeek = 10, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
 
       val ty = TCTaxYear(from = periodStartDate, until = periodStartDate, claimants = List(claimant, claimant1), children = List())
 
@@ -868,8 +868,8 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
     "populate the claimant's elements model for a period (couple, both severely disabled, one working < 16, other > 16, qualifying)" in {
       val periodStartDate = LocalDate.parse("2017-08-31", formatter)
 
-      val claimant = TCClaimant(isPartner = false, hours = 2, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
-      val claimant1 = TCClaimant(isPartner = true, hours = 16, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
+      val claimant = TCClaimant(isPartner = false, hoursPerWeek = 2, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = true, hoursPerWeek = 16, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
 
       val ty = TCTaxYear(from = periodStartDate, until = periodStartDate, claimants = List(claimant, claimant1), children = List())
 
@@ -886,7 +886,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
       val periodEndDate = LocalDate.parse("2016-12-01", formatter)
 
       val child1 = TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)
-      val claimant1 = TCClaimant(isPartner = false, hours = 30, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = false, hoursPerWeek = 30, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
       val ty = models.input.tc.TCTaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1), children = List(child1))
 
       val outputHousehold = output.tc.TCHouseHoldElements(basic = true, hours30 = true, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
@@ -901,7 +901,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
       val periodEndDate = LocalDate.parse("2016-12-01", formatter)
 
       val child1 = TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)
-      val claimant1 = TCClaimant(isPartner = false, hours = 16, disability = TCDisability(disabled = true, severelyDisabled = false), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = false, hoursPerWeek = 16, disability = TCDisability(disabled = true, severelyDisabled = false), carersAllowance = false)
       val ty = models.input.tc.TCTaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1), children = List(child1))
 
       val outputHousehold = output.tc.TCHouseHoldElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
@@ -916,7 +916,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
       val periodEndDate = LocalDate.parse("2016-12-01", formatter)
 
       val child1 = TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)
-      val claimant1 = TCClaimant(isPartner = false, hours = 1, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = false, hoursPerWeek = 1, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
       val ty = models.input.tc.TCTaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1), children = List(child1))
 
       val outputHousehold = output.tc.TCHouseHoldElements(basic = false, hours30 = false, childcare = false, loneParent = true, secondParent = false, family = true, wtc = false, ctc = true)
@@ -931,7 +931,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
       val periodEndDate = LocalDate.parse("2016-12-01", formatter)
 
       val child1 = TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)
-      val claimant1 = TCClaimant(isPartner = false, hours = 1, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = false, hoursPerWeek = 1, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
       val ty = models.input.tc.TCTaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1), children = List(child1))
 
       val outputHousehold = output.tc.TCHouseHoldElements(basic = false, hours30 = false, childcare = false, loneParent = false, secondParent = false, family = false, wtc = false, ctc = false)
@@ -947,7 +947,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
       val educationStartDate = LocalDate.parse("2011-09-05", formatter)
 
       val child1 = TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = TCDisability(disabled = false, severelyDisabled = false), education = Some(TCEducation(inEducation = true, startDate = educationStartDate)))
-      val claimant1 = TCClaimant(isPartner = false, hours = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = false, hoursPerWeek = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
       val ty = models.input.tc.TCTaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1), children = List(child1))
 
       val outputHousehold = output.tc.TCHouseHoldElements(basic = true, hours30 = false, childcare = false, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
@@ -962,7 +962,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
       val periodEndDate = LocalDate.parse("2016-12-01", formatter)
 
       val child1 = TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)
-      val claimant1 = TCClaimant(isPartner = false, hours = 16, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = false, hoursPerWeek = 16, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
       val ty = models.input.tc.TCTaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1), children = List(child1))
 
       val outputHousehold = output.tc.TCHouseHoldElements(basic = false, hours30 = false, childcare = false, loneParent = false, secondParent = false, family = false, wtc = true, ctc = false)
@@ -979,7 +979,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
 
       val child1 = TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)
       val child2 = TCChild(id = 1, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth2, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)
-      val claimant1 = TCClaimant(isPartner = false, hours = 16, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = false, hoursPerWeek = 16, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
       val ty = models.input.tc.TCTaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1), children = List(child1, child2))
 
       val outputHousehold = output.tc.TCHouseHoldElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
@@ -995,8 +995,8 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
       val periodEndDate = LocalDate.parse("2016-12-01", formatter)
 
       val child1 = TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)
-      val claimant1 = TCClaimant(isPartner = false, hours = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
-      val claimant2 = TCClaimant(isPartner = true, hours = 8, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = false, hoursPerWeek = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
+      val claimant2 = TCClaimant(isPartner = true, hoursPerWeek = 8, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
       val ty = models.input.tc.TCTaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1, claimant2), children = List(child1))
 
       val outputHousehold = output.tc.TCHouseHoldElements(basic = true, hours30 = false, childcare = false, loneParent = false, secondParent = true, family = true, wtc = true, ctc = true)
@@ -1011,8 +1011,8 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
       val periodEndDate = LocalDate.parse("2016-12-01", formatter)
 
       val child1 = TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)
-      val claimant1 = TCClaimant(isPartner = false, hours = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
-      val claimant2 = TCClaimant(isPartner = true, hours = 0, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = false, hoursPerWeek = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
+      val claimant2 = TCClaimant(isPartner = true, hoursPerWeek = 0, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
       val ty = models.input.tc.TCTaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1, claimant2), children = List(child1))
 
       val outputHousehold = output.tc.TCHouseHoldElements(basic = false, hours30 = false, childcare = false, loneParent = false, secondParent = false, family = true, wtc = false, ctc = true)
@@ -1027,8 +1027,8 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
       val periodEndDate = LocalDate.parse("2016-12-01", formatter)
 
       val child1 = TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)
-      val claimant1 = TCClaimant(isPartner = false, hours = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
-      val claimant2 = TCClaimant(isPartner = true, hours = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = false, hoursPerWeek = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
+      val claimant2 = TCClaimant(isPartner = true, hoursPerWeek = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
       val ty = models.input.tc.TCTaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1, claimant2), children = List(child1))
 
       val outputHousehold = output.tc.TCHouseHoldElements(basic = true, hours30 = true, childcare = true, loneParent = false, secondParent = true, family = true, wtc = true, ctc = true)
@@ -1043,8 +1043,8 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
       val periodEndDate = LocalDate.parse("2016-12-01", formatter)
 
       val child1 = TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)
-      val claimant1 = TCClaimant(isPartner = false, hours = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
-      val claimant2 = TCClaimant(isPartner = true, hours = 0, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = false, hoursPerWeek = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
+      val claimant2 = TCClaimant(isPartner = true, hoursPerWeek = 0, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
       val ty = models.input.tc.TCTaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1, claimant2), children = List(child1))
 
       val outputHousehold = output.tc.TCHouseHoldElements(basic = true, hours30 = false, childcare = true, loneParent = false, secondParent = true, family = true, wtc = true, ctc = true)
@@ -1059,8 +1059,8 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
       val periodEndDate = LocalDate.parse("2016-12-01", formatter)
 
       val child1 = TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)
-      val claimant1 = TCClaimant(isPartner = false, hours = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
-      val claimant2 = TCClaimant(isPartner = true, hours = 0, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = false, hoursPerWeek = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
+      val claimant2 = TCClaimant(isPartner = true, hoursPerWeek = 0, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
       val ty = models.input.tc.TCTaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1, claimant2), children = List(child1))
 
       val outputHousehold = output.tc.TCHouseHoldElements(basic = true, hours30 = false, childcare = true, loneParent = false, secondParent = true, family = true, wtc = true, ctc = true)
@@ -1075,8 +1075,8 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
       val periodEndDate = LocalDate.parse("2016-12-01", formatter)
 
       val child1 = TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)
-      val claimant1 = TCClaimant(isPartner = false, hours = 0, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
-      val claimant2 = TCClaimant(isPartner = true, hours = 0, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = false, hoursPerWeek = 0, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
+      val claimant2 = TCClaimant(isPartner = true, hoursPerWeek = 0, disability = TCDisability(disabled = true, severelyDisabled = true), carersAllowance = false)
       val ty = models.input.tc.TCTaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1, claimant2), children = List(child1))
 
       val outputHousehold = output.tc.TCHouseHoldElements(basic = false, hours30 = false, childcare = false, loneParent = false, secondParent = false, family = true, wtc = false, ctc = true)
@@ -1148,7 +1148,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
       val dateOfBirth1 = LocalDate.parse("2011-12-01", formatter)
 
       val child1 = TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)
-      val claimant1 = TCClaimant(isPartner = false, hours = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = false, hoursPerWeek = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
       val ty = models.input.tc.TCTaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1), children = List(child1))
 
       val outputClaimant = output.tc.TCOutputClaimant(qualifying = true, isPartner = false, claimantDisability = output.tc.TCDisability(disability = false, severeDisability = false))
@@ -1168,7 +1168,7 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
       val dateOfBirth1 = LocalDate.parse("2011-12-01", formatter)
 
       val child1 = TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth1, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)
-      val claimant1 = TCClaimant(isPartner = false, hours = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
+      val claimant1 = TCClaimant(isPartner = false, hoursPerWeek = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false)
       val ty = models.input.tc.TCTaxYear(from = periodStartDate, until = periodEndDate, claimants = List(claimant1), children = List(child1))
 
       val outputClaimant = output.tc.TCOutputClaimant(qualifying = true, isPartner = false, claimantDisability = output.tc.TCDisability(disability = false, severeDisability = false))

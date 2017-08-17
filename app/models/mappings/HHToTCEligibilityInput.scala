@@ -90,7 +90,7 @@ trait HHToTCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
 
   private def createClaimant(claimant: Claimant, isPartner: Boolean): TCClaimant = {
     TCClaimant(
-      hours = claimant.hours.getOrElse(BigDecimal(0.0)).doubleValue(),
+      hoursPerWeek = claimant.hours.getOrElse(BigDecimal(0.0)).doubleValue(),
       isPartner = isPartner,
       disability = TCDisability(claimant.benefits.exists(_.disabilityBenefits), claimant.benefits.exists(_.highRateDisabilityBenefits)),
       carersAllowance = claimant.benefits.exists(_.carersAllowance)

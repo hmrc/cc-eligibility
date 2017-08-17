@@ -36,7 +36,7 @@ object TCDisability {
 }
 
 case class TCClaimant(
-                     hours: Double,
+                     hoursPerWeek: Double,
                      isPartner: Boolean,
                      disability: TCDisability,
                      carersAllowance: Boolean
@@ -49,7 +49,7 @@ case class TCClaimant(
   def isWorkingAtLeast16HoursPerWeek(periodStart: LocalDate): Boolean = {
     val taxYearConfig = TCConfig.getConfig(periodStart)
     val minimum: Double = taxYearConfig.minimumHoursWorked
-    hours >= minimum
+    hoursPerWeek >= minimum
   }
 
 }
@@ -302,9 +302,9 @@ case class TCTaxYear(
 
   def getTotalHouseholdWorkingHours: Double = {
     if (isCouple) {
-      claimants.head.hours + claimants.tail.head.hours
+      claimants.head.hoursPerWeek + claimants.tail.head.hoursPerWeek
     } else {
-      claimants.head.hours
+      claimants.head.hoursPerWeek
     }
   }
 
