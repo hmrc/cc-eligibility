@@ -16,6 +16,7 @@
 
 package models.mappings
 
+import config.ApplicationConfig
 import models._
 import models.input.tc._
 import org.joda.time.LocalDate
@@ -33,6 +34,26 @@ trait HHToTCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
     TCEligibilityInput(taxYears = createTaxYears(household.parent, household.partner, household.children))
   }
 
+  private def buildIncome(parentIncome: Option[Income], partnerIncome: Option[Income]): TCIncome = {
+    val employmentIncome = List(parentIncome.flatMap(_.employmentIncome), partnerIncome.flatMap(_.employmentIncome)).flatten
+    val pensionIncome = List(parentIncome.flatMap(_.pension), partnerIncome.flatMap(_.pension)).flatten
+    val otherIncome = List(parentIncome.flatMap(_.otherIncome), partnerIncome.flatMap(_.otherIncome)).flatten
+    val benefitsIncome = List(parentIncome.flatMap(_.benefits), partnerIncome.flatMap(_.benefits)).flatten
+
+    val parentStatutory = parentIncome.flatMap(_.statutoryIncome.map(si => TCStatutoryIncome(si.statutoryWeeks, si.statutoryAmount)))
+    val partnerStatutory = partnerIncome.flatMap(_.statutoryIncome.map(si => TCStatutoryIncome(si.statutoryWeeks, si.statutoryAmount)))
+
+    val statutoryIncome = List(parentStatutory, partnerStatutory).flatten
+
+    TCIncome(
+      employment = if(employmentIncome.isEmpty) None else Some(employmentIncome),
+      pension = if(pensionIncome.isEmpty) None else Some(pensionIncome),
+      other = if(otherIncome.isEmpty) None else Some(otherIncome),
+      benefits = if(benefitsIncome.isEmpty) None else Some(benefitsIncome),
+      statutory = if(statutoryIncome.isEmpty) None else Some(statutoryIncome)
+    )
+  }
+
   private def createTaxYears(
                               parent: Claimant,
                               partner: Option[Claimant],
@@ -44,16 +65,23 @@ trait HHToTCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
     val claimantList = hhClaimantToTCEligibilityInputClaimant(parent, partner)
     val childList = hhChildToTEligibilityInputChild(children)
 
+    val lastYearIncome: TCIncome = buildIncome(parent.lastYearlyIncome, partner.flatMap(_.lastYearlyIncome))
+    val currentYearIncome: TCIncome = buildIncome(parent.currentYearlyIncome, partner.flatMap(_.currentYearlyIncome))
+
     List(
       TCTaxYear(
         from = now,
         until = april6thCurrentYear,
+        previousHouseholdIncome = Some(lastYearIncome),
+        currentHouseholdIncome = Some(currentYearIncome),
         claimants = claimantList,
         children = childList
       ),
       TCTaxYear(
         from = april6thCurrentYear,
         until = now.plusYears(1),
+        previousHouseholdIncome = Some(currentYearIncome),
+        currentHouseholdIncome = Some(currentYearIncome),
         claimants = claimantList,
         children = childList
       )
@@ -62,7 +90,7 @@ trait HHToTCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
 
   private def createClaimant(claimant: Claimant, isPartner: Boolean): TCClaimant = {
     TCClaimant(
-      hours = claimant.hours.getOrElse(BigDecimal(0.0)).doubleValue(),
+      hoursPerWeek = claimant.hours.getOrElse(BigDecimal(0.0)).doubleValue(),
       isPartner = isPartner,
       disability = TCDisability(claimant.benefits.exists(_.disabilityBenefits), claimant.benefits.exists(_.highRateDisabilityBenefits)),
       carersAllowance = claimant.benefits.exists(_.carersAllowance)

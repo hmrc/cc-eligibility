@@ -16,6 +16,7 @@
 
 package models.output.tc
 
+import models.input.tc.TCIncome
 import org.joda.time.LocalDate
 import play.api.libs.json.{Writes, Json}
 import utils.Periods
@@ -41,26 +42,6 @@ case class TCTaxYear(
 
 object TCTaxYear {
   implicit val taxYearWrites: Writes[TCTaxYear] = Json.writes[TCTaxYear]
-}
-
-case class TCIncome(
-                     employment: Option[List[BigDecimal]] = None,
-                     pension: Option[List[BigDecimal]] = None,
-                     other: Option[List[BigDecimal]] = None,
-                     benefits: Option[List[BigDecimal]] = None,
-                     statutory: Option[List[TCStatutoryIncome]] = None
-                     )
-
-object TCIncome {
-  implicit val incomeFormat: Writes[TCIncome] = Json.writes[TCIncome]
-}
-
-case class TCStatutoryIncome(
-                              weeks: Double = 0,
-                              amount: BigDecimal = 0
-                              )
-object TCStatutoryIncome {
-  implicit val statutoryIncomeFormat: Writes[TCStatutoryIncome] = Json.writes[TCStatutoryIncome]
 }
 
 case class TCPeriod(

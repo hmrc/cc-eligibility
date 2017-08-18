@@ -16,7 +16,7 @@
 
 package eligibility
 
-import models.input.tc.{TCChild, TCEligibilityInput, TCTaxYear}
+import models.input.tc.{TCIncome, TCChild, TCEligibilityInput, TCTaxYear}
 
 import models.output.tc.{TCChildElements, TCDisability, TCOutputChild, TCEligibilityOutput}
 import org.joda.time.LocalDate
@@ -78,6 +78,8 @@ object TCEligibility extends TCEligibility {
       models.output.tc.TCTaxYear(
         from = ty.from,
         until = ty.until,
+        previousHouseholdIncome = ty.previousHouseholdIncome.getOrElse(TCIncome()),
+        currentHouseholdIncome = ty.currentHouseholdIncome.getOrElse(TCIncome()),
         periods = determinePeriodsForTaxYear(ty)
       )
     }
