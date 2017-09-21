@@ -59,18 +59,24 @@ trait FreeEntitlementEligibility extends CCConfig with ChildHelper {
       val tfcEligibility: Boolean = tfcEligibilityResult.householdEligibility
       val location = tfcEligibilityInput.location
 
-      val hasChild3Or4Sept2017: Boolean = hasChildAtAge(
-        configField = s"thirty.${location}",
-        dobs = tfcEligibilityInput.children.map(_.dob),
-        currentDate = localDate
-      )
+      val hasChild3Or4Years: Boolean = if(tfcEligibilityInput.children.nonEmpty) {
+        hasChildAtAge(
+          configField = s"thirty.${location}",
+          dobs = tfcEligibilityInput.children.map(_.dob),
+          currentDate = localDate
+        )
+      } else {
+        tfcEligibilityInput.childAgedThreeOrFour.getOrElse(false)
+      }
+
+      println(s"************hasChild3Or4Years>>>$hasChild3Or4Years")
 
       val rollout = tfcEligibilityInput.children.exists( child =>
         isChildDOBWithinRollout(child.dob)
       )
 
       ThirtyHoursEligibilityModel(
-        eligibility = tfcEligibility && hasChild3Or4Sept2017,
+        eligibility = tfcEligibility && hasChild3Or4Years,
         rollout = rollout
       )
     }

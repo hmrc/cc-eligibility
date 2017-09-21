@@ -23,9 +23,9 @@ trait HHToFree30hoursEligibilityInput {
 
   def convert(household: Household): FreeEntitlementEligibilityInput = {
     val location = household.location.getOrElse(LocationEnum.ENGLAND)
-    val childDOBList = household.children.map(_.dob).flatten
+    val isChild3Or4Years = household.childAgedThreeOrFour.getOrElse(false) //Checking based on user selection for 3 or 4 years old
 
-    FreeEntitlementEligibilityInput(location.toString, childDOBList)
+    FreeEntitlementEligibilityInput(location.toString, List(), Some(isChild3Or4Years)) //Empty DOB list for 30 hours eligibility with revised journey
   }
 
 }

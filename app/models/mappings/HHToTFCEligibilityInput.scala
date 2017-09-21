@@ -30,9 +30,11 @@ trait HHToTFCEligibilityInput extends PeriodEnumToPeriod {
   val tFCConfig: TFCConfig
 
   def convert(hh: Household): TFCEligibilityInput = {
+    println(s"********hh>>$hh")
     TFCEligibilityInput(
       from = tFCConfig.StartDate,
       numberOfPeriods = tFCConfig.tfcNoOfPeriods,
+      childAgedThreeOrFour = hh.childAgedThreeOrFour,
       location = hh.location.getOrElse(LocationEnum.ENGLAND.toString).toString,
       claimants = hhClaimantToTFCEligibilityInputClaimant(hh.parent, hh.partner),
       children = hhChildToTFCEligibilityInputChild(hh.children)

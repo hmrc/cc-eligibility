@@ -37,6 +37,7 @@ case class TFCEligibilityInput(
                                 from: LocalDate,
                                 numberOfPeriods: Short,
                                 location: String,
+                                childAgedThreeOrFour: Option[Boolean] = None,
                                 claimants: List[TFCClaimant],
                                 children: List[TFCChild]
                 ) {
@@ -96,6 +97,7 @@ object TFCEligibilityInput extends CCFormat with MessagesObject {
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "numberOfPeriods").read[Short].orElse(Reads.pure(1)) and
         (JsPath \ "location").read[String] and
+        (JsPath \ "childAgedThreeOrFour").readNullable[Boolean] and
           (JsPath \ "claimants").read[List[TFCClaimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
             (JsPath \ "children").read[List[TFCChild]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
     )(TFCEligibilityInput.apply _)

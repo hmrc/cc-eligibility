@@ -46,25 +46,27 @@ trait EligibilityService {
       tcEligibility <- tc.eligibility(TCEligibilityInput.convert(request))
       tfcEligibility <- tfc.eligibility(TFCEligibilityInput.convert(request))
       escEligibility <- esc.eligibility(ESCEligibilityInput.convert(request))
-      thirtyHoursEligiblity <- thirtyHours.thirtyHours(TFCEligibilityInput.convert(request))
+      thirtyHoursEligibility <- thirtyHours.thirtyHours(TFCEligibilityInput.convert(request))
 
       calcInput = CalculatorInput(if (tcEligibility.eligible) Some(tcEligibility) else None,
         if (tfcEligibility.householdEligibility) Some(tfcEligibility) else None,
         if (escEligibility.eligibility) Some(escEligibility) else None)
 
       calcOutput <- {
-        if (calcInput.esc.isDefined || calcInput.tc.isDefined || calcInput.tfc.isDefined)
+        if (calcInput.esc.isDefined || calcInput.tc.isDefined || calcInput.tfc.isDefined) {
           calcConnector.getCalculatorResult(calcInput)
-        else Future(CalculatorOutput())
+        } else {
+          Future(CalculatorOutput())
+        }
       }
 
     } yield {
 
-      val escresult: SchemeResults = SchemeResultsBuilder.buildESCResults(escEligibility, Some(calcOutput), SchemeResults(List()))
-      val tcresult: SchemeResults = SchemeResultsBuilder.buildTCResults(tcEligibility, Some(calcOutput), escresult)
-      val tfcresult: SchemeResults = SchemeResultsBuilder.buildTFCResults(tfcEligibility, Some(calcOutput), tcresult)
+      val escResult: SchemeResults = SchemeResultsBuilder.buildESCResults(escEligibility, Some(calcOutput), SchemeResults(List()))
+      val tcResult: SchemeResults = SchemeResultsBuilder.buildTCResults(tcEligibility, Some(calcOutput), escResult)
+      val tfcResult: SchemeResults = SchemeResultsBuilder.buildTFCResults(tfcEligibility, Some(calcOutput), tcResult)
 
-      tfcresult.copy(thirtyHrsRollout = thirtyHoursEligiblity.rollout)
+      tfcResult.copy(thirtyHrsRollout = thirtyHoursEligibility.rollout)
     }
 
   }

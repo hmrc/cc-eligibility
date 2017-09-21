@@ -128,6 +128,7 @@ object Claimant {
 case class Household(
                       credits: Option[CreditsEnum] =   None,
                       location: Option[LocationEnum] = None,
+                      childAgedThreeOrFour: Option[Boolean] = None,
                       children: List[Child],
                       parent: Claimant,
                       partner: Option[Claimant] = None

@@ -20,7 +20,7 @@ import org.joda.time.LocalDate
 import play.api.libs.json.Json
 
 case class FreeEntitlementEligibilityInput(claimantLocation: String,
-                                           childDOBList: List[LocalDate])
+                                           childDOBList: List[LocalDate], child3Or4Years: Option[Boolean] = None)
 
 object FreeEntitlementEligibilityInput {
   implicit val format = Json.format[FreeEntitlementEligibilityInput]
