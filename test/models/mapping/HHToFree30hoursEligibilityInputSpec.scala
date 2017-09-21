@@ -57,11 +57,11 @@ class HHToFree30hoursEligibilityInputSpec extends UnitSpec with FakeCCEligibilit
           children = children,
           location = Some(LocationEnum.ENGLAND),
           parent = Claimant(
-            escVouchers = Some(YesNoUnsureBothEnum.YES)
+            escVouchers = Some(YesNoUnsureEnum.YES)
           ),
           partner = Some(
             Claimant(
-              escVouchers = Some(YesNoUnsureBothEnum.NO)
+              escVouchers = Some(YesNoUnsureEnum.NO)
             )
           )
         )
@@ -93,11 +93,11 @@ class HHToFree30hoursEligibilityInputSpec extends UnitSpec with FakeCCEligibilit
         val household = Household(
           children = children,
           parent = Claimant(
-            escVouchers = Some(YesNoUnsureBothEnum.YES)
+            escVouchers = Some(YesNoUnsureEnum.YES)
           ),
           partner = Some(
             Claimant(
-              escVouchers = Some(YesNoUnsureBothEnum.NO)
+              escVouchers = Some(YesNoUnsureEnum.NO)
             )
           )
         )

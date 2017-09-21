@@ -47,7 +47,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
         val household = Household(children = Nil,
           parent = Claimant(lastYearlyIncome = Some(Income(Some(20000.00), Some(200.00), Some(500.00))),
             currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00))),
-            escVouchers = Some(YesNoUnsureBothEnum.YES)),
+            escVouchers = Some(YesNoUnsureEnum.YES)),
           partner = None)
 
         val res = ESCEligibilityInput(List(
@@ -70,10 +70,10 @@ class HHToESCEligibilityInputSpec extends UnitSpec
         val household = Household(children = Nil,
           parent = Claimant(lastYearlyIncome = Some(Income(Some(20000.00), Some(200.00), Some(500.00))),
             currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00))),
-            escVouchers = Some(YesNoUnsureBothEnum.NOTSURE)),
+            escVouchers = Some(YesNoUnsureEnum.NOTSURE)),
           partner = Some(Claimant(lastYearlyIncome = Some(Income(Some(20000.00), Some(200.00), Some(500.00))),
             currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00))),
-            escVouchers = Some(YesNoUnsureBothEnum.NO))))
+            escVouchers = Some(YesNoUnsureEnum.NO))))
 
         val res = ESCEligibilityInput(List(
           ESCTaxYear(LocalDate.now(),
@@ -111,11 +111,11 @@ class HHToESCEligibilityInputSpec extends UnitSpec
         val household = Household(
           children = children,
           parent = Claimant(
-            escVouchers = Some(YesNoUnsureBothEnum.YES)
+            escVouchers = Some(YesNoUnsureEnum.YES)
           ),
           partner = Some(
             Claimant(
-              escVouchers = Some(YesNoUnsureBothEnum.NO)
+              escVouchers = Some(YesNoUnsureEnum.NO)
             )
           )
         )
@@ -180,9 +180,9 @@ class HHToESCEligibilityInputSpec extends UnitSpec
 
         val household = Household(
           children = children,
-          parent = Claimant(escVouchers = Some(YesNoUnsureBothEnum.YES)),
+          parent = Claimant(escVouchers = Some(YesNoUnsureEnum.YES)),
           partner = Some(
-            Claimant(escVouchers = Some(YesNoUnsureBothEnum.NO))
+            Claimant(escVouchers = Some(YesNoUnsureEnum.NO))
           )
         )
 

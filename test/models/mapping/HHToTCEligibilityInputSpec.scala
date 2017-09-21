@@ -435,7 +435,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
         )),
         hours = Some(40),
         minimumEarnings = None,
-        escVouchers = Some(YesNoUnsureBothEnum.YES)
+        escVouchers = Some(YesNoUnsureEnum.YES)
       )
       val partner = Claimant(
         ageRange = Some(AgeRangeEnum.EIGHTEENTOTWENTY),
@@ -459,7 +459,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
         )),
         hours = Some(40),
         minimumEarnings = None,
-        escVouchers = Some(YesNoUnsureBothEnum.NOTSURE)
+        escVouchers = Some(YesNoUnsureEnum.NOTSURE)
       )
 
       val hhModel = Household(None, Some(LocationEnum.ENGLAND), List(hhChild1, hhChild2), parent, Some(partner))

@@ -76,7 +76,7 @@ class HHToTFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApp
           )),
           hours = Some(32),
           minimumEarnings = Some(MinimumEarnings(BigDecimal(3900), Some(EmploymentStatusEnum.SELFEMPLOYED), Some(true))),
-          escVouchers = Some(YesNoUnsureBothEnum.YES)
+          escVouchers = Some(YesNoUnsureEnum.YES)
         )
 
         val hhModel = Household(None, Some(LocationEnum.ENGLAND), List(hhChild1, hhChild2), parent, None)
@@ -130,7 +130,7 @@ class HHToTFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApp
           )),
           hours = Some(34),
           minimumEarnings = Some(MinimumEarnings(BigDecimal(0), Some(EmploymentStatusEnum.SELFEMPLOYED), Some(true))),
-          escVouchers = Some(YesNoUnsureBothEnum.YES)
+          escVouchers = Some(YesNoUnsureEnum.YES)
         )
         val partner = Claimant(
           ageRange = Some(AgeRangeEnum.EIGHTEENTOTWENTY),
@@ -149,7 +149,7 @@ class HHToTFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApp
           )),
           hours = Some(21),
           minimumEarnings = None,
-          escVouchers = Some(YesNoUnsureBothEnum.NOTSURE)
+          escVouchers = Some(YesNoUnsureEnum.NOTSURE)
         )
 
         val hhModel = Household(None, Some(LocationEnum.ENGLAND), List(hhChild1, hhChild2), parent, Some(partner))

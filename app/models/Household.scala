@@ -18,8 +18,8 @@ package models
 
 import models.AgeRangeEnum.AgeRangeEnum
 import models.LocationEnum.LocationEnum
-import models.TcUcBenefitsEnum.TcUcBenefitsEnum
-import models.YesNoUnsureBothEnum.YesNoUnsureBothEnum
+import models.CreditsEnum.CreditsEnum
+import models.YesNoUnsureEnum.YesNoUnsureEnum
 import models.EmploymentStatusEnum.EmploymentStatusEnum
 import models.PeriodEnum.PeriodEnum
 import org.joda.time.LocalDate
@@ -57,7 +57,6 @@ case class Benefits(
 
 object Benefits {
   implicit val formatBenefits = Json.format[Benefits]
-
 }
 
 case class MinimumEarnings(
@@ -91,7 +90,7 @@ object ChildCareCost {
 
 case class Education(
                       inEducation: Boolean = false,
-                      startDate: Option[LocalDate] =   None
+                      startDate: Option[LocalDate] = None
                     )
 
 object Education {
@@ -101,10 +100,10 @@ object Education {
 case class Child(
                   id: Short,
                   name: String,
-                  dob: Option[LocalDate]=None,
-                  disability: Option[Disability]=None,
-                  childcareCost: Option[ChildCareCost]=None,
-                  education: Option[Education]= None
+                  dob: Option[LocalDate] = None,
+                  disability: Option[Disability] = None,
+                  childcareCost: Option[ChildCareCost] = None,
+                  education: Option[Education] = None
                 )
 
 object Child {
@@ -118,7 +117,8 @@ case class Claimant(
                      currentYearlyIncome: Option[Income]  = None,
                      hours: Option[BigDecimal] =   None,
                      minimumEarnings: Option[MinimumEarnings]= None,
-                     escVouchers: Option[YesNoUnsureBothEnum] =   None
+                     escVouchers: Option[YesNoUnsureEnum] =   None,
+                     maximumEarnings: Option[Boolean] = None
                    )
 
 object Claimant {
@@ -126,11 +126,11 @@ object Claimant {
 }
 
 case class Household(
-                      tcUcBenefits: Option[TcUcBenefitsEnum] =   None,
+                      credits: Option[CreditsEnum] =   None,
                       location: Option[LocationEnum] = None,
                       children: List[Child],
                       parent: Claimant,
-                      partner: Option[Claimant]
+                      partner: Option[Claimant] = None
                     )
 
 object Household {

@@ -19,15 +19,14 @@ package models
 import play.api.libs.json.{Format, Reads, Writes}
 import utils.EnumUtils
 
-object TcUcBenefitsEnum extends Enumeration {
-  type TcUcBenefitsEnum = Value
-  val TAXCREDITS,
-    UNIVERSALCREDITS = Value
-  val enumReads: Reads[TcUcBenefitsEnum] = EnumUtils.enumReads(TcUcBenefitsEnum)
+object CreditsEnum extends Enumeration {
+  type CreditsEnum = Value
+  val TAXCREDITS, UNIVERSALCREDITS, NONE = Value
+  val enumReads: Reads[CreditsEnum] = EnumUtils.enumReads(CreditsEnum)
 
-  val enumWrites: Writes[TcUcBenefitsEnum] = EnumUtils.enumWrites
+  val enumWrites: Writes[CreditsEnum] = EnumUtils.enumWrites
 
-  implicit def enumFormats: Format[TcUcBenefitsEnum] = EnumUtils.enumFormat(TcUcBenefitsEnum)
+  implicit def enumFormats: Format[CreditsEnum] = EnumUtils.enumFormat(CreditsEnum)
 }
 
 object LocationEnum extends Enumeration {
@@ -56,7 +55,8 @@ object AgeRangeEnum extends Enumeration {
 
 object EmploymentStatusEnum extends Enumeration {
   type EmploymentStatusEnum = Value
-  val SELFEMPLOYED, APPRENTICE = Value
+  val SELFEMPLOYED, APPRENTICE, NEITHER = Value
+
   val enumReads: Reads[EmploymentStatusEnum] = EnumUtils.enumReads(EmploymentStatusEnum)
 
   val enumWrites: Writes[EmploymentStatusEnum] = EnumUtils.enumWrites
@@ -64,14 +64,14 @@ object EmploymentStatusEnum extends Enumeration {
   implicit def enumFormats: Format[EmploymentStatusEnum] = EnumUtils.enumFormat(EmploymentStatusEnum)
 }
 
-object YesNoUnsureBothEnum extends Enumeration {
-  type YesNoUnsureBothEnum = Value
-  val YES, NO, NOTSURE, BOTH = Value
-  val enumReads: Reads[YesNoUnsureBothEnum] = EnumUtils.enumReads(YesNoUnsureBothEnum)
+object YesNoUnsureEnum extends Enumeration {
+  type YesNoUnsureEnum = Value
+  val YES, NO, NOTSURE = Value
+  val enumReads: Reads[YesNoUnsureEnum] = EnumUtils.enumReads(YesNoUnsureEnum)
 
-  val enumWrites: Writes[YesNoUnsureBothEnum] = EnumUtils.enumWrites
+  val enumWrites: Writes[YesNoUnsureEnum] = EnumUtils.enumWrites
 
-  implicit def enumFormats: Format[YesNoUnsureBothEnum] = EnumUtils.enumFormat(YesNoUnsureBothEnum)
+  implicit def enumFormats: Format[YesNoUnsureEnum] = EnumUtils.enumFormat(YesNoUnsureEnum)
   }
 
 object PeriodEnum extends Enumeration {
