@@ -17,93 +17,70 @@
 package models.mapping
 
 import controllers.FakeCCEligibilityApplication
+import models.LocationEnum.LocationEnum
 import models._
 import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.mappings.HHToFree30hoursEligibilityInput
-import org.joda.time.LocalDate
 import uk.gov.hmrc.play.test.UnitSpec
 
 class HHToFree30hoursEligibilityInputSpec extends UnitSpec with FakeCCEligibilityApplication {
 
   val SUT = new HHToFree30hoursEligibilityInput {
-
   }
 
   "HHToFree30hoursEligibilityInput" should {
 
+    def buildHousehold(child3Or4: Option[Boolean] = None, theLocation: Option[LocationEnum] = None): Household = {
+      Household(
+        children = Nil,
+        location = theLocation,
+        childAgedThreeOrFour = child3Or4,
+        parent = Claimant()
+      )
+    }
+
     "convert Household into FreeEntitlementEligibilityInput" when {
-      "given a household with location and children having DOB" in {
-        val dob1 = LocalDate.parse("2017-08-01")
-        val dob2 = LocalDate.parse("2016-08-01")
 
-        val children = List(
-          Child(
-            1,
-            "Child1",
-            Some(dob1),
-            Some(Disability(true, false, false)),
-            Some(ChildCareCost(period = Some(PeriodEnum.MONTHLY)))
-          ),
-          Child(
-            2,
-            "Child2",
-            Some(dob2),
-            Some(Disability(true, false, false)),
-            Some(ChildCareCost(period = Some(PeriodEnum.MONTHLY)))
-          )
+      "a household in england and having 3 or 4 years child" in {
+
+        val household = buildHousehold(
+          child3Or4 = Some(true),
+          theLocation = Some(LocationEnum.ENGLAND)
         )
 
-        val household = Household(
-          children = children,
-          location = Some(LocationEnum.ENGLAND),
-          parent = Claimant(
-            escVouchers = Some(YesNoUnsureEnum.YES)
-          ),
-          partner = Some(
-            Claimant(
-              escVouchers = Some(YesNoUnsureEnum.NO)
-            )
-          )
-        )
-
-        val childDOBList = List(dob1, dob2)
-
-        SUT.convert(household) shouldBe FreeEntitlementEligibilityInput("england", childDOBList)
+        SUT.convert(household) shouldBe FreeEntitlementEligibilityInput("england", Nil, Some(true))
       }
 
-      "given a household with no location and children having no DOB" in {
+      "a household with england location and no to child of 3 or 4 years" in {
 
-        val children = List(
-          Child(
-            1,
-            "Child1",
-            None,
-            Some(Disability(true, false, false)),
-            Some(ChildCareCost(period = Some(PeriodEnum.MONTHLY)))
-          ),
-          Child(
-            2,
-            "Child2",
-            None,
-            Some(Disability(true, false, false)),
-            Some(ChildCareCost(period = Some(PeriodEnum.MONTHLY)))
-          )
+        val household = buildHousehold(
+          child3Or4 = Some(false),
+          theLocation = Some(LocationEnum.ENGLAND)
         )
 
-        val household = Household(
-          children = children,
-          parent = Claimant(
-            escVouchers = Some(YesNoUnsureEnum.YES)
-          ),
-          partner = Some(
-            Claimant(
-              escVouchers = Some(YesNoUnsureEnum.NO)
-            )
-          )
-        )
-
-        SUT.convert(household) shouldBe FreeEntitlementEligibilityInput("england", Nil)
+        SUT.convert(household) shouldBe FreeEntitlementEligibilityInput("england", Nil, Some(false))
       }
+
+      "a household with non england location and no to child of 3 or 4 years" in {
+
+        val household = buildHousehold(
+          child3Or4 = Some(false),
+          theLocation = Some(LocationEnum.SCOTLAND)
+        )
+
+        SUT.convert(household) shouldBe FreeEntitlementEligibilityInput("scotland", Nil, Some(false))
+      }
+
+      "a household with non england location and no child" in {
+
+        val household = buildHousehold(
+          child3Or4 = None,
+          theLocation = Some(LocationEnum.WALES)
+        )
+
+        SUT.convert(household) shouldBe FreeEntitlementEligibilityInput("wales", Nil, None)
+      }
+
     }
   }
 }

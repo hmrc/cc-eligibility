@@ -49,13 +49,10 @@ case class TFCEligibilityInput(
       val partner = claimants.last
       val maxEarningsPartner = partner.maximumEarnings.getOrElse(false)
       (maxEarningsParent, maxEarningsPartner) match {
-        case (false, false) => {println(s"**********maxEarnings >>>SATISFY")
-          true}
-        case _ => {println(s"********** one maxEarnings >>>Not Satisfy")
-          false}
+        case (false, false) => true
+        case _ => false
       }
     } else {
-      println(s"**********maxEarningsParent>>>$maxEarningsParent")
       !maxEarningsParent
     }
   }
@@ -75,15 +72,13 @@ case class TFCEligibilityInput(
         case (true, true) => true
         case (true, false) => partner.carersAllowance
         case (false, true) => parent.carersAllowance
-        case _ => {println(s"**********minEarnings not satisfy")
-          false}
+        case _ => false
       }
     } else {
 //      val parentSatisfy = parent.satisfyMinimumEarnings(from, parent = true, location)
       if(!minEarningsParent) {
         AuditEvents.auditMinEarnings(minEarningsParent)
       }
-      println(s"**********minEarningsParent>>>$minEarningsParent")
       minEarningsParent
     }
   }
