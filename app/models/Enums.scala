@@ -22,6 +22,7 @@ import utils.EnumUtils
 object CreditsEnum extends Enumeration {
   type CreditsEnum = Value
   val TAXCREDITS, UNIVERSALCREDITS, NONE = Value
+
   val enumReads: Reads[CreditsEnum] = EnumUtils.enumReads(CreditsEnum)
 
   val enumWrites: Writes[CreditsEnum] = EnumUtils.enumWrites
@@ -46,6 +47,7 @@ object LocationEnum extends Enumeration {
 object AgeRangeEnum extends Enumeration {
   type AgeRangeEnum = Value
   val UNDER18, EIGHTEENTOTWENTY, TWENTYONETOTWENTYFOUR, OVERTWENTYFOUR = Value
+
   val enumReads: Reads[AgeRangeEnum] = EnumUtils.enumReads(AgeRangeEnum)
 
   val enumWrites: Writes[AgeRangeEnum] = EnumUtils.enumWrites

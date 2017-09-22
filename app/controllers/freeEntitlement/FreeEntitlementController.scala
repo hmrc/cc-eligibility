@@ -44,7 +44,7 @@ trait FreeEntitlementController extends BaseController {
     implicit request =>
       request.body.validate[FreeEntitlementEligibilityInput].fold(
         error => {
-          Logger.warn(s"FreeEntitlement Validation JsError *****\n")
+          Logger.warn(s"FreeEntitlementController FreeEntitlement Validation JsError *****${error}")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
@@ -55,7 +55,7 @@ trait FreeEntitlementController extends BaseController {
               Ok(Json.toJson(response))
           } recover {
             case e: Exception =>
-              Logger.warn(s"FreeEntitlement Eligibility Exception: ${e.getMessage}\n")
+              Logger.warn(s"FreeEntitlementController FreeEntitlement Eligibility Exception: ${e.getMessage}")
               InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
           }
         }
@@ -66,7 +66,7 @@ trait FreeEntitlementController extends BaseController {
     implicit request =>
       request.body.validate[TFCEligibilityInput].fold(
         error => {
-          Logger.warn("Thirty Hours Validation JsError *****")
+          Logger.warn(s"FreeEntitlementController Thirty Hours Free Entitlement Validation JsError *****${error}")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
@@ -75,7 +75,7 @@ trait FreeEntitlementController extends BaseController {
             Ok(Json.toJson(response))
           }.recover {
             case e: Exception =>
-              Logger.warn(s"Tax Free Childcare Eligibility Exception: ${e.getMessage}")
+              Logger.warn(s"FreeEntitlementController Thirty Hours Free Entitlement Eligibility Exception: ${e.getMessage}")
               InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
           }
         }

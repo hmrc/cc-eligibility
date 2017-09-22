@@ -193,7 +193,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(claimant, partner), List())
         tfc.claimants.head.isWorkingAtLeast16HoursPerWeek(fromDate, tfc.location) shouldBe true
         tfc.claimants.last.isWorkingAtLeast16HoursPerWeek(fromDate, tfc.location) shouldBe true
       }
@@ -207,7 +207,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(claimant, partner), List())
 
         tfc.claimants.head.isTotalIncomeLessThan100000(fromDate, tfc.location) shouldBe true
         tfc.claimants.last.isTotalIncomeLessThan100000(fromDate, tfc.location) shouldBe true
@@ -222,7 +222,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(claimant, partner), List())
         tfc.claimants.head.isQualifyingForTFC(fromDate, tfc.location) shouldBe true
         tfc.claimants.last.isQualifyingForTFC(fromDate, tfc.location) shouldBe true
       }
@@ -248,7 +248,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(claimant, partner), List())
         tfc.claimants.head.isQualifyingForTFC(fromDate, tfc.location) shouldBe false
         tfc.claimants.last.isQualifyingForTFC(fromDate, tfc.location) shouldBe true
       }
@@ -274,7 +274,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(claimant, partner), List())
         tfc.claimants.head.isQualifyingForTFC(fromDate, tfc.location) shouldBe true
         tfc.claimants.last.isQualifyingForTFC(fromDate, tfc.location) shouldBe false
       }
@@ -300,7 +300,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(claimant, partner), List())
         tfc.claimants.head.isQualifyingForTFC(fromDate, tfc.location) shouldBe false
         tfc.claimants.last.isQualifyingForTFC(fromDate, tfc.location) shouldBe true
       }
@@ -314,7 +314,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val fromDate = LocalDate.parse("2000-08-27", formatter)
         val toDate = LocalDate.parse("2000-08-27", formatter)
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(claimant, partner), List())
         tfc.claimants.head.isQualifyingForTFC(fromDate, tfc.location) shouldBe true
         tfc.claimants.last.isQualifyingForTFC(fromDate, tfc.location) shouldBe true
       }
@@ -362,7 +362,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(claimant, partner), List())
         tfc.claimants.head.satisfyMinimumEarnings(fromDate, true, "england")(req, hc) shouldBe false
         tfc.claimants.last.satisfyMinimumEarnings(fromDate, false, "england")(req, hc) shouldBe true
       }
@@ -383,7 +383,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
           selfEmployedSelection = Some(false),
           employmentStatus = Some("apprentice"))
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(claimant, partner), List())
         tfc.claimants.head.satisfyMinimumEarnings(fromDate, true, "england")(req, hc) shouldBe true
         tfc.claimants.last.satisfyMinimumEarnings(fromDate, false, "england")(req, hc) shouldBe false
       }
@@ -405,7 +405,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
           employmentStatus = Some("apprentice")
         )
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(claimant, partner), List())
         tfc.claimants.head.satisfyMinimumEarnings(fromDate, true, "england")(req, hc) shouldBe true
         tfc.claimants.last.satisfyMinimumEarnings(fromDate, false, "england")(req, hc) shouldBe true
       }
@@ -418,7 +418,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
       "if satisfyMinimumEarnings is false and partner.carersAllowance = false" in {
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(claimant, partner), List())
         when(claimant.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(true)
         when(claimant.carersAllowance).thenReturn(false)
         when(partner.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(false)
@@ -428,7 +428,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
       "if parent.satisfyMinimumEarnings = true and partner.satisfyMinimumEarnings = true" in {
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(claimant, partner), List())
         when(claimant.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(true)
         when(claimant.carersAllowance).thenReturn(true)
         when(partner.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(true)
@@ -438,7 +438,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
       "check if validHouseholdMinimumEarnings is correct if parent.satisfyMinimumEarnings is true and partner.satisfyMinimumEarnings = false" in {
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(claimant, partner), List())
         when(claimant.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(true)
         when(claimant.carersAllowance).thenReturn(true)
         when(partner.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(false)
@@ -448,7 +448,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
       "check if validHouseholdMinimumEarnings is correct if parent.satisfyMinimumEarnings is false and partner.satisfyMinimumEarnings = true" in {
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(claimant, partner), List())
         when(claimant.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(false)
         when(claimant.carersAllowance).thenReturn(true)
         when(partner.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(true)
@@ -458,7 +458,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
       "check if validHouseholdMinimumEarnings is correct if parent.satisfyMinimumEarnings is false and partner.satisfyMinimumEarnings = false" in {
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(claimant, partner), List())
         when(claimant.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(false)
         when(claimant.carersAllowance).thenReturn(true)
         when(partner.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(false)
@@ -468,7 +468,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
       "check if validHouseholdMinimumEarnings is correct if parent.satisfyMinimumEarnings is false" in {
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(claimant), List())
         when(claimant.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(false)
 
         tfc.validHouseholdMinimumEarnings(req, hc) shouldBe false
@@ -476,7 +476,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
       "check if validHouseholdMinimumEarnings is correct if parent.satisfyMinimumEarnings is true" in {
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(claimant), List())
         when(claimant.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(true)
 
         tfc.validHouseholdMinimumEarnings(req, hc) shouldBe true
@@ -487,60 +487,62 @@ class TFCEligibilityInputSpec extends CCConfigSpec
       def buildClaimat = TFCClaimant(maximumEarnings = None, disability = TFCDisability(), minimumEarnings = TFCMinimumEarnings(), age = None)
 
       "single parent eligible if earning maximum amount is none" in {
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(buildClaimat), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(buildClaimat), List())
 
         tfc.validHouseholdMaximumEarnings(req, hc) shouldBe true
       }
 
       "single parent not eligible if earning maximum amount (£100,000)" in {
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(buildClaimat.copy(maximumEarnings=Some(true))), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(buildClaimat.copy(maximumEarnings=Some(true))),
+          List())
 
         tfc.validHouseholdMaximumEarnings(req, hc) shouldBe false
       }
 
       "single parent eligible if not earning maximum amount (£100,000)" in {
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(buildClaimat.copy(maximumEarnings=Some(false))), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(buildClaimat.copy(maximumEarnings=Some(false))),
+          List())
 
         tfc.validHouseholdMaximumEarnings(req, hc) shouldBe true
       }
 
       "single partner not eligible if earning maximum amount (£100,000)" in {
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(buildClaimat,
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(buildClaimat,
           buildClaimat.copy(maximumEarnings=Some(true))), List())
 
         tfc.validHouseholdMaximumEarnings(req, hc) shouldBe false
       }
 
       "single partner eligible if not earning maximum amount (£100,000)" in {
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(buildClaimat,
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(buildClaimat,
           buildClaimat.copy(maximumEarnings=Some(false))), List())
 
         tfc.validHouseholdMaximumEarnings(req, hc) shouldBe true
       }
 
       "parent and partner not eligible if both earning maximum amount (£100,000)" in {
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(buildClaimat.copy(maximumEarnings=Some(true)),
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(buildClaimat.copy(maximumEarnings=Some(true)),
           buildClaimat.copy(maximumEarnings=Some(true))), List())
 
         tfc.validHouseholdMaximumEarnings(req, hc) shouldBe false
       }
 
       "parent and partner eligible if both not earning maximum amount (£100,000)" in {
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(buildClaimat.copy(maximumEarnings=Some(false)),
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(buildClaimat.copy(maximumEarnings=Some(false)),
           buildClaimat.copy(maximumEarnings=Some(false))), List())
 
         tfc.validHouseholdMaximumEarnings(req, hc) shouldBe true
       }
 
       "parent eligible and partner not eligible if partner earning maximum amount (£100,000) and parent not" in {
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(buildClaimat.copy(maximumEarnings=Some(false)),
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(buildClaimat.copy(maximumEarnings=Some(false)),
           buildClaimat.copy(maximumEarnings=Some(true))), List())
 
         tfc.validHouseholdMaximumEarnings(req, hc) shouldBe false
       }
 
       "partner eligible and parent not eligible if parent earning maximum amount (£100,000) and partner not" in {
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(buildClaimat.copy(maximumEarnings=Some(true)),
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", None, List(buildClaimat.copy(maximumEarnings=Some(true)),
           buildClaimat.copy(maximumEarnings=Some(false))), List())
 
         tfc.validHouseholdMaximumEarnings(req, hc) shouldBe false

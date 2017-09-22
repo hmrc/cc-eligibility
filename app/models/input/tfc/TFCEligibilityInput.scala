@@ -49,10 +49,13 @@ case class TFCEligibilityInput(
       val partner = claimants.last
       val maxEarningsPartner = partner.maximumEarnings.getOrElse(false)
       (maxEarningsParent, maxEarningsPartner) match {
-        case (false, false) => true
-        case _ => false
+        case (false, false) => {println(s"**********maxEarnings >>>SATISFY")
+          true}
+        case _ => {println(s"********** one maxEarnings >>>Not Satisfy")
+          false}
       }
     } else {
+      println(s"**********maxEarningsParent>>>$maxEarningsParent")
       !maxEarningsParent
     }
   }
@@ -68,16 +71,19 @@ case class TFCEligibilityInput(
         AuditEvents.auditMinEarnings(auditMinEarns)
       }
       (minEarningsParent, minEarningsPartner) match {
+
         case (true, true) => true
         case (true, false) => partner.carersAllowance
         case (false, true) => parent.carersAllowance
-        case _ => false
+        case _ => {println(s"**********minEarnings not satisfy")
+          false}
       }
     } else {
-      val parentSatisfy = parent.satisfyMinimumEarnings(from, parent = true, location)
+//      val parentSatisfy = parent.satisfyMinimumEarnings(from, parent = true, location)
       if(!minEarningsParent) {
         AuditEvents.auditMinEarnings(minEarningsParent)
       }
+      println(s"**********minEarningsParent>>>$minEarningsParent")
       minEarningsParent
     }
   }
@@ -97,9 +103,9 @@ object TFCEligibilityInput extends CCFormat with MessagesObject {
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "numberOfPeriods").read[Short].orElse(Reads.pure(1)) and
         (JsPath \ "location").read[String] and
-        (JsPath \ "childAgedThreeOrFour").readNullable[Boolean] and
-          (JsPath \ "claimants").read[List[TFCClaimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
-            (JsPath \ "children").read[List[TFCChild]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
+          (JsPath \ "childAgedThreeOrFour").readNullable[Boolean] and
+            (JsPath \ "claimants").read[List[TFCClaimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
+              (JsPath \ "children").read[List[TFCChild]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
     )(TFCEligibilityInput.apply _)
 }
 
@@ -313,7 +319,6 @@ case class TFCChild(
     dateFormatter.parse(endWeekOf1stSeptember.toString)
   }
 }
-
 
 object TFCChild extends CCFormat with MessagesObject {
 

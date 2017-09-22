@@ -39,7 +39,7 @@ trait EligibilityController extends BaseController {
     implicit request =>
       request.body.validate[Household].fold(
         error => {
-          Logger.warn(s"Household Validation JsError *****")
+          Logger.warn(s"EligibilityController Household Validation JsError *****${error}")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
@@ -50,7 +50,7 @@ trait EligibilityController extends BaseController {
               Ok(Json.toJson(response))
           } recover {
             case e: Exception =>
-              Logger.warn(s"Household Eligibility Exception: ${e.getMessage}")
+              Logger.warn(s"EligibilityController Household Eligibility Exception: ${e.getMessage}")
               InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
           }
         }

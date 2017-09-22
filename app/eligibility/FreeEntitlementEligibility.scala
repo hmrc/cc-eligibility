@@ -58,6 +58,7 @@ trait FreeEntitlementEligibility extends CCConfig with ChildHelper {
 
       val tfcEligibility: Boolean = tfcEligibilityResult.householdEligibility
       val location = tfcEligibilityInput.location
+      println(s"********location>>>$location")
 
       val hasChild3Or4Years: Boolean = if(tfcEligibilityInput.children.nonEmpty) {
         hasChildAtAge(
@@ -66,10 +67,10 @@ trait FreeEntitlementEligibility extends CCConfig with ChildHelper {
           currentDate = localDate
         )
       } else {
-        tfcEligibilityInput.childAgedThreeOrFour.getOrElse(false)
+        location.contains("england") && tfcEligibilityInput.childAgedThreeOrFour.getOrElse(false)
       }
 
-      println(s"************hasChild3Or4Years>>>$hasChild3Or4Years")
+      println(s"************ELIGIBILITY>>>${tfcEligibility && hasChild3Or4Years}")
 
       val rollout = tfcEligibilityInput.children.exists( child =>
         isChildDOBWithinRollout(child.dob)

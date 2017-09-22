@@ -40,7 +40,7 @@ trait TFCEligibilityController extends BaseController {
     implicit request =>
       request.body.validate[TFCEligibilityInput].fold(
         error => {
-          Logger.warn(s"TFC Validation JsError *****")
+          Logger.warn(s"TFCEligibilityController TFC Validation JsError *****${error}")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
@@ -51,7 +51,7 @@ trait TFCEligibilityController extends BaseController {
               Ok(Json.toJson(response))
           } recover {
             case e: Exception =>
-              Logger.warn(s"Tax Free Childcare Eligibility Exception: ${e.getMessage}")
+              Logger.warn(s"TFCEligibilityController TFC Eligibility Exception: ${e.getMessage}")
               InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
           }
         }
