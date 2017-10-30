@@ -19,7 +19,7 @@ package service
 import config.MicroserviceAuditConnector
 import play.api.mvc.Request
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
-import uk.gov.hmrc.play.audit.model.{DataEvent, DeviceId}
+import uk.gov.hmrc.play.audit.model.DataEvent
 import uk.gov.hmrc.play.http.HeaderCarrier
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -45,11 +45,7 @@ trait AuditService {
       auditSource =  auditSource,
       auditType = auditType,
       tags = hc.headers.toMap,
-      detail = generateDetails(request, details))
-  }
-
-  private def generateDetails(request: Request[_], details: Map[String, String]): Map[String, String] = {
-    details ++ Map("deviceID" -> DeviceId(request).map(_.id).getOrElse("-"))
+      detail = details)
   }
 
 }
