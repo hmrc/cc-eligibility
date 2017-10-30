@@ -25,7 +25,7 @@ import uk.gov.hmrc.play.microservice.filters.{AuditFilter, LoggingFilter, Micros
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.config.{AppName, ControllerConfig, RunMode}
 import utils.LoadConfig
-import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.{HttpGet, HttpPut, HttpPost, HttpPatch, HttpDelete}
 import uk.gov.hmrc.play.http.ws._
 import uk.gov.hmrc.play.microservice.bootstrap.DefaultMicroserviceGlobal
 

@@ -27,7 +27,7 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.test.FakeRequest
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
@@ -38,9 +38,6 @@ import scala.concurrent.Future
 class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityApplication with MockitoSugar {
 
   val now = LocalDate.now
-
-  // TODO: Replace this with LocalDate.now after 01.09.2017
-  val firstSept2017 = LocalDate.parse("2017-09-01", DateTimeFormat.forPattern("yyyy-MM-dd"))
 
   "determine eligibility corectly for fifteenHours" when {
 
@@ -97,19 +94,19 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
 
   //Some of these tests will fail after 01/09/2017 but the logic needs fixing anyway
 
-  "determine eligibility corectly for thirtyHours" when {
+  "determine eligibility correctly for thirtyHours" when {
     val testCases = Table(
       ("Location", "TFC Eligibility", "Dates of Birth", "Eligibility Result", "Eligibility Rollout"),
-      ("england", true, List(firstSept2017.minusYears(3).plusDays(1)), false, true),
-      ("england", true, List(firstSept2017.minusYears(3)), true, true),
-      ("england", true, List(firstSept2017.minusYears(4)), true, true),
-      ("england", true, List(firstSept2017.minusYears(5).plusDays(1)), true, false),
-      ("england", true, List(firstSept2017.minusYears(5)), false, false),
-      ("scotland", true, List(firstSept2017.minusYears(3)), false, true),
-      ("northern-ireland", true, List(firstSept2017.minusYears(3)), false, true),
-      ("wales", true, List(firstSept2017.minusYears(3)), false, true),
-      ("invalid-location", true, List(firstSept2017.minusYears(3)), false, true),
-      ("england", false, List(firstSept2017.minusYears(3)), false, true)
+      ("england", true, List(now.minusYears(3).plusDays(1)), false, true),
+      ("england", true, List(now.minusYears(3)), true, true),
+      ("england", true, List(now.minusYears(4)), true, true),
+      ("england", true, List(now.minusYears(5).plusDays(1)), true, false),
+      ("england", true, List(now.minusYears(5)), false, false),
+      ("scotland", true, List(now.minusYears(3)), false, true),
+      ("northern-ireland", true, List(now.minusYears(3)), false, true),
+      ("wales", true, List(now.minusYears(3)), false, true),
+      ("invalid-location", true, List(now.minusYears(3)), false, true),
+      ("england", false, List(now.minusYears(3)), false, true)
     )
 
     forAll(testCases) { case (location, tfcEligibilityVal, dobs, isEligible, isRollout) =>
@@ -197,7 +194,7 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
       children = List(TFCChild(
         id = 0,
         childcareCostPeriod = Periods.Monthly,
-        dob = firstSept2017.minusYears(3),
+        dob = now.minusYears(3),
         disability = TFCDisability()
       )
     ))

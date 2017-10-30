@@ -19,7 +19,7 @@ package controllers
 import akka.stream.Materializer
 import org.scalatest.Suite
 import play.api.test.FakeApplication
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.WithFakeApplication
 
 trait FakeCCEligibilityApplication extends WithFakeApplication {

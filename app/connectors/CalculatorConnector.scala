@@ -20,7 +20,7 @@ import config.{ApplicationConfig, WSHttp}
 import models.input.CalculatorOutput
 import models.output.CalculatorInput
 import uk.gov.hmrc.http.{HeaderCarrier, HttpPost}
-
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 object CalculatorConnector extends CalculatorConnector {

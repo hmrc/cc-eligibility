@@ -24,8 +24,7 @@ import org.joda.time.format.DateTimeFormat
 import org.scalatest.mock.MockitoSugar
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import uk.gov.hmrc.play.http.HeaderCarrier
-import utils.{CCConfigSpec, Periods, TFCConfig}
+import utils.{CCConfigSpec, Periods}
 
 import scala.concurrent.Future
 
@@ -211,8 +210,6 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
 
       val childFrom = LocalDate.parse("2016-08-31", formatter)
       val childUntil = LocalDate.parse("2016-09-04", formatter)
-//      val outputChild = TFCOutputChild(id = 0, qualifying = true, from = Some(childFrom), until = Some(childUntil), tfcRollout = false)
-//      val outputChild2 = TFCOutputChild(id = 0, qualifying = false, from = None, until = None, tfcRollout = false)
 
       val outputChild = TFCOutputChild(id = 0, qualifying = true, from = Some(childFrom), until = Some(childUntil),
         tfcRollout = false, BigDecimal(200.0), models.output.tfc.TFCDisability(false,false))
