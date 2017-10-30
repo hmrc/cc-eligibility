@@ -19,8 +19,7 @@ package connectors
 import config.{ApplicationConfig, WSHttp}
 import models.input.CalculatorOutput
 import models.output.CalculatorInput
-import play.api.libs.json.Json
-import uk.gov.hmrc.play.http.{HeaderCarrier, HttpPost}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpPost}
 
 import scala.concurrent.Future
 
