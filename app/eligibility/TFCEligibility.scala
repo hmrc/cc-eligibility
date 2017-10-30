@@ -130,11 +130,14 @@ trait TFCEligibility extends TFCRolloutSchemeConfig {
 
   def eligibility(request : TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
     val outputPeriods = determineTFCPeriods(request)
-    println(s"*******outputPeriods>>>>>>$outputPeriods")
-    println(s"*******outputPeriods.exists(period => period.periodEligibility)>>>>>>${outputPeriods.exists(period => period.periodEligibility)}")
 
-    val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && request.validHouseholdMinimumEarnings &&
-      request.validHouseholdMaximumEarnings
+    val householdEligibility = if(request.children.nonEmpty) {
+      outputPeriods.exists(period => period.periodEligibility) && request.validHouseholdMinimumEarnings &&
+        request.validHouseholdMaximumEarnings
+    } else {
+      request.validHouseholdMinimumEarnings && request.validHouseholdMaximumEarnings
+    }
+    println(s"*******householdEligibility>>>>>>$householdEligibility")
 
     Future {
       TFCEligibilityOutput(

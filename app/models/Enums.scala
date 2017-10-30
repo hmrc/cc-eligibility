@@ -21,7 +21,7 @@ import utils.EnumUtils
 
 object CreditsEnum extends Enumeration {
   type CreditsEnum = Value
-  val TAXCREDITS, UNIVERSALCREDITS, NONE = Value
+  val TAXCREDITS, UNIVERSALCREDIT, NONE = Value
 
   val enumReads: Reads[CreditsEnum] = EnumUtils.enumReads(CreditsEnum)
 
