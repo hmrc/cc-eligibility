@@ -20,9 +20,9 @@ import config.MicroserviceAuditConnector
 import play.api.test.FakeRequest
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
-import uk.gov.hmrc.play.audit.model.{AuditEvent, DataEvent}
-import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.play.http.logging.{ForwardedFor, SessionId}
+import uk.gov.hmrc.play.audit.model.DataEvent
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.{ForwardedFor, SessionId}
 import utils.CCConfigSpec
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -54,7 +54,7 @@ class AuditServiceTest extends CCConfigSpec {
         var lastAuditEvent : Option[DataEvent]  = None
 
         override def auditingConfig: AuditingConfig = ???
-        override def sendEvent(event: AuditEvent)(implicit hc: HeaderCarrier = HeaderCarrier(), ec : ExecutionContext): Future[AuditResult] = {
+        override def sendEvent(event: DataEvent)(implicit hc: HeaderCarrier = HeaderCarrier(), ec : ExecutionContext): Future[AuditResult] = {
           lastAuditEvent = Some(event.asInstanceOf[DataEvent])
           Future.successful(AuditResult.Success)
         }
@@ -77,7 +77,6 @@ class AuditServiceTest extends CCConfigSpec {
       auditEvent.auditSource should equal("cc-eligibility")
       auditEvent.auditType should equal("testTranType")
       auditEvent.detail("randomDetails") should equal("+=+=+=+=+=+=+=+=+")
-      auditEvent.detail("deviceID") should equal("-")
 
     }
 

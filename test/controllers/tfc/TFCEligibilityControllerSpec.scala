@@ -32,7 +32,7 @@ import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import play.api.test.{FakeHeaders, FakeRequest}
 import service.AuditEvents
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 import utils.CCConfigSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -214,14 +214,14 @@ class TFCEligibilityControllerSpec extends CCConfigSpec
         }
       }
     }
-    }
+  }
 
-    "accept valid json scenario when partner selected carer's allowance and return a valid response (TFC start date provided)" in {
+  "accept valid json scenario when partner selected carer's allowance and return a valid response (TFC start date provided)" in {
 
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_partner.json").toString)
+    val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_partner.json").toString)
 
-      val outputJson = Json.parse(
-        s"""
+    val outputJson = Json.parse(
+      s"""
         {
                    "from": "2016-08-27",
                   "until": "2017-05-27",
@@ -304,20 +304,20 @@ class TFCEligibilityControllerSpec extends CCConfigSpec
         }
         """.stripMargin)
 
-      withCallToPOST(inputJson){  res =>
-        res.flatMap{ result =>
-          status(result) shouldBe Status.OK
-          jsonBodyOf(result) shouldBe outputJson
-        }
+    withCallToPOST(inputJson){  res =>
+      res.flatMap{ result =>
+        status(result) shouldBe Status.OK
+        jsonBodyOf(result) shouldBe outputJson
       }
     }
+  }
 
-    "accept valid json scenario when parent and partner selected carer's allowance with parent and partner do not qualify and return a valid response  (TFC start date provided)" in {
+  "accept valid json scenario when parent and partner selected carer's allowance with parent and partner do not qualify and return a valid response  (TFC start date provided)" in {
 
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_both.json").toString)
+    val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_both.json").toString)
 
-      val outputJson = Json.parse(
-        s"""
+    val outputJson = Json.parse(
+      s"""
         {
                   "from": "2016-08-27",
                   "until": "2017-05-27",
@@ -400,20 +400,20 @@ class TFCEligibilityControllerSpec extends CCConfigSpec
         }
         """.stripMargin)
 
-      withCallToPOST(inputJson){  res =>
-        res.flatMap{ result =>
-          status(result) shouldBe Status.OK
-          jsonBodyOf(result) shouldBe outputJson
-        }
+    withCallToPOST(inputJson){  res =>
+      res.flatMap{ result =>
+        status(result) shouldBe Status.OK
+        jsonBodyOf(result) shouldBe outputJson
       }
     }
+  }
 
-    "accept valid json scenario when parent and partner selected carer's allowance with partner hours and return a valid response (TFC start date provided)" in {
+  "accept valid json scenario when parent and partner selected carer's allowance with partner hours and return a valid response (TFC start date provided)" in {
 
-      val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_hours_both.json").toString)
+    val inputJson = Json.parse(JsonLoader.fromResource("/json/input/tfc/carers_allowance_hours_both.json").toString)
 
-      val outputJson = Json.parse(
-        s"""
+    val outputJson = Json.parse(
+      s"""
         {
                   "from": "2016-08-27",
                   "until": "2017-05-27",
@@ -496,12 +496,12 @@ class TFCEligibilityControllerSpec extends CCConfigSpec
         }
         """.stripMargin)
 
-      withCallToPOST(inputJson){  res =>
-        res.flatMap{ result =>
-          status(result) shouldBe Status.OK
-          jsonBodyOf(result) shouldBe outputJson
-        }
+    withCallToPOST(inputJson){  res =>
+      res.flatMap{ result =>
+        status(result) shouldBe Status.OK
+        jsonBodyOf(result) shouldBe outputJson
       }
+    }
   }
 
   val validTFCEligibilityInputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/input/tfc/eligibility_input_test.json").toString)

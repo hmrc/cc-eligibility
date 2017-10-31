@@ -17,7 +17,7 @@
 package service
 
 import play.api.mvc.Request
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 
 /**
  * Created by user on 25/04/16.

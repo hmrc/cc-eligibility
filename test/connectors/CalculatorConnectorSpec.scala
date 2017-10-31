@@ -24,8 +24,7 @@ import org.scalatest.BeforeAndAfterEach
 import org.mockito.Mockito._
 import org.mockito.Matchers._
 import org.scalatest.mock.MockitoSugar
-import uk.gov.hmrc.play.http.HttpPost
-import uk.gov.hmrc.play.http.ws.WSHttp
+import uk.gov.hmrc.http.HttpPost
 import uk.gov.hmrc.play.test.UnitSpec
 import scala.concurrent.Future
 
@@ -52,7 +51,7 @@ class CalculatorConnectorSpec extends UnitSpec with MockitoSugar with FakeCCElig
     )
 
     when(
-      sut.httpPost.POST[CalculatorInput, CalculatorOutput](anyString, any(), any())(any(), any(), any())
+      sut.httpPost.POST[CalculatorInput, CalculatorOutput](anyString, any(), any())(any(), any(), any(), any())
     ).thenReturn(
       Future.successful(testOutput)
     )

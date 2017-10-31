@@ -34,8 +34,8 @@ trait MicroService {
       retrieveManaged := true,
       evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
       routesGenerator := StaticRoutesGenerator,
-      scalaVersion := "2.11.7",
-      crossScalaVersions := Seq("2.11.7"),
+      scalaVersion := "2.11.11",
+      crossScalaVersions := Seq("2.11.11"),
       ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) },
       resolvers := Seq(
         Resolver.bintrayRepo("hmrc", "releases"),

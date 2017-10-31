@@ -22,7 +22,7 @@ import models.input.tfc.{TFCEligibilityInput}
 import models.output.freeEntitlement.{FifteenHoursEligibilityModel, ThirtyHoursEligibilityModel}
 import org.joda.time.LocalDate
 import play.api.Configuration
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 import utils.{ChildHelper, CCConfig}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
