@@ -462,7 +462,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
         escVouchers = Some(YesNoUnsureEnum.NOTSURE)
       )
 
-      val hhModel = Household(None, Some(LocationEnum.ENGLAND), None, List(hhChild1, hhChild2), parent, Some(partner))
+      val hhModel = Household(None, Some(LocationEnum.ENGLAND), List(hhChild1, hhChild2), parent, Some(partner))
 
       val expectedOutput = TCEligibilityInput(List(
         TCTaxYear(currentDate,

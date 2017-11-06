@@ -16,7 +16,6 @@
 
 package models.mappings
 
-
 import models._
 import models.input.tfc._
 import utils.TFCConfig
@@ -30,11 +29,9 @@ trait HHToTFCEligibilityInput extends PeriodEnumToPeriod {
   val tFCConfig: TFCConfig
 
   def convert(hh: Household): TFCEligibilityInput = {
-    println(s"********hh>>$hh")
     TFCEligibilityInput(
       from = tFCConfig.StartDate,
       numberOfPeriods = tFCConfig.tfcNoOfPeriods,
-      childAgedThreeOrFour = hh.childAgedThreeOrFour,
       location = hh.location.getOrElse(LocationEnum.ENGLAND.toString).toString,
       claimants = hhClaimantToTFCEligibilityInputClaimant(hh.parent, hh.partner),
       children = hhChildToTFCEligibilityInputChild(hh.children)
@@ -63,8 +60,7 @@ trait HHToTFCEligibilityInput extends PeriodEnumToPeriod {
       minimumEarnings = hhMinimumEarningsToTFCMinimumEarnings(claimant.minimumEarnings),
       age = claimant.ageRange.map(x => x.toString),
       employmentStatus = claimant.minimumEarnings.map(x => x.employmentStatus.toString),
-      selfEmployedSelection = claimant.minimumEarnings.flatMap(x => x.selfEmployedIn12Months),
-      maximumEarnings = claimant.maximumEarnings
+      selfEmployedSelection = claimant.minimumEarnings.flatMap(x => x.selfEmployedIn12Months)
     )
   }
 

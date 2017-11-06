@@ -135,7 +135,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
       val child = TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = TFCDisability(disabled = false, severelyDisabled = false))
-      val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 4, location = "england", None, List(claimant), List(child))
+      val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 4, location = "england", List(claimant), List(child))
 
       val result = TFCEligibility.determineTFCPeriods(tfc)
 
@@ -199,7 +199,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
       val child = TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = TFCDisability(disabled = false, severelyDisabled = false))
-      val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 2, location = "england", None, List(claimant), List(child))
+      val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 2, location = "england", List(claimant), List(child))
       val result = TFCEligibility.determineTFCPeriods(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -245,7 +245,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
       val child = TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = TFCDisability(disabled = false, severelyDisabled = false))
-      val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 1, location = "england", None, List(claimant, partner), List(child))
+      val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 1, location = "england", List(claimant, partner), List(child))
       val result = TFCEligibility.determineTFCPeriods(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -473,7 +473,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
       val child = TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = TFCDisability(disabled = false, severelyDisabled = false))
-      val tfc = TFCEligibilityInput(from = from, 1, location = "england", None, List(claimant), List(child))
+      val tfc = TFCEligibilityInput(from = from, 1, location = "england", List(claimant), List(child))
       val result = TFCEligibility.determineTFCPeriods(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -526,7 +526,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
         disability = TFCDisability(disabled = true, severelyDisabled = false))
       val child2 = TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = false, severelyDisabled = false))
-      val tfc = TFCEligibilityInput(from = from, 1, location = "england", None, List(claimant), List(child1, child2))
+      val tfc = TFCEligibilityInput(from = from, 1, location = "england", List(claimant), List(child1, child2))
       val result = TFCEligibility.determineTFCPeriods(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -563,7 +563,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
         disability = TFCDisability(disabled = false, severelyDisabled = false))
       val child3 = TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild3,
         disability = TFCDisability(disabled = true, severelyDisabled = false))
-      val tfc = TFCEligibilityInput(from = from, 2, location = "england", None, List(claimant), List(child1, child2, child3))
+      val tfc = TFCEligibilityInput(from = from, 2, location = "england", List(claimant), List(child1, child2, child3))
       val result = TFCEligibility.determineTFCPeriods(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -618,7 +618,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
         disability = TFCDisability(disabled = true, severelyDisabled = false))
       val child3 = TFCChild(id = 3, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild3,
         disability = TFCDisability(disabled = false, severelyDisabled = false))
-      val tfc = TFCEligibilityInput(from = from, 8, location = "england", None, List(claimant), List(child1, child2, child3))
+      val tfc = TFCEligibilityInput(from = from, 8, location = "england", List(claimant), List(child1, child2, child3))
       val result = TFCEligibility.determineTFCPeriods(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -771,7 +771,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val child2 = TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = true, severelyDisabled = false))
 
-      val tfc = TFCEligibilityInput(from = from, 4, location = "england", None, List(claimant), List(child1, child2))
+      val tfc = TFCEligibilityInput(from = from, 4, location = "england", List(claimant), List(child1, child2))
       val result = TFCEligibility.determineTFCPeriods(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -852,7 +852,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
         disability = TFCDisability(disabled = true, severelyDisabled = false))
       val child3 = TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild3,
         disability = TFCDisability(disabled = false, severelyDisabled = false))
-      val tfc = TFCEligibilityInput(from = from, 6, location = "england", None, List(claimant), List(child1, child2, child3))
+      val tfc = TFCEligibilityInput(from = from, 6, location = "england", List(claimant), List(child1, child2, child3))
       val result = TFCEligibility.determineTFCPeriods(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -973,7 +973,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val child2 = TFCChild(id = 0,  childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = true, severelyDisabled = false))
 
-      val tfc = TFCEligibilityInput(from = from, 3, location = "england", None, List(claimant, claimant1), List(child1, child2))
+      val tfc = TFCEligibilityInput(from = from, 3, location = "england", List(claimant, claimant1), List(child1, child2))
       val result = TFCEligibility.determineTFCPeriods(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -1046,7 +1046,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
         disability = TFCDisability(disabled = false, severelyDisabled = false))
       val child3 = TFCChild(id = 0,  childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild3,
         disability = TFCDisability(disabled = false, severelyDisabled = false))
-      val tfc = TFCEligibilityInput(from = from, 5, location = "england", None, List(claimant, claimant1), List(child1, child2, child3))
+      val tfc = TFCEligibilityInput(from = from, 5, location = "england", List(claimant, claimant1), List(child1, child2, child3))
       val result = TFCEligibility.determineTFCPeriods(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -1152,7 +1152,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
         disability = TFCDisability(disabled = true, severelyDisabled = false))
       val child2 = TFCChild(id = 0,  childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = false, severelyDisabled = false))
-      val tfc = TFCEligibilityInput(from = from, 7, location = "england", None, List(claimant), List(child1, child2))
+      val tfc = TFCEligibilityInput(from = from, 7, location = "england", List(claimant), List(child1, child2))
       val result = TFCEligibility.determineTFCPeriods(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -1270,7 +1270,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
         disability = TFCDisability(disabled = true, severelyDisabled = false))
       val child2 = TFCChild(id = 0,  childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = true, severelyDisabled = false))
-      val tfc = TFCEligibilityInput(from = from, 8, location = "england", None, List(claimant), List(child1, child2))
+      val tfc = TFCEligibilityInput(from = from, 8, location = "england", List(claimant), List(child1, child2))
       val result = TFCEligibility.determineTFCPeriods(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -1406,7 +1406,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val child2 = TFCChild(id = 0,  childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = false, severelyDisabled = false))
 
-      val tfc = TFCEligibilityInput(from = from, 4, location = "england", None, List(claimant), List(child1, child2))
+      val tfc = TFCEligibilityInput(from = from, 4, location = "england", List(claimant), List(child1, child2))
       val result = TFCEligibility.determineTFCPeriods(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -1484,7 +1484,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val child2 = TFCChild(id = 0,  childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = true, severelyDisabled = false))
 
-      val tfc = TFCEligibilityInput(from = from, 4, location = "england", None, List(claimant), List(child1, child2))
+      val tfc = TFCEligibilityInput(from = from, 4, location = "england", List(claimant), List(child1, child2))
       val result = TFCEligibility.determineTFCPeriods(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -1807,7 +1807,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val child = TFCChild(id = 0,  childcareCost = BigDecimal(200.00),
         childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = TFCDisability(disabled = false, severelyDisabled = false))
-      val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 1, location = "england", None, List(claimant), List(child))
+      val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 1, location = "england", List(claimant), List(child))
       val result = await(TFCEligibility.eligibility(tfc))
 
       val outputClaimant = TFCOutputClaimant(qualifying = false, isPartner = false)
@@ -1829,7 +1829,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
       val child = TFCChild(id = 0,  childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = TFCDisability(disabled = false, severelyDisabled = false))
-      val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 2, location = "england", None, List(claimant), List(child))
+      val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 2, location = "england", List(claimant), List(child))
       val result = await(TFCEligibility.eligibility(tfc))
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -1869,7 +1869,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
       val child = TFCChild(id = 0,  childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = TFCDisability(disabled = false, severelyDisabled = false))
-      val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 2, location = "england", None, List(claimant), List(child))
+      val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 2, location = "england", List(claimant), List(child))
       val result = await(TFCEligibility.eligibility(tfc))
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -1908,7 +1908,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
       val child = TFCChild(id = 0,  childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
         disability = TFCDisability(disabled = false, severelyDisabled = false))
-      val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 3, location = "england", None, List(claimant), List(child))
+      val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 3, location = "england", List(claimant), List(child))
       val result = await(TFCEligibility.eligibility(tfc))
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)

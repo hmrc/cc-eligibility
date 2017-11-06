@@ -79,9 +79,9 @@ class HHToTFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApp
           escVouchers = Some(YesNoUnsureEnum.YES)
         )
 
-        val hhModel = Household(None, Some(LocationEnum.ENGLAND), None, List(hhChild1, hhChild2), parent, None)
+        val hhModel = Household(None, Some(LocationEnum.ENGLAND), List(hhChild1, hhChild2), parent, None)
 
-        val expectedOutput = TFCEligibilityInput(currentDate, 4, "england", None,
+        val expectedOutput = TFCEligibilityInput(currentDate, 4, "england",
           List(TFCClaimant(None, Some(TFCIncome(Some(25000), Some(1200), Some(6000))), 32.0, false, TFCDisability(false, false), false,
             TFCMinimumEarnings(true, 3900), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), Some(Some(EmploymentStatusEnum.SELFEMPLOYED).toString), Some(true))),
           List(TFCChild(0, 350, Periods.Monthly, dob, TFCDisability(true, false)),
@@ -152,9 +152,9 @@ class HHToTFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApp
           escVouchers = Some(YesNoUnsureEnum.NOTSURE)
         )
 
-        val hhModel = Household(None, Some(LocationEnum.ENGLAND), None, List(hhChild1, hhChild2), parent, Some(partner))
+        val hhModel = Household(None, Some(LocationEnum.ENGLAND), List(hhChild1, hhChild2), parent, Some(partner))
 
-        val expectedOutput = TFCEligibilityInput(currentDate, 4, "england", None,
+        val expectedOutput = TFCEligibilityInput(currentDate, 4, "england",
           List(TFCClaimant(None, Some(TFCIncome(Some(12212), Some(47674), Some(647864))), 34.0, false, TFCDisability(false, false), false,
             TFCMinimumEarnings(false, 0.0), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), Some(Some(EmploymentStatusEnum.SELFEMPLOYED).toString), Some(true)),
             TFCClaimant(None, Some(TFCIncome(Some(12212), Some(47674), Some(647864))), 21.0, true, TFCDisability(false, false), false,

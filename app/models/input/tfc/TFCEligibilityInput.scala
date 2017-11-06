@@ -37,25 +37,9 @@ case class TFCEligibilityInput(
                                 from: LocalDate,
                                 numberOfPeriods: Short,
                                 location: String,
-                                childAgedThreeOrFour: Option[Boolean] = None,
                                 claimants: List[TFCClaimant],
                                 children: List[TFCChild]
                 ) {
-
-  def validHouseholdMaximumEarnings(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
-    val parent = claimants.head
-    val maxEarningsParent = parent.maximumEarnings.getOrElse(false)
-    if(claimants.length > 1) {
-      val partner = claimants.last
-      val maxEarningsPartner = partner.maximumEarnings.getOrElse(false)
-      (maxEarningsParent, maxEarningsPartner) match {
-        case (false, false) => true
-        case _ => false
-      }
-    } else {
-      !maxEarningsParent
-    }
-  }
 
   def validHouseholdMinimumEarnings(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): (Boolean) = {
     val parent = claimants.head
@@ -64,18 +48,19 @@ case class TFCEligibilityInput(
       val partner = claimants.last
       val minEarningsPartner = partner.satisfyMinimumEarnings(from, parent = false, location)
       val auditMinEarns = minEarningsParent && minEarningsPartner
+
       if(!auditMinEarns) {
         AuditEvents.auditMinEarnings(auditMinEarns)
       }
-      (minEarningsParent, minEarningsPartner) match {
 
+      (minEarningsParent, minEarningsPartner) match {
         case (true, true) => true
         case (true, false) => partner.carersAllowance
         case (false, true) => parent.carersAllowance
         case _ => false
       }
     } else {
-//      val parentSatisfy = parent.satisfyMinimumEarnings(from, parent = true, location)
+
       if(!minEarningsParent) {
         AuditEvents.auditMinEarnings(minEarningsParent)
       }
@@ -98,9 +83,8 @@ object TFCEligibilityInput extends CCFormat with MessagesObject {
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "numberOfPeriods").read[Short].orElse(Reads.pure(1)) and
         (JsPath \ "location").read[String] and
-          (JsPath \ "childAgedThreeOrFour").readNullable[Boolean] and
-            (JsPath \ "claimants").read[List[TFCClaimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
-              (JsPath \ "children").read[List[TFCChild]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
+          (JsPath \ "claimants").read[List[TFCClaimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
+            (JsPath \ "children").read[List[TFCChild]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
     )(TFCEligibilityInput.apply _)
 }
 
@@ -123,8 +107,7 @@ case class TFCClaimant(
                         minimumEarnings: TFCMinimumEarnings,
                         age: Option[String],
                         employmentStatus: Option[String] = None,
-                        selfEmployedSelection: Option[Boolean] = None,
-                        maximumEarnings: Option[Boolean] = None
+                        selfEmployedSelection: Option[Boolean] = None
                      ) {
 
   def totalIncome: BigDecimal = {
@@ -220,8 +203,7 @@ object TFCClaimant {
                 (JsPath \ "minimumEarnings").read[TFCMinimumEarnings] and
                   (JsPath \ "age").readNullable[String] and
                     (JsPath \ "employmentStatus").readNullable[String] and
-                      (JsPath \ "selfEmployedSelection").readNullable[Boolean] and
-                        (JsPath \ "maximumEarnings").readNullable[Boolean]
+                      (JsPath \ "selfEmployedSelection").readNullable[Boolean]
     )(TFCClaimant.apply _)
 }
 
