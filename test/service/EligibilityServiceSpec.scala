@@ -33,29 +33,26 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import play.api.mvc.Request
 import play.api.test.FakeRequest
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication with MockitoSugar{
+class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication with MockitoSugar {
 
 
   class ServiceTest extends EligibilityService{
     override val calcConnector: CalculatorConnector = mock[CalculatorConnector]
-
     override val esc: ESCEligibility = mock[ESCEligibility]
     override val tc: TCEligibility = mock[TCEligibility]
     override val tfc: TFCEligibility = mock[TFCEligibility]
     override val thirtyHours: FreeEntitlementEligibility = mock[FreeEntitlementEligibility]
-
     override val TCEligibilityInput: HHToTCEligibilityInput = mock[HHToTCEligibilityInput]
     override val TFCEligibilityInput: HHToTFCEligibilityInput = mock[HHToTFCEligibilityInput]
     override val ESCEligibilityInput: HHToESCEligibilityInput = mock[HHToESCEligibilityInput]
     override val FreeEntitlementEligibilityInput: HHToFree30hoursEligibilityInput = mock[HHToFree30hoursEligibilityInput]
-
     override def eligibility(request: Household)(implicit req: Request[_], hc: HeaderCarrier): Future[SchemeResults] = super.eligibility(request)
   }
 

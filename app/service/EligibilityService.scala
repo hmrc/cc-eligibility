@@ -22,7 +22,7 @@ import models.Household
 import models.input.CalculatorOutput
 import models.mappings._
 import models.output.{CalculatorInput, SchemeResults}
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

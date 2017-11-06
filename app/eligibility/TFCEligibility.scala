@@ -22,7 +22,7 @@ import models.input.tfc.{TFCChild, TFCClaimant, TFCEligibilityInput}
 import models.output.tfc._
 import org.joda.time.LocalDate
 import service.AuditEvents
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 import utils.TFCRolloutSchemeConfig
 
 import scala.concurrent.Future
