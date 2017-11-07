@@ -80,7 +80,7 @@ object TCEducation {
 case class TCChild(
                     id: Short,
                     childcareCost: BigDecimal,
-                    childcareCostPeriod: Periods.Period,
+                    childcareCostPeriod: Periods.Period = Periods.Monthly,
                     dob: LocalDate,
                     disability: TCDisability,
                     education: Option[TCEducation]

@@ -234,7 +234,7 @@ object TFCDisability {
 case class TFCChild(
                     id: Short,
                     childcareCost: BigDecimal = BigDecimal(0.00),
-                    childcareCostPeriod: Periods.Period,
+                    childcareCostPeriod: Periods.Period = Periods.Monthly,
                     dob: LocalDate,
                     disability: TFCDisability
                     ) extends models.input.BaseChild {

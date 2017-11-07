@@ -80,7 +80,7 @@ object ESCIncome {
 case class ESCChild(
                         qualifying: Boolean = false,
                         childCareCost: BigDecimal,
-                        childCareCostPeriod: Periods.Period //TODO - Update to take the input from user
+                        childCareCostPeriod: Periods.Period = Periods.Monthly
                    )
 
 object ESCChild {
