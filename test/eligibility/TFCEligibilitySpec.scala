@@ -151,13 +151,13 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
 
 
       val outputChild1 = TFCOutputChild(id = 0, qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val outputChild2 = TFCOutputChild(id = 0, qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val outputChild3 = TFCOutputChild(id = 0, qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val outputChild4 = TFCOutputChild(id = 0, qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       Json.toJson(result) shouldBe Json.toJson(List(
         TFCPeriod(
@@ -212,9 +212,9 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val childUntil = LocalDate.parse("2016-09-04", formatter)
 
       val outputChild = TFCOutputChild(id = 0, qualifying = true, from = Some(childFrom), until = Some(childUntil),
-        tfcRollout = false, BigDecimal(200.0), models.output.tfc.TFCDisability(false,false))
+        tfcRollout = false, BigDecimal(200.0), childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val outputChild2 = TFCOutputChild(id = 0, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.0), models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.0), childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       result shouldBe List(
         TFCPeriod(
@@ -256,7 +256,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val childFrom = LocalDate.parse("2016-08-27", formatter)
       val childUntil = LocalDate.parse("2016-11-27", formatter)
       val outputChild = TFCOutputChild(id = 0, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.0), models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.0), childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       result shouldBe List(
         TFCPeriod(
@@ -480,7 +480,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val startPeriod1 = LocalDate.parse("2016-08-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-11-27", formatter)
       val outputChild = TFCOutputChild(id = 0, qualifying = false, None, None, false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       result shouldBe List(
         TFCPeriod(
@@ -510,6 +510,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
           until = None,
           tfcRollout = false,
           BigDecimal(200.00),
+          childcareCostPeriod=Periods.Monthly,
           models.output.tfc.TFCDisability(false,false)
         )
       )
@@ -534,9 +535,9 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
       val outputChild1 = TFCOutputChild(id = 0, qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val outputChild2 = TFCOutputChild(id = 0, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       result shouldBe List(
         TFCPeriod(
@@ -573,18 +574,18 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val untilPeriod2 = LocalDate.parse("2017-02-01", formatter)
 
       val Period1OutputChild1 = TFCOutputChild(id = 0, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period1OutputChild2 = TFCOutputChild(id = 0, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period1OutputChild3 = TFCOutputChild(id = 0, qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       val Period2OutputChild1 = TFCOutputChild(id = 0, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period2OutputChild2 = TFCOutputChild(id = 0, qualifying = true, from = Some(dateOfBirthChild2), until = Some(untilPeriod2), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period2OutputChild3 = TFCOutputChild(id = 0, qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       result shouldBe List(
         TFCPeriod(
@@ -643,60 +644,60 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val child2EndDate = LocalDate.parse("2017-09-03", formatter)
 
       val Period1OutputChild1 = TFCOutputChild(id = 1, qualifying = true, from = Some(startPeriod1), until = Some(child1EndDate), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period1OutputChild2 = TFCOutputChild(id = 2, qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period1OutputChild3 = TFCOutputChild(id = 3, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period2OutputChild1 = TFCOutputChild(id = 1, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period2OutputChild2 = TFCOutputChild(id = 2, qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period2OutputChild3 = TFCOutputChild(id = 3, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period3OutputChild1 = TFCOutputChild(id = 1, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period3OutputChild2 = TFCOutputChild(id = 2, qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period3OutputChild3 = TFCOutputChild(id = 3, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period4OutputChild1 = TFCOutputChild(id = 1, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period4OutputChild2 = TFCOutputChild(id = 2, qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period4OutputChild3 = TFCOutputChild(id = 3, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period5OutputChild1 = TFCOutputChild(id = 1, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period5OutputChild2 = TFCOutputChild(id = 2, qualifying = true, from = Some(startPeriod5), until = Some(child2EndDate), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period5OutputChild3 = TFCOutputChild(id = 3, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period6OutputChild1 = TFCOutputChild(id = 1, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period6OutputChild2 = TFCOutputChild(id = 2, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period6OutputChild3 = TFCOutputChild(id = 3, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period7OutputChild1 = TFCOutputChild(id = 1, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period7OutputChild2 = TFCOutputChild(id = 2, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period7OutputChild3 = TFCOutputChild(id = 3, qualifying = true, from = Some(dateOfBirthChild3), until = Some(untilPeriod7), tfcRollout = dateOfBirthChild3.isBefore(LocalDate.now().plusWeeks(2)),
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period8OutputChild1 = TFCOutputChild(id = 1, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period8OutputChild2 = TFCOutputChild(id = 2, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period8OutputChild3 = TFCOutputChild(id = 3, qualifying = true, from = Some(startPeriod8), until = Some(untilPeriod8), tfcRollout = dateOfBirthChild3.isBefore(LocalDate.now().plusWeeks(2)),
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       result shouldBe List(
         TFCPeriod(
@@ -787,24 +788,24 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val child1EndDate = LocalDate.parse("2016-09-04", formatter)
 
       val Period1OutputChild1 = TFCOutputChild(id = 0, qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period1OutputChild2 = TFCOutputChild(id = 0, qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       val Period2OutputChild1 = TFCOutputChild(id = 0, qualifying = true, from = Some(startPeriod2), until = Some(child1EndDate), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period2OutputChild2 = TFCOutputChild(id = 0, qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       val Period3OutputChild1 = TFCOutputChild(id = 0, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period3OutputChild2 = TFCOutputChild(id = 0, qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       val Period4OutputChild1 = TFCOutputChild(id = 0, qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period4OutputChild2 = TFCOutputChild(id = 0, qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       result shouldBe List(
         TFCPeriod(
@@ -870,46 +871,46 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val untilPeriod6 = LocalDate.parse("2018-04-30", formatter)
 
       val Period1OutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period1OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period1OutputChild3 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period2OutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period2OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period2OutputChild3 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period3OutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period3OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period3OutputChild3 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period4OutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period4OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period4OutputChild3 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period5OutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period5OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(untilPeriod5), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period5OutputChild3 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(untilPeriod5), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period6OutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period6OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod6), until = Some(untilPeriod6), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period6OutputChild3 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod6), until = Some(untilPeriod6), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       result shouldBe List(
         TFCPeriod(
@@ -989,19 +990,19 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val child1EndDate = LocalDate.parse("2017-09-03", formatter)
 
       val Period1OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(child1EndDate), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period1OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       val Period2OutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period2OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       val Period3OutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period3OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       result shouldBe List(
         TFCPeriod(
@@ -1065,42 +1066,42 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val child2EndDate = LocalDate.parse("2018-09-02", formatter)
 
       val Period1OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period1OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period1OutputChild3 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period2OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period2OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period2OutputChild3 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period3OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period3OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period3OutputChild3 = TFCOutputChild(id = 0,  qualifying = true, from = Some(dateOfBirthChild3), until = Some(untilPeriod3),
         tfcRollout = dateOfBirthChild3.isBefore(LocalDate.now().plusWeeks(2)),
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period4OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period4OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period4OutputChild3 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4),
         tfcRollout = dateOfBirthChild3.isBefore(LocalDate.now().plusWeeks(2)),
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period5OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(untilPeriod5), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period5OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(child2EndDate), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period5OutputChild3 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(untilPeriod5),
         tfcRollout = dateOfBirthChild3.isBefore(LocalDate.now().plusWeeks(2)),
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       result shouldBe List(
         TFCPeriod(
@@ -1172,39 +1173,39 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val untilPeriod7 = LocalDate.parse("2017-10-15", formatter)
 
       val Period1OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period1OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period2OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period2OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period3OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period3OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period4OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period4OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period5OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(untilPeriod5), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period5OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(untilPeriod5), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period6OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod6), until = Some(untilPeriod6), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period6OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod6), until = Some(untilPeriod6), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period7OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod7), until = Some(untilPeriod7), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period7OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod7), until = Some(untilPeriod7), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       result shouldBe List(
         TFCPeriod(
@@ -1294,44 +1295,44 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val child2EndDate = LocalDate.parse("2017-09-03", formatter)
 
       val Period1OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period1OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       val Period2OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period2OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod2), until = Some(untilPeriod2), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       val Period3OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period3OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod3), until = Some(untilPeriod3), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       val Period4OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period4OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod4), until = Some(untilPeriod4), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       val Period5OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(untilPeriod5), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period5OutputChild2 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod5), until = Some(child2EndDate), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       val Period6OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod6), until = Some(untilPeriod6), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period6OutputChild2 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       val Period7OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod7), until = Some(untilPeriod7), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period7OutputChild2 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       val Period8OutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod8), until = Some(untilPeriod8), tfcRollout = true,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period8OutputChild2 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       result shouldBe List(
         TFCPeriod(
@@ -1420,24 +1421,24 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val untilPeriod4 = LocalDate.parse("2017-05-23", formatter)
 
       val Period1OutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period1OutputChild2 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period2OutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period2OutputChild2 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period3OutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period3OutputChild2 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val Period4OutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val Period4OutputChild2 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       result shouldBe List(
         TFCPeriod(
@@ -1498,24 +1499,24 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val untilPeriod4 = LocalDate.parse("2017-05-28", formatter)
 
       val Period1OutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period1OutputChild2 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       val Period2OutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period2OutputChild2 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       val Period3OutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period3OutputChild2 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       val Period4OutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
       val Period4OutputChild2 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(true,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(true,false))
 
       result shouldBe List(
         TFCPeriod(
@@ -1665,8 +1666,20 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       result shouldBe true
     }
 
+    "determine period eligibility for 1 period - non qualifying child and qualifying claimant with weekly cost" in {
+      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
+      val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
+      val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
 
-    "determine period eligibility for 1 period - non qualifying child and qual claimant" in {
+      val outputChild1 = TFCOutputChild(id = 0, childcareCostPeriod=Periods.Weekly, qualifying = false, from = Some(startPeriod1), until = Some(untilPeriod1), tfcRollout = false)
+
+      val result = TFCEligibility.determinePeriodEligibility(List(outputClaimant), List(outputChild1))
+
+      result shouldBe false
+    }
+
+    "determine period eligibility for 1 period - non qualifying child and qualifying claimant" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
@@ -1814,7 +1827,7 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val startPeriod = LocalDate.parse("2016-03-30", formatter)
       val untilPeriod = LocalDate.parse("2016-06-30", formatter)
       val PeriodOutputChild = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod), until = Some(untilPeriod), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val tfcPeriods = List(TFCPeriod(from = startPeriod, until = untilPeriod, periodEligibility = false, claimants = List(outputClaimant), children = List(PeriodOutputChild)))
       val tfcEligibilityModel = TFCEligibilityOutput(from = from, until = tfcPeriods.last.until,
         householdEligibility = false, periods = tfcPeriods, tfcRollout = false)
@@ -1840,9 +1853,9 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val untilPeriod1 = LocalDate.parse("2016-12-30", formatter)
       val septDate = LocalDate.parse("2016-09-04", formatter)
       val PeriodOutputChild = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod), until = Some(septDate), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val PeriodOutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val tfcPeriods = List(
         TFCPeriod(from = startPeriod,
@@ -1880,9 +1893,9 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val untilPeriod1 = LocalDate.parse("2016-12-30", formatter)
 
       val PeriodOutputChild = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod), until = Some(untilPeriod), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val PeriodOutputChild1 = TFCOutputChild(id = 0,  qualifying = true, from = Some(startPeriod1), until = Some(untilPeriod1), tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val tfcPeriods = List(
         TFCPeriod(from = startPeriod,
@@ -1920,11 +1933,11 @@ class TFCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication 
       val untilPeriod2 = LocalDate.parse("2017-03-30", formatter)
 
       val PeriodOutputChild = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val PeriodOutputChild1 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
       val PeriodOutputChild2 = TFCOutputChild(id = 0,  qualifying = false, from = None, until = None, tfcRollout = false,
-        BigDecimal(200.00),models.output.tfc.TFCDisability(false,false))
+        BigDecimal(200.00),childcareCostPeriod=Periods.Monthly, models.output.tfc.TFCDisability(false,false))
 
       val tfcPeriods = List(
         TFCPeriod(from = startPeriod,

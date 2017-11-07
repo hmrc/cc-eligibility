@@ -179,7 +179,7 @@ class JSONFactorySpec extends CCConfigSpec with FakeCCEligibilityApplication {
       val outputStartPeriod2 = LocalDate.parse("2015-09-30", formatter)
       val outputUntilPeriod2 = LocalDate.parse("2015-12-30", formatter)
       val outputPeriodChild1 = models.output.tfc.TFCOutputChild(id = 0, qualifying = true, from = Some(outputStartPeriod1), until = Some(outputUntilPeriod1), tfcRollout = false)
-      val outputPeriodChild2 = models.output.tfc.TFCOutputChild(id = 0, qualifying = true, from = Some(outputStartPeriod2), until = Some(outputUntilPeriod2), tfcRollout = false)
+      val outputPeriodChild2 = models.output.tfc.TFCOutputChild(id = 0, childcareCostPeriod=Periods.Weekly, qualifying = true, from = Some(outputStartPeriod2), until = Some(outputUntilPeriod2), tfcRollout = false)
 
       val tfcPeriods = List(
         TFCPeriod(from = outputStartPeriod1,
@@ -198,64 +198,66 @@ class JSONFactorySpec extends CCConfigSpec with FakeCCEligibilityApplication {
       val outputJson = Json.parse(
         s"""
         {
-                  "from": "2015-06-30",
-                  "until": "2015-12-30",
-                  "householdEligibility": true,
-                   "tfcRollout":false,
-                   "periods": [
-                    {
-                      "from" : "2015-06-30",
-                      "until" : "2015-09-30",
-                      "periodEligibility" : true,
-                      "claimants" : [
-                       {
-                        "qualifying" : true,
-                        "isPartner" : false
-                       }
-                      ],
-                      "children" : [
-                       {
-                        "id":0,
-                        "qualifying" : true,
-                        "from" : "2015-06-30",
-                        "until" : "2015-09-30",
-                        "tfcRollout":false,
-                        "childcareCost":0,
-                        "disability": {
-                          "disabled":false,
-                          "severelyDisabled":false
-                          }
-                       }
-                      ]
-                    },
-                    {
-                      "from" : "2015-09-30",
-                      "until" : "2015-12-30",
-                      "periodEligibility" : true,
-                      "claimants" : [
-                       {
-                        "qualifying" : true,
-                        "isPartner" : false
-                       }
-                      ],
-                      "children" : [
-                       {
-                        "id":0,
-                        "qualifying" : true,
-                        "from" : "2015-09-30",
-                        "until" : "2015-12-30",
-                        "tfcRollout":false,
-                        "childcareCost":0,
-                        "disability": {
-                          "disabled":false,
-                          "severelyDisabled":false
-                          }
-                       }
-                      ]
-                    }
-                   ]
-                }
-        """.stripMargin)
+          "from": "2015-06-30",
+          "until": "2015-12-30",
+          "householdEligibility": true,
+           "tfcRollout":false,
+           "periods": [
+            {
+              "from" : "2015-06-30",
+              "until" : "2015-09-30",
+              "periodEligibility" : true,
+              "claimants" : [
+               {
+                "qualifying" : true,
+                "isPartner" : false
+               }
+              ],
+              "children" : [
+               {
+                "id":0,
+                "qualifying" : true,
+                "from" : "2015-06-30",
+                "until" : "2015-09-30",
+                "tfcRollout":false,
+                "childcareCost":0,
+                "childcareCostPeriod": "Month",
+                "disability": {
+                  "disabled":false,
+                  "severelyDisabled":false
+                  }
+               }
+              ]
+            },
+            {
+              "from" : "2015-09-30",
+              "until" : "2015-12-30",
+              "periodEligibility" : true,
+              "claimants" : [
+               {
+                "qualifying" : true,
+                "isPartner" : false
+               }
+              ],
+              "children" : [
+               {
+                "id":0,
+                "qualifying" : true,
+                "from" : "2015-09-30",
+                "until" : "2015-12-30",
+                "tfcRollout":false,
+                "childcareCost":0,
+                "childcareCostPeriod": "Week",
+                "disability": {
+                  "disabled":false,
+                  "severelyDisabled":false
+                  }
+               }
+              ]
+            }
+           ]
+        }
+      """.stripMargin)
 
       val result = Json.toJson(tfcEligibilityModel)
       result shouldBe outputJson
@@ -298,39 +300,39 @@ class JSONFactorySpec extends CCConfigSpec with FakeCCEligibilityApplication {
       val outputJson = Json.parse(
         s"""
         {
-                  "taxYears":[
+            "taxYears":[
+            {
+               "from":"2015-06-20",
+               "until":"2016-04-06",
+               "periods":[
                   {
                      "from":"2015-06-20",
                      "until":"2016-04-06",
-                     "periods":[
+                     "claimants":[
                         {
-                           "from":"2015-06-20",
-                           "until":"2016-04-06",
-                           "claimants":[
-                              {
-                                 "qualifying":true,
-                                 "isPartner":false,
-                                 "eligibleMonthsInPeriod":11,
-                                 "vouchers":true,
-                                 "escStartDate":"${LocalDate.now().toString()}"
-                              }
-                           ],
-                           "children": [
-                              {
-                                "qualifying": false,
-                                "childCareCost": 100,
-                                "childCareCostPeriod": "Month"
-                              }
-                           ]
+                           "qualifying":true,
+                           "isPartner":false,
+                           "eligibleMonthsInPeriod":11,
+                           "vouchers":true,
+                           "escStartDate":"${LocalDate.now().toString()}"
+                        }
+                     ],
+                     "children": [
+                        {
+                          "qualifying": false,
+                          "childCareCost": 100,
+                          "childCareCostPeriod": "Month"
                         }
                      ]
                   }
-               ],
-                "eligibility":false,
-                "parentEligibility":false,
-                "partnerEligibility":false
+               ]
+            }
+         ],
+          "eligibility":false,
+          "parentEligibility":false,
+          "partnerEligibility":false
       }
-        """.stripMargin)
+      """.stripMargin)
 
       val result = Json.toJson(escEligibilityModel)
       result shouldBe outputJson

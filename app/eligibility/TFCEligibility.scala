@@ -116,6 +116,7 @@ trait TFCEligibility extends TFCRolloutSchemeConfig {
         until = qualifyEndDate,
         tfcRollout = isChildEligibleForTFCRollout(child, childEligibility),
         childcareCost = child.childcareCost,
+        childcareCostPeriod = child.childcareCostPeriod,
         disability = models.output.tfc.TFCDisability(child.disability.disabled,child.disability.severelyDisabled)
       )
     }
