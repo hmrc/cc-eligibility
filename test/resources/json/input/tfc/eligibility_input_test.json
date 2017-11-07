@@ -22,7 +22,7 @@
         {
           "id": 0,
           "childcareCost": 3000.00,
-          "childcareCostPeriod": "Month",
+          "childcareCostPeriod": "Week",
           "dob": "2014-05-12",
           "disability": {
             "disabled": false,

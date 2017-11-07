@@ -25,7 +25,7 @@
       "dob": "2015-06-12",
       "childcareCost": {
         "amount": 300,
-        "period": "MONTHLY"
+        "period": "WEEKLY"
       },
       "disability": {
         "disabled": false,
