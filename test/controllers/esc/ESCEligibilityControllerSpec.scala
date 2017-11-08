@@ -137,7 +137,7 @@ class ESCEligibilityControllerSpec extends CCConfigSpec with FakeCCEligibilityAp
                               {
                                   "qualifying":true,
                                   "childCareCost":100,
-                                  "childCareCostPeriod":"Month"
+                                  "childCareCostPeriod":"Week"
                               }
                           ]
                       }

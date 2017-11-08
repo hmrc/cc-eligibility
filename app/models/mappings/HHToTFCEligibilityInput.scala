@@ -16,7 +16,6 @@
 
 package models.mappings
 
-
 import models._
 import models.input.tfc._
 import utils.TFCConfig
@@ -61,7 +60,8 @@ trait HHToTFCEligibilityInput extends PeriodEnumToPeriod {
       minimumEarnings = hhMinimumEarningsToTFCMinimumEarnings(claimant.minimumEarnings),
       age = claimant.ageRange.map(x => x.toString),
       employmentStatus = claimant.minimumEarnings.map(x => x.employmentStatus.toString),
-      selfEmployedSelection = claimant.minimumEarnings.flatMap(x => x.selfEmployedIn12Months))
+      selfEmployedSelection = claimant.minimumEarnings.flatMap(x => x.selfEmployedIn12Months)
+    )
   }
 
   private def hhMinimumEarningsToTFCMinimumEarnings(hhMinimumEarnings: Option[MinimumEarnings]): TFCMinimumEarnings = {

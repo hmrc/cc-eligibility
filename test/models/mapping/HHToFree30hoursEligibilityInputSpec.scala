@@ -25,85 +25,81 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 class HHToFree30hoursEligibilityInputSpec extends UnitSpec with FakeCCEligibilityApplication {
 
-  val SUT = new HHToFree30hoursEligibilityInput {
-
-  }
+  val SUT = new HHToFree30hoursEligibilityInput {}
 
   "HHToFree30hoursEligibilityInput" should {
 
-    "convert Household into FreeEntitlementEligibilityInput" when {
-      "given a household with location and children having DOB" in {
-        val dob1 = LocalDate.parse("2017-08-01")
-        val dob2 = LocalDate.parse("2016-08-01")
+    "given a household with location and children having DOB" in {
+      val dob1 = LocalDate.parse("2017-08-01")
+      val dob2 = LocalDate.parse("2016-08-01")
 
-        val children = List(
-          Child(
-            1,
-            "Child1",
-            Some(dob1),
-            Some(Disability(true, false, false)),
-            Some(ChildCareCost(period = Some(PeriodEnum.MONTHLY)))
-          ),
-          Child(
-            2,
-            "Child2",
-            Some(dob2),
-            Some(Disability(true, false, false)),
-            Some(ChildCareCost(period = Some(PeriodEnum.MONTHLY)))
+      val children = List(
+        Child(
+          1,
+          "Child1",
+          Some(dob1),
+          Some(Disability(true, false, false)),
+          Some(ChildCareCost(period = Some(PeriodEnum.MONTHLY)))
+        ),
+        Child(
+          2,
+          "Child2",
+          Some(dob2),
+          Some(Disability(true, false, false)),
+          Some(ChildCareCost(period = Some(PeriodEnum.MONTHLY)))
+        )
+      )
+
+      val household = Household(
+        children = children,
+        location = Some(LocationEnum.ENGLAND),
+        parent = Claimant(
+          escVouchers = Some(YesNoUnsureEnum.YES)
+        ),
+        partner = Some(
+          Claimant(
+            escVouchers = Some(YesNoUnsureEnum.NO)
           )
         )
+      )
 
-        val household = Household(
-          children = children,
-          location = Some(LocationEnum.ENGLAND),
-          parent = Claimant(
-            escVouchers = Some(YesNoUnsureBothEnum.YES)
-          ),
-          partner = Some(
-            Claimant(
-              escVouchers = Some(YesNoUnsureBothEnum.NO)
-            )
+      val childDOBList = List(dob1, dob2)
+
+      SUT.convert(household) shouldBe FreeEntitlementEligibilityInput("england", childDOBList)
+    }
+
+    "given a household with default location and no children" in {
+
+      val children = List(
+        Child(
+          1,
+          "Child1",
+          None,
+          Some(Disability(true, false, false)),
+          Some(ChildCareCost(period = Some(PeriodEnum.MONTHLY)))
+        ),
+        Child(
+          2,
+          "Child2",
+          None,
+          Some(Disability(true, false, false)),
+          Some(ChildCareCost(period = Some(PeriodEnum.MONTHLY)))
+        )
+      )
+
+      val household = Household(
+        children = List(),
+        parent = Claimant(
+          escVouchers = Some(YesNoUnsureEnum.YES)
+        ),
+        partner = Some(
+          Claimant(
+            escVouchers = Some(YesNoUnsureEnum.NO)
           )
         )
+      )
 
-        val childDOBList = List(dob1, dob2)
-
-        SUT.convert(household) shouldBe FreeEntitlementEligibilityInput("england", childDOBList)
-      }
-
-      "given a household with no location and children having no DOB" in {
-
-        val children = List(
-          Child(
-            1,
-            "Child1",
-            None,
-            Some(Disability(true, false, false)),
-            Some(ChildCareCost(period = Some(PeriodEnum.MONTHLY)))
-          ),
-          Child(
-            2,
-            "Child2",
-            None,
-            Some(Disability(true, false, false)),
-            Some(ChildCareCost(period = Some(PeriodEnum.MONTHLY)))
-          )
-        )
-
-        val household = Household(
-          children = children,
-          parent = Claimant(
-            escVouchers = Some(YesNoUnsureBothEnum.YES)
-          ),
-          partner = Some(
-            Claimant(
-              escVouchers = Some(YesNoUnsureBothEnum.NO)
-            )
-          )
-        )
-
-        SUT.convert(household) shouldBe FreeEntitlementEligibilityInput("england", Nil)
-      }
+      SUT.convert(household) shouldBe FreeEntitlementEligibilityInput("england", Nil)
     }
   }
 }

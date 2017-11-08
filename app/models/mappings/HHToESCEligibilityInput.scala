@@ -83,8 +83,8 @@ trait HHToESCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
 
   private def escVouchersAvailable(claimant: Claimant): Boolean = {
     claimant.escVouchers match {
-      case Some(YesNoUnsureBothEnum.YES) => true
-      case Some(YesNoUnsureBothEnum.NOTSURE) => true
+      case Some(YesNoUnsureEnum.YES) => true
+      case Some(YesNoUnsureEnum.NOTSURE) => true
       case _ => false
     }
   }

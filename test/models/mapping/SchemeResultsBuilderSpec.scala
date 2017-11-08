@@ -25,7 +25,7 @@ import models.output.tc.{TCEligibilityOutput, TCTaxYear}
 import models.output.tfc._
 import org.joda.time.LocalDate
 import org.scalatest.mock.MockitoSugar
-import utils.CCConfigSpec
+import utils.{CCConfigSpec, Periods}
 
 class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
 
@@ -154,6 +154,7 @@ class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
                                         until = None,
                                         tfcRollout = false, //Not required in frontend
                                         childcareCost = BigDecimal(0),
+                                        childcareCostPeriod = Periods.Monthly,
                                         disability = TFCDisability())
 
   val tfcEligibilityOutput = TFCEligibilityOutput(from = LocalDate.now(),

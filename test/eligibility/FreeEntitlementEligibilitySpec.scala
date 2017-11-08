@@ -22,7 +22,6 @@ import models.input.tfc._
 
 import models.output.tfc.TFCEligibilityOutput
 import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
@@ -39,7 +38,7 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
 
   val now = LocalDate.now
 
-  "determine eligibility corectly for fifteenHours" when {
+  "determine eligibility correctly for fifteenHours" when {
 
     val testCases = Table(
       ("Location", "Dates of Birth", "Result"),
@@ -110,7 +109,8 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
     )
 
     forAll(testCases) { case (location, tfcEligibilityVal, dobs, isEligible, isRollout) =>
-      s"location = ${location}, tfcEligibilty = ${tfcEligibilityVal}, dobs = ${dobs} then isEligible should be ${isEligible} and rollout should be ${isRollout}" in {
+      s"location = ${location}, tfcEligibilty = ${tfcEligibilityVal}, dobs = ${dobs} then isEligible should be ${isEligible} and rollout " +
+        s"should be ${isRollout}" in {
         implicit val request = FakeRequest()
         implicit val hc = new HeaderCarrier()
 

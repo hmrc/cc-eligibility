@@ -16,9 +16,8 @@
 
 package eligibility
 
-import config.ConfigConstants
 import models.input.freeEntitlement.FreeEntitlementEligibilityInput
-import models.input.tfc.{TFCEligibilityInput}
+import models.input.tfc.TFCEligibilityInput
 import models.output.freeEntitlement.{FifteenHoursEligibilityModel, ThirtyHoursEligibilityModel}
 import org.joda.time.LocalDate
 import play.api.Configuration
@@ -57,34 +56,28 @@ trait FreeEntitlementEligibility extends CCConfig with ChildHelper {
     tfcEligibility.eligibility(tfcEligibilityInput).map { tfcEligibilityResult =>
 
       val tfcEligibility: Boolean = tfcEligibilityResult.householdEligibility
-
       val location = tfcEligibilityInput.location
 
+      val hasChild3Or4Years: Boolean = hasChildAtAge(
+          configField = s"thirty.${location}",
+          dobs = tfcEligibilityInput.children.map(_.dob),
+          currentDate = localDate
+        )
 
-      val hasChild3Or4Sept2017: Boolean = hasChildAtAge(
-        configField = s"thirty.${location}",
-        dobs = tfcEligibilityInput.children.map(_.dob),
-        currentDate = if(localDate.isBefore(ConfigConstants.firstSept2017)) { // TODO: Use only LocalDate.now after 01.09.2017
-          ConfigConstants.firstSept2017
-        }
-        else {
-          localDate
-        }
-      )
-
-      val rollout = tfcEligibilityInput.children.exists( child =>
+      val rollOut = tfcEligibilityInput.children.exists( child =>
         isChildDOBWithinRollout(child.dob)
       )
 
       ThirtyHoursEligibilityModel(
-        eligibility = tfcEligibility && hasChild3Or4Sept2017,
-        rollout = rollout
+        eligibility = tfcEligibility && hasChild3Or4Years,
+        rollout = rollOut
       )
     }
   }
 
   def fifteenHours(request: FreeEntitlementEligibilityInput): Future[FifteenHoursEligibilityModel] = {
     val location = request.claimantLocation
+
     Future {
       FifteenHoursEligibilityModel(
         eligibility = hasChildAtAge(

@@ -83,8 +83,8 @@ object ESCClaimant extends CCFormat {
   implicit val claimantReads: Reads[ESCClaimant] = (
     (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "employerProvidesESC").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "previousIncome").readNullable[ESCIncome] and
-      (JsPath \ "currentIncome").readNullable[ESCIncome]
+        (JsPath \ "previousIncome").readNullable[ESCIncome] and
+          (JsPath \ "currentIncome").readNullable[ESCIncome]
     )(ESCClaimant.apply _)
 }
 
@@ -140,9 +140,9 @@ object ESCChild extends CCFormat with MessagesObject {
   implicit val childReads: Reads[ESCChild] = (
     (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
       (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
-      (JsPath \ "childCareCost").read[BigDecimal] and
-      (JsPath \ "childCareCostPeriod").read[Periods.Period] and
-      (JsPath \ "disability").read[ESCDisability]
+        (JsPath \ "childCareCost").read[BigDecimal] and
+          (JsPath \ "childCareCostPeriod").read[Periods.Period] and
+            (JsPath \ "disability").read[ESCDisability]
     )(ESCChild.apply _)
 }
 

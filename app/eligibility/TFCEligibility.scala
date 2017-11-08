@@ -31,116 +31,121 @@ object TFCEligibility extends TFCEligibility
 
 trait TFCEligibility extends TFCRolloutSchemeConfig {
 
-    import scala.concurrent.ExecutionContext.Implicits.global
-    val auditEvents: AuditEvents = AuditEvents
+  import scala.concurrent.ExecutionContext.Implicits.global
+  val auditEvents: AuditEvents = AuditEvents
 
-    def determineChildStartDateInTFCPeriod(child: models.input.tfc.TFCChild, periodFrom : LocalDate, periodUntil: LocalDate, location: String): Option[LocalDate] = {
-      val childDob : java.util.Date = child.dob.toDate
-      val childBirthdaySeptDate : java.util.Date = child.endWeek1stOfSeptemberDate(periodFrom, location)
+  def determineChildStartDateInTFCPeriod(child: models.input.tfc.TFCChild, periodFrom : LocalDate, periodUntil: LocalDate, location: String):Option[LocalDate]={
+    val childDob : java.util.Date = child.dob.toDate
+    val childBirthdaySeptDate : java.util.Date = child.endWeek1stOfSeptemberDate(periodFrom, location)
 
-      childDob match {
-        case dob if(dob.before(periodFrom.toDate)) =>
-          childBirthdaySeptDate match {
-            case septDate if septDate.after(periodFrom.toDate) => Some(periodFrom)
-            case _ => None
-          }
-        case dob if(dob.before(periodUntil.toDate)) => Some(child.dob)
-        case _ => None
-      }
+    childDob match {
+      case dob if(dob.before(periodFrom.toDate)) =>
+        childBirthdaySeptDate match {
+          case septDate if septDate.after(periodFrom.toDate) => Some(periodFrom)
+          case _ => None
+        }
+      case dob if(dob.before(periodUntil.toDate)) => Some(child.dob)
+      case _ => None
     }
+  }
 
-    def determineChildEndDateInTFCPeriod(child: models.input.tfc.TFCChild, periodFrom : LocalDate, periodUntil: LocalDate, location: String): Option[LocalDate] = {
-      val childDob : java.util.Date = child.dob.toDate
-      val childBirthdaySeptDate : java.util.Date = child.endWeek1stOfSeptemberDate(periodFrom, location)
+  def determineChildEndDateInTFCPeriod(child: models.input.tfc.TFCChild, periodFrom : LocalDate, periodUntil: LocalDate, location: String): Option[LocalDate]={
+    val childDob : java.util.Date = child.dob.toDate
+    val childBirthdaySeptDate : java.util.Date = child.endWeek1stOfSeptemberDate(periodFrom, location)
 
-      childDob match {
-        case dob if(dob.after(periodUntil.toDate) || dob.equals(periodUntil.toDate)) => None
-        case _ =>
-          childBirthdaySeptDate match {
-            case septDate if septDate.after(periodUntil.toDate) => Some(periodUntil)
-            case septDate if septDate.after(periodFrom.toDate) => Some(LocalDate.fromDateFields(septDate))
-            case _ => None
-          }
-      }
+    childDob match {
+      case dob if(dob.after(periodUntil.toDate) || dob.equals(periodUntil.toDate)) => None
+      case _ =>
+        childBirthdaySeptDate match {
+          case septDate if septDate.after(periodUntil.toDate) => Some(periodUntil)
+          case septDate if septDate.after(periodFrom.toDate) => Some(LocalDate.fromDateFields(septDate))
+          case _ => None
+        }
     }
+  }
 
-    def determinePeriodEligibility(outputClaimants : List[TFCOutputClaimant], outputChildren : List[TFCOutputChild]) : Boolean = {
-      val childEligibility = outputChildren.exists(child => child.qualifying)
+  def determinePeriodEligibility(outputClaimants : List[TFCOutputClaimant], outputChildren : List[TFCOutputChild]) : Boolean = {
+    val childEligibility = outputChildren.exists(child => child.qualifying)
 
-     val periodEligibility =  outputClaimants match {
-        case claimantList if claimantList.length == 1 =>
-          claimantList.head.qualifying && childEligibility
-        case claimantList if claimantList.length == 2 =>
-          claimantList.head.qualifying && claimantList.tail.head.qualifying && childEligibility
-        case _ => false
-      }
-      periodEligibility
+    val periodEligibility =  outputClaimants match {
+      case claimantList if claimantList.length == 1 =>
+        claimantList.head.qualifying && childEligibility
+      case claimantList if claimantList.length == 2 =>
+        claimantList.head.qualifying && claimantList.tail.head.qualifying && childEligibility
+      case _ => false
     }
+    periodEligibility
+  }
 
-    def determineTFCPeriods(tfcEligibilityInput: TFCEligibilityInput) : List[TFCPeriod] = {
-      val currentCalendar = Calendar.getInstance()
-      currentCalendar.clear()
-      currentCalendar.setTime(tfcEligibilityInput.from.toDate)
+  def determineTFCPeriods(tfcEligibilityInput: TFCEligibilityInput) : List[TFCPeriod] = {
 
-      val periods = for(i <- 1 to tfcEligibilityInput.numberOfPeriods) yield {
-        val startDate = LocalDate.fromDateFields(currentCalendar.getTime)
-        currentCalendar.add(Calendar.MONTH, 3)
-        val untilDate = LocalDate.fromDateFields(currentCalendar.getTime)
-        val outputClaimants = determineClaimantsEligibility(tfcEligibilityInput.claimants, startDate, tfcEligibilityInput.location)
-        val location = if(tfcEligibilityInput.claimants.isEmpty) "default" else tfcEligibilityInput.location
-        val outputChildren = determineChildrenEligibility(tfcEligibilityInput.children, startDate, untilDate, location)
-        val periodEligibility = determinePeriodEligibility(outputClaimants, outputChildren)
+    val currentCalendar = Calendar.getInstance()
+    currentCalendar.clear()
+    currentCalendar.setTime(tfcEligibilityInput.from.toDate)
 
-        TFCPeriod(
-          from = startDate,
-          until = untilDate,
-          periodEligibility = periodEligibility,
-          claimants = outputClaimants,
-          children = outputChildren
-        )
-      }
-      periods.toList
+    val periods = for(i <- 1 to tfcEligibilityInput.numberOfPeriods) yield {
+      val startDate = LocalDate.fromDateFields(currentCalendar.getTime)
+      currentCalendar.add(Calendar.MONTH, 3)
+      val untilDate = LocalDate.fromDateFields(currentCalendar.getTime)
+      val outputClaimants = determineClaimantsEligibility(tfcEligibilityInput.claimants, startDate, tfcEligibilityInput.location)
+      val location = if(tfcEligibilityInput.claimants.isEmpty) "default" else tfcEligibilityInput.location
+      val outputChildren = determineChildrenEligibility(tfcEligibilityInput.children, startDate, untilDate, location)
+      val periodEligibility = determinePeriodEligibility(outputClaimants, outputChildren)
+
+      TFCPeriod(
+        from = startDate,
+        until = untilDate,
+        periodEligibility = periodEligibility,
+        claimants = outputClaimants,
+        children = outputChildren
+      )
     }
+    periods.toList
+  }
 
-    def determineChildrenEligibility(children: List[TFCChild], periodFrom: LocalDate, periodUntil: LocalDate, location: String) : List[TFCOutputChild] = {
-      for(child <- children) yield {
-        val qualifyStartDate = determineChildStartDateInTFCPeriod(child, periodFrom, periodUntil, location)
-        val qualifyEndDate = determineChildEndDateInTFCPeriod(child, periodFrom, periodUntil, location)
-        val childEligibility = qualifyStartDate.isDefined && qualifyEndDate.isDefined
-        TFCOutputChild(
-          id = child.id,
-          qualifying = childEligibility,
-          from = qualifyStartDate,
-          until = qualifyEndDate,
-          tfcRollout = isChildEligibleForTFCRollout(child, childEligibility),
-          childcareCost = child.childcareCost,
-          disability = models.output.tfc.TFCDisability(child.disability.disabled,child.disability.severelyDisabled)
-        )
-      }
+  def determineChildrenEligibility(children: List[TFCChild], periodFrom: LocalDate, periodUntil: LocalDate, location: String) : List[TFCOutputChild] = {
+
+    for(child <- children) yield {
+      val qualifyStartDate = determineChildStartDateInTFCPeriod(child, periodFrom, periodUntil, location)
+      val qualifyEndDate = determineChildEndDateInTFCPeriod(child, periodFrom, periodUntil, location)
+      val childEligibility = qualifyStartDate.isDefined && qualifyEndDate.isDefined
+      TFCOutputChild(
+        id = child.id,
+        qualifying = childEligibility,
+        from = qualifyStartDate,
+        until = qualifyEndDate,
+        tfcRollout = isChildEligibleForTFCRollout(child, childEligibility),
+        childcareCost = child.childcareCost,
+        childcareCostPeriod = child.childcareCostPeriod,
+        disability = models.output.tfc.TFCDisability(child.disability.disabled,child.disability.severelyDisabled)
+      )
     }
+  }
 
-    def determineClaimantsEligibility(claimants: List[TFCClaimant], periodStart : LocalDate, location : String) : List[TFCOutputClaimant] = {
-      for(claimant <- claimants) yield {
-        TFCOutputClaimant(
-          qualifying = claimant.isQualifyingForTFC(periodStart, location),
-          isPartner = claimant.isPartner
-        )
-      }
+  def determineClaimantsEligibility(claimants: List[TFCClaimant], periodStart : LocalDate, location : String) : List[TFCOutputClaimant] = {
+
+    for(claimant <- claimants) yield {
+      TFCOutputClaimant(
+        qualifying = claimant.isQualifyingForTFC(periodStart, location),
+        isPartner = claimant.isPartner
+      )
     }
+  }
 
-    def eligibility(request : TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
-      val outputPeriods = determineTFCPeriods(request)
+  def eligibility(request : TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
 
-      val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && request.validHouseholdMinimumEarnings
+    val outputPeriods = determineTFCPeriods(request)
+    val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && request.validHouseholdMinimumEarnings
 
-      Future {
-            TFCEligibilityOutput(
-              from = request.from,
-              until = outputPeriods.last.until,
-              householdEligibility = householdEligibility,
-              periods = outputPeriods,
-              tfcRollout = outputPeriods.exists(_.children.exists(_.tfcRollout))
-        )
-      }
+    Future {
+      TFCEligibilityOutput(
+        from = request.from,
+        until = outputPeriods.last.until,
+        householdEligibility = householdEligibility,
+        periods = outputPeriods,
+        tfcRollout = outputPeriods.exists(_.children.exists(_.tfcRollout))
+      )
     }
+  }
+
 }

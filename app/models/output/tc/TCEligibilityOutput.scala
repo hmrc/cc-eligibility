@@ -94,7 +94,7 @@ object TCDisability {
 
 case class TCOutputChild(
                         childcareCost: BigDecimal = BigDecimal(0.00),
-                        childcareCostPeriod: Periods.Period,
+                        childcareCostPeriod: Periods.Period = Periods.Monthly,
                         qualifying: Boolean = false,
                         childElements: TCChildElements
                       )
