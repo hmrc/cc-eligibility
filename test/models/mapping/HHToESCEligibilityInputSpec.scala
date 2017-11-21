@@ -46,7 +46,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
 
         val household = Household(children = Nil,
           parent = Claimant(lastYearlyIncome = Some(Income(Some(20000.00), Some(200.00), Some(500.00))),
-            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00))),
+            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00), None, None, Some("1100L"))),
             escVouchers = Some(YesNoUnsureEnum.YES)),
           partner = None)
 
@@ -54,11 +54,11 @@ class HHToESCEligibilityInputSpec extends UnitSpec
           ESCTaxYear(LocalDate.now(),
             LocalDate.parse("2018-04-06"),
             List(ESCClaimant(false, true,
-              Some(ESCIncome(Some(20000.0),Some(200.0))),Some(ESCIncome(Some(30000.0),Some(200.0))))), List()),
+              Some(ESCIncome(Some(20000.0),Some(200.0))),Some(ESCIncome(Some(30000.0),Some(200.0), Some("1100L"))))), List()),
           ESCTaxYear(LocalDate.parse("2018-04-06"),
             LocalDate.now().plusYears(1),
             List(ESCClaimant(false, true,
-              Some(ESCIncome(Some(20000.0),Some(200.0))),Some(ESCIncome(Some(30000.0),Some(200.0))))), List())))
+              Some(ESCIncome(Some(20000.0),Some(200.0))),Some(ESCIncome(Some(30000.0),Some(200.0), Some("1100L"))))), List())))
 
         when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
 
@@ -206,6 +206,30 @@ class HHToESCEligibilityInputSpec extends UnitSpec
 
         SUT.convert(household) shouldBe res
       }
+
+      "given a household with only parent and no children with a tax code" in {
+
+        val household = Household(children = Nil,
+          parent = Claimant(lastYearlyIncome = None,
+            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00), None, None, Some("1200L"))),
+            escVouchers = Some(YesNoUnsureEnum.NOTSURE)),
+          partner = None)
+
+        val res = ESCEligibilityInput(List(
+          ESCTaxYear(LocalDate.now(),
+            LocalDate.parse("2018-04-06"),
+            List(ESCClaimant(false, true,
+              None, Some(ESCIncome(Some(30000.0),Some(200.0), Some("1200L"))))), List()),
+          ESCTaxYear(LocalDate.parse("2018-04-06"),
+            LocalDate.now().plusYears(1),
+            List(ESCClaimant(false, true,
+              None,Some(ESCIncome(Some(30000.0),Some(200.0), Some("1200L"))))), List())))
+
+        when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
+
+        SUT.convert(household) shouldBe res
+      }
+
     }
 
   }

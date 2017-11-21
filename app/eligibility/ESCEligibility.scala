@@ -80,8 +80,8 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
         isPartner = claimant.isPartner,
         eligibleMonthsInPeriod = months,
         vouchers = vouchers,
-        previousIncome = claimant.previousIncome.map(x => models.output.esc.ESCIncome(x.employmentIncome, x.pension)),
-        currentIncome = claimant.currentIncome.map(x => models.output.esc.ESCIncome(x.employmentIncome, x.pension))
+        previousIncome = claimant.previousIncome.map(x => models.output.esc.ESCIncome(x.employmentIncome, x.pension, x.taxCode)),
+        currentIncome = claimant.currentIncome.map(x => models.output.esc.ESCIncome(x.employmentIncome, x.pension, x.taxCode))
       )
     }
   }

@@ -61,7 +61,8 @@ object ESCTaxYear extends CCFormat with MessagesObject {
 
 case class ESCIncome(
                       employmentIncome : Option[BigDecimal] = None,
-                      pension : Option[BigDecimal] = None
+                      pension : Option[BigDecimal] = None,
+                      taxCode: Option[String] = None
                     )
 
 object ESCIncome {
