@@ -70,7 +70,8 @@ object ESCClaimant {
 
 case class ESCIncome(
                       employmentIncome : Option[BigDecimal] = None,
-                      pension : Option[BigDecimal] = None
+                      pension : Option[BigDecimal] = None,
+                      taxCode: Option[String] = None
                       )
 
 object ESCIncome {

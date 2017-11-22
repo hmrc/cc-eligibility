@@ -41,7 +41,8 @@ case class Income(
                    pension: Option[BigDecimal] = None,
                    otherIncome: Option[BigDecimal] = None,
                    benefits: Option[BigDecimal] = None,
-                   statutoryIncome: Option[StatutoryIncome] = None
+                   statutoryIncome: Option[StatutoryIncome] = None,
+                   taxCode: Option[String] = None
                  )
 
 object Income {
