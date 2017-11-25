@@ -47,7 +47,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
       val json: JsValue = Json.parse(resource.toString)
       val result = json.validate[TFCEligibilityInput]
       result match {
-        case JsSuccess(x, _) => {
+        case JsSuccess(x, _) =>
           x shouldBe a[TFCEligibilityInput]
           x should not be null
 
@@ -80,7 +80,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
           //Child Disability model
           x.children.head.disability.disabled.isInstanceOf[Boolean] shouldBe true
           x.children.head.disability.severelyDisabled.isInstanceOf[Boolean] shouldBe true
-        }
+
         case JsError(e) => throw new IllegalArgumentException(e.toString)
       }
     }
@@ -91,7 +91,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
         val child = TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
-          TFCDisability(disabled = true, severelyDisabled = false))
+          TFCDisability(disabled = true))
         child.isDisabled shouldBe true
       }
 
@@ -99,7 +99,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
         val child = TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
-          TFCDisability(disabled = false, severelyDisabled = true))
+          TFCDisability(severelyDisabled = true))
         child.isDisabled shouldBe true
       }
 
@@ -107,7 +107,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
         val child = TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
-          TFCDisability(disabled = false, severelyDisabled = false))
+          TFCDisability())
         child.isDisabled shouldBe false
       }
 
@@ -124,7 +124,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
         val current = LocalDate.parse("2017-08-01", formatter)
         val child = TFCChild(id = 0, childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
-          TFCDisability(disabled = false, severelyDisabled = false))
+          TFCDisability())
         val child11Birthday = child.getChildBirthday(current, "england")
         LocalDate.fromDateFields(child11Birthday) shouldBe LocalDate.parse("2016-08-27", formatter)
       }
@@ -134,7 +134,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val dateOfBirth = LocalDate.parse("2000-09-27", formatter)
         val current = LocalDate.parse("2017-08-01", formatter)
         val child = TFCChild(id = 0, childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
-          TFCDisability(disabled = true, severelyDisabled = false))
+          TFCDisability(disabled = true))
         val child11Birthday = child.getChildBirthday(current, "england")
         LocalDate.fromDateFields(child11Birthday) shouldBe LocalDate.parse("2016-09-27", formatter)
       }
@@ -144,7 +144,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
         val current = LocalDate.parse("2017-08-01", formatter)
         val child = TFCChild(id = 0, childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
-          TFCDisability(disabled = false, severelyDisabled = false))
+          TFCDisability())
         val endWeek1stOfSeptemberDate = child.endWeek1stOfSeptemberDate(current, "england")
         LocalDate.fromDateFields(endWeek1stOfSeptemberDate) shouldBe LocalDate.parse("2016-09-04", formatter)
       }
@@ -154,7 +154,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val dateOfBirth = LocalDate.parse("2005-09-12", formatter)
         val current = LocalDate.parse("2017-08-01", formatter)
         val child = TFCChild(id = 0, childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
-          TFCDisability(disabled = false, severelyDisabled = false))
+          TFCDisability())
         val endWeek1stOfSeptemberDate = child.endWeek1stOfSeptemberDate(current, "england")
         LocalDate.fromDateFields(endWeek1stOfSeptemberDate) shouldBe LocalDate.parse("2017-09-03", formatter)
       }
@@ -164,7 +164,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
         val current = LocalDate.parse("2017-08-01", formatter)
         val child = TFCChild(id = 0, childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
-          TFCDisability(disabled = true, severelyDisabled = false))
+          TFCDisability(disabled = true))
         val endWeek1stOfSeptemberDate = child.endWeek1stOfSeptemberDate(current, "england")
         LocalDate.fromDateFields(endWeek1stOfSeptemberDate) shouldBe LocalDate.parse("2021-09-05", formatter)
       }
@@ -174,7 +174,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val dateOfBirth = LocalDate.parse("2005-09-12", formatter)
         val current = LocalDate.parse("2017-08-01", formatter)
         val child = TFCChild(id = 0, childcareCost = BigDecimal(300.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
-          TFCDisability(disabled = true, severelyDisabled = false))
+          TFCDisability(disabled = true))
         val endWeek1stOfSeptemberDate = child.endWeek1stOfSeptemberDate(current, "england")
         LocalDate.fromDateFields(endWeek1stOfSeptemberDate) shouldBe LocalDate.parse("2022-09-04", formatter)
       }
@@ -184,9 +184,9 @@ class TFCEligibilityInputSpec extends CCConfigSpec
     "Claimant" should {
 
       "Check if claimant and partner eligible for minimum earnings rule (minimum 8 hours)" in {
-        val claimant = TFCClaimant(hoursPerWeek = 16.01, isPartner = false, disability = TFCDisability(), carersAllowance = false, minimumEarnings =
+        val claimant = TFCClaimant(hoursPerWeek = 16.01, disability = TFCDisability(), minimumEarnings =
           TFCMinimumEarnings(), age = None)
-        val partner = TFCClaimant(hoursPerWeek = 18.01, isPartner = true, disability = TFCDisability(), carersAllowance = false, minimumEarnings =
+        val partner = TFCClaimant(hoursPerWeek = 18.01, isPartner = true, disability = TFCDisability(), minimumEarnings =
           TFCMinimumEarnings(), age = None)
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
@@ -198,9 +198,9 @@ class TFCEligibilityInputSpec extends CCConfigSpec
       }
 
       "Check if claimant and partner eligible for maximum earnings rule (maximum £100000 earnings)" in {
-        val claimant = TFCClaimant(hoursPerWeek = 16.50, isPartner = false, disability = TFCDisability(), carersAllowance = false, minimumEarnings =
+        val claimant = TFCClaimant(hoursPerWeek = 16.50, disability = TFCDisability(), minimumEarnings =
           TFCMinimumEarnings(), age = None)
-        val partner = TFCClaimant(hoursPerWeek = 16.50, isPartner = true, disability = TFCDisability(), carersAllowance = false, minimumEarnings =
+        val partner = TFCClaimant(hoursPerWeek = 16.50, isPartner = true, disability = TFCDisability(), minimumEarnings =
           TFCMinimumEarnings(), age = None)
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
@@ -212,10 +212,46 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         tfc.claimants.last.isTotalIncomeLessThan100000(fromDate, tfc.location) shouldBe true
       }
 
-      "Check if claimant and partner qualify for TFC" in {
-        val claimant = TFCClaimant(hoursPerWeek = 16.50, isPartner = false, disability = TFCDisability(), carersAllowance = false, minimumEarnings =
+      "eligibility fails if claimant income > 100000" in {
+        val claimant = TFCClaimant(currentIncome= Some(TFCIncome(Some(100000.01), None, None)), disability = TFCDisability(), minimumEarnings =
           TFCMinimumEarnings(), age = None)
-        val partner = TFCClaimant(hoursPerWeek = 17.50, isPartner = true, disability = TFCDisability(), carersAllowance = false, minimumEarnings =
+        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+        val fromDate = LocalDate.parse("2000-08-27", formatter)
+        val toDate = LocalDate.parse("2000-08-27", formatter)
+
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant), List())
+
+        tfc.claimants.head.isTotalIncomeLessThan100000(fromDate, tfc.location) shouldBe false
+      }
+
+      "eligibility fails if claimant income <= 100000 gets other income" in {
+        val claimant = TFCClaimant(currentIncome= Some(TFCIncome(Some(100000.0), None, Some(900.0))), disability = TFCDisability(), minimumEarnings =
+          TFCMinimumEarnings(), age = None)
+        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+        val fromDate = LocalDate.parse("2000-08-27", formatter)
+        val toDate = LocalDate.parse("2000-08-27", formatter)
+
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant), List())
+
+        tfc.claimants.head.isTotalIncomeLessThan100000(fromDate, tfc.location) shouldBe false
+      }
+
+      "eligibility passes if claimant income <= 100000" in {
+        val claimant = TFCClaimant(currentIncome= Some(TFCIncome(Some(100000.0), None, None)), disability = TFCDisability(), minimumEarnings =
+          TFCMinimumEarnings(), age = None)
+        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+        val fromDate = LocalDate.parse("2000-08-27", formatter)
+        val toDate = LocalDate.parse("2000-08-27", formatter)
+
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant), List())
+
+        tfc.claimants.head.isTotalIncomeLessThan100000(fromDate, tfc.location) shouldBe true
+      }
+
+      "Check if claimant and partner qualify for TFC" in {
+        val claimant = TFCClaimant(hoursPerWeek = 16.50, disability = TFCDisability(), minimumEarnings =
+          TFCMinimumEarnings(), age = None)
+        val partner = TFCClaimant(hoursPerWeek = 17.50, isPartner = true, disability = TFCDisability(), minimumEarnings =
           TFCMinimumEarnings(), age = None)
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
@@ -231,16 +267,13 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val partnerIncome = Some(TFCIncome(Some(99999.0), Some(100.0), Some(100.0)))
         val claimant = TFCClaimant(currentIncome = claimantIncome,
           hoursPerWeek = 9.50,
-          isPartner = false,
           disability = TFCDisability(),
-          carersAllowance = false,
           minimumEarnings = TFCMinimumEarnings(),
           age = None)
         val partner = TFCClaimant(currentIncome = partnerIncome,
           hoursPerWeek = 4.50,
           isPartner = true,
           disability = TFCDisability(),
-          carersAllowance = false,
           minimumEarnings = TFCMinimumEarnings(),
           age = None)
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
@@ -257,16 +290,13 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val partnerIncome = Some(TFCIncome(Some(9999999.0), Some(100.0), Some(100.0)))
         val claimant = TFCClaimant(previousIncome = claimantIncome,
           hoursPerWeek = 16.50,
-          isPartner = false,
           disability = TFCDisability(),
-          carersAllowance = false,
           minimumEarnings = TFCMinimumEarnings(),
           age = None)
         val partner = TFCClaimant(previousIncome = partnerIncome,
           hoursPerWeek = 14.50,
           isPartner = true,
           disability = TFCDisability(),
-          carersAllowance = false,
           minimumEarnings = TFCMinimumEarnings(),
           age = None)
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
@@ -283,16 +313,13 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         val partnerIncome = Some(TFCIncome(Some(99999.0), Some(100.0), Some(100.0)))
         val claimant = TFCClaimant(currentIncome = claimantIncome,
           hoursPerWeek = 9.50,
-          isPartner = false,
           disability = TFCDisability(),
-          carersAllowance = false,
           minimumEarnings = TFCMinimumEarnings(),
           age = None)
         val partner = TFCClaimant(currentIncome = partnerIncome,
           hoursPerWeek = 16.50,
           isPartner = true,
           disability = TFCDisability(),
-          carersAllowance = false,
           minimumEarnings = TFCMinimumEarnings(),
           age = None)
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
@@ -305,9 +332,9 @@ class TFCEligibilityInputSpec extends CCConfigSpec
       }
 
       "claimant qualify if carer's allowance is selected with zero hours worked" in {
-        val claimant = TFCClaimant(hoursPerWeek = 0, isPartner = false, disability = TFCDisability(), carersAllowance = true, minimumEarnings =
+        val claimant = TFCClaimant(hoursPerWeek = 0, disability = TFCDisability(), carersAllowance = true, minimumEarnings =
           TFCMinimumEarnings(), age = None)
-        val partner = TFCClaimant(hoursPerWeek = 16.50, isPartner = true, disability = TFCDisability(), carersAllowance = false, minimumEarnings =
+        val partner = TFCClaimant(hoursPerWeek = 16.50, isPartner = true, disability = TFCDisability(), minimumEarnings =
           TFCMinimumEarnings(), age = None)
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
@@ -322,28 +349,28 @@ class TFCEligibilityInputSpec extends CCConfigSpec
     "getNWMPerAge checks" should {
 
       "check if getNWMPerAge is correct for under-18 year olds" in {
-        val claimant = TFCClaimant(hoursPerWeek = 0, isPartner = false, disability = TFCDisability(), carersAllowance = true, minimumEarnings =
+        val claimant = TFCClaimant(disability = TFCDisability(), carersAllowance = true, minimumEarnings =
           TFCMinimumEarnings(), age = Some("under-18"))
         val taxYearConfig = TFCConfig.getConfig(LocalDate.parse("2000-08-27", formatter), "england")
-        claimant.getNWMPerAge(taxYearConfig)._1 shouldBe (taxYearConfig.nmwUnder18)
+        claimant.getNWMPerAge(taxYearConfig)._1 shouldBe taxYearConfig.nmwUnder18
       }
       "check if getNWMPerAge is correct for 18-20 year olds" in {
-        val claimant = TFCClaimant(hoursPerWeek = 0, isPartner = false, disability = TFCDisability(), carersAllowance = true, minimumEarnings =
+        val claimant = TFCClaimant(disability = TFCDisability(), carersAllowance = true, minimumEarnings =
           TFCMinimumEarnings(), age = Some("18-20"))
         val taxYearConfig = TFCConfig.getConfig(LocalDate.parse("2000-08-27", formatter), "england")
-        claimant.getNWMPerAge(taxYearConfig)._1 shouldBe (taxYearConfig.nmw18To20)
+        claimant.getNWMPerAge(taxYearConfig)._1 shouldBe taxYearConfig.nmw18To20
       }
       "check if getNWMPerAge is correct for 21 -24 year olds" in {
-        val claimant = TFCClaimant(hoursPerWeek = 0, isPartner = false, disability = TFCDisability(), carersAllowance = true, minimumEarnings =
+        val claimant = TFCClaimant(disability = TFCDisability(), carersAllowance = true, minimumEarnings =
           TFCMinimumEarnings(), age = Some("21-24"))
         val taxYearConfig = TFCConfig.getConfig(LocalDate.parse("2000-08-27", formatter), "england")
-        claimant.getNWMPerAge(taxYearConfig)._1 shouldBe (taxYearConfig.nmw21To24)
+        claimant.getNWMPerAge(taxYearConfig)._1 shouldBe taxYearConfig.nmw21To24
       }
       "check if getNWMPerAge is correct for over 25 year olds" in {
-        val claimant = TFCClaimant(hoursPerWeek = 0, isPartner = false, disability = TFCDisability(), carersAllowance = true, minimumEarnings =
+        val claimant = TFCClaimant(disability = TFCDisability(), carersAllowance = true, minimumEarnings =
           TFCMinimumEarnings(), age = Some("25 or over"))
         val taxYearConfig = TFCConfig.getConfig(LocalDate.parse("2000-08-27", formatter), "england")
-        claimant.getNWMPerAge(taxYearConfig)._1 shouldBe (taxYearConfig.nmw25Over)
+        claimant.getNWMPerAge(taxYearConfig)._1 shouldBe taxYearConfig.nmw25Over
       }
     }
 
@@ -351,11 +378,11 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
       "with default values" in {
 
-        val minimumEarnings = TFCMinimumEarnings(selection = false, amount = 0.0)
-        val claimant = TFCClaimant(hoursPerWeek = 0, isPartner = false, disability = TFCDisability(), carersAllowance = true, minimumEarnings =
+        val minimumEarnings = TFCMinimumEarnings(selection = false)
+        val claimant = TFCClaimant(disability = TFCDisability(), carersAllowance = true, minimumEarnings =
           minimumEarnings, age = None)
 
-        val partner = TFCClaimant(hoursPerWeek = 16.50, isPartner = true, disability = TFCDisability(), carersAllowance = false, minimumEarnings =
+        val partner = TFCClaimant(hoursPerWeek = 16.50, isPartner = true, disability = TFCDisability(), minimumEarnings =
           TFCMinimumEarnings(), age = None)
 
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
@@ -369,14 +396,14 @@ class TFCEligibilityInputSpec extends CCConfigSpec
       "with undefined ages, parent - TFCMinimumEarnings(selection = false) selfemployed, partner - apprentice" in {
 
         val minimumEarnings = TFCMinimumEarnings(selection = false)
-        val claimant = TFCClaimant(hoursPerWeek = 0, isPartner = false, disability = TFCDisability(), carersAllowance = true,
+        val claimant = TFCClaimant(disability = TFCDisability(), carersAllowance = true,
           minimumEarnings = minimumEarnings,
           age = None,
           selfEmployedSelection = Some(true),
           employmentStatus = Some("selfEmployed"))
 
-        val minimumEarnings1 = TFCMinimumEarnings(selection = false, amount = 0.00)
-        val partner = TFCClaimant(hoursPerWeek = 16.50, isPartner = true, disability = TFCDisability(), carersAllowance = false,
+        val minimumEarnings1 = TFCMinimumEarnings(selection = false)
+        val partner = TFCClaimant(hoursPerWeek = 16.50, isPartner = true, disability = TFCDisability(),
           minimumEarnings = minimumEarnings1,
           age = None,
           selfEmployedSelection = Some(false),
@@ -389,7 +416,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
       "with an 18-20 old, selfemployed and partner under 18, TFCMinimumEarnings(selection = false, amount = 0.0), apprentice" in {
 
-        val claimant = TFCClaimant(hoursPerWeek = 0, isPartner = false, disability = TFCDisability(), carersAllowance = false,
+        val claimant = TFCClaimant(disability = TFCDisability(),
           minimumEarnings = TFCMinimumEarnings(),
           age = Some("18-20"),
           selfEmployedSelection = Some(true),
@@ -397,7 +424,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
         )
 
         val minimumEarnings1 = TFCMinimumEarnings(selection = false, amount = 70.0)
-        val partner = TFCClaimant(hoursPerWeek = 28.00, isPartner = true, disability = TFCDisability(), carersAllowance = false,
+        val partner = TFCClaimant(hoursPerWeek = 28.00, isPartner = true, disability = TFCDisability(),
           minimumEarnings = minimumEarnings1,
           age = Some("under-18"),
           selfEmployedSelection = Some(false),
