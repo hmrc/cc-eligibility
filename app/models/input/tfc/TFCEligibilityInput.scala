@@ -138,19 +138,19 @@ case class TFCClaimant(
     employmentIncome + otherIncome - pension * ConfigConstants.noOfMonths
   }
 
-  def isWorkingAtLeast16HoursPerWeek (periodStart:LocalDate, location:String) : Boolean = {
+  def isWorkingAtLeast16HoursPerWeek (periodStart: LocalDate, location: String) : Boolean = {
     val taxYearConfig = TFCConfig.getConfig(periodStart, location)
     val minimum : Double = taxYearConfig.minimumHoursWorked
     hoursPerWeek >= minimum
   }
 
-  def isTotalIncomeLessThan100000(periodStart:LocalDate, location: String) : Boolean = {
+  def isTotalIncomeLessThan100000(periodStart: LocalDate, location: String) : Boolean = {
     val taxYearConfig = TFCConfig.getConfig(periodStart, location)
-    val maximumTotalIncome : Double = taxYearConfig.maxIncomePerClaimant
-    (totalIncome - taxYearConfig.personalAllowancePerClaimant) <= maximumTotalIncome
+    val maximumTotalIncome: Double = taxYearConfig.maxIncomePerClaimant
+    totalIncome <= maximumTotalIncome
   }
 
-  def isQualifyingForTFC(periodStart : LocalDate, location: String) : Boolean = {
+  def isQualifyingForTFC(periodStart: LocalDate, location: String) : Boolean = {
       isTotalIncomeLessThan100000(periodStart, location)
   }
 
