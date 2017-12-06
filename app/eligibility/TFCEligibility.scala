@@ -39,12 +39,12 @@ trait TFCEligibility extends TFCRolloutSchemeConfig {
     val childBirthdaySeptDate : java.util.Date = child.endWeek1stOfSeptemberDate(periodFrom, location)
 
     childDob match {
-      case dob if(dob.before(periodFrom.toDate)) =>
+      case dob if dob.before(periodFrom.toDate) =>
         childBirthdaySeptDate match {
           case septDate if septDate.after(periodFrom.toDate) => Some(periodFrom)
           case _ => None
         }
-      case dob if(dob.before(periodUntil.toDate)) => Some(child.dob)
+      case dob if dob.before(periodUntil.toDate) => Some(child.dob)
       case _ => None
     }
   }
@@ -54,7 +54,7 @@ trait TFCEligibility extends TFCRolloutSchemeConfig {
     val childBirthdaySeptDate : java.util.Date = child.endWeek1stOfSeptemberDate(periodFrom, location)
 
     childDob match {
-      case dob if(dob.after(periodUntil.toDate) || dob.equals(periodUntil.toDate)) => None
+      case dob if dob.after(periodUntil.toDate) || dob.equals(periodUntil.toDate) => None
       case _ =>
         childBirthdaySeptDate match {
           case septDate if septDate.after(periodUntil.toDate) => Some(periodUntil)
@@ -135,7 +135,7 @@ trait TFCEligibility extends TFCRolloutSchemeConfig {
   def eligibility(request : TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
 
     val outputPeriods = determineTFCPeriods(request)
-    val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && request.validHouseholdMinimumEarnings
+    val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && request.validHouseholdMinimumEarnings && request.validMaxEarnings
 
     Future {
       TFCEligibilityOutput(

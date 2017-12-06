@@ -140,6 +140,7 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
                 TFCClaimant(
                   disability = TFCDisability(),
                   minimumEarnings = TFCMinimumEarnings(),
+                  maximumEarnings = Some(false),
                   age = None
                 )
               ),

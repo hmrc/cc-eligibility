@@ -60,7 +60,8 @@ trait HHToTFCEligibilityInput extends PeriodEnumToPeriod {
       minimumEarnings = hhMinimumEarningsToTFCMinimumEarnings(claimant.minimumEarnings),
       age = claimant.ageRange.map(x => x.toString),
       employmentStatus = claimant.minimumEarnings.map(x => x.employmentStatus.toString),
-      selfEmployedSelection = claimant.minimumEarnings.flatMap(x => x.selfEmployedIn12Months)
+      selfEmployedSelection = claimant.minimumEarnings.flatMap(x => x.selfEmployedIn12Months),
+      maximumEarnings = claimant.maximumEarnings
     )
   }
 
@@ -71,7 +72,7 @@ trait HHToTFCEligibilityInput extends PeriodEnumToPeriod {
         if (hhMinimumEarnings.amount <= BigDecimal(0.00)) {
           TFCMinimumEarnings(selection = false, amount = BigDecimal(0.00))
         } else {
-          TFCMinimumEarnings(selection = true, amount = hhMinimumEarnings.amount)
+          TFCMinimumEarnings(amount = hhMinimumEarnings.amount)
         }
       }
       case None => TFCMinimumEarnings() //default values will be used
