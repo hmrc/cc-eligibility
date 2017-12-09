@@ -82,7 +82,7 @@ case class TFCEligibilityInput(
         case (_, _) => false
       }
     } else {
-      maxEarningsParent.getOrElse(true) // default to true to ensure existing live application satisfy
+      !maxEarningsParent.getOrElse(false) // default should return true to ensure existing live application satisfy
     }
   }
 
