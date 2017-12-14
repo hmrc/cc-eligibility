@@ -61,12 +61,7 @@ class HHToTFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApp
         )
         val parent = Claimant(
           ageRange = Some(AgeRangeEnum.EIGHTEENTOTWENTY),
-          benefits = Some(Benefits(
-            disabilityBenefits = false,
-            highRateDisabilityBenefits = false,
-            incomeBenefits = false,
-            carersAllowance = false
-          )),
+          benefits = Some(Benefits()),
           lastYearlyIncome = None,
           currentYearlyIncome = Some(Income(employmentIncome = Some(25000),
             pension = Some(1200),
@@ -76,14 +71,16 @@ class HHToTFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApp
           )),
           hours = Some(32),
           minimumEarnings = Some(MinimumEarnings(BigDecimal(3900), Some(EmploymentStatusEnum.SELFEMPLOYED), Some(true))),
-          escVouchers = Some(YesNoUnsureEnum.YES)
+          escVouchers = Some(YesNoUnsureEnum.YES),
+          maximumEarnings = Some(false)
         )
 
         val hhModel = Household(None, Some(LocationEnum.ENGLAND), List(hhChild1, hhChild2), parent, None)
 
         val expectedOutput = TFCEligibilityInput(currentDate, 4, "england",
           List(TFCClaimant(None, Some(TFCIncome(Some(25000), Some(1200), Some(6000))), 32.0, false, TFCDisability(false, false), false,
-            TFCMinimumEarnings(true, 3900), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), Some(Some(EmploymentStatusEnum.SELFEMPLOYED).toString), Some(true))),
+            TFCMinimumEarnings(true, 3900), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), Some(Some(EmploymentStatusEnum.SELFEMPLOYED).toString), Some(true),
+            maximumEarnings = Some(false))),
           List(TFCChild(0, 350, Periods.Monthly, dob, TFCDisability(true, false)),
             TFCChild(1, 100, Periods.Monthly, dob, TFCDisability(false, true))))
 
@@ -115,12 +112,7 @@ class HHToTFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApp
         )
         val parent = Claimant(
           ageRange = Some(AgeRangeEnum.EIGHTEENTOTWENTY),
-          benefits = Some(Benefits(
-            disabilityBenefits = false,
-            highRateDisabilityBenefits = false,
-            incomeBenefits = false,
-            carersAllowance = false
-          )),
+          benefits = Some(Benefits()),
           lastYearlyIncome = None,
           currentYearlyIncome = Some(Income(employmentIncome = Some(12212),
             pension = Some(47674),
@@ -134,12 +126,7 @@ class HHToTFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApp
         )
         val partner = Claimant(
           ageRange = Some(AgeRangeEnum.EIGHTEENTOTWENTY),
-          benefits = Some(Benefits(
-            disabilityBenefits = false,
-            highRateDisabilityBenefits = false,
-            incomeBenefits = false,
-            carersAllowance = false
-          )),
+          benefits = Some(Benefits()),
           lastYearlyIncome = None,
           currentYearlyIncome = Some(Income(employmentIncome = Some(12212),
             pension = Some(47674),

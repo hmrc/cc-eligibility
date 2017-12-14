@@ -41,7 +41,7 @@ case class TFCEligibilityInput(
                                 children: List[TFCChild]
                 ) {
 
-  def validHouseholdMinimumEarnings(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): (Boolean) = {
+  def validHouseholdMinimumEarnings(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
     val parent = claimants.head
     val minEarningsParent = parent.satisfyMinimumEarnings(from, parent = true, location)
     if(claimants.length > 1) {
@@ -67,6 +67,25 @@ case class TFCEligibilityInput(
       minEarningsParent
     }
   }
+
+  def validMaxEarnings(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
+    val parent = claimants.head
+    val maxEarningsParent = parent.maximumEarnings
+
+    if(claimants.length > 1) {
+      val partner = claimants.last
+      val maxEarningsPartner = partner.maximumEarnings
+
+      (maxEarningsParent, maxEarningsPartner) match {
+        case (Some(false), Some(false)) => true
+        case (None, None) => true // to ensure existing live application satisfy
+        case (_, _) => false
+      }
+    } else {
+      !maxEarningsParent.getOrElse(false) // default should return true to ensure existing live application satisfy
+    }
+  }
+
 }
 
 object TFCEligibilityInput extends CCFormat with MessagesObject {
@@ -107,7 +126,8 @@ case class TFCClaimant(
                         minimumEarnings: TFCMinimumEarnings,
                         age: Option[String],
                         employmentStatus: Option[String] = None,
-                        selfEmployedSelection: Option[Boolean] = None
+                        selfEmployedSelection: Option[Boolean] = None,
+                        maximumEarnings: Option[Boolean] = None
                      ) {
 
   def totalIncome: BigDecimal = {
@@ -203,7 +223,8 @@ object TFCClaimant {
                 (JsPath \ "minimumEarnings").read[TFCMinimumEarnings] and
                   (JsPath \ "age").readNullable[String] and
                     (JsPath \ "employmentStatus").readNullable[String] and
-                      (JsPath \ "selfEmployedSelection").readNullable[Boolean]
+                      (JsPath \ "selfEmployedSelection").readNullable[Boolean] and
+                        (JsPath \ "maximumEarnings").readNullable[Boolean]
     )(TFCClaimant.apply _)
 }
 
