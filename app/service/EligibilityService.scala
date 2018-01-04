@@ -22,6 +22,7 @@ import models.Household
 import models.input.CalculatorOutput
 import models.mappings._
 import models.output.{CalculatorInput, SchemeResults}
+import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -42,6 +43,7 @@ trait EligibilityService {
   val FreeEntitlementEligibilityInput: HHToFree30hoursEligibilityInput
 
   def eligibility(request: Household)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[SchemeResults] = {
+    Logger.info("In Eligibility")
     for {
       tcEligibility <- tc.eligibility(TCEligibilityInput.convert(request))
       tfcEligibility <- tfc.eligibility(TFCEligibilityInput.convert(request))
@@ -54,7 +56,10 @@ trait EligibilityService {
 
       calcOutput <- {
         if (calcInput.esc.isDefined || calcInput.tc.isDefined || calcInput.tfc.isDefined) {
-          calcConnector.getCalculatorResult(calcInput)
+          Logger.info("In CalcOutput check")
+          val calculationResult = calcConnector.getCalculatorResult(calcInput)
+          Logger.info("calculationResult is ::: " + calculationResult)
+          calculationResult
         } else {
           Future(CalculatorOutput())
         }

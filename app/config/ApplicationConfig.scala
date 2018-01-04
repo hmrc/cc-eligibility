@@ -16,12 +16,17 @@
 
 package config
 
+import play.api.Logger
 import uk.gov.hmrc.play.config.ServicesConfig
 
 object ApplicationConfig extends ApplicationConfig
 
 trait ApplicationConfig extends ServicesConfig {
 
-  lazy val calculatorUrl = baseUrl("cc-calculator") + getString("microservice.services.cc-calculator.url")
+  lazy val calculatorUrl = {
+    Logger.info("Calculation Url ::::  "+baseUrl("cc-calculator") + getString("microservice.services.cc-calculator.url"))
+    baseUrl("cc-calculator") + getString("microservice.services.cc-calculator.url")
+  }
+
 
 }
