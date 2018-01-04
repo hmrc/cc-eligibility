@@ -57,7 +57,9 @@ trait EligibilityService {
       calcOutput <- {
         if (calcInput.esc.isDefined || calcInput.tc.isDefined || calcInput.tfc.isDefined) {
           Logger.info("In CalcOutput check")
-          calcConnector.getCalculatorResult(calcInput)
+          val calculationResult = calcConnector.getCalculatorResult(calcInput)
+          Logger.info("calculationResult is ::: " + calculationResult)
+          calculationResult
         } else {
           Future(CalculatorOutput())
         }

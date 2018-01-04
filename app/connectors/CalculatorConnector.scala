@@ -19,7 +19,9 @@ package connectors
 import config.{ApplicationConfig, WSHttp}
 import models.input.CalculatorOutput
 import models.output.CalculatorInput
+import play.api.Logger
 import uk.gov.hmrc.http.{HeaderCarrier, HttpPost}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -32,6 +34,7 @@ trait CalculatorConnector {
   def httpPost: HttpPost
 
   def getCalculatorResult(calculatorInput: CalculatorInput)(implicit hc: HeaderCarrier): Future[CalculatorOutput] = {
+    Logger.info("In CalculatorConnector and url is ::: " + ApplicationConfig.calculatorUrl)
     httpPost.POST[CalculatorInput, CalculatorOutput](ApplicationConfig.calculatorUrl, calculatorInput)
   }
 }
