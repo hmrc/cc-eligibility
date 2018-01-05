@@ -16,7 +16,6 @@
 
 package models.mappings
 
-import config.ApplicationConfig
 import models._
 import models.input.tc._
 import org.joda.time.LocalDate

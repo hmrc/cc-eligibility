@@ -19,10 +19,10 @@ package utils
 import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import play.api.Configuration
+import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
-import org.mockito.Matchers._
+import play.api.Configuration
 
 class SchemeConfigSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
 

@@ -23,7 +23,6 @@ import models.mappings._
 import org.joda.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
-import play.api.libs.json.Json
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.{CCConfig, CCConfigSpec, Periods}
 

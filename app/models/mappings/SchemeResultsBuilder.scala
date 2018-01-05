@@ -18,10 +18,10 @@ package models.mappings
 
 import models.SchemeEnum
 import models.input.CalculatorOutput
-import models.output.{EscClaimantEligibility, Scheme, SchemeResults, TaxCreditsEligibility}
 import models.output.esc.ESCEligibilityOutput
-import models.output.tfc.TFCEligibilityOutput
 import models.output.tc.TCEligibilityOutput
+import models.output.tfc.TFCEligibilityOutput
+import models.output.{EscClaimantEligibility, Scheme, SchemeResults, TaxCreditsEligibility}
 
 trait SchemeResultsBuilder{
 

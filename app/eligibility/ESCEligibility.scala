@@ -17,7 +17,7 @@
 package eligibility
 
 import models.input.esc._
-import models.{LocationEnum, output}
+import models.output
 import models.output.esc.ESCEligibilityOutput
 import org.joda.time.LocalDate
 import utils.MessagesObject

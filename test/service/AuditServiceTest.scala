@@ -18,11 +18,11 @@ package service
 
 import config.MicroserviceAuditConnector
 import play.api.test.FakeRequest
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.logging.{ForwardedFor, SessionId}
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.DataEvent
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.logging.{ForwardedFor, SessionId}
 import utils.CCConfigSpec
 
 import scala.concurrent.{ExecutionContext, Future}

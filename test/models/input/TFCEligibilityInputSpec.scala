@@ -22,14 +22,14 @@ import controllers.FakeCCEligibilityApplication
 import models.input.tfc._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import org.scalatest.mock.MockitoSugar
 import org.mockito.Matchers._
-import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.{CCConfigSpec, Periods, TFCConfig}
 import org.mockito.Mockito._
+import org.scalatest.mock.MockitoSugar
+import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.mvc.Request
 import play.api.test.FakeRequest
+import uk.gov.hmrc.http.HeaderCarrier
+import utils.{CCConfigSpec, Periods, TFCConfig}
 
 class TFCEligibilityInputSpec extends CCConfigSpec
   with FakeCCEligibilityApplication

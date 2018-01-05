@@ -17,7 +17,6 @@
 package utils
 
 import models.input.tfc.TFCChild
-import org.joda.time.LocalDate
 import play.api.Configuration
 
 trait TFCRolloutSchemeConfig extends CCConfig {

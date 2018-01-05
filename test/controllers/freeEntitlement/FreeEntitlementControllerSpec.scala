@@ -20,18 +20,18 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import eligibility.FreeEntitlementEligibility
 import models.input.freeEntitlement.FreeEntitlementEligibilityInput
-import models.output.freeEntitlement.{ThirtyHoursEligibilityModel, FifteenHoursEligibilityModel}
-import org.scalatest.mock.MockitoSugar
-import org.scalatestplus.play.OneAppPerSuite
-import play.api.test.FakeRequest
-import play.api.http.Status.{NOT_FOUND, OK}
-import play.api.test.Helpers.{POST, route}
-import uk.gov.hmrc.play.test.UnitSpec
-import play.api.test.Helpers._
-import service.AuditEvents
+import models.output.freeEntitlement.{FifteenHoursEligibilityModel, ThirtyHoursEligibilityModel}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
+import org.scalatest.mock.MockitoSugar
+import org.scalatestplus.play.OneAppPerSuite
+import play.api.http.Status.{NOT_FOUND, OK}
 import play.api.libs.json.{JsValue, Json}
+import play.api.test.FakeRequest
+import play.api.test.Helpers.{POST, route, _}
+import service.AuditEvents
+import uk.gov.hmrc.play.test.UnitSpec
+
 import scala.concurrent.Future
 
 class FreeEntitlementControllerSpec extends UnitSpec with OneAppPerSuite with MockitoSugar {

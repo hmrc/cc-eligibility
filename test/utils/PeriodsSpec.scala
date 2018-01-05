@@ -17,7 +17,6 @@
 package utils
 
 import controllers.FakeCCEligibilityApplication
-import play.api.i18n.Messages
 import play.api.libs.json.{JsError, JsString, Json}
 
 /**

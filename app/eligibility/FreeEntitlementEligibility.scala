@@ -22,7 +22,8 @@ import models.output.freeEntitlement.{FifteenHoursEligibilityModel, ThirtyHoursE
 import org.joda.time.LocalDate
 import play.api.Configuration
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.{ChildHelper, CCConfig}
+import utils.{CCConfig, ChildHelper}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

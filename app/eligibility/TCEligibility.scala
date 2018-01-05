@@ -16,11 +16,11 @@
 
 package eligibility
 
-import models.input.tc.{TCIncome, TCChild, TCEligibilityInput, TCTaxYear}
-
-import models.output.tc.{TCChildElements, TCDisability, TCOutputChild, TCEligibilityOutput}
+import models.input.tc.{TCChild, TCEligibilityInput, TCIncome, TCTaxYear}
+import models.output.tc.{TCChildElements, TCDisability, TCEligibilityOutput, TCOutputChild}
 import org.joda.time.LocalDate
 import utils.{MessagesObject, TCConfig}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

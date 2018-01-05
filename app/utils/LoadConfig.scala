@@ -16,7 +16,7 @@
 
 package utils
 
-import play.api.{Play, Configuration}
+import play.api.{Configuration, Play}
 
 trait LoadConfig {
   val conf = Play.current.injector.instanceOf[Configuration]

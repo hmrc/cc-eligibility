@@ -22,7 +22,6 @@ import models.input.esc._
 import models.output.esc.{ESCEligibilityOutput, ESCPeriod}
 import org.joda.time.LocalDate
 import org.scalatest.mock.MockitoSugar
-import play.api.libs.json.Json
 import utils.CCConfigSpec
 
 import scala.concurrent.Future
