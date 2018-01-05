@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import models.mappings._
 import org.joda.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
-import play.api.libs.json.Json
 import uk.gov.hmrc.play.test.UnitSpec
 import utils.{CCConfig, CCConfigSpec, Periods}
 

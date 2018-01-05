@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package eligibility
 
-import models.input.tc.{TCIncome, TCChild, TCEligibilityInput, TCTaxYear}
-
-import models.output.tc.{TCChildElements, TCDisability, TCOutputChild, TCEligibilityOutput}
+import models.input.tc.{TCChild, TCEligibilityInput, TCIncome, TCTaxYear}
+import models.output.tc.{TCChildElements, TCDisability, TCEligibilityOutput, TCOutputChild}
 import org.joda.time.LocalDate
 import utils.{MessagesObject, TCConfig}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

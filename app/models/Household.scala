@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
 package models
 
 import models.AgeRangeEnum.AgeRangeEnum
-import models.LocationEnum.LocationEnum
 import models.CreditsEnum.CreditsEnum
-import models.YesNoUnsureEnum.YesNoUnsureEnum
 import models.EmploymentStatusEnum.EmploymentStatusEnum
+import models.LocationEnum.LocationEnum
 import models.PeriodEnum.PeriodEnum
+import models.YesNoUnsureEnum.YesNoUnsureEnum
 import org.joda.time.LocalDate
 import play.api.libs.json.Json
 
@@ -137,4 +137,3 @@ case class Household(
 object Household {
   implicit val formatHousehold = Json.format[Household]
 }
-

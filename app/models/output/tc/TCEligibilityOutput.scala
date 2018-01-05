@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package models.output.tc
 
 import models.input.tc.TCIncome
 import org.joda.time.LocalDate
-import play.api.libs.json.{Writes, Json}
+import play.api.libs.json.{Json, Writes}
 import utils.Periods
 
 case class TCEligibilityOutput(

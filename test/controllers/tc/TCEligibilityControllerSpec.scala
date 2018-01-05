@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,6 @@ import controllers.FakeCCEligibilityApplication
 import eligibility.TCEligibility
 import models.input.tc.TCEligibilityInput
 import models.output.tc.TCEligibilityOutput
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
 import org.mockito.Matchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar

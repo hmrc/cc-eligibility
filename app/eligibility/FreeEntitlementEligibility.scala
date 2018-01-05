@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ import models.output.freeEntitlement.{FifteenHoursEligibilityModel, ThirtyHoursE
 import org.joda.time.LocalDate
 import play.api.Configuration
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.{ChildHelper, CCConfig}
+import utils.{CCConfig, ChildHelper}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,13 @@ import config.WSHttp
 import controllers.FakeCCEligibilityApplication
 import models.input.CalculatorOutput
 import models.output.CalculatorInput
-import org.scalatest.BeforeAndAfterEach
-import org.mockito.Mockito._
 import org.mockito.Matchers._
+import org.mockito.Mockito._
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mock.MockitoSugar
 import uk.gov.hmrc.http.HttpPost
 import uk.gov.hmrc.play.test.UnitSpec
+
 import scala.concurrent.Future
 
 class CalculatorConnectorSpec extends UnitSpec with MockitoSugar with FakeCCEligibilityApplication with BeforeAndAfterEach {

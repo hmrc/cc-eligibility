@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,24 +21,24 @@ import controllers.FakeCCEligibilityApplication
 import eligibility.{ESCEligibility, FreeEntitlementEligibility, TCEligibility, TFCEligibility}
 import models.input.CalculatorOutput
 import models.mappings.{HHToESCEligibilityInput, HHToFree30hoursEligibilityInput, HHToTCEligibilityInput, HHToTFCEligibilityInput}
-import models.output.{EscClaimantEligibility, Scheme, SchemeResults, TaxCreditsEligibility}
 import models.output.esc.{ESCEligibilityOutput, ESCTaxYear}
 import models.output.freeEntitlement.ThirtyHoursEligibilityModel
 import models.output.tc.{TCEligibilityOutput, TCTaxYear}
 import models.output.tfc._
+import models.output.{EscClaimantEligibility, Scheme, SchemeResults, TaxCreditsEligibility}
 import models.{Claimant, Household, LocationEnum, SchemeEnum}
 import org.joda.time.LocalDate
-import org.scalatest.mock.MockitoSugar
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
+import org.scalatest.mock.MockitoSugar
 import play.api.mvc.Request
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
-import scala.concurrent.{Await, Future}
-import scala.concurrent.duration.Duration
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 
 class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication with MockitoSugar {
 
