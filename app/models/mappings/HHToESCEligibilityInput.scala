@@ -70,15 +70,14 @@ trait HHToESCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
       currentIncome = parent.currentYearlyIncome.map(x => ESCIncome(x.employmentIncome, x.pension, x.taxCode))
     )
 
-    if (partner.isDefined) {
-      List(newParent, ESCClaimant(isPartner = true,
-        employerProvidesESC = escVouchersAvailable(partner.get),
-        previousIncome = parent.lastYearlyIncome.map(x => ESCIncome(x.employmentIncome, x.pension, x.taxCode)),
-        currentIncome = parent.currentYearlyIncome.map(x => ESCIncome(x.employmentIncome, x.pension, x.taxCode))))
+    partner.fold(List(newParent)) {
+      p =>
+        List(newParent, ESCClaimant(isPartner = true,
+          employerProvidesESC = escVouchersAvailable(partner.get),
+          previousIncome = p.lastYearlyIncome.map(x => ESCIncome(x.employmentIncome, x.pension, x.taxCode)),
+          currentIncome = p.currentYearlyIncome.map(x => ESCIncome(x.employmentIncome, x.pension, x.taxCode))))
     }
-    else {
-      List(newParent)
-    }
+
   }
 
   private def escVouchersAvailable(claimant: Claimant): Boolean = {

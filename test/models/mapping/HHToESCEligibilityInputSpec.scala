@@ -54,11 +54,70 @@ class HHToESCEligibilityInputSpec extends UnitSpec
           ESCTaxYear(LocalDate.now(),
             LocalDate.parse("2018-04-06"),
             List(ESCClaimant(false, true,
-              Some(ESCIncome(Some(20000.0),Some(200.0))),Some(ESCIncome(Some(30000.0),Some(200.0), Some("1100L"))))), List()),
+              Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List()),
           ESCTaxYear(LocalDate.parse("2018-04-06"),
             LocalDate.now().plusYears(1),
             List(ESCClaimant(false, true,
-              Some(ESCIncome(Some(20000.0),Some(200.0))),Some(ESCIncome(Some(30000.0),Some(200.0), Some("1100L"))))), List())))
+              Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List())))
+
+        when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
+
+        SUT.convert(household) shouldBe res
+      }
+
+      "given a household with parent not working, partner working and single child" in {
+
+        val currentDate = LocalDate.parse("2017-08-01")
+        val dob = LocalDate.now().minusYears(2)
+
+        val children = List(
+          Child(
+            1,
+            "Child1",
+            Some(dob),
+            Some(Disability(true, false, false)),
+            Some(ChildCareCost(period = Some(PeriodEnum.MONTHLY)))
+          )
+        )
+
+        val household = Household(children = children,
+          parent = Claimant(lastYearlyIncome = None,
+            currentYearlyIncome = None,
+            escVouchers = Some(YesNoUnsureEnum.NO)),
+          partner = Some(Claimant(lastYearlyIncome = Some(Income(Some(20000.00), Some(200.00), Some(500.00))),
+            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00), None, None, Some("1100L"))),
+            escVouchers = Some(YesNoUnsureEnum.YES))))
+
+        val res = ESCEligibilityInput(List(
+          ESCTaxYear(LocalDate.now(),
+            LocalDate.parse("2018-04-06"),
+            List(
+              ESCClaimant(false, false, None),
+              ESCClaimant(true, true,
+                Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))),
+            List(
+              ESCChild(
+                1,
+                dob,
+                0,
+                Periods.Monthly,
+                ESCDisability(true, false)
+              )
+            )),
+          ESCTaxYear(LocalDate.parse("2018-04-06"),
+            LocalDate.now().plusYears(1),
+            List(
+              ESCClaimant(false, false, None),
+              ESCClaimant(true, true,
+                Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List(
+              ESCChild(
+                1,
+                dob,
+                0,
+                Periods.Monthly,
+                ESCDisability(true, false)
+              )
+            ))))
 
         when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
 
@@ -79,15 +138,15 @@ class HHToESCEligibilityInputSpec extends UnitSpec
           ESCTaxYear(LocalDate.now(),
             LocalDate.parse("2018-04-06"),
             List(ESCClaimant(false, true,
-              Some(ESCIncome(Some(20000.0),Some(200.0))),Some(ESCIncome(Some(30000.0),Some(200.0)))),
+              Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0)))),
               ESCClaimant(true, false,
-                Some(ESCIncome(Some(20000.0),Some(200.0))),Some(ESCIncome(Some(30000.0),Some(200.0))))), List()),
+                Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0))))), List()),
           ESCTaxYear(LocalDate.parse("2018-04-06"),
             LocalDate.now().plusYears(1),
             List(ESCClaimant(false, true,
-              Some(ESCIncome(Some(20000.0),Some(200.0))),Some(ESCIncome(Some(30000.0),Some(200.0)))),
+              Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0)))),
               ESCClaimant(true, false,
-                Some(ESCIncome(Some(20000.0),Some(200.0))),Some(ESCIncome(Some(30000.0),Some(200.0))))), List())))
+                Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0))))), List())))
 
         when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
 
@@ -219,11 +278,11 @@ class HHToESCEligibilityInputSpec extends UnitSpec
           ESCTaxYear(LocalDate.now(),
             LocalDate.parse("2018-04-06"),
             List(ESCClaimant(false, true,
-              None, Some(ESCIncome(Some(30000.0),Some(200.0), Some("1200L"))))), List()),
+              None, Some(ESCIncome(Some(30000.0), Some(200.0), Some("1200L"))))), List()),
           ESCTaxYear(LocalDate.parse("2018-04-06"),
             LocalDate.now().plusYears(1),
             List(ESCClaimant(false, true,
-              None,Some(ESCIncome(Some(30000.0),Some(200.0), Some("1200L"))))), List())))
+              None, Some(ESCIncome(Some(30000.0), Some(200.0), Some("1200L"))))), List())))
 
         when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
 
@@ -233,4 +292,5 @@ class HHToESCEligibilityInputSpec extends UnitSpec
     }
 
   }
+
 }
