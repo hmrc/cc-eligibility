@@ -39,7 +39,8 @@ case class TCClaimant(
                      hoursPerWeek: Double,
                      isPartner: Boolean,
                      disability: TCDisability,
-                     carersAllowance: Boolean
+                     carersAllowance: Boolean,
+                     incomeBenefits: Boolean
                    ) {
 
   def getDisabilityElement(periodStart: LocalDate): Boolean = {
@@ -60,7 +61,8 @@ object TCClaimant {
     (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
       (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
         (JsPath \ "disability").read[TCDisability] and
-          (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false))
+          (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false)) and
+      (JsPath \ "incomeBenefits").read[Boolean].orElse(Reads.pure(false))
     ) (TCClaimant.apply _)
 
 }

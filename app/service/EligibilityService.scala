@@ -52,6 +52,7 @@ trait EligibilityService {
         if (tfcEligibility.householdEligibility) Some(tfcEligibility) else None,
         if (escEligibility.eligibility) Some(escEligibility) else None)
 
+
       calcOutput <- {
         if (calcInput.esc.isDefined || calcInput.tc.isDefined || calcInput.tfc.isDefined) {
           calcConnector.getCalculatorResult(calcInput)
@@ -65,7 +66,6 @@ trait EligibilityService {
       val escResult: SchemeResults = SchemeResultsBuilder.buildESCResults(escEligibility, Some(calcOutput), SchemeResults(List()))
       val tcResult: SchemeResults = SchemeResultsBuilder.buildTCResults(tcEligibility, Some(calcOutput), escResult)
       val tfcResult: SchemeResults = SchemeResultsBuilder.buildTFCResults(tfcEligibility, Some(calcOutput), tcResult)
-
       tfcResult.copy(thirtyHrsRollout = thirtyHoursEligibility.rollout)
     }
 
