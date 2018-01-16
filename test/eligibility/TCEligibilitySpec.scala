@@ -760,6 +760,26 @@ class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication w
       result shouldBe List(outputChild1, outputChild2, outputChild3, outputChild4)
     }
 
+    "set doesnottaper to true when we have incomebenefits" in {
+      val periodStartDate = LocalDate.parse("2017-08-31", formatter)
+
+      val claimant = TCClaimant(isPartner = false, hoursPerWeek = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false,incomeBenefits =  true)
+      val ty = TCTaxYear(from = periodStartDate, until = periodStartDate, claimants = List(claimant), children = List())
+
+      val result = TCEligibility.determineClaimantsEligibilityForPeriod(ty)
+      result(0).doesNotTaper shouldBe true
+    }
+
+    "set doesnottaper to false when we don't have incomebenefits" in {
+      val periodStartDate = LocalDate.parse("2017-08-31", formatter)
+
+      val claimant = TCClaimant(isPartner = false, hoursPerWeek = 16, disability = TCDisability(disabled = false, severelyDisabled = false), carersAllowance = false,incomeBenefits =  false)
+      val ty = TCTaxYear(from = periodStartDate, until = periodStartDate, claimants = List(claimant), children = List())
+
+      val result = TCEligibility.determineClaimantsEligibilityForPeriod(ty)
+      result(0).doesNotTaper shouldBe false
+    }
+
     "populate the claimant's elements model for a period (1 claimant, non-disabled, qualifying)" in {
       val periodStartDate = LocalDate.parse("2017-08-31", formatter)
 
