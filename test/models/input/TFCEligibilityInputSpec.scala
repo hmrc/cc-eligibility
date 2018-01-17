@@ -509,5 +509,79 @@ class TFCEligibilityInputSpec extends CCConfigSpec
       }
     }
 
+    "validMaxEarnings" should {
+
+      val claimant = TFCClaimant(hoursPerWeek = 16.50, disability = TFCDisability(), minimumEarnings =
+        TFCMinimumEarnings(), age = None)
+
+      val partner = TFCClaimant(hoursPerWeek = 17.50, isPartner = true, disability = TFCDisability(), minimumEarnings =
+        TFCMinimumEarnings(), age = None)
+
+
+      "return true when its single parent journey when parent max earnings does not exist" in {
+        val parent = claimant.copy(maximumEarnings = None)
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(parent), List())
+
+        tfc.validMaxEarnings(req, hc) shouldBe true
+      }
+
+      "return true when its single parent journey and max earnings is false" in {
+        val parent = claimant.copy(maximumEarnings = Some(false))
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(parent), List())
+
+        tfc.validMaxEarnings(req, hc) shouldBe true
+      }
+
+      //This test is for live service (old one)
+      "return true when journey is with partner and max earnings for both parents does not exist" in {
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+
+        tfc.validMaxEarnings(req, hc) shouldBe true
+      }
+
+      "return true when journey is with partner and both parents have max earnings as false" in {
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england",
+          List(claimant.copy(maximumEarnings = Some(false)), partner.copy(maximumEarnings = Some(false))), List())
+
+        tfc.validMaxEarnings(req, hc) shouldBe true
+      }
+
+      "return true when journey is with partner, parent has false for max earnings and partner max earnings does not exist" in {
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england",
+          List(claimant.copy(maximumEarnings = Some(false)), partner), List())
+
+        tfc.validMaxEarnings(req, hc) shouldBe true
+      }
+
+      "return true when journey is with partner, partner has false for max earnings and parent max earnings does not exist" in {
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england",
+          List(claimant, partner.copy(maximumEarnings = Some(false))), List())
+
+        tfc.validMaxEarnings(req, hc) shouldBe true
+      }
+
+      "return false when journey is with partner and both parents have max earnings as true" in {
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england",
+          List(claimant.copy(maximumEarnings = Some(true)), partner.copy(maximumEarnings = Some(true))), List())
+
+        tfc.validMaxEarnings(req, hc) shouldBe false
+      }
+
+      "return true when journey is with partner, partner has true for max earnings and parent max earnings does not exist" in {
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england",
+          List(claimant, partner.copy(maximumEarnings = Some(true))), List())
+
+        tfc.validMaxEarnings(req, hc) shouldBe false
+      }
+
+      "return true when journey is with partner, parent has true for max earnings and partner max earnings does not exist" in {
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england",
+          List(claimant.copy(maximumEarnings = Some(true)), partner), List())
+
+        tfc.validMaxEarnings(req, hc) shouldBe false
+      }
+
+    }
+
   }
 }
