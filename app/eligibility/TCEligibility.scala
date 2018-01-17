@@ -128,7 +128,7 @@ trait TCEligibility extends CCEligibilityHelpers with MessagesObject {
         claimantDisability = TCDisability(
           disability = claimantIsDisabled,
           severeDisability = claimantIsSeverelyDisabled
-        )
+        ),claimant.incomeBenefits
       )
       outputClaimant
     }
