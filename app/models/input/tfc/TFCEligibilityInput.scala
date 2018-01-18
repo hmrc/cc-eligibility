@@ -79,6 +79,8 @@ case class TFCEligibilityInput(
       (maxEarningsParent, maxEarningsPartner) match {
         case (Some(false), Some(false)) => true
         case (None, None) => true // to ensure existing live application satisfy
+        case (Some(false), None) => true
+        case (None, Some(false)) => true
         case (_, _) => false
       }
     } else {
