@@ -519,8 +519,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
 
       "return true when its single parent journey when parent max earnings does not exist" in {
-        val parent = claimant.copy(maximumEarnings = None)
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(parent), List())
+        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant), List())
 
         tfc.validMaxEarnings(req, hc) shouldBe true
       }
