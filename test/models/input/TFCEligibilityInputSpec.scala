@@ -517,7 +517,6 @@ class TFCEligibilityInputSpec extends CCConfigSpec
       val partner = TFCClaimant(hoursPerWeek = 17.50, isPartner = true, disability = TFCDisability(), minimumEarnings =
         TFCMinimumEarnings(), age = None)
 
-
       "return true when its single parent journey when parent max earnings does not exist" in {
         val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant), List())
 
@@ -579,7 +578,6 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
         tfc.validMaxEarnings(req, hc) shouldBe false
       }
-
     }
 
   }
