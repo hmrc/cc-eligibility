@@ -35,6 +35,8 @@ class HHToTCEligibilityInputSpec extends UnitSpec
     override val cCConfig: CCConfig = mock[CCConfig]
   }
 
+  val testYear = LocalDate.now().plusYears(1).getYear
+
   "HHToTCEligibilityInput" should {
 
     "have reference to CCConfig" in {
@@ -45,7 +47,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
       "given a household with parent and no partner no children" in {
 
         val currentDate = LocalDate.now
-        val fourthApril = LocalDate.parse("2018-04-06")
+        val fourthApril = LocalDate.parse(s"$testYear-04-06")
 
         val benefits: Benefits = Benefits(
           disabilityBenefits = false,
@@ -119,7 +121,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
 
       "given a household with parent and a partner with no children" in {
         val currentDate = LocalDate.now
-        val fourthApril = LocalDate.parse("2018-04-06")
+        val fourthApril = LocalDate.parse(s"$testYear-04-06")
 
         val benefits: Benefits = Benefits(
           disabilityBenefits = false,

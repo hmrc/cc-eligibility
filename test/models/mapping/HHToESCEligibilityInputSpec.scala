@@ -35,6 +35,8 @@ class HHToESCEligibilityInputSpec extends UnitSpec
     override val cCConfig: CCConfig = mock[CCConfig]
   }
 
+  val testYear = LocalDate.now().plusYears(1).getYear
+
   "HHToESCEligibilityInput" should {
 
     "have reference to CCConfig" in {
@@ -52,10 +54,10 @@ class HHToESCEligibilityInputSpec extends UnitSpec
 
         val res = ESCEligibilityInput(List(
           ESCTaxYear(LocalDate.now(),
-            LocalDate.parse("2018-04-06"),
+            LocalDate.parse(s"$testYear-04-06"),
             List(ESCClaimant(false, true,
               Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List()),
-          ESCTaxYear(LocalDate.parse("2018-04-06"),
+          ESCTaxYear(LocalDate.parse(s"$testYear-04-06"),
             LocalDate.now().plusYears(1),
             List(ESCClaimant(false, true,
               Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List())))
@@ -90,7 +92,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
 
         val res = ESCEligibilityInput(List(
           ESCTaxYear(LocalDate.now(),
-            LocalDate.parse("2018-04-06"),
+            LocalDate.parse(s"$testYear-04-06"),
             List(
               ESCClaimant(false, false, None),
               ESCClaimant(true, true,
@@ -104,7 +106,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
                 ESCDisability(true, false)
               )
             )),
-          ESCTaxYear(LocalDate.parse("2018-04-06"),
+          ESCTaxYear(LocalDate.parse(s"$testYear-04-06"),
             LocalDate.now().plusYears(1),
             List(
               ESCClaimant(false, false, None),
@@ -136,12 +138,12 @@ class HHToESCEligibilityInputSpec extends UnitSpec
 
         val res = ESCEligibilityInput(List(
           ESCTaxYear(LocalDate.now(),
-            LocalDate.parse("2018-04-06"),
+            LocalDate.parse(s"$testYear-04-06"),
             List(ESCClaimant(false, false,
               Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0)))),
               ESCClaimant(true, false,
                 Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0))))), List()),
-          ESCTaxYear(LocalDate.parse("2018-04-06"),
+          ESCTaxYear(LocalDate.parse(s"$testYear-04-06"),
             LocalDate.now().plusYears(1),
             List(ESCClaimant(false, false,
               Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0)))),
@@ -276,10 +278,10 @@ class HHToESCEligibilityInputSpec extends UnitSpec
 
         val res = ESCEligibilityInput(List(
           ESCTaxYear(LocalDate.now(),
-            LocalDate.parse("2018-04-06"),
+            LocalDate.parse(s"$testYear-04-06"),
             List(ESCClaimant(false, false,
               None, Some(ESCIncome(Some(30000.0), Some(200.0), Some("1200L"))))), List()),
-          ESCTaxYear(LocalDate.parse("2018-04-06"),
+          ESCTaxYear(LocalDate.parse(s"$testYear-04-06"),
             LocalDate.now().plusYears(1),
             List(ESCClaimant(false, false,
               None, Some(ESCIncome(Some(30000.0), Some(200.0), Some("1200L"))))), List())))
