@@ -19,7 +19,7 @@ package utils
 import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.Configuration

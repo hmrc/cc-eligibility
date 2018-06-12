@@ -19,7 +19,7 @@ package controllers
 import com.github.fge.jackson.JsonLoader
 import models.Household
 import models.output.SchemeResults
-import org.mockito.Matchers.{eq => mockEq, _}
+import org.mockito.ArgumentMatchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.http.Status

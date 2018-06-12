@@ -22,7 +22,7 @@ import controllers.FakeCCEligibilityApplication
 import models.input.tfc._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}

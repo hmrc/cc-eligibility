@@ -21,7 +21,7 @@ import com.github.fge.jackson.JsonLoader
 import eligibility.FreeEntitlementEligibility
 import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.output.freeEntitlement.{FifteenHoursEligibilityModel, ThirtyHoursEligibilityModel}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneAppPerSuite

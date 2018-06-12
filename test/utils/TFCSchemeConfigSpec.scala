@@ -19,7 +19,7 @@ package utils
 import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import org.mockito.Matchers.anyString
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks.forAll

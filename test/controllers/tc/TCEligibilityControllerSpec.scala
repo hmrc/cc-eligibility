@@ -21,7 +21,7 @@ import controllers.FakeCCEligibilityApplication
 import eligibility.TCEligibility
 import models.input.tc.TCEligibilityInput
 import models.output.tc.TCEligibilityOutput
-import org.mockito.Matchers.{eq => mockEq, _}
+import org.mockito.ArgumentMatchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.http.Status

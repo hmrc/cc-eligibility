@@ -22,7 +22,7 @@ import eligibility.ESCEligibility
 import models.input.esc.ESCEligibilityInput
 import models.output.esc.ESCEligibilityOutput
 import org.joda.time.LocalDate
-import org.mockito.Matchers.{eq => mockEq, _}
+import org.mockito.ArgumentMatchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import play.api.http.Status

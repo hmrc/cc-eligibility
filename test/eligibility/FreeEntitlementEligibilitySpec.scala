@@ -21,8 +21,8 @@ import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.input.tfc._
 import models.output.tfc.TFCEligibilityOutput
 import org.joda.time.LocalDate
-import org.mockito.Matchers
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks._
@@ -119,7 +119,7 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
           val tfcEligibility = mock[TFCEligibility]
           val testYear = LocalDate.now().minusYears(4).getYear
           val mockConfiguration = mock[Configuration]
-          when(mockConfiguration.getString(Matchers.any(), Matchers.any()))
+          when(mockConfiguration.getString(ArgumentMatchers.any(), ArgumentMatchers.any()))
             .thenReturn(Some(s"01-04-$testYear"))
           override def loadConfigByType(configType: String, currentDate: LocalDate = LocalDate.now): Configuration = {
             if (configType == "free-hours-rollout") {
