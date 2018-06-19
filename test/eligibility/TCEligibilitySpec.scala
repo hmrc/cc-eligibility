@@ -24,15 +24,15 @@ import models.output
 import models.output.tc.{TCChildElements, TCEligibilityOutput}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
-import utils.{CCConfigSpec, Periods}
+import utils.Periods
 
 import scala.concurrent.Future
 
-class TCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar {
+class TCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar {
 
   "TCEligibility" should {
 

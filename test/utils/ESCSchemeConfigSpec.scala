@@ -20,7 +20,7 @@ import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 
-class ESCSchemeConfigSpec extends CCConfigSpec with FakeCCEligibilityApplication {
+class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
 
   "ESC Scheme Config" should {
 

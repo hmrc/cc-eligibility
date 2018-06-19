@@ -28,9 +28,9 @@ import models.output.tfc._
 import models.output.{EscClaimantEligibility, Scheme, SchemeResults, TaxCreditsEligibility}
 import models.{Claimant, Household, LocationEnum, SchemeEnum}
 import org.joda.time.LocalDate
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Request
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
@@ -169,7 +169,7 @@ class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication 
 
   val tfcOutputparent = TFCOutputClaimant(qualifying = true, isPartner = false)
   val tfcOutputpartner = TFCOutputClaimant(qualifying = true, isPartner = true)
-  val tfcOutputCChild = TFCOutputChild( id = 0,
+  lazy val tfcOutputCChild = TFCOutputChild( id = 0,
     qualifying = true,
     from = None,
     until = None,
@@ -177,7 +177,7 @@ class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication 
     childcareCost = BigDecimal(0),
     disability = TFCDisability())
 
-  val tfcEligibilityOutputTrue = TFCEligibilityOutput(from = LocalDate.now(),
+  lazy val tfcEligibilityOutputTrue = TFCEligibilityOutput(from = LocalDate.now(),
     until  = LocalDate.now(),
     householdEligibility  = true,
     tfcRollout  = false,
@@ -187,7 +187,7 @@ class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication 
       claimants = List(tfcOutputparent, tfcOutputpartner),
       children = List(tfcOutputCChild))))
 
-  val tfcEligibilityOutputRolloutTrue = TFCEligibilityOutput(from = LocalDate.now(),
+  lazy val tfcEligibilityOutputRolloutTrue = TFCEligibilityOutput(from = LocalDate.now(),
     until  = LocalDate.now(),
     householdEligibility  = true,
     tfcRollout  = true,

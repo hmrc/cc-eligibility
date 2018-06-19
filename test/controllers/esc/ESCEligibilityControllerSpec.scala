@@ -22,19 +22,18 @@ import eligibility.ESCEligibility
 import models.input.esc.ESCEligibilityInput
 import models.output.esc.ESCEligibilityOutput
 import org.joda.time.LocalDate
-import org.mockito.Matchers.{eq => mockEq, _}
+import org.mockito.ArgumentMatchers.{eq => mockEq, _}
 import org.mockito.Mockito._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
-import utils.CCConfigSpec
 
 import scala.concurrent.Future
 
-class ESCEligibilityControllerSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
+class ESCEligibilityControllerSpec extends FakeCCEligibilityApplication with MockitoSugar {
 
   implicit val request = FakeRequest()
 

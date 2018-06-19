@@ -24,9 +24,9 @@ import org.joda.time.LocalDate
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import play.api.libs.json.{JsValue, Json}
-import utils.{CCConfigSpec, Periods}
+import utils.Periods
 
-class TCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplication {
+class TCEligibilityInputSpec extends FakeCCEligibilityApplication {
 
   "TCInputEligibility" should {
 

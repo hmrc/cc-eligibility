@@ -22,7 +22,7 @@ import play.api.libs.json.{JsError, JsString, Json}
 /**
  * Created by adamconder on 09/06/15.
  */
-class PeriodsSpec extends CCConfigSpec with FakeCCEligibilityApplication {
+class PeriodsSpec extends FakeCCEligibilityApplication {
 
   "Periods" should {
 

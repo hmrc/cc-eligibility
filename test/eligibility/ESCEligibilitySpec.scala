@@ -21,12 +21,11 @@ import fixtures.ESCChildren
 import models.input.esc._
 import models.output.esc.{ESCEligibilityOutput, ESCPeriod}
 import org.joda.time.LocalDate
-import org.scalatest.mock.MockitoSugar
-import utils.CCConfigSpec
+import org.scalatest.mockito.MockitoSugar
 
 import scala.concurrent.Future
 
-class ESCEligibilitySpec extends CCConfigSpec with FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar with ESCChildren {
+class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar with ESCChildren {
 
   "ESCEligibilityService" should {
 

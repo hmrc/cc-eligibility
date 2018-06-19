@@ -19,20 +19,19 @@ package controllers
 import com.github.fge.jackson.JsonLoader
 import models.Household
 import models.output.SchemeResults
-import org.mockito.Matchers.{eq => mockEq, _}
+import org.mockito.ArgumentMatchers.{eq => mockEq, _}
 import org.mockito.Mockito._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.{AuditEvents, EligibilityService}
-import utils.CCConfigSpec
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class EligibilityControllerSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
+class EligibilityControllerSpec extends FakeCCEligibilityApplication with MockitoSugar {
 
   implicit val request = FakeRequest()
 

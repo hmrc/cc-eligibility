@@ -22,10 +22,10 @@ import eligibility.TFCEligibility
 import models.input.tfc.TFCEligibilityInput
 import models.output.tfc.TFCEligibilityOutput
 import org.joda.time.LocalDate
-import org.mockito.Matchers.{eq => mockEq, _}
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Request, Result}
