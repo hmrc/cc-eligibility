@@ -21,19 +21,18 @@ import controllers.FakeCCEligibilityApplication
 import eligibility.TCEligibility
 import models.input.tc.TCEligibilityInput
 import models.output.tc.TCEligibilityOutput
-import org.mockito.ArgumentMatchers.{eq => mockEq, _}
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import service.AuditEvents
-import utils.CCConfigSpec
 
 import scala.concurrent.Future
 
-class TCEligibilityControllerSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
+class TCEligibilityControllerSpec extends FakeCCEligibilityApplication with MockitoSugar {
 
   implicit val request = FakeRequest()
 

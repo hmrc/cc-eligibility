@@ -17,13 +17,12 @@
 package service
 
 import controllers.FakeCCEligibilityApplication
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.DataEvent
-import utils.CCConfigSpec
 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 /**
   * Created by user on 25/04/16.
   */
-class AuditEventsTest extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
+class AuditEventsTest extends FakeCCEligibilityApplication with MockitoSugar {
 
   def createObservableAuditConnector = new ObservableAuditConnector {}
 

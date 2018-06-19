@@ -22,10 +22,10 @@ import models.input.tfc._
 import models.mappings._
 import org.joda.time.LocalDate
 import org.mockito.Mockito.when
-import org.scalatest.mock.MockitoSugar
-import utils.{CCConfigSpec, Periods, TFCConfig}
+import org.scalatest.mockito.MockitoSugar
+import utils.{Periods, TFCConfig}
 
-class HHToTFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
+class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with MockitoSugar {
 
   val SUT = new HHToTFCEligibilityInput {
     override val tFCConfig = mock[TFCConfig]

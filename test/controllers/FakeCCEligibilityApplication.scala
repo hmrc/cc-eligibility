@@ -20,9 +20,9 @@ import akka.stream.Materializer
 import org.scalatest.Suite
 import play.api.test.FakeApplication
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.WithFakeApplication
+import utils.CCConfigSpec
 
-trait FakeCCEligibilityApplication extends WithFakeApplication {
+trait FakeCCEligibilityApplication extends CCConfigSpec {
   this: Suite =>
 
   val config: Map[String, _] = Map(
@@ -43,7 +43,7 @@ trait FakeCCEligibilityApplication extends WithFakeApplication {
     "free-hours.0.thirty.england" -> "3,4"
   )
 
-  override lazy val fakeApplication = FakeApplication(additionalConfiguration = config)
+  override lazy val app = FakeApplication(additionalConfiguration = config)
   implicit lazy val mat: Materializer = fakeApplication.materializer
   implicit val hc: HeaderCarrier = new HeaderCarrier()
 

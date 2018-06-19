@@ -21,12 +21,12 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks.forAll
 import org.scalatest.prop.Tables.Table
 import play.api.Configuration
 
-class TFCSchemeConfigSpec extends CCConfigSpec with FakeCCEligibilityApplication  with MockitoSugar {
+class TFCSchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar {
 
   "TFC Scheme Config" should {
 

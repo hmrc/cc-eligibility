@@ -21,10 +21,10 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import play.api.Configuration
 
-class SchemeConfigSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
+class SchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar {
 
   "SchemeConfig" should {
 

@@ -23,9 +23,8 @@ import fixtures.ESCChildren
 import models.input.esc._
 import org.joda.time.LocalDate
 import play.api.libs.json.{JsValue, Json}
-import utils.CCConfigSpec
 
-class ESCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplication with ESCChildren {
+class ESCEligibilityInputSpec extends FakeCCEligibilityApplication with ESCChildren {
 
   "ESCInputEligibility" should {
 

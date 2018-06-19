@@ -25,7 +25,7 @@ import org.joda.time.format.DateTimeFormat
 import play.api.data.validation.ValidationError
 import play.api.libs.json._
 
-class JSONFactorySpec extends CCConfigSpec with FakeCCEligibilityApplication {
+class JSONFactorySpec extends FakeCCEligibilityApplication {
 
   "JSONFactory" should {
 
