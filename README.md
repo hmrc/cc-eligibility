@@ -11,7 +11,6 @@ The Eligibility micro-service common to all the schemes (Tax, Credit, Tax-Free C
 The service will accept the parent details and children details as input request in json format and returns whether the scheme, parent and/or children are eligible to apply in
 a json format.
 
-
 * **Endpoint URLs**
 
   * **TC  :**  /cc-eligibility/tax-credits/eligibility
