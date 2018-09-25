@@ -7,11 +7,9 @@ resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/
 
 resolvers += Resolver.url("scoverage-bintray", url("https://dl.bintray.com/sksamuel/sbt-plugins/"))(Resolver.ivyStylePatterns)
 
-resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
+//resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
-addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "1.13.0")
 
-addSbtPlugin("uk.gov.hmrc" % "sbt-git-versioning" % "0.10.0")
 
 addSbtPlugin("uk.gov.hmrc" % "sbt-distributables" % "1.1.0")
 
@@ -26,3 +24,8 @@ addSbtPlugin("com.github.gseitz" % "sbt-release" % "0.8.5")
 addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.5.1")
 
 
+addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "1.13.0")
+
+addSbtPlugin("uk.gov.hmrc" % "sbt-git-versioning" % "1.15.0")
+
+addSbtPlugin("uk.gov.hmrc" % "sbt-artifactory" % "0.13.0")
