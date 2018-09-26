@@ -2,16 +2,23 @@ import play.routes.compiler.StaticRoutesGenerator
 import play.sbt.routes.RoutesKeys.routesGenerator
 import sbt.Keys._
 import sbt._
-import uk.gov.hmrc.{SbtAutoBuildPlugin, _}
+import uk.gov.hmrc.{SbtArtifactory, SbtAutoBuildPlugin}
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
+import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
+
 
 trait MicroService {
 
   val appName: String
   lazy val appDependencies : Seq[ModuleID] = ???
-  lazy val plugins : Seq[Plugins] = Seq()
+  lazy val plugins : Seq[Plugins] = Seq(
+    SbtAutoBuildPlugin,
+    SbtGitVersioning,
+    SbtDistributablesPlugin,
+    SbtArtifactory
+  )
   lazy val playSettings : Seq[Setting[_]] = Seq.empty
 
   lazy val scoverageSettings = {
@@ -25,7 +32,8 @@ trait MicroService {
   }
 
   lazy val microservice = Project(appName, file("."))
-    .enablePlugins(Seq(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins : _*)
+    .enablePlugins(Seq(play.sbt.PlayScala) ++ plugins : _*)
+    .settings(majorVersion := 1)
     .settings(playSettings ++ scoverageSettings : _*)
     .settings(publishingSettings : _*)
     .settings(
