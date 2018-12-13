@@ -18,7 +18,7 @@ package config
 
 import uk.gov.hmrc.play.config.ServicesConfig
 
-object ApplicationConfig extends ApplicationConfig
+object ApplicationConfig extends ApplicationConfig with RunModeConfig
 
 trait ApplicationConfig extends ServicesConfig {
 
