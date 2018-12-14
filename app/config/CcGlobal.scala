@@ -18,7 +18,8 @@ package config
 
 import com.typesafe.config.Config
 import net.ceedubs.ficus.Ficus._
-import play.api.{Application, Configuration}
+import play.api.Mode.Mode
+import play.api.{Application, Configuration, Play}
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.config.{AppName, ControllerConfig, RunMode}
@@ -28,11 +29,19 @@ import uk.gov.hmrc.play.microservice.config.LoadAuditingConfig
 import uk.gov.hmrc.play.microservice.filters.{AuditFilter, LoggingFilter, MicroserviceFilterSupport}
 import utils.LoadConfig
 
-object WSHttp extends HttpGet with WSGet with HttpPut with WSPut with HttpPost with WSPost with HttpDelete with WSDelete with HttpPatch with WSPatch {
-  override val hooks = NoneRequired
+trait RunModeConfig {
+  def appNameConfiguration: Configuration = Play.current.configuration
+  def runModeConfiguration: Configuration = Play.current.configuration
+  def mode: Mode = Play.current.mode
 }
 
-object MicroserviceAuditConnector extends AuditConnector with RunMode {
+object WSHttp extends HttpGet with WSGet with HttpPut with WSPut with HttpPost with WSPost with HttpDelete with WSDelete with HttpPatch with WSPatch {
+  override val hooks = NoneRequired
+
+  override val configuration: Option[Config] = Some(Play.current.configuration.underlying)
+}
+
+object MicroserviceAuditConnector extends AuditConnector with RunMode with RunModeConfig {
   override lazy val auditingConfig = LoadAuditingConfig("auditing")
 }
 
@@ -40,7 +49,7 @@ object ControllerConfiguration extends ControllerConfig with LoadConfig {
   lazy val controllerConfigs = conf.underlying.as[Config]("controllers")
 }
 
-object MicroserviceAuditFilter extends AuditFilter with AppName with MicroserviceFilterSupport {
+object MicroserviceAuditFilter extends AuditFilter with AppName with MicroserviceFilterSupport with RunModeConfig {
   override val auditConnector = MicroserviceAuditConnector
   override def controllerNeedsAuditing(controllerName: String) : Boolean = ControllerConfiguration.paramsForController(controllerName).needsAuditing
 }
@@ -49,7 +58,7 @@ object MicroserviceLoggingFilter extends LoggingFilter with MicroserviceFilterSu
   override def controllerNeedsLogging(controllerName: String) : Boolean = ControllerConfiguration.paramsForController(controllerName).needsLogging
 }
 
-object CcGlobal extends DefaultMicroserviceGlobal with RunMode {
+object CcGlobal extends DefaultMicroserviceGlobal with RunMode with RunModeConfig {
   override val auditConnector = MicroserviceAuditConnector
   override val loggingFilter = MicroserviceLoggingFilter
   override val microserviceAuditFilter = MicroserviceAuditFilter
