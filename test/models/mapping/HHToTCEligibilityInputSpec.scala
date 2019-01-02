@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.joda.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.{CCConfig, CCConfigSpec, Periods}
+import utils.{CCConfig, CCConfigSpec, HelperManager, Periods}
 
 class HHToTCEligibilityInputSpec extends UnitSpec
   with MockitoSugar
@@ -47,7 +47,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
       "given a household with parent and no partner no children" in {
 
         val currentDate = LocalDate.now
-        val fourthApril = LocalDate.parse(s"$testYear-04-06")
+        val fourthApril = HelperManager.determineApril6DateFromNow(LocalDate.now())
 
         val benefits: Benefits = Benefits(
           disabilityBenefits = false,
@@ -121,7 +121,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
 
       "given a household with parent and a partner with no children" in {
         val currentDate = LocalDate.now
-        val fourthApril = LocalDate.parse(s"$testYear-04-06")
+        val fourthApril = HelperManager.determineApril6DateFromNow(LocalDate.now())
 
         val benefits: Benefits = Benefits(
           disabilityBenefits = false,
