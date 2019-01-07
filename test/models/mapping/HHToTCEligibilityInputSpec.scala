@@ -24,7 +24,7 @@ import org.joda.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.{CCConfig, CCConfigSpec, Periods}
+import utils.{CCConfig, CCConfigSpec, HelperManager, Periods}
 
 class HHToTCEligibilityInputSpec extends UnitSpec
   with MockitoSugar
@@ -47,7 +47,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
       "given a household with parent and no partner no children" in {
 
         val currentDate = LocalDate.now
-        val fourthApril = LocalDate.parse(s"$testYear-04-06")
+        val fourthApril = HelperManager.determineApril6DateFromNow(LocalDate.now())
 
         val benefits: Benefits = Benefits(
           disabilityBenefits = false,
@@ -121,7 +121,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
 
       "given a household with parent and a partner with no children" in {
         val currentDate = LocalDate.now
-        val fourthApril = LocalDate.parse(s"$testYear-04-06")
+        val fourthApril = HelperManager.determineApril6DateFromNow(LocalDate.now())
 
         val benefits: Benefits = Benefits(
           disabilityBenefits = false,

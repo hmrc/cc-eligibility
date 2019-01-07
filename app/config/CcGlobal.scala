@@ -16,6 +16,7 @@
 
 package config
 
+import akka.actor.ActorSystem
 import com.typesafe.config.Config
 import net.ceedubs.ficus.Ficus._
 import play.api.Mode.Mode
@@ -39,6 +40,8 @@ object WSHttp extends HttpGet with WSGet with HttpPut with WSPut with HttpPost w
   override val hooks = NoneRequired
 
   override val configuration: Option[Config] = Some(Play.current.configuration.underlying)
+
+  override protected def actorSystem: ActorSystem = Play.current.actorSystem
 }
 
 object MicroserviceAuditConnector extends AuditConnector with RunMode with RunModeConfig {
