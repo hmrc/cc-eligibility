@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,7 +99,7 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
       ("Location", "TFC Eligibility", "Dates of Birth", "Eligibility Result", "Eligibility Rollout"),
       ("england", true, List(now.minusYears(3).plusDays(1)), false, true),
       ("england", true, List(now.minusYears(3)), true, true),
-      ("england", true, List(now.minusYears(4)), true, true),
+      ("england", true, List(now.minusYears(4)), true, false),
       ("england", true, List(now.minusYears(5).plusDays(1)), true, false),
       ("england", true, List(now.minusYears(5)), false, false),
       ("scotland", true, List(now.minusYears(3)), false, true),

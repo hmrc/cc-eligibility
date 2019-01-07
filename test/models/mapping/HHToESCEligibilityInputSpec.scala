@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.joda.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.{CCConfig, CCConfigSpec, Periods}
+import utils.{CCConfig, CCConfigSpec, Periods, HelperManager}
 
 class HHToESCEligibilityInputSpec extends UnitSpec
   with MockitoSugar
@@ -54,10 +54,10 @@ class HHToESCEligibilityInputSpec extends UnitSpec
 
         val res = ESCEligibilityInput(List(
           ESCTaxYear(LocalDate.now(),
-            LocalDate.parse(s"$testYear-04-06"),
+            HelperManager.determineApril6DateFromNow(LocalDate.now()),
             List(ESCClaimant(false, true,
               Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List()),
-          ESCTaxYear(LocalDate.parse(s"$testYear-04-06"),
+          ESCTaxYear(HelperManager.determineApril6DateFromNow(LocalDate.now()),
             LocalDate.now().plusYears(1),
             List(ESCClaimant(false, true,
               Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List())))
@@ -92,7 +92,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
 
         val res = ESCEligibilityInput(List(
           ESCTaxYear(LocalDate.now(),
-            LocalDate.parse(s"$testYear-04-06"),
+            HelperManager.determineApril6DateFromNow(LocalDate.now()),
             List(
               ESCClaimant(false, false, None),
               ESCClaimant(true, true,
@@ -106,7 +106,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
                 ESCDisability(true, false)
               )
             )),
-          ESCTaxYear(LocalDate.parse(s"$testYear-04-06"),
+          ESCTaxYear(HelperManager.determineApril6DateFromNow(LocalDate.now()),
             LocalDate.now().plusYears(1),
             List(
               ESCClaimant(false, false, None),
@@ -138,12 +138,12 @@ class HHToESCEligibilityInputSpec extends UnitSpec
 
         val res = ESCEligibilityInput(List(
           ESCTaxYear(LocalDate.now(),
-            LocalDate.parse(s"$testYear-04-06"),
+            HelperManager.determineApril6DateFromNow(LocalDate.now()),
             List(ESCClaimant(false, false,
               Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0)))),
               ESCClaimant(true, false,
                 Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0))))), List()),
-          ESCTaxYear(LocalDate.parse(s"$testYear-04-06"),
+          ESCTaxYear(HelperManager.determineApril6DateFromNow(LocalDate.now()),
             LocalDate.now().plusYears(1),
             List(ESCClaimant(false, false,
               Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0)))),
@@ -278,10 +278,10 @@ class HHToESCEligibilityInputSpec extends UnitSpec
 
         val res = ESCEligibilityInput(List(
           ESCTaxYear(LocalDate.now(),
-            LocalDate.parse(s"$testYear-04-06"),
+            HelperManager.determineApril6DateFromNow(LocalDate.now()),
             List(ESCClaimant(false, false,
               None, Some(ESCIncome(Some(30000.0), Some(200.0), Some("1200L"))))), List()),
-          ESCTaxYear(LocalDate.parse(s"$testYear-04-06"),
+          ESCTaxYear(HelperManager.determineApril6DateFromNow(LocalDate.now()),
             LocalDate.now().plusYears(1),
             List(ESCClaimant(false, false,
               None, Some(ESCIncome(Some(30000.0), Some(200.0), Some("1200L"))))), List())))

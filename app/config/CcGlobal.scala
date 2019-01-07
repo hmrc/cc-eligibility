@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import uk.gov.hmrc.play.microservice.bootstrap.DefaultMicroserviceGlobal
 import uk.gov.hmrc.play.microservice.config.LoadAuditingConfig
 import uk.gov.hmrc.play.microservice.filters.{AuditFilter, LoggingFilter, MicroserviceFilterSupport}
 import utils.LoadConfig
+import akka.actor.ActorSystem
 
 trait RunModeConfig {
   def appNameConfiguration: Configuration = Play.current.configuration
@@ -39,6 +40,8 @@ object WSHttp extends HttpGet with WSGet with HttpPut with WSPut with HttpPost w
   override val hooks = NoneRequired
 
   override val configuration: Option[Config] = Some(Play.current.configuration.underlying)
+
+  override protected def actorSystem: ActorSystem = Play.current.actorSystem
 }
 
 object MicroserviceAuditConnector extends AuditConnector with RunMode with RunModeConfig {
