@@ -17,28 +17,19 @@
 package controllers.freeEntitlement
 
 import eligibility.FreeEntitlementEligibility
+import javax.inject.Inject
 import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.input.tfc.TFCEligibilityInput
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Action
 import service.AuditEvents
-import uk.gov.hmrc.play.microservice.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object FreeEntitlementController extends FreeEntitlementController {
-  override val auditEvent = AuditEvents
-
-  override val freeHoursService: FreeEntitlementEligibility = FreeEntitlementEligibility
-}
-
-trait FreeEntitlementController extends BaseController {
-
-  val auditEvent: AuditEvents
-
-  val freeHoursService: FreeEntitlementEligibility
+class FreeEntitlementController @Inject()(auditEvent: AuditEvents, freeHoursService: FreeEntitlementEligibility) extends BaseController {
 
   def fifteenHours: Action[JsValue] = Action.async(parse.json) {
     implicit request =>

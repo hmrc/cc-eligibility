@@ -41,7 +41,7 @@ case class TFCEligibilityInput(
                                 children: List[TFCChild]
                 ) {
 
-  def validHouseholdMinimumEarnings(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
+  def validHouseholdMinimumEarnings(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier, AuditEvents: AuditEvents): Boolean = {
     val parent = claimants.head
     val minEarningsParent = parent.satisfyMinimumEarnings(from, parent = true, location)
     if(claimants.length > 1) {
@@ -183,7 +183,7 @@ case class TFCClaimant(
     case _ => (taxYearConfig.nmw25Over, "25 or over") //25 or over
   }
 
-  def satisfyMinimumEarnings(periodStart: LocalDate, parent: Boolean, location:String)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
+  def satisfyMinimumEarnings(periodStart: LocalDate, parent: Boolean, location:String)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier, AuditEvents: AuditEvents): Boolean = {
     val user = if(parent) {
       "Parent"
     } else {

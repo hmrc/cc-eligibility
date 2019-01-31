@@ -16,24 +16,23 @@
 
 package service
 
-import config.MicroserviceAuditConnector
+import javax.inject.Inject
 import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.DataEvent
+import uk.gov.hmrc.play.config.RunMode
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object AuditService extends AuditService {
-  override lazy val auditSource = "cc-eligibility"
-  override lazy val auditConnector = MicroserviceAuditConnector
-}
 
-trait AuditService {
+//object MicroserviceAuditConnector extends AuditConnector with RunMode with RunModeConfig {
+//  override lazy val auditingConfig = LoadAuditingConfig("auditing")
 
-  def auditSource : String
-  def auditConnector: AuditConnector
+class AuditService @Inject()(runMode: RunMode, auditConnector: AuditConnector) {
+
+  lazy val auditSource = "cc-eligibility"
 
   def sendEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)
                (implicit request: Request[_], hc: HeaderCarrier): Future[AuditResult] = {

@@ -16,11 +16,14 @@
 
 package config
 
-import uk.gov.hmrc.play.config.ServicesConfig
+import javax.inject.Inject
+import play.api.{Configuration, Mode}
+import uk.gov.hmrc.play.config.{RunMode, ServicesConfig}
 
-object ApplicationConfig extends ApplicationConfig with RunModeConfig
+class ApplicationConfig @Inject()(appConfig: ApplicationConfig, runMode: RunMode) extends ServicesConfig{
 
-trait ApplicationConfig extends ServicesConfig {
+  override def mode :Mode.Mode = appConfig.mode
+  override def runModeConfiguration: Configuration = appConfig.runModeConfiguration
 
   lazy val calculatorUrl = {
     baseUrl("cc-calculator") + getString("microservice.services.cc-calculator.url")
