@@ -28,16 +28,15 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.mvc.Request
 import play.api.test.FakeRequest
+import service.AuditEvents
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{CCConfigSpec, Periods, TFCConfig}
 
-class TFCEligibilityInputSpec extends CCConfigSpec
-  with FakeCCEligibilityApplication
-  with MockitoSugar {
+class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
 
   implicit val req = FakeRequest()
 
-  "TFCInputEligibility" should {
+  "TFCEInputEligibility" should {
 
     val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
     val fromDate = LocalDate.parse("2000-08-27", formatter)
@@ -379,16 +378,22 @@ class TFCEligibilityInputSpec extends CCConfigSpec
       "with default values" in {
 
         val minimumEarnings = TFCMinimumEarnings(selection = false)
-        val claimant = TFCClaimant(disability = TFCDisability(), carersAllowance = true, minimumEarnings =
-          minimumEarnings, age = None)
+        val claimant = new TFCClaimant(disability = TFCDisability(), carersAllowance = true, minimumEarnings =
+          minimumEarnings, age = None){
+          override lazy val auditEvents: AuditEvents = mock[AuditEvents]
+        }
 
-        val partner = TFCClaimant(hoursPerWeek = 16.50, isPartner = true, disability = TFCDisability(), minimumEarnings =
-          TFCMinimumEarnings(), age = None)
+        val partner = new TFCClaimant(hoursPerWeek = 16.50, isPartner = true, disability = TFCDisability(), minimumEarnings =
+          TFCMinimumEarnings(), age = None){
+          override lazy val auditEvents: AuditEvents = mock[AuditEvents]
+        }
 
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val fromDate = LocalDate.parse("2000-08-27", formatter)
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = new TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List()){
+          override lazy val auditEvents: AuditEvents = mock[AuditEvents]
+        }
         tfc.claimants.head.satisfyMinimumEarnings(fromDate, true, "england")(req, hc) shouldBe false
         tfc.claimants.last.satisfyMinimumEarnings(fromDate, false, "england")(req, hc) shouldBe true
       }
@@ -396,20 +401,26 @@ class TFCEligibilityInputSpec extends CCConfigSpec
       "with undefined ages, parent - TFCMinimumEarnings(selection = false) selfemployed, partner - apprentice" in {
 
         val minimumEarnings = TFCMinimumEarnings(selection = false)
-        val claimant = TFCClaimant(disability = TFCDisability(), carersAllowance = true,
+        val claimant = new TFCClaimant(disability = TFCDisability(), carersAllowance = true,
           minimumEarnings = minimumEarnings,
           age = None,
           selfEmployedSelection = Some(true),
-          employmentStatus = Some("selfEmployed"))
+          employmentStatus = Some("selfEmployed")){
+             override lazy val auditEvents: AuditEvents = mock[AuditEvents]
+        }
 
         val minimumEarnings1 = TFCMinimumEarnings(selection = false)
-        val partner = TFCClaimant(hoursPerWeek = 16.50, isPartner = true, disability = TFCDisability(),
+        val partner = new TFCClaimant(hoursPerWeek = 16.50, isPartner = true, disability = TFCDisability(),
           minimumEarnings = minimumEarnings1,
           age = None,
           selfEmployedSelection = Some(false),
-          employmentStatus = Some("apprentice"))
+          employmentStatus = Some("apprentice")){
+             override lazy val auditEvents: AuditEvents = mock[AuditEvents]
+        }
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = new TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List()){
+          override lazy val auditEvents: AuditEvents = mock[AuditEvents]
+        }
         tfc.claimants.head.satisfyMinimumEarnings(fromDate, true, "england")(req, hc) shouldBe true
         tfc.claimants.last.satisfyMinimumEarnings(fromDate, false, "england")(req, hc) shouldBe false
       }
@@ -444,7 +455,9 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
       "if satisfyMinimumEarnings is false and partner.carersAllowance = false" in {
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = new TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List()){
+          override lazy val auditEvents: AuditEvents = mock[AuditEvents]
+        }
         when(claimant.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(true)
         when(claimant.carersAllowance).thenReturn(false)
         when(partner.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(false)
@@ -454,7 +467,9 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
       "if parent.satisfyMinimumEarnings = true and partner.satisfyMinimumEarnings = true" in {
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = new TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List()){
+          override lazy val auditEvents: AuditEvents = mock[AuditEvents]
+        }
         when(claimant.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(true)
         when(claimant.carersAllowance).thenReturn(true)
         when(partner.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(true)
@@ -464,7 +479,9 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
       "check if validHouseholdMinimumEarnings is correct if parent.satisfyMinimumEarnings is true and partner.satisfyMinimumEarnings = false" in {
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = new TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List()){
+          override lazy val auditEvents: AuditEvents = mock[AuditEvents]
+        }
         when(claimant.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(true)
         when(claimant.carersAllowance).thenReturn(true)
         when(partner.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(false)
@@ -474,7 +491,9 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
       "check if validHouseholdMinimumEarnings is correct if parent.satisfyMinimumEarnings is false and partner.satisfyMinimumEarnings = true" in {
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = new TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List()){
+          override lazy val auditEvents: AuditEvents = mock[AuditEvents]
+        }
         when(claimant.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(false)
         when(claimant.carersAllowance).thenReturn(true)
         when(partner.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(true)
@@ -484,7 +503,9 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
       "check if validHouseholdMinimumEarnings is correct if parent.satisfyMinimumEarnings is false and partner.satisfyMinimumEarnings = false" in {
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
+        val tfc = new TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List()){
+          override lazy val auditEvents: AuditEvents = mock[AuditEvents]
+        }
         when(claimant.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(false)
         when(claimant.carersAllowance).thenReturn(true)
         when(partner.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(false)
@@ -494,7 +515,9 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
       "check if validHouseholdMinimumEarnings is correct if parent.satisfyMinimumEarnings is false" in {
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant), List())
+        val tfc = new TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant), List()){
+          override lazy val auditEvents: AuditEvents = mock[AuditEvents]
+        }
         when(claimant.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(false)
 
         tfc.validHouseholdMinimumEarnings(req, hc) shouldBe false
@@ -502,7 +525,9 @@ class TFCEligibilityInputSpec extends CCConfigSpec
 
       "check if validHouseholdMinimumEarnings is correct if parent.satisfyMinimumEarnings is true" in {
 
-        val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant), List())
+        val tfc = new TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant), List()){
+          override lazy val auditEvents: AuditEvents = mock[AuditEvents]
+        }
         when(claimant.satisfyMinimumEarnings(any[LocalDate], any[Boolean], any[String])(any[Request[_]], any[HeaderCarrier])).thenReturn(true)
 
         tfc.validHouseholdMinimumEarnings(req, hc) shouldBe true

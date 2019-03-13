@@ -18,7 +18,8 @@ package controllers
 
 import akka.stream.Materializer
 import org.scalatest.Suite
-import play.api.test.FakeApplication
+import play.api.Application
+import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.CCConfigSpec
 
@@ -43,8 +44,13 @@ trait FakeCCEligibilityApplication extends CCConfigSpec {
     "free-hours.0.thirty.england" -> "3,4"
   )
 
-  override lazy val app = FakeApplication(additionalConfiguration = config)
-  implicit lazy val mat: Materializer = fakeApplication.materializer
+  override lazy val app: Application =
+    new GuiceApplicationBuilder()
+      .disable[com.kenshoo.play.metrics.PlayModule]
+      .configure(config)
+      .build()
+
+  implicit lazy val mat: Materializer = app.materializer
   implicit val hc: HeaderCarrier = new HeaderCarrier()
 
 }

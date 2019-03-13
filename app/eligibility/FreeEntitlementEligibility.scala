@@ -16,6 +16,7 @@
 
 package eligibility
 
+import javax.inject.Inject
 import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.input.tfc.TFCEligibilityInput
 import models.output.freeEntitlement.{FifteenHoursEligibilityModel, ThirtyHoursEligibilityModel}
@@ -27,13 +28,9 @@ import utils.{CCConfig, ChildHelper}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object FreeEntitlementEligibility extends FreeEntitlementEligibility{
-  override val tfcEligibility: TFCEligibility = TFCEligibility
-}
 
-trait FreeEntitlementEligibility extends CCConfig with ChildHelper {
+class FreeEntitlementEligibility @Inject()(tfcEligibility: TFCEligibility) extends CCConfig with ChildHelper {
 
-  val tfcEligibility: TFCEligibility
   def localDate = StartDate
 
   private def isChildDOBWithinRollout(dob: LocalDate): Boolean = {

@@ -34,10 +34,11 @@ package utils
 
 import org.joda.time.format.DateTimeFormat
 import org.scalatestplus.play.OneAppPerSuite
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import uk.gov.hmrc.play.test.UnitSpec
 
-trait CCConfigSpec extends UnitSpec with OneAppPerSuite {
+trait CCConfigSpec extends UnitSpec with GuiceOneAppPerSuite {
 
   def getMessages = {
     val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]

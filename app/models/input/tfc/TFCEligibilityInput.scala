@@ -21,6 +21,7 @@ import java.util.{Calendar, Date}
 
 import config.ConfigConstants
 import org.joda.time.LocalDate
+import play.api.Play
 import play.api.data.validation.ValidationError
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
@@ -40,6 +41,7 @@ case class TFCEligibilityInput(
                                 claimants: List[TFCClaimant],
                                 children: List[TFCChild]
                 ) {
+  lazy val auditEvents: AuditEvents = Play.current.injector.asInstanceOf[AuditEvents]
 
   def validHouseholdMinimumEarnings(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
     val parent = claimants.head
@@ -50,7 +52,7 @@ case class TFCEligibilityInput(
       val auditMinEarns = minEarningsParent && minEarningsPartner
 
       if(!auditMinEarns) {
-        AuditEvents.auditMinEarnings(auditMinEarns)
+        auditEvents.auditMinEarnings(auditMinEarns)
       }
 
       (minEarningsParent, minEarningsPartner) match {
@@ -62,7 +64,7 @@ case class TFCEligibilityInput(
     } else {
 
       if(!minEarningsParent) {
-        AuditEvents.auditMinEarnings(minEarningsParent)
+        auditEvents.auditMinEarnings(minEarningsParent)
       }
       minEarningsParent
     }
@@ -131,6 +133,7 @@ case class TFCClaimant(
                         selfEmployedSelection: Option[Boolean] = None,
                         maximumEarnings: Option[Boolean] = None
                      ) {
+  lazy val auditEvents: AuditEvents = Play.current.injector.asInstanceOf[AuditEvents]
 
   def totalIncome: BigDecimal = {
     val (currentEmployment, currentvOther, currentPension) = getIncomeElements(previousIncome, currentIncome)
@@ -198,11 +201,11 @@ case class TFCClaimant(
       if(minimumEarnings.amount >= nmw._1) {
         true
       } else {
-        AuditEvents.auditAgeGroup(user, nmw._2)
+        auditEvents.auditAgeGroup(user, nmw._2)
         employmentStatus match {
           case Some("selfEmployed") =>
-            AuditEvents.auditSelfEmploymentStatus(user, employmentStatus.get)
-            AuditEvents.auditSelfEmployedin1st(user, selfEmployedSelection.getOrElse(false))
+            auditEvents.auditSelfEmploymentStatus(user, employmentStatus.get)
+            auditEvents.auditSelfEmployedin1st(user, selfEmployedSelection.getOrElse(false))
             selfEmployedSelection.getOrElse(false)
           case Some("apprentice") => minimumEarnings.amount >= taxYearConfig.nmwApprentice
           case _ => false

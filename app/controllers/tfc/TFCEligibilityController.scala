@@ -17,30 +17,25 @@
 package controllers.tfc
 
 import eligibility.TFCEligibility
+import javax.inject.Inject
 import models.input.tfc.TFCEligibilityInput
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Action
 import service.AuditEvents
-import uk.gov.hmrc.play.microservice.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object TFCEligibilityController extends TFCEligibilityController {
-  val tfcEligibility = TFCEligibility
-  override val auditEvent = AuditEvents
-}
-
-trait TFCEligibilityController extends BaseController {
-  val tfcEligibility : TFCEligibility
-  val auditEvent : AuditEvents
+class TFCEligibilityController @Inject ()(val tfcEligibility: TFCEligibility,
+                                          val auditEvent: AuditEvents)  extends BaseController {
 
   def eligible : Action[JsValue] = Action.async(parse.json) {
     implicit request =>
       request.body.validate[TFCEligibilityInput].fold(
         error => {
-          Logger.warn(s"TFCEligibilityController TFC Validation JsError *****${error}")
+          Logger.warn(s"TFCEligibilityController TFC Validation JsError *****$error")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {

@@ -16,30 +16,25 @@
 
 package controllers
 
+import javax.inject.Inject
 import models.Household
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Action
 import service.{AuditEvents, EligibilityService}
-import uk.gov.hmrc.play.microservice.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object EligibilityController extends EligibilityController  {
-  override val eligibilityService = EligibilityService
-  override val auditEvent = AuditEvents
-}
-
-trait EligibilityController extends BaseController {
-  val eligibilityService: EligibilityService
-  val auditEvent : AuditEvents
+class EligibilityController @Inject ()(val eligibilityService: EligibilityService,
+                                       val auditEvent: AuditEvents) extends BaseController {
 
   def eligible : Action[JsValue] = Action.async(parse.json) {
     implicit request =>
       request.body.validate[Household].fold(
         error => {
-          Logger.warn(s"EligibilityController Household Validation JsError *****${error}")
+          Logger.warn(s"EligibilityController Household Validation JsError *****$error")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {

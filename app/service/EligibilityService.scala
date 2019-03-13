@@ -18,6 +18,7 @@ package service
 
 import connectors.CalculatorConnector
 import eligibility.{ESCEligibility, FreeEntitlementEligibility, TCEligibility, TFCEligibility}
+import javax.inject.Inject
 import models.Household
 import models.input.CalculatorOutput
 import models.mappings._
@@ -27,19 +28,16 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-trait EligibilityService {
-
-  val calcConnector: CalculatorConnector
-
-  val esc: ESCEligibility
-  val tc: TCEligibility
-  val tfc: TFCEligibility
-  val thirtyHours: FreeEntitlementEligibility
-
-  val TCEligibilityInput: HHToTCEligibilityInput
-  val TFCEligibilityInput: HHToTFCEligibilityInput
-  val ESCEligibilityInput: HHToESCEligibilityInput
-  val FreeEntitlementEligibilityInput: HHToFree30hoursEligibilityInput
+class EligibilityService @Inject()(val calcConnector: CalculatorConnector,
+                                   val esc: ESCEligibility,
+                                   val tc: TCEligibility,
+                                   val tfc: TFCEligibility,
+                                   val thirtyHours: FreeEntitlementEligibility,
+                                   val TCEligibilityInput: HHToTCEligibilityInput,
+                                   val TFCEligibilityInput: HHToTFCEligibilityInput,
+                                   val ESCEligibilityInput: HHToESCEligibilityInput,
+                                   val FreeEntitlementEligibilityInput: HHToFree30hoursEligibilityInput
+                                   ){
 
   def eligibility(request: Household)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[SchemeResults] = {
     for {
@@ -71,19 +69,4 @@ trait EligibilityService {
 
   }
 
-}
-
-object EligibilityService extends EligibilityService
-{
-  override val calcConnector: CalculatorConnector = CalculatorConnector
-
-  override val esc: ESCEligibility = ESCEligibility
-  override val tc: TCEligibility = TCEligibility
-  override val tfc: TFCEligibility = TFCEligibility
-  override val thirtyHours: FreeEntitlementEligibility = FreeEntitlementEligibility
-
-  override val TCEligibilityInput: HHToTCEligibilityInput = HHToTCEligibilityInput
-  override val TFCEligibilityInput: HHToTFCEligibilityInput = HHToTFCEligibilityInput
-  override val ESCEligibilityInput: HHToESCEligibilityInput = HHToESCEligibilityInput
-  override val FreeEntitlementEligibilityInput: HHToFree30hoursEligibilityInput = HHToFree30hoursEligibilityInput
 }

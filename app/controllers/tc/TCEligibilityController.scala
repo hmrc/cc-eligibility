@@ -17,31 +17,25 @@
 package controllers.tc
 
 import eligibility.TCEligibility
+import javax.inject.Inject
 import models.input.tc.TCEligibilityInput
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Action
 import service.AuditEvents
-import uk.gov.hmrc.play.microservice.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object TCEligibilityController extends TCEligibilityController {
-  override val tcEligibility: TCEligibility = TCEligibility
-  override val auditEvent = AuditEvents
-}
-
-trait TCEligibilityController extends BaseController {
-  val tcEligibility: TCEligibility
-
-  val auditEvent : AuditEvents
+class TCEligibilityController @Inject()(val tcEligibility: TCEligibility,
+                                        val auditEvent: AuditEvents) extends BaseController {
 
   def eligible : Action[JsValue] = Action.async(parse.json) {
     implicit request =>
       request.body.validate[TCEligibilityInput].fold(
         error => {
-          Logger.warn(s"TCEligibilityController TC Validation JsError ******${error}")
+          Logger.warn(s"TCEligibilityController TC Validation JsError ******$error")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {

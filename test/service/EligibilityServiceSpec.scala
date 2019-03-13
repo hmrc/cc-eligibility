@@ -43,16 +43,17 @@ import scala.concurrent.{Await, Future}
 class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication with MockitoSugar {
 
 
-  class ServiceTest extends EligibilityService{
-    override val calcConnector: CalculatorConnector = mock[CalculatorConnector]
-    override val esc: ESCEligibility = mock[ESCEligibility]
-    override val tc: TCEligibility = mock[TCEligibility]
-    override val tfc: TFCEligibility = mock[TFCEligibility]
-    override val thirtyHours: FreeEntitlementEligibility = mock[FreeEntitlementEligibility]
-    override val TCEligibilityInput: HHToTCEligibilityInput = mock[HHToTCEligibilityInput]
-    override val TFCEligibilityInput: HHToTFCEligibilityInput = mock[HHToTFCEligibilityInput]
-    override val ESCEligibilityInput: HHToESCEligibilityInput = mock[HHToESCEligibilityInput]
-    override val FreeEntitlementEligibilityInput: HHToFree30hoursEligibilityInput = mock[HHToFree30hoursEligibilityInput]
+  class ServiceTest extends EligibilityService(
+    mock[CalculatorConnector],
+    mock[ESCEligibility],
+    mock[TCEligibility],
+    mock[TFCEligibility],
+    mock[FreeEntitlementEligibility],
+    mock[HHToTCEligibilityInput],
+    mock[HHToTFCEligibilityInput],
+    mock[HHToESCEligibilityInput],
+    mock[HHToFree30hoursEligibilityInput]
+  ){
     override def eligibility(request: Household)(implicit req: Request[_], hc: HeaderCarrier): Future[SchemeResults] = super.eligibility(request)
   }
 

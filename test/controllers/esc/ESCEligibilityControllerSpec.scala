@@ -38,16 +38,10 @@ class ESCEligibilityControllerSpec extends FakeCCEligibilityApplication with Moc
   implicit val request = FakeRequest()
 
   "ESCEligibilityController" should {
-    val controller = new ESCEligibilityController {
-      override val escEligibility = mock[ESCEligibility]
-      override val auditEvent = mock[AuditEvents]
-    }
-
-    "not return NOT_FOUND endpoint" in {
-      val result = route(app, FakeRequest(POST, "/cc-eligibility/employer-supported-childcare/eligibility"))
-      result.isDefined shouldBe true
-      status(result.get) should not be NOT_FOUND
-    }
+    val controller = new ESCEligibilityController (
+      mock[ESCEligibility],
+      mock[AuditEvents]
+    )
 
     "Accept valid json should return Json body" in {
       val inputJson = Json.parse(JsonLoader.fromResource("/json/input/esc/eligibility_input_test.json").toString)

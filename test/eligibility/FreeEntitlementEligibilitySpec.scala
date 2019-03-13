@@ -38,6 +38,7 @@ import scala.concurrent.Future
 class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityApplication with MockitoSugar {
 
   val now = LocalDate.now
+  val mockTFCE = mock[TFCEligibility]
 
   "determine eligibility correctly for fifteenHours" when {
 
@@ -77,9 +78,9 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
 
     forAll(testCases) { case (location, dobs, isEligible) =>
       s"for ${location} and children dobs = ${dobs} eligibility should be ${isEligible}" in {
-        val freeEntitlementService: FreeEntitlementEligibility = new FreeEntitlementEligibility {
-          override val tfcEligibility: TFCEligibility = mock[TFCEligibility]
-        }
+        val freeEntitlementService: FreeEntitlementEligibility = new FreeEntitlementEligibility (
+          mock[TFCEligibility]
+        )
 
         val data = FreeEntitlementEligibilityInput(
           claimantLocation = location,
@@ -115,8 +116,9 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
         implicit val request = FakeRequest()
         implicit val hc = new HeaderCarrier()
 
-        val freeEntitlementService: FreeEntitlementEligibility = new FreeEntitlementEligibility {
-          val tfcEligibility = mock[TFCEligibility]
+        val freeEntitlementService: FreeEntitlementEligibility = new FreeEntitlementEligibility(
+          mockTFCE
+        ) {
           val testYear = LocalDate.now().minusYears(4).getYear
           val mockConfiguration = mock[Configuration]
           when(mockConfiguration.getString(ArgumentMatchers.any(), ArgumentMatchers.any()))
@@ -131,7 +133,7 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
         }
 
         when(
-          freeEntitlementService.tfcEligibility.eligibility(any[models.input.tfc.TFCEligibilityInput])(any[play.api.mvc.Request[_]], any[HeaderCarrier])
+          mockTFCE.eligibility(any[models.input.tfc.TFCEligibilityInput])(any[play.api.mvc.Request[_]], any[HeaderCarrier])
         ).thenReturn(
           Future.successful(
                 TFCEligibilityOutput(
@@ -174,13 +176,14 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
   "determine eligiblity correctly for thirtyHours when it's next year" in {
     implicit val request = FakeRequest()
     implicit val hc = new HeaderCarrier()
-    val freeEntitlementService: FreeEntitlementEligibility = new FreeEntitlementEligibility {
-      val tfcEligibility = mock[TFCEligibility]
+    val freeEntitlementService: FreeEntitlementEligibility = new FreeEntitlementEligibility(
+      mockTFCE
+    ) {
       override def localDate = LocalDate.now().plusYears(1)
     }
 
     when(
-      freeEntitlementService.tfcEligibility.eligibility(any[models.input.tfc.TFCEligibilityInput])(any[play.api.mvc.Request[_]], any[HeaderCarrier])
+      mockTFCE.eligibility(any[models.input.tfc.TFCEligibilityInput])(any[play.api.mvc.Request[_]], any[HeaderCarrier])
     ).thenReturn(
       Future.successful(
         TFCEligibilityOutput(

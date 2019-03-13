@@ -34,17 +34,13 @@ class AuditEventsTest extends FakeCCEligibilityApplication with MockitoSugar {
 
   def createObservableAuditConnector = new ObservableAuditConnector {}
 
-  def createAuditor(observableAuditConnector: ObservableAuditConnector) = {
+  def createAuditor(observableAuditConnector: ObservableAuditConnector): AuditEvents = {
 
-    val testAuditService = new AuditService {
-      override lazy val auditSource = "cc-eligibility"
+    val testAuditService = new AuditService(observableAuditConnector)
 
-      override def auditConnector = observableAuditConnector
-    }
-
-    new AuditEvents {
-      override val auditService: AuditService = testAuditService
-    }
+    new AuditEvents (
+      testAuditService
+    )
   }
 
   trait ObservableAuditConnector extends AuditConnector {
@@ -66,7 +62,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with MockitoSugar {
 
   "Audit Events" should {
     implicit val request = FakeRequest()
-    implicit var hc = new HeaderCarrier()
+    implicit val hc = new HeaderCarrier()
 
     "audit request received for TFC - success " in {
       val observableAuditConnector = createObservableAuditConnector

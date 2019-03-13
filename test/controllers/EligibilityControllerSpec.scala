@@ -25,7 +25,6 @@ import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
 import service.{AuditEvents, EligibilityService}
 
 import scala.concurrent.duration.Duration
@@ -36,23 +35,17 @@ class EligibilityControllerSpec extends FakeCCEligibilityApplication with Mockit
   implicit val request = FakeRequest()
 
   "EligibilityController" should {
-    val controller = new EligibilityController {
-      override val eligibilityService = mock[EligibilityService]
-      override val auditEvent = mock[AuditEvents]
-    }
+    val controller = new EligibilityController(
+      mock[EligibilityService],
+      mock[AuditEvents]
+    )
 
     "have reference to EligibilityService" in {
-      EligibilityController.eligibilityService.isInstanceOf[EligibilityService] shouldBe true
+      controller.eligibilityService.isInstanceOf[EligibilityService] shouldBe true
     }
 
     "have reference to auditEvents" in {
-      EligibilityController.auditEvent.isInstanceOf[AuditEvents] shouldBe true
-    }
-
-    "not return NOT_FOUND endpoint" in {
-      val result = route(app, FakeRequest(POST, "/cc-eligibility/eligibility"))
-      result.isDefined shouldBe true
-      status(result.get) should not be NOT_FOUND
+      controller.auditEvent.isInstanceOf[AuditEvents] shouldBe true
     }
 
     "Accept a valid json for household " in {

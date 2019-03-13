@@ -16,7 +16,7 @@
 
 package connectors
 
-import config.WSHttp
+import config.ApplicationConfig
 import controllers.FakeCCEligibilityApplication
 import models.input.CalculatorOutput
 import models.output.CalculatorInput
@@ -24,41 +24,32 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.mockito.MockitoSugar
-import uk.gov.hmrc.http.HttpPost
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future
 
 class CalculatorConnectorSpec extends UnitSpec with MockitoSugar with FakeCCEligibilityApplication with BeforeAndAfterEach {
 
-  val sut = new CalculatorConnector {
-    override val httpPost: HttpPost = mock[HttpPost]
-  }
+  "CalculatorConnector" should {
 
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    reset(sut.httpPost)
-  }
+    "get calculator result" in {
+      val mockHttp =  mock[DefaultHttpClient]
+      val testCalculatorConnector = new CalculatorConnector(app.injector.instanceOf[ApplicationConfig], mockHttp)
 
-  "check that httpPost is set" in {
-    CalculatorConnector.httpPost shouldBe WSHttp
-  }
+      val testOutput = CalculatorOutput(
+        tcAmount = Some(100),
+        tfcAmount = Some(200),
+        escAmount = Some(300)
+      )
 
-  "get calculator result" in {
-    val testOutput = CalculatorOutput(
-      tcAmount = Some(100),
-      tfcAmount = Some(200),
-      escAmount = Some(300)
-    )
+      when(mockHttp.POST[CalculatorInput, CalculatorOutput](anyString, any(), any())(any(), any(), any(), any()))
+        .thenReturn(Future.successful(testOutput))
 
-    when(
-      sut.httpPost.POST[CalculatorInput, CalculatorOutput](anyString, any(), any())(any(), any(), any(), any())
-    ).thenReturn(
-      Future.successful(testOutput)
-    )
+      val result = testCalculatorConnector.getCalculatorResult(CalculatorInput(tc = None, tfc = None, esc = None))
+      await(result) shouldBe testOutput
+    }
 
-    val result = await(sut.getCalculatorResult(CalculatorInput(tc = None, tfc = None, esc = None)))
-    result shouldBe testOutput
   }
 
 }

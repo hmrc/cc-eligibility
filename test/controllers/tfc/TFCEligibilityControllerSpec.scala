@@ -508,10 +508,10 @@ class TFCEligibilityControllerSpec extends CCConfigSpec
 
   val validTFCEligibilityOutput: TFCEligibilityOutput = TFCEligibilityOutput(LocalDate.now(), LocalDate.now, false, false, Nil)
 
-  val SUT = new TFCEligibilityController {
-    override val tfcEligibility = mock[TFCEligibility]
-    override val auditEvent = mock[AuditEvents]
-  }
+  val SUT = new TFCEligibilityController (
+    mock[TFCEligibility],
+    mock[AuditEvents]
+  )
 
   private def withCalltoPOSTInvalidPayload(payload: String)(handler: Future[Result] => Any) = {
     handler(SUT.eligible.apply(registerRequestWithPayload(Json.parse(payload))))

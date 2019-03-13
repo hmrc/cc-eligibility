@@ -18,6 +18,7 @@ package eligibility
 
 import java.util.Calendar
 
+import javax.inject.Inject
 import models.input.tfc.{TFCChild, TFCClaimant, TFCEligibilityInput}
 import models.output.tfc._
 import org.joda.time.LocalDate
@@ -27,12 +28,9 @@ import utils.TFCRolloutSchemeConfig
 
 import scala.concurrent.Future
 
-object TFCEligibility extends TFCEligibility
-
-trait TFCEligibility extends TFCRolloutSchemeConfig {
+class TFCEligibility @Inject()(auditEvent: AuditEvents) extends TFCRolloutSchemeConfig {
 
   import scala.concurrent.ExecutionContext.Implicits.global
-  val auditEvents: AuditEvents = AuditEvents
 
   def determineChildStartDateInTFCPeriod(child: models.input.tfc.TFCChild, periodFrom : LocalDate, periodUntil: LocalDate, location: String):Option[LocalDate]={
     val childDob : java.util.Date = child.dob.toDate
