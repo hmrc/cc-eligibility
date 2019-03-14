@@ -36,8 +36,8 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
     "have reference to TFCConfig" in {
       HHToTFCEligibilityInput.tFCConfig.isInstanceOf[TFCConfig] shouldBe true
     }
-    "return 4 as a default if tfcNoOfPeriods is not specified" in {
-      HHToTFCEligibilityInput.tFCConfig.tfcNoOfPeriods shouldBe 4
+    "return 6 as a default if tfcNoOfPeriods is not specified" in {
+      HHToTFCEligibilityInput.tFCConfig.tfcNoOfPeriods shouldBe 6
     }
 
     "convert Household to TFC Eligibility Input" when {
