@@ -17,14 +17,13 @@
 package utils
 
 
-import play.api.data.validation.ValidationError
 import play.api.libs.json._
 
 object JSONFactory extends JSONFactory
 
 trait JSONFactory {
 
-  def generateErrorJSON(status: Int, errors: Either[Seq[(JsPath, Seq[ValidationError])], Exception]): JsObject = {
+  def generateErrorJSON(status: Int, errors: Either[Seq[(JsPath, Seq[JsonValidationError])], Exception]): JsObject = {
     errors match {
       case Left(e) =>
         val errorsSequence = errorBuilder(e)
@@ -34,9 +33,8 @@ trait JSONFactory {
     }
   }
 
-  def errorBuilder(errors: Seq[(JsPath, Seq[ValidationError])]): JsArray = {
-    errors.nonEmpty match {
-      case true => {
+  def errorBuilder(errors: Seq[(JsPath, Seq[JsonValidationError])]): JsArray = {
+    if(errors.nonEmpty) {
         JsArray(
           errors.map {
             case (path, validationErrors) => Json.obj(
@@ -44,20 +42,16 @@ trait JSONFactory {
               "validationErrors" -> JsArray(validationErrors.map(
                 validationError => Json.obj(
                   "message" -> JsString(validationError.message),
-                  "args" -> JsArray(validationError.args.map(
-                    _ match {
+                  "args" -> JsArray(validationError.args.map {
                       case x: Int => JsNumber(x)
                       case x => JsString(x.toString)
                     }
-                  ))
+                  )
                 ))
               )
             )
           }
         )
-      }
-      case false => JsArray(Seq(JsString("Error while generating JSON response")))
-    }
+      } else { JsArray(Seq(JsString("Error while generating JSON response"))) }
   }
-
 }

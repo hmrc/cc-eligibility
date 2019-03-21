@@ -22,10 +22,12 @@ import java.util.{Calendar, Date}
 import config.ConfigConstants
 import org.joda.time.LocalDate
 import play.api.Play
-import play.api.data.validation.ValidationError
+import play.api.i18n.Lang
 import play.api.libs.functional.syntax._
-import play.api.libs.json.Reads._
+import play.api.libs.json.JodaReads._
+import play.api.libs.json.JodaWrites._
 import play.api.libs.json._
+import play.api.mvc.Request
 import service.AuditEvents
 import uk.gov.hmrc.http.HeaderCarrier
 import utils._
@@ -94,6 +96,8 @@ case class TFCEligibilityInput(
 
 object TFCEligibilityInput extends CCFormat with MessagesObject {
 
+  implicit val lang: Lang = Lang("en")
+
   def maxChildValidation(noOfChild: List[TFCChild]): Boolean = {
     noOfChild.length <= 25
   }
@@ -106,15 +110,15 @@ object TFCEligibilityInput extends CCFormat with MessagesObject {
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "numberOfPeriods").read[Short].orElse(Reads.pure(1)) and
         (JsPath \ "location").read[String] and
-          (JsPath \ "claimants").read[List[TFCClaimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
-            (JsPath \ "children").read[List[TFCChild]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
+          (JsPath \ "claimants").read[List[TFCClaimant]].filter(JsonValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
+            (JsPath \ "children").read[List[TFCChild]].filter(JsonValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
     )(TFCEligibilityInput.apply _)
 }
 
 case class TFCIncome(
-                   employmentIncome : Option[BigDecimal],
-                   pension : Option[BigDecimal],
-                   otherIncome : Option[BigDecimal]
+                   employmentIncome: Option[BigDecimal],
+                   pension: Option[BigDecimal],
+                   otherIncome: Option[BigDecimal]
                  )
 object TFCIncome {
   implicit val formats = Json.format[TFCIncome]
@@ -134,6 +138,7 @@ case class TFCClaimant(
                         maximumEarnings: Option[Boolean] = None
                      ) {
   lazy val auditEvents: AuditEvents = Play.current.injector.asInstanceOf[AuditEvents]
+  lazy val tFCConfig: TFCConfig = Play.current.injector.asInstanceOf[TFCConfig]
 
   def totalIncome: BigDecimal = {
     val (currentEmployment, currentvOther, currentPension) = getIncomeElements(previousIncome, currentIncome)
@@ -163,19 +168,19 @@ case class TFCClaimant(
     employmentIncome + otherIncome - pension * ConfigConstants.noOfMonths
   }
 
-  def isWorkingAtLeast16HoursPerWeek (periodStart: LocalDate, location: String) : Boolean = {
-    val taxYearConfig = TFCConfig.getConfig(periodStart, location)
-    val minimum : Double = taxYearConfig.minimumHoursWorked
+  def isWorkingAtLeast16HoursPerWeek (periodStart: LocalDate, location: String): Boolean = {
+    val taxYearConfig = tFCConfig.getConfig(periodStart, location)
+    val minimum: Double = taxYearConfig.minimumHoursWorked
     hoursPerWeek >= minimum
   }
 
-  def isTotalIncomeLessThan100000(periodStart: LocalDate, location: String) : Boolean = {
-    val taxYearConfig = TFCConfig.getConfig(periodStart, location)
+  def isTotalIncomeLessThan100000(periodStart: LocalDate, location: String): Boolean = {
+    val taxYearConfig = tFCConfig.getConfig(periodStart, location)
     val maximumTotalIncome: Double = taxYearConfig.maxIncomePerClaimant
     totalIncome <= maximumTotalIncome
   }
 
-  def isQualifyingForTFC(periodStart: LocalDate, location: String) : Boolean = {
+  def isQualifyingForTFC(periodStart: LocalDate, location: String): Boolean = {
       isTotalIncomeLessThan100000(periodStart, location)
   }
 
@@ -186,14 +191,14 @@ case class TFCClaimant(
     case _ => (taxYearConfig.nmw25Over, "25 or over") //25 or over
   }
 
-  def satisfyMinimumEarnings(periodStart: LocalDate, parent: Boolean, location:String)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
+  def satisfyMinimumEarnings(periodStart: LocalDate, parent: Boolean, location:String)(implicit req: Request[_], hc: HeaderCarrier): Boolean = {
     val user = if(parent) {
       "Parent"
     } else {
       "Partner"
     }
 
-    val taxYearConfig = TFCConfig.getConfig(periodStart, location)
+    val taxYearConfig = tFCConfig.getConfig(periodStart, location)
     if(minimumEarnings.selection) {
       true
     } else {
@@ -265,37 +270,35 @@ case class TFCChild(
                     disability: TFCDisability
                     ) extends models.input.BaseChild {
 
+  lazy val tFCConfig: TFCConfig = Play.current.injector.asInstanceOf[TFCConfig]
+
   def isDisabled: Boolean = {
     disability.severelyDisabled || disability.disabled
   }
 
-  def getChildBirthday(periodStart : LocalDate, location: String) : Date = {
-    isDisabled match {
-      case true => getChild16Birthday(periodStart, location)
-      case _ => getChild11Birthday(periodStart, location)
-    }
-  }
+  def getChildBirthday(periodStart: LocalDate, location: String): Date =
+    if(isDisabled) getChild16Birthday(periodStart, location) else getChild11Birthday(periodStart, location)
 
-  def getChild16Birthday(periodStart : LocalDate, location: String) : Date = {
-    val taxYearConfig = TFCConfig.getConfig(periodStart, location)
+  def getChild16Birthday(periodStart: LocalDate, location: String): Date = {
+    val taxYearConfig = tFCConfig.getConfig(periodStart, location)
     val ageIncrease = taxYearConfig.childAgeLimitDisabled
     childsBirthdayDateForAge(ageIncrease)
   }
 
-  def getChild11Birthday(periodStart : LocalDate, location: String) : Date = {
-    val taxYearConfig = TFCConfig.getConfig(periodStart, location)
+  def getChild11Birthday(periodStart: LocalDate, location: String): Date = {
+    val taxYearConfig = tFCConfig.getConfig(periodStart, location)
     val ageIncrease = taxYearConfig.childAgeLimit
     childsBirthdayDateForAge(ageIncrease)
   }
 
-  def getWeekEnd(calendar : Calendar, weekStart : Int) : Date = {
+  def getWeekEnd(calendar: Calendar, weekStart: Int): Date = {
     while (calendar.get(Calendar.DAY_OF_WEEK) != weekStart || calendar.get(Calendar.DAY_OF_MONTH) == 1) {
       calendar.add(Calendar.DATE, 1)
     }
     calendar.getTime
   }
 
-  def firstOfSeptember(septemberCalendar : Calendar, childBirthday: Date, childBirthdayCalendar: Calendar) : Date = {
+  def firstOfSeptember(septemberCalendar: Calendar, childBirthday: Date, childBirthdayCalendar: Calendar): Date = {
     septemberCalendar.setFirstDayOfWeek(Calendar.SUNDAY)
     septemberCalendar.setTime(childBirthday) // today
     septemberCalendar.set(Calendar.MONTH, Calendar.SEPTEMBER) // september in calendar year
@@ -305,9 +308,9 @@ case class TFCChild(
 
   }
 
-  def endWeek1stOfSeptemberDate(periodStart : LocalDate, location: String) : Date = {
+  def endWeek1stOfSeptemberDate(periodStart: LocalDate, location: String): Date = {
     val childBirthday = getChildBirthday(periodStart, location)  //child's 11th or 16th Birthday
-    val childBirthdayCalendar : Calendar = Calendar.getInstance()  // todays date
+    val childBirthdayCalendar: Calendar = Calendar.getInstance()  // todays date
     childBirthdayCalendar.setTime(childBirthday) // childs date of birth
     val septemberCalendar = Calendar.getInstance()
     septemberCalendar.clear()
@@ -325,17 +328,19 @@ case class TFCChild(
 
 object TFCChild extends CCFormat with MessagesObject {
 
+  implicit val lang: Lang = Lang("en")
+
   def validID(id: Short): Boolean = {
     id >= 0
   }
 
-  def childSpendValidation(cost: BigDecimal) : Boolean = {
+  def childSpendValidation(cost: BigDecimal): Boolean = {
     cost >= BigDecimal(0.00)
   }
 
   implicit val childReads: Reads[TFCChild] = (
-    (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
-      (JsPath \ "childcareCost").read[BigDecimal].filter(ValidationError(messages("cc.elig.childcare.spend.too.low")))(x => childSpendValidation(x)) and
+    (JsPath \ "id").read[Short].filter(JsonValidationError(messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
+      (JsPath \ "childcareCost").read[BigDecimal].filter(JsonValidationError(messages("cc.elig.childcare.spend.too.low")))(x => childSpendValidation(x)) and
         (JsPath \ "childcareCostPeriod").read[Periods.Period] and
           (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
             (JsPath \ "disability").read[TFCDisability]

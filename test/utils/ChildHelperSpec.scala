@@ -17,12 +17,13 @@
 package utils
 
 import org.joda.time.LocalDate
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 
-class ChildHelperSpec extends CCConfigSpec {
+class ChildHelperSpec extends CCConfigSpec with MockitoSugar {
 
-  class Test extends ChildHelper {}
+  class Test extends ChildHelper(mock[CCConfig])
 
   val testClass = new Test
 
@@ -40,7 +41,7 @@ class ChildHelperSpec extends CCConfigSpec {
     )
 
     forAll(testCases) { case (dob, currentDate, result) =>
-      s"return age = ${result} if dob = ${dob}" in {
+      s"return age = $result if dob = $dob" in {
         testClass.age(dob, currentDate) shouldBe result
       }
     }

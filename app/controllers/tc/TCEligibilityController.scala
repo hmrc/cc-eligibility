@@ -21,17 +21,18 @@ import javax.inject.Inject
 import models.input.tc.TCEligibilityInput
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.Action
+import play.api.mvc.{Action, ControllerComponents}
 import service.AuditEvents
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class TCEligibilityController @Inject()(val tcEligibility: TCEligibility,
-                                        val auditEvent: AuditEvents) extends BaseController {
+class TCEligibilityController @Inject()(tcEligibility: TCEligibility,
+                                        auditEvent: AuditEvents,
+                                        cc: ControllerComponents) extends BackendController(cc) {
 
-  def eligible : Action[JsValue] = Action.async(parse.json) {
+  def eligible : Action[JsValue] = Action.async(cc.parsers.json) {
     implicit request =>
       request.body.validate[TCEligibilityInput].fold(
         error => {

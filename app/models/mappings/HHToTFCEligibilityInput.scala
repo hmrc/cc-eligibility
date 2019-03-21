@@ -16,21 +16,16 @@
 
 package models.mappings
 
+import javax.inject.Inject
 import models._
 import models.input.tfc._
 import utils.TFCConfig
 
-object HHToTFCEligibilityInput extends HHToTFCEligibilityInput {
-  override val tFCConfig = TFCConfig
-}
-
-trait HHToTFCEligibilityInput extends PeriodEnumToPeriod {
-
-  val tFCConfig: TFCConfig
+class HHToTFCEligibilityInput @Inject()(val tFCConfig: TFCConfig) extends PeriodEnumToPeriod {
 
   def convert(hh: Household): TFCEligibilityInput = {
     TFCEligibilityInput(
-      from = tFCConfig.StartDate,
+      from = tFCConfig.config.startDate,
       numberOfPeriods = tFCConfig.tfcNoOfPeriods,
       location = hh.location.getOrElse(LocationEnum.ENGLAND.toString).toString,
       claimants = hhClaimantToTFCEligibilityInputClaimant(hh.parent, hh.partner),
@@ -68,11 +63,11 @@ trait HHToTFCEligibilityInput extends PeriodEnumToPeriod {
   private def hhMinimumEarningsToTFCMinimumEarnings(hhMinimumEarnings: Option[MinimumEarnings]): TFCMinimumEarnings = {
 
     hhMinimumEarnings match {
-      case Some(hhMinimumEarnings) => {
-        if (hhMinimumEarnings.amount <= BigDecimal(0.00)) {
+      case Some(earnings) => {
+        if (earnings.amount <= BigDecimal(0.00)) {
           TFCMinimumEarnings(selection = false, amount = BigDecimal(0.00))
         } else {
-          TFCMinimumEarnings(amount = hhMinimumEarnings.amount)
+          TFCMinimumEarnings(amount = earnings.amount)
         }
       }
       case None => TFCMinimumEarnings() //default values will be used

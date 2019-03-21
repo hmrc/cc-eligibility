@@ -20,15 +20,16 @@ import javax.inject.Inject
 import models.Household
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.Action
+import play.api.mvc.{Action, ControllerComponents}
 import service.{AuditEvents, EligibilityService}
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class EligibilityController @Inject ()(val eligibilityService: EligibilityService,
-                                       val auditEvent: AuditEvents) extends BaseController {
+                                       val auditEvent: AuditEvents,
+                                       cc: ControllerComponents) extends BackendController(cc) {
 
   def eligible : Action[JsValue] = Action.async(parse.json) {
     implicit request =>

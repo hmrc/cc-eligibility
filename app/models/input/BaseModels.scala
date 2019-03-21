@@ -19,6 +19,7 @@ package models.input
 import java.util.{Calendar, Date}
 
 import org.joda.time.LocalDate
+import play.api.Play
 import utils.CCConfig
 
 trait BaseTaxYear {
@@ -30,6 +31,8 @@ trait BaseChild {
   def id : Short
   def dob : LocalDate
 
+  lazy val ccConfig: CCConfig = Play.current.injector.instanceOf[CCConfig]
+
   def isBeingBornInTaxYear(taxYear: BaseTaxYear) : (Boolean, LocalDate) = {
     val dateOfBirth = dob.toDate
 
@@ -38,7 +41,7 @@ trait BaseChild {
   }
 
   private def isSplittingPeriod1stSeptBeforeEndDate(claimDate: LocalDate, years: Int, september1 : LocalDate) = {
-    val previousSeptember1 = CCConfig.previousSeptember1stForDate(claimDate)
+    val previousSeptember1 = ccConfig.previousSeptember1stForDate(claimDate)
     val childBirthday = childsBirthdayDateForAge(years)
     childBirthday match {
       //if child's 15/16(if disabled) birthday after 1st September of current tax year no split is required
@@ -56,7 +59,7 @@ trait BaseChild {
 
   // TODO REMOVE THE BIRTHDAY IS AFTER PERIOD START DATE?
   def isSplittingPeriodOn1stSeptemberForYear(claimDate: LocalDate, endDate : LocalDate, years: Int) : (Boolean, LocalDate) = {
-    val september1 = CCConfig.september1stForDate(claimDate)
+    val september1 = ccConfig.september1stForDate(claimDate)
     val requiresSplit = september1 match {
       //if child's 15/16(if disabled) birthday after end date of current tax year no split is required
       case date if date.toDate.after(endDate.toDate) =>

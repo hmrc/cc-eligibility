@@ -22,7 +22,6 @@ import models.output.tc._
 import models.output.tfc._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import play.api.data.validation.ValidationError
 import play.api.libs.json._
 
 class JSONFactorySpec extends FakeCCEligibilityApplication {
@@ -32,9 +31,9 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
     "Return a valid output JSON when error sequence and status are passed" in {
       val status = 400
       val JSONPath = JsPath \ "tc"
-      val validationError1 = ValidationError("Very Bad Thing Happened", 42)
-      val validationError2 = ValidationError("Not So Bad Thing Happened", "Error")
-      val errorTuple: (play.api.libs.json.JsPath, Seq[play.api.data.validation.ValidationError]) = (JSONPath, Seq(validationError1, validationError2))
+      val validationError1 = JsonValidationError("Very Bad Thing Happened", 42)
+      val validationError2 = JsonValidationError("Not So Bad Thing Happened", "Error")
+      val errorTuple: (JsPath, Seq[JsonValidationError]) = (JSONPath, Seq(validationError1, validationError2))
 
       val outputJSON = Json.parse(
         """

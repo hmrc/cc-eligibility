@@ -21,16 +21,18 @@ import javax.inject.Inject
 import models.input.esc.ESCEligibilityInput
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.Action
+import play.api.mvc.{Action, ControllerComponents}
 import service.AuditEvents
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ESCEligibilityController @Inject()(val escEligibility: ESCEligibility, auditEvent: AuditEvents) extends BaseController {
+class ESCEligibilityController @Inject()(escEligibility: ESCEligibility,
+                                         auditEvent: AuditEvents,
+                                         cc: ControllerComponents) extends BackendController(cc) {
 
-  def eligible : Action[JsValue] = Action.async(parse.json) {
+  def eligible : Action[JsValue] = Action.async(cc.parsers.json) {
     implicit request =>
       request.body.validate[ESCEligibilityInput].fold(
         error => {

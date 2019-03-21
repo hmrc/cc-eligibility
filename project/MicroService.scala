@@ -36,14 +36,11 @@ trait MicroService {
     .settings(majorVersion := 1)
     .settings(playSettings ++ scoverageSettings : _*)
     .settings(publishingSettings : _*)
-    .settings(routesGenerator := InjectedRoutesGenerator)
     .settings(
       libraryDependencies ++= appDependencies,
       retrieveManaged := true,
       evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
-      routesGenerator := StaticRoutesGenerator,
       scalaVersion := "2.11.12",
-      crossScalaVersions := Seq("2.11.12"),
       ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) },
       resolvers := Seq(
         Resolver.bintrayRepo("hmrc", "releases"),

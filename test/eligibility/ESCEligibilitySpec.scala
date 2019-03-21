@@ -27,10 +27,11 @@ import scala.concurrent.Future
 
 class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar with ESCChildren {
 
+  val service = app.injector.instanceOf[ESCEligibility]
+
   "ESCEligibilityService" should {
 
     "return a Future[Eligibility] result" in {
-      val service = ESCEligibility
       val result = service.eligibility(ESCEligibilityInput(escTaxYears = List()))
       result.isInstanceOf[Future[ESCEligibilityOutput]] shouldBe true
     }
@@ -43,7 +44,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
       val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
-      val result = ESCEligibility invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
+      val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 1
     }
@@ -56,7 +57,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
       val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
-      val result = ESCEligibility invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
+      val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 2
     }
@@ -69,7 +70,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
       val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
-      val result = ESCEligibility invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
+      val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 1
     }
@@ -82,7 +83,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
       val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
-      val result = ESCEligibility invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
+      val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 2
     }
@@ -95,7 +96,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
       val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
-      val result = ESCEligibility invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
+      val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 2
     }
@@ -110,7 +111,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child, child2))
 
-      val result = ESCEligibility.generateSplitDates(taxYear)
+      val result = service.generateSplitDates(taxYear)
       result shouldBe List(dateOfBirth, dateOfBirth2)
     }
 
@@ -123,7 +124,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child, child2))
 
-      val result = ESCEligibility.generateSplitDates(taxYear)
+      val result = service.generateSplitDates(taxYear)
       result shouldBe List(dateOfBirth, dateOfBirth2)
     }
 
@@ -137,7 +138,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child, child2))
 
-      val result = ESCEligibility.determineStartDatesOfPeriodsInTaxYear(taxYear)
+      val result = service.determineStartDatesOfPeriodsInTaxYear(taxYear)
       result shouldBe List(today,september,dateOfBirth2)
     }
 
@@ -151,7 +152,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val child2 = buildChild(id = 1, dob = dateOfBirth2)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
+      val result = service.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = buildOutputChild(
         qualifying = true
@@ -192,7 +193,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val child2 = buildChild(id = 1, dob = dateOfBirth2)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
+      val result = service.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = buildOutputChild(
         qualifying = false
@@ -233,7 +234,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val child2 = buildChild(dob = dateOfBirth2)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
+      val result = service.determinePeriodsForTaxYear(taxYear)
 
       result shouldBe List(
         ESCPeriod(
@@ -281,7 +282,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val child2 = buildChild(dob = dateOfBirth2)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
+      val result = service.determinePeriodsForTaxYear(taxYear)
 
       result shouldBe List(
         ESCPeriod(
@@ -330,7 +331,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val child2 = buildChild(dob = dateOfBirth2)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
+      val result = service.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = buildOutputChild(
         qualifying = true
@@ -423,7 +424,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val child2 = buildChild(dob = dateOfBirth2)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
+      val result = service.determinePeriodsForTaxYear(taxYear)
 
       result shouldBe List(
         ESCPeriod(
@@ -487,7 +488,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val child1 = buildChild(dob = dateOfBirth1)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1), claimants = List(claimant1))
-      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
+      val result = service.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = buildOutputChild(
         qualifying = false
@@ -546,7 +547,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val child2 = buildChild(dob = dateOfBirth2)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
+      val result = service.determinePeriodsForTaxYear(taxYear)
 
       result shouldBe List(
         ESCPeriod(
@@ -595,7 +596,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val child2 = buildChild(dob = dateOfBirth2)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
+      val result = service.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = buildOutputChild(
         qualifying = true
@@ -665,7 +666,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val result = ESCEligibility.determinePeriodsForTaxYear(taxYear)
+      val result = service.determinePeriodsForTaxYear(taxYear)
 
       result shouldBe List(
         ESCPeriod(
@@ -737,7 +738,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear))
+      val result = service.constructTaxYearsWithPeriods(List(taxYear))
 
       val outputChild1 = buildOutputChild(
         qualifying = true
@@ -793,7 +794,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear))
+      val result = service.constructTaxYearsWithPeriods(List(taxYear))
 
       val outputChild1 = buildOutputChild(
         qualifying = true
@@ -850,7 +851,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear))
+      val result = service.constructTaxYearsWithPeriods(List(taxYear))
 
       val outputChild1 = buildOutputChild(
         qualifying = false
@@ -907,7 +908,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear))
+      val result = service.constructTaxYearsWithPeriods(List(taxYear))
 
       result shouldBe List(
         models.output.esc.ESCTaxYear(
@@ -970,7 +971,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear))
+      val result = service.constructTaxYearsWithPeriods(List(taxYear))
 
       result shouldBe List(
         models.output.esc.ESCTaxYear(
@@ -1033,7 +1034,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear))
+      val result = service.constructTaxYearsWithPeriods(List(taxYear))
 
       result shouldBe List(
         models.output.esc.ESCTaxYear(
@@ -1096,7 +1097,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear))
+      val result = service.constructTaxYearsWithPeriods(List(taxYear))
 
       result shouldBe List(
         models.output.esc.ESCTaxYear(
@@ -1159,7 +1160,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear))
+      val result = service.constructTaxYearsWithPeriods(List(taxYear))
 
 
 
@@ -1235,7 +1236,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
       val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1), claimants = List(claimant1))
-      val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear))
+      val result = service.constructTaxYearsWithPeriods(List(taxYear))
 
       val outputChild1 = buildOutputChild(
         qualifying = false
@@ -1309,7 +1310,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
 
       val taxYear1 = ESCTaxYear(from = ty1periodStart, until = ty1periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val taxYear2 = ESCTaxYear(from = ty2periodStart, until = ty2periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear1, taxYear2))
+      val result = service.constructTaxYearsWithPeriods(List(taxYear1, taxYear2))
 
       result shouldBe List(
         models.output.esc.ESCTaxYear(
@@ -1432,7 +1433,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
 
       val taxYear1 = ESCTaxYear(from = ty1periodStart, until = ty1periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val taxYear2 = ESCTaxYear(from = ty2periodStart, until = ty2periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear1, taxYear2))
+      val result = service.constructTaxYearsWithPeriods(List(taxYear1, taxYear2))
 
       result shouldBe List(
         models.output.esc.ESCTaxYear(
@@ -1537,7 +1538,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val taxYear1 = ESCTaxYear(from = ty1periodStart, until = ty1periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
       val taxYear2 = ESCTaxYear(from = ty2periodStart, until = ty2periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
 
-      val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear1, taxYear2))
+      val result = service.constructTaxYearsWithPeriods(List(taxYear1, taxYear2))
       result shouldBe List(
         models.output.esc.ESCTaxYear(
           from = ty1periodStart,
@@ -1668,7 +1669,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
         vouchers = true
       )
 
-      val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear1, taxYear2))
+      val result = service.constructTaxYearsWithPeriods(List(taxYear1, taxYear2))
       result shouldBe List(
         models.output.esc.ESCTaxYear(
           from = ty1periodStart,
@@ -1737,7 +1738,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val taxYear1 = ESCTaxYear(from = ty1Start, until = ty1End, children = List(child1, child2, child3), claimants = List(claimant1))
       val taxYear2 = ESCTaxYear(from = ty2Start, until = ty2End, children = List(child1, child2, child3), claimants = List(claimant1))
 
-      val result = ESCEligibility.constructTaxYearsWithPeriods(List(taxYear1, taxYear2))
+      val result = service.constructTaxYearsWithPeriods(List(taxYear1, taxYear2))
       result shouldBe List(
         models.output.esc.ESCTaxYear(
           from = ty1Start,
@@ -1833,7 +1834,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val child2 = buildChild(dob = dateOfBirth2)
       val child3 = buildChild(dob = dateOfBirth3)
 
-      val result = ESCEligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
+      val result = service.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
       result shouldBe List(
         buildOutputChild(qualifying = true),
         buildOutputChild(qualifying = false),
@@ -1851,7 +1852,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val child2 = buildChild(dob = dateOfBirth2)
       val child3 = buildChild(dob = dateOfBirth3)
 
-      val result = ESCEligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
+      val result = service.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
       result shouldBe List(
         buildOutputChild(qualifying = false),
         buildOutputChild(qualifying = false),
@@ -1871,7 +1872,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val child2 = buildChild(dob = dateOfBirth2)
       val child3 = buildChild(dob = dateOfBirth3)
 
-      val result = ESCEligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
+      val result = service.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
       result shouldBe List(
         buildOutputChild(qualifying = false),
         buildOutputChild(qualifying = false),
@@ -1891,7 +1892,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val child2 = buildChild(dob = dateOfBirth2)
       val child3 = buildChild(dob = dateOfBirth3)
 
-      val result = ESCEligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
+      val result = service.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
       result shouldBe List(
         buildOutputChild(qualifying = false),
         buildOutputChild(qualifying = true),
@@ -1910,7 +1911,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val child2 = buildChild(dob = dateOfBirth2)
       val child3 = buildChild(dob = dateOfBirth3)
 
-      val result = ESCEligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
+      val result = service.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
       result shouldBe List(
         buildOutputChild(qualifying = false),
         buildOutputChild(qualifying = false),
@@ -1933,7 +1934,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val child4 = buildChild(dob = dateOfBirth4)
       val child5 = buildChild(dob = dateOfBirth5)
 
-      val result = ESCEligibility.determineChildrensEligibilityForPeriod(List(child1,child2,child3,child4, child5),ty1periodStart)
+      val result = service.determineChildrensEligibilityForPeriod(List(child1,child2,child3,child4, child5),ty1periodStart)
       result shouldBe List(
         buildOutputChild(qualifying = false),
         buildOutputChild(qualifying = true),
@@ -1951,7 +1952,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
         previousIncome = Some(ESCIncome(Some(20000.0),Some(200.0), Some("1100L"))),
         currentIncome = Some(ESCIncome(Some(20000.0),Some(200.0), Some("1150L"))))
 
-      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(List(), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = true,
@@ -1971,7 +1972,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = true)
 
-      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = true,
@@ -1993,7 +1994,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = true)
 
-      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
@@ -2014,7 +2015,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
 
-      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(List(), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
@@ -2032,7 +2033,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = false)
 
-      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
@@ -2059,7 +2060,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
-      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = true,
@@ -2083,7 +2084,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = true)
 
-      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
@@ -2113,7 +2114,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = false)
 
-      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = true,
@@ -2142,7 +2143,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
 
-      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
@@ -2166,7 +2167,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = false)
 
-      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
@@ -2195,7 +2196,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
-      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = true,
@@ -2219,7 +2220,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = true)
 
-      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = true,
@@ -2249,7 +2250,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = false)
 
-      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = true,
@@ -2278,7 +2279,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
 
-      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
@@ -2302,7 +2303,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = false)
 
-      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
@@ -2331,7 +2332,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
 
-      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
@@ -2354,7 +2355,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
 
       val claimant1 = ESCClaimant(isPartner = false)
 
-      val result = ESCEligibility.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
@@ -2369,7 +2370,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val ty1periodStart = LocalDate.parse("2016-06-20", formatter)
       val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val result = ESCEligibility.numberOfQualifyingMonthsForPeriod(qualifying = false, ty1periodStart, ty1periodEnd)
+      val result = service.numberOfQualifyingMonthsForPeriod(qualifying = false, ty1periodStart, ty1periodEnd)
       result shouldBe 0
     }
 
@@ -2377,7 +2378,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val ty1periodStart = LocalDate.parse("2016-06-20", formatter)
       val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val result = ESCEligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
+      val result = service.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 10
     }
 
@@ -2385,7 +2386,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val ty1periodStart = LocalDate.parse("2015-06-20", formatter)
       val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val result = ESCEligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
+      val result = service.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 22
     }
 
@@ -2393,7 +2394,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val ty1periodStart = LocalDate.parse("2016-04-1", formatter)
       val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val result = ESCEligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
+      val result = service.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 12
     }
 
@@ -2401,7 +2402,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val ty1periodStart = LocalDate.parse("2016-04-15", formatter)
       val ty1periodEnd = LocalDate.parse("2016-09-01", formatter)
 
-      val result = ESCEligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
+      val result = service.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 5
     }
 
@@ -2409,7 +2410,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val ty1periodStart = LocalDate.parse("2016-06-15", formatter)
       val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
 
-      val result = ESCEligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
+      val result = service.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 10
     }
 
@@ -2417,7 +2418,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val ty1periodStart = LocalDate.parse("2017-04-06", formatter)
       val ty1periodEnd = LocalDate.parse("2017-06-15", formatter)
 
-      val result = ESCEligibility.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
+      val result = service.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 2
     }
 

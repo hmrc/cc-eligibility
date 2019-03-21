@@ -19,16 +19,16 @@ package models.input.esc
 import models.LocationEnum.LocationEnum
 import models.input.BaseTaxYear
 import org.joda.time.LocalDate
-import play.api.data.validation.ValidationError
+import play.api.Play
+import play.api.i18n.Lang
 import play.api.libs.functional.syntax._
-import play.api.libs.json.Reads._
+import play.api.libs.json.JodaReads._
+import play.api.libs.json.JodaWrites._
 import play.api.libs.json._
 import utils.{CCFormat, ESCConfig, MessagesObject, Periods}
 
-case class ESCEligibilityInput(
-                                escTaxYears: List[ESCTaxYear],
-                                location: Option[LocationEnum] = None
-                  )
+case class ESCEligibilityInput(escTaxYears: List[ESCTaxYear],
+                               location: Option[LocationEnum] = None)
 
 object ESCEligibilityInput {
   implicit val requestFormat: Reads[ESCEligibilityInput] = Json.reads[ESCEligibilityInput]
@@ -43,19 +43,21 @@ case class ESCTaxYear(
 
 object ESCTaxYear extends CCFormat with MessagesObject {
 
+  implicit val lang: Lang = Lang("en")
+
   def maxChildValidation(noOfChild: List[ESCChild]): Boolean = {
     noOfChild.length <= 25
   }
 
   def claimantValidation(noOfClaimant: List[ESCClaimant]): Boolean = {
-    noOfClaimant.length > 0 && noOfClaimant.length < 3
+    noOfClaimant.nonEmpty && noOfClaimant.length < 3
   }
 
   implicit val taxYearReads: Reads[ESCTaxYear] = (
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "until").read[LocalDate](jodaLocalDateReads(datePattern)) and
-        (JsPath \ "claimants").read[List[ESCClaimant]].filter(ValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
-          (JsPath \ "children").read[List[ESCChild]].filter(ValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
+        (JsPath \ "claimants").read[List[ESCClaimant]].filter(JsonValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
+          (JsPath \ "children").read[List[ESCChild]].filter(JsonValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
     )(ESCTaxYear.apply _)
 }
 
@@ -97,14 +99,16 @@ case class ESCChild(
                    disability: ESCDisability
                   ) extends models.input.BaseChild {
 
+  val eSCConfig: ESCConfig = Play.current.injector.instanceOf[ESCConfig]
+
   def isTurning16Before1September(periodStart: LocalDate, periodUntil : LocalDate) : (Boolean, LocalDate) = {
-    val escTaxYearConfig = ESCConfig.getConfig(periodStart)
+    val escTaxYearConfig = eSCConfig.getConfig(periodStart)
     val ageIncrease = escTaxYearConfig.childAgeLimitDisabled
     isSplittingPeriodOn1stSeptemberForYear(periodStart, periodUntil, ageIncrease)
   }
 
   def isTurning15Before1September(periodStart: LocalDate, periodUntil : LocalDate ) : (Boolean, LocalDate) = {
-    val escTaxYearConfig = ESCConfig.getConfig(periodStart)
+    val escTaxYearConfig = eSCConfig.getConfig(periodStart)
     val ageIncrease = escTaxYearConfig.childAgeLimit
     isSplittingPeriodOn1stSeptemberForYear(periodStart, periodUntil, ageIncrease)
   }
@@ -114,7 +118,7 @@ case class ESCChild(
   }
 
   def qualifiesForESC(now : LocalDate = LocalDate.now) : Boolean = {
-    val escTaxYearConfig = ESCConfig.getConfig(now)
+    val escTaxYearConfig = eSCConfig.getConfig(now)
     val threshold15 = escTaxYearConfig.childAgeLimit
     val threshold16 = escTaxYearConfig.childAgeLimitDisabled
     val childAge = age(now)
@@ -122,8 +126,8 @@ case class ESCChild(
     val child15Birthday = childsBirthdayDateForAge(years = threshold15)
     val child16Birthday = childsBirthdayDateForAge(years = threshold16)
 
-    val september1stFollowing15thBirthday = ESCConfig.september1stFollowingChildBirthday(LocalDate.fromDateFields(child15Birthday))
-    val september1stFollowing16thBirthday = ESCConfig.september1stFollowingChildBirthday(LocalDate.fromDateFields(child16Birthday))
+    val september1stFollowing15thBirthday = eSCConfig.config.september1stFollowingChildBirthday(LocalDate.fromDateFields(child15Birthday))
+    val september1stFollowing16thBirthday = eSCConfig.config.september1stFollowingChildBirthday(LocalDate.fromDateFields(child16Birthday))
 
     val child15Rule = now.toDate.before(september1stFollowing15thBirthday.toDate) && !isDisabled
     val child16Rule = now.toDate.before(september1stFollowing16thBirthday.toDate) && isDisabled
@@ -139,7 +143,7 @@ object ESCChild extends CCFormat with MessagesObject {
   }
 
   implicit val childReads: Reads[ESCChild] = (
-    (JsPath \ "id").read[Short].filter(ValidationError(messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
+    (JsPath \ "id").read[Short].filter(JsonValidationError(messages("cc.elig.id.should.not.be.less.than.0")(Lang("en"))))(x => validID(x)) and
       (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
         (JsPath \ "childCareCost").read[BigDecimal] and
           (JsPath \ "childCareCostPeriod").read[Periods.Period] and

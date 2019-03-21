@@ -16,17 +16,12 @@
 
 package models.mappings
 
+import javax.inject.Inject
 import models._
 import models.input.esc._
 import utils.{CCConfig, HelperManager}
 
-object HHToESCEligibilityInput extends HHToESCEligibilityInput {
-  override val cCConfig = CCConfig
-}
-
-trait HHToESCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
-
-  val cCConfig: CCConfig
+class HHToESCEligibilityInput @Inject()(val cCConfig: CCConfig) extends PeriodEnumToPeriod with HelperManager {
 
   def convert(household: Household): ESCEligibilityInput = {
     ESCEligibilityInput(createTaxYears(household.parent, household.partner, household.children),
@@ -39,7 +34,7 @@ trait HHToESCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
                               children: List[Child]
                             ): List[ESCTaxYear] = {
 
-    val now = cCConfig.StartDate
+    val now = cCConfig.startDate
     val april6thCurrentYear = determineApril6DateFromNow(now)
     val claimantList = createClaimants(parent, partner)
     val childList = createChildren(children)

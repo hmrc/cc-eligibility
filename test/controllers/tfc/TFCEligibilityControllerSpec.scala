@@ -25,10 +25,9 @@ import org.joda.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
-import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Request, Result}
+import play.api.mvc._
 import play.api.test.Helpers._
 import play.api.test.{FakeHeaders, FakeRequest}
 import service.AuditEvents
@@ -40,8 +39,25 @@ import scala.concurrent.Future
 
 class TFCEligibilityControllerSpec extends CCConfigSpec
   with FakeCCEligibilityApplication
-  with MockitoSugar
   with BeforeAndAfter {
+
+  val validTFCEligibilityInputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/input/tfc/eligibility_input_test.json").toString)
+  val validTFCEligibilityOutput: TFCEligibilityOutput = TFCEligibilityOutput(LocalDate.now(), LocalDate.now, false, false, Nil)
+  val SUT = new TFCEligibilityController(mock[TFCEligibility], mock[AuditEvents], mockCC)
+
+  private def withCalltoPOSTInvalidPayload(payload: String)(handler: Future[Result] => Any) = {
+    handler(SUT.eligible.apply(registerRequestWithPayload(Json.parse(payload))))
+  }
+
+  private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {
+    handler(SUT.eligible.apply(registerRequestWithPayload(payload)))
+  }
+  private def registerRequestWithPayload(payload: JsValue): Request[JsValue] = FakeRequest(
+    "POST",
+    "",
+    FakeHeaders(),
+    payload
+  ).withHeaders(CONTENT_TYPE -> "application/json")
 
   before{
     when(SUT.tfcEligibility.eligibility(any[TFCEligibilityInput]())(any[play.api.mvc.Request[_]], any[HeaderCarrier])).
@@ -49,8 +65,6 @@ class TFCEligibilityControllerSpec extends CCConfigSpec
   }
 
   "TFCEligibilityController" should {
-    implicit val req = FakeRequest()
-    implicit val hc = new HeaderCarrier()
 
     "not return NOT_FOUND endpoint" in {
       val result = route(app, FakeRequest(POST, "/cc-eligibility/tax-free-childcare/eligibility"))
@@ -503,27 +517,4 @@ class TFCEligibilityControllerSpec extends CCConfigSpec
       }
     }
   }
-
-  val validTFCEligibilityInputJson: JsValue = Json.parse(JsonLoader.fromResource("/json/input/tfc/eligibility_input_test.json").toString)
-
-  val validTFCEligibilityOutput: TFCEligibilityOutput = TFCEligibilityOutput(LocalDate.now(), LocalDate.now, false, false, Nil)
-
-  val SUT = new TFCEligibilityController (
-    mock[TFCEligibility],
-    mock[AuditEvents]
-  )
-
-  private def withCalltoPOSTInvalidPayload(payload: String)(handler: Future[Result] => Any) = {
-    handler(SUT.eligible.apply(registerRequestWithPayload(Json.parse(payload))))
-  }
-
-  private def withCallToPOST(payload: JsValue)(handler: Future[Result] => Any) = {
-    handler(SUT.eligible.apply(registerRequestWithPayload(payload)))
-  }
-  private def registerRequestWithPayload(payload: JsValue): Request[JsValue] = FakeRequest(
-    "POST",
-    "",
-    FakeHeaders(),
-    payload
-  ).withHeaders(CONTENT_TYPE -> "application/json")
 }
