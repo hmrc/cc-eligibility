@@ -17,15 +17,12 @@
 package config
 
 import javax.inject.Inject
-import play.api.{Configuration, Environment}
-import play.api.Mode.Mode
-import uk.gov.hmrc.play.config.ServicesConfig
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
-class ApplicationConfig @Inject() (val runModeConfiguration : Configuration,
-                                    env: Environment
-                                  ) extends ServicesConfig {
-  val mode: Mode = env.mode
-  lazy val calculatorUrl = {
-    baseUrl("cc-calculator") + getString("microservice.services.cc-calculator.url")
+class ApplicationConfig @Inject() (conf: ServicesConfig) {
+
+  lazy val calculatorUrl: String = {
+    conf.baseUrl("cc-calculator") + conf.getString("microservice.services.cc-calculator.url")
   }
+
 }

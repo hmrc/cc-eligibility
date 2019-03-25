@@ -23,8 +23,14 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
 import play.api.Configuration
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 class SchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar {
+
+  lazy val ccConfig = new CCConfig(
+    app.injector.instanceOf[ServicesConfig],
+    app.injector.instanceOf[Configuration]
+  )
 
   "SchemeConfig" should {
 
@@ -32,40 +38,40 @@ class SchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val from = LocalDate.parse("2015-06-20", formatter)
 
-      CCConfig.september1stForDate(from) shouldBe LocalDate.parse("2015-09-01", formatter)
+      ccConfig.september1stForDate(from) shouldBe LocalDate.parse("2015-09-01", formatter)
     }
 
     "return prior 1st september date for current tax year date" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val from = LocalDate.parse("2015-06-20", formatter)
 
-      CCConfig.previousSeptember1stForDate(from) shouldBe LocalDate.parse("2014-09-01", formatter)
+      ccConfig.previousSeptember1stForDate(from) shouldBe LocalDate.parse("2014-09-01", formatter)
     }
 
 
     "(child birthday is before september 1st) return September 1st following child's birthday" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val birthday = LocalDate.parse("2015-06-20", formatter)
-      CCConfig.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2015-09-01", formatter)
+      ccConfig.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2015-09-01", formatter)
     }
 
     "(child birthday is after september 1st) return September 1st following child's birthday" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val birthday = LocalDate.parse("2015-09-02", formatter)
-      CCConfig.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2016-09-01", formatter)
+      ccConfig.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2016-09-01", formatter)
     }
 
     "(child birthday is on september 1st) return September 1st following child's birthday" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val birthday = LocalDate.parse("2015-09-01", formatter)
-      CCConfig.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2016-09-01", formatter)
+      ccConfig.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2016-09-01", formatter)
     }
 
     "(after april before december) determine the correct tax year for a date" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val today = LocalDate.parse("2016-06-20", formatter)
 
-      val taxYear = TCConfig.determineTaxYearFromNow(from = today)
+      val taxYear = ccConfig.determineTaxYearFromNow(from = today)
       taxYear shouldBe 2016
     }
 
@@ -73,54 +79,33 @@ class SchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val today = LocalDate.parse("2016-02-20", formatter)
 
-      val taxYear = TCConfig.determineTaxYearFromNow(from = today)
+      val taxYear = ccConfig.determineTaxYearFromNow(from = today)
       taxYear shouldBe 2015
     }
   }
 
+  val mockServiceConf: ServicesConfig = mock[ServicesConfig]
+  val mockConfiguration: Configuration = mock[Configuration]
+
   "loadConfigByType" should {
     "return config" when {
-      "configType is passed" in{
-
-
-        val testConfig = new CCConfig{
-          override val conf: Configuration = mock[Configuration]
-        }
+      "configType is passed" in {
+        val testConfig = new CCConfig(mockServiceConf, mockConfiguration)
         val configurationObject = Configuration(("rule-date", "2017-07-04"))
-        when(testConfig.conf.getConfigSeq(any())).thenReturn(Some(Seq(configurationObject, configurationObject)))
+
+        when(mockConfiguration.getConfigSeq(any())).thenReturn(Some(Seq(configurationObject, configurationObject)))
         testConfig.loadConfigByType("tfc-rollout").isInstanceOf[Configuration] shouldBe true
       }
     }
   }
 
   "determine the current date" in  {
-    val testObj = new CCConfig {
-      override val conf: Configuration = mock[Configuration]
-    }
+    val testObj = new CCConfig(mockServiceConf, mockConfiguration)
 
-    when(
-      testObj.conf.getString(anyString(), any())
-    ).thenReturn(
-      None
-    )
+    when(mockServiceConf.getString(anyString()))
+      .thenReturn("")
 
-    val result = testObj.StartDate
+    val result = testObj.startDate
     result shouldBe LocalDate.now()
   }
-
-  "determine the current date from config" in  {
-    val testObj = new CCConfig {
-      override val conf = mock[Configuration]
-    }
-
-    when(
-      testObj.conf.getString(anyString(), any())
-    ).thenReturn(
-      Some("2017-02-06")
-    )
-
-    val result = testObj.StartDate
-    result shouldBe LocalDate.parse("2017-02-06")
-  }
-
 }

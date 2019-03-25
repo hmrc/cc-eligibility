@@ -18,9 +18,9 @@ package utils
 
 import org.joda.time.LocalDate
 
-trait ChildHelper {
+class ChildHelper(ccConfig: CCConfig) {
 
-  def age(dob: LocalDate, currentDate: LocalDate = CCConfig.StartDate): Int = {
+  def age(dob: LocalDate, currentDate: LocalDate = ccConfig.startDate): Int = {
     if (dob.isAfter(currentDate)) {
       -1
     } else {

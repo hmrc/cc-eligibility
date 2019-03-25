@@ -23,22 +23,14 @@ import models.mappings._
 import org.joda.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar
-import utils.{Periods, TFCConfig}
+import utils.{CCConfig, Periods, TFCConfig}
 
 class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with MockitoSugar {
 
-  val SUT = new HHToTFCEligibilityInput {
-    override val tFCConfig = mock[TFCConfig]
-  }
+  val mockTFC = mock[TFCConfig]
+  val SUT = new HHToTFCEligibilityInput(mockTFC)
 
   "HHToTFCEligibilityInput" should {
-
-    "have reference to TFCConfig" in {
-      HHToTFCEligibilityInput.tFCConfig.isInstanceOf[TFCConfig] shouldBe true
-    }
-    "return 6 as a default if tfcNoOfPeriods is not specified" in {
-      HHToTFCEligibilityInput.tFCConfig.tfcNoOfPeriods shouldBe 6
-    }
 
     "convert Household to TFC Eligibility Input" when {
       "a household with parent, no partner and 2 children" in {
@@ -84,8 +76,11 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
           List(TFCChild(0, 350, Periods.Monthly, dob, TFCDisability(true, false)),
             TFCChild(1, 100, Periods.Monthly, dob, TFCDisability(false, true))))
 
-        when(SUT.tFCConfig.tfcNoOfPeriods).thenReturn(4.toShort)
-        when(SUT.tFCConfig.StartDate).thenReturn(currentDate)
+        val mockCC = mock[CCConfig]
+
+        when(mockTFC.tfcNoOfPeriods).thenReturn(4.toShort)
+        when(mockTFC.config).thenReturn(mockCC)
+        when(mockCC.startDate).thenReturn(currentDate)
 
         val output = SUT.convert(hhModel)
         output.isInstanceOf[TFCEligibilityInput] shouldBe true
@@ -149,8 +144,8 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
           List(TFCChild(0, 0, Periods.Monthly, dob, TFCDisability(true, false)),
             TFCChild(1, 1000, Periods.Monthly, dob, TFCDisability(true, false))))
 
-        when(SUT.tFCConfig.tfcNoOfPeriods).thenReturn(4.toShort)
-        when(SUT.tFCConfig.StartDate).thenReturn(currentDate)
+        when(mockTFC.tfcNoOfPeriods).thenReturn(4.toShort)
+        when(mockTFC.config.startDate).thenReturn(currentDate)
 
         val output = SUT.convert(hhModel)
         output.isInstanceOf[TFCEligibilityInput] shouldBe true

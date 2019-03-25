@@ -22,6 +22,8 @@ import org.joda.time.format.DateTimeFormat
 
 class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
 
+  val escConfig = app.injector.instanceOf[ESCConfig]
+
   "ESC Scheme Config" should {
 
     "return 1st september date for current tax year date (as ESC TAX YEAR)" in {
@@ -35,7 +37,7 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
         claimants = List(),
         children = List()
       )
-      ESCConfig.september1stForDate(ty.from) shouldBe LocalDate.parse("2015-09-01", formatter)
+      escConfig.config.september1stForDate(ty.from) shouldBe LocalDate.parse("2015-09-01", formatter)
     }
 
     "return prior 1st september date for current tax year date (as ESC TAX YEAR)" in {
@@ -49,12 +51,12 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
         claimants = List(),
         children = List()
       )
-      ESCConfig.previousSeptember1stForDate(ty.from) shouldBe LocalDate.parse("2014-09-01", formatter)
+      escConfig.config.previousSeptember1stForDate(ty.from) shouldBe LocalDate.parse("2014-09-01", formatter)
     }
 
     "get default Tax Year Config" in {
       val configs : Seq[play.api.Configuration] = app.configuration.getConfigSeq("esc.rule-change").get
-      val defaultConfig = ESCConfig.getESCConfigDefault(configs)
+      val defaultConfig = escConfig.getESCConfigDefault(configs)
 
       val resultTaxYearConfig = ESCTaxYearConfig(
         childAgeLimit = defaultConfig.getInt("child-age-limit").get,
@@ -70,7 +72,7 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val current = LocalDate.parse("01-01-2014", formatter)
 
-      val result = ESCConfig.getConfig(current)
+      val result = escConfig.getConfig(current)
 
       result.childAgeLimit shouldBe 15
       result.childAgeLimitDisabled shouldBe 16
@@ -82,7 +84,7 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val current = LocalDate.parse("06-04-2018", formatter)
 
-      val result = ESCConfig.getConfig(current)
+      val result = escConfig.getConfig(current)
 
       result.childAgeLimit shouldBe 15
       result.childAgeLimitDisabled shouldBe 16
@@ -93,7 +95,7 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val current = LocalDate.parse("01-01-2018", formatter)
 
-      val result = ESCConfig.getConfig(current)
+      val result = escConfig.getConfig(current)
 
       result.childAgeLimit shouldBe 15
       result.childAgeLimitDisabled shouldBe 16
@@ -104,7 +106,7 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val current = LocalDate.parse("01-08-2017", formatter)
 
-      val result = ESCConfig.getConfig(current)
+      val result = escConfig.getConfig(current)
 
       result.childAgeLimit shouldBe 15
       result.childAgeLimitDisabled shouldBe 16
@@ -115,7 +117,7 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val current = LocalDate.parse("06-04-2017", formatter)
 
-      val result = ESCConfig.getConfig(current)
+      val result = escConfig.getConfig(current)
 
       result.childAgeLimit shouldBe 15
       result.childAgeLimitDisabled shouldBe 16
@@ -126,7 +128,7 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val current = LocalDate.parse("01-08-2016", formatter)
 
-      val result = ESCConfig.getConfig(current)
+      val result = escConfig.getConfig(current)
 
       result.childAgeLimit shouldBe 15
       result.childAgeLimitDisabled shouldBe 16
@@ -137,7 +139,7 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val current = LocalDate.parse("06-04-2016", formatter)
 
-      val result = ESCConfig.getConfig(current)
+      val result = escConfig.getConfig(current)
 
       result.childAgeLimit shouldBe 15
       result.childAgeLimitDisabled shouldBe 16
@@ -148,7 +150,7 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val current = LocalDate.parse("01-08-2015", formatter)
 
-      val result = ESCConfig.getConfig(current)
+      val result = escConfig.getConfig(current)
 
       result.childAgeLimit shouldBe 15
       result.childAgeLimitDisabled shouldBe 16
@@ -159,7 +161,7 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val current = LocalDate.parse("06-04-2015", formatter)
 
-      val result = ESCConfig.getConfig(current)
+      val result = escConfig.getConfig(current)
 
       result.childAgeLimit shouldBe 15
       result.childAgeLimitDisabled shouldBe 16

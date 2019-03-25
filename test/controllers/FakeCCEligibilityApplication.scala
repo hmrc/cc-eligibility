@@ -17,13 +17,24 @@
 package controllers
 
 import akka.stream.Materializer
+import models.ChildCareCost
+import models.input.tfc._
+import org.joda.time.LocalDate
+import org.mockito.Mockito.when
 import org.scalatest.Suite
+import org.scalatest.mockito.MockitoSugar
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.mvc.{AnyContent, ControllerComponents, DefaultMessagesActionBuilderImpl, PlayBodyParsers}
+import play.api.test.Helpers.{stubBodyParser, stubMessagesApi}
+import service.AuditEvents
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.CCConfigSpec
+import utils.{CCConfigSpec, Periods, TFCConfig}
 
-trait FakeCCEligibilityApplication extends CCConfigSpec {
+import scala.concurrent.ExecutionContext.Implicits.global
+
+
+trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
   this: Suite =>
 
   val config: Map[String, _] = Map(
@@ -51,6 +62,47 @@ trait FakeCCEligibilityApplication extends CCConfigSpec {
       .build()
 
   implicit lazy val mat: Materializer = app.materializer
-  implicit val hc: HeaderCarrier = new HeaderCarrier()
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
+  val mockCC: ControllerComponents = mock[ControllerComponents]
+  val mockParser: PlayBodyParsers = mock[PlayBodyParsers]
+
+  when(mockCC.actionBuilder)
+    .thenReturn(new DefaultMessagesActionBuilderImpl(stubBodyParser[AnyContent](), stubMessagesApi()))
+  when(mockCC.parsers)
+    .thenReturn(mockParser)
+
+  lazy val tfcConfig: TFCConfig = app.injector.instanceOf[TFCConfig]
+  lazy val audits: AuditEvents = mock[AuditEvents]
+
+  def testClaimant(
+                    previousIncome: Option[TFCIncome] = None,
+                    currentIncome: Option[TFCIncome] = None,
+                    hoursPerWeek: Double = 0.00,
+                    isPartner: Boolean = false,
+                    disability: TFCDisability,
+                    carersAllowance: Boolean = false,
+                    minimumEarnings: TFCMinimumEarnings,
+                    age: Option[String],
+                    employmentStatus: Option[String] = None,
+                    selfEmployedSelection: Option[Boolean] = None,
+                    maximumEarnings: Option[Boolean] = None
+                  ): TFCClaimant ={
+    new TFCClaimant(previousIncome, currentIncome, hoursPerWeek, isPartner, disability,
+      carersAllowance, minimumEarnings, age, employmentStatus, selfEmployedSelection, maximumEarnings){
+      override lazy val auditEvents: AuditEvents = audits
+    }
+  }
+
+  def testChild(
+               id: Short,
+               childCareCost: BigDecimal,
+               childcareCostPeriod: Periods.Period = Periods.Monthly,
+               dob: LocalDate,
+               disability: TFCDisability
+              ): TFCChild = {
+    new TFCChild(id, childCareCost, childcareCostPeriod, dob, disability) {
+      override lazy val tFCConfig: TFCConfig = tfcConfig
+    }
+  }
 }

@@ -20,16 +20,12 @@ import models.input.esc._
 import models.output
 import models.output.esc.ESCEligibilityOutput
 import org.joda.time.LocalDate
-import utils.MessagesObject
 
 import scala.annotation.tailrec
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object ESCEligibility extends ESCEligibility
-
-trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
-
-  import scala.concurrent.ExecutionContext.Implicits.global
+class ESCEligibility extends CCEligibilityHelpers {
 
   def generateSplitDates(taxYear: ESCTaxYear): List[LocalDate] = {
       val dates: List[Option[LocalDate]] = for (child <- taxYear.children) yield {
@@ -140,7 +136,7 @@ trait ESCEligibility extends CCEligibilityHelpers with MessagesObject {
     def getClaimantEligibility(isPartner: Boolean) = taxYears.exists(
       _.periods.exists(
         _.claimants.exists(
-          claimant => (claimant.isPartner == isPartner && claimant.qualifying)
+          claimant => claimant.isPartner == isPartner && claimant.qualifying
         )
       )
     )

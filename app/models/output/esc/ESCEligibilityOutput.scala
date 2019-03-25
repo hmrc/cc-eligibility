@@ -19,6 +19,8 @@ package models.output.esc
 import models.LocationEnum.LocationEnum
 import org.joda.time.LocalDate
 import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.JodaReads._
+import play.api.libs.json.JodaWrites._
 import utils.Periods
 
 case class ESCEligibilityOutput(

@@ -24,20 +24,22 @@ import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.libs.json.Json
+import play.api.mvc.{AnyContentAsEmpty, ControllerComponents}
 import play.api.test.FakeRequest
 import service.{AuditEvents, EligibilityService}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class EligibilityControllerSpec extends FakeCCEligibilityApplication with MockitoSugar {
+class EligibilityControllerSpec extends FakeCCEligibilityApplication {
 
-  implicit val request = FakeRequest()
+  implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
   "EligibilityController" should {
     val controller = new EligibilityController(
       mock[EligibilityService],
-      mock[AuditEvents]
+      mock[AuditEvents],
+      mockCC
     )
 
     "have reference to EligibilityService" in {

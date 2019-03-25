@@ -18,6 +18,7 @@ package utils
 
 import java.text.SimpleDateFormat
 
+import javax.inject.Inject
 import org.joda.time.LocalDate
 import play.api.Configuration
 
@@ -26,26 +27,19 @@ case class ESCTaxYearConfig(
                              childAgeLimitDisabled: Int
                              )
 
-object ESCConfig extends ESCConfig
+class ESCConfig @Inject()(val config: CCConfig) {
 
-trait ESCConfig extends CCConfig with LoadConfig {
-
-    def getESCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
-    configs.filter(x => {
-      x.getString("rule-date").equals(Some("default"))
-    }).head
+  def getESCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
+    configs.filter(_.getString("rule-date").contains("default")).head
   }
 
   def getESCConfigExcludingDefault(configs :Seq[play.api.Configuration]) : Seq[play.api.Configuration] = {
-    configs.filter(x => {
-      !x.getString("rule-date").equals(Some("default"))
-    })
+    configs.filter(!_.getString("rule-date").contains("default"))
   }
+
   def getSortedESCConfigExcludingDefault(configsExcludingDefault : Seq[play.api.Configuration]) : Seq[play.api.Configuration] = {
     configsExcludingDefault.sortBy(c => {
-      val predicate = new SimpleDateFormat("dd-MM-yyyy").parse(c.getString("rule-date").get)
-      predicate
-      //c
+      new SimpleDateFormat("dd-MM-yyyy").parse(c.get[String]("rule-date"))
     }).reverse
   }
 
@@ -72,7 +66,7 @@ trait ESCConfig extends CCConfig with LoadConfig {
   }
 
   def getConfig(currentDate: LocalDate): ESCTaxYearConfig = {
-    val configs : Seq[play.api.Configuration] = conf.getConfigSeq("esc.rule-change").get
+    val configs : Seq[play.api.Configuration] = config.oldConf.getConfigSeq("esc.rule-change").get
     val configsExcludingDefault = getESCConfigExcludingDefault(configs)
     val defaultConfig = getESCConfigDefault(configs)
     // ensure the latest date is in the head position
@@ -80,12 +74,11 @@ trait ESCConfig extends CCConfig with LoadConfig {
 
     val result = getConfigHelper(currentDate, sorted.toList, None, 0)
 
-    val config : ESCTaxYearConfig = result match {
+    result match {
       case Some(x) =>
         getESCTaxYearConfig(x)
       case _ =>
         getESCTaxYearConfig(defaultConfig)
     }
-    config
   }
 }

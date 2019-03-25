@@ -19,18 +19,19 @@ package utils
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
+import javax.inject.Inject
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.Configuration
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
-trait CCConfig extends LoadConfig {
+class CCConfig @Inject()(val conf: ServicesConfig,
+                         val oldConf: Configuration) {
 
   val dateFormat = new SimpleDateFormat("dd-MM-yyyy")
 
-  def StartDate = {
-    val local_Date: String = conf.getString("local-date").getOrElse("")
-    if(local_Date.isEmpty) LocalDate.now() else LocalDate.parse(local_Date, DateTimeFormat.forPattern("yyyy-MM-dd"))
-  }
+  def startDate: LocalDate = LocalDate.now()
+
 
   private def calendar(year: Int, month: Int, day: Int): Calendar = {
     val calendar  = Calendar.getInstance()
@@ -105,23 +106,21 @@ trait CCConfig extends LoadConfig {
   }
 
   def loadConfigByType(configType: String, currentDate: LocalDate = LocalDate.now): Configuration = {
-    val configs: Seq[Configuration] = conf.getConfigSeq(configType).get
+    val configs: Seq[Configuration] = oldConf.getConfigSeq(configType).get
     val configExcludingDefault: Seq[Configuration] = getConfigExcludingDefault(configs)
     configExcludingDefault.find(conf => {
-      val ruleDate = dateFormat.parse(conf.getString("rule-date").get)
+      val ruleDate = dateFormat.parse(conf.get[String]("rule-date"))
       currentDate.toDate.compareTo(ruleDate) >= 0
     }).getOrElse(getConfigDefault(configs))
   }
 
   private def getConfigDefault(configs: Seq[Configuration]): Configuration = {
-    configs.filter(_.getString("rule-date").equals(Some("default"))).head
+    configs.filter(_.getString("rule-date").contains("default")).head
   }
 
   private def getConfigExcludingDefault(configs: Seq[Configuration]): Seq[Configuration] = {
-    configs.filterNot(_.getString("rule-date").equals(Some("default"))).sortWith(
-      (conf1, conf2) => dateFormat.parse(conf1.getString("rule-date").get).after(dateFormat.parse(conf2.getString("rule-date").get))
+    configs.filterNot(_.getString("rule-date").contains("default")).sortWith(
+      (conf1, conf2) => dateFormat.parse(conf1.get[String]("rule-date")).after(dateFormat.parse(conf2.get[String]("rule-date")))
     )
   }
 }
-
-object CCConfig extends CCConfig

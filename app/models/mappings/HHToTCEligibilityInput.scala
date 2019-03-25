@@ -16,18 +16,13 @@
 
 package models.mappings
 
+import javax.inject.Inject
 import models._
 import models.input.tc._
 import org.joda.time.LocalDate
 import utils.{CCConfig, HelperManager}
 
-object HHToTCEligibilityInput extends HHToTCEligibilityInput {
-  override val cCConfig = CCConfig
-}
-
-trait HHToTCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
-
-  val cCConfig: CCConfig
+class HHToTCEligibilityInput @Inject()(val cCConfig: CCConfig) extends PeriodEnumToPeriod with HelperManager {
 
   def convert(household: Household): TCEligibilityInput = {
     TCEligibilityInput(taxYears = createTaxYears(household.parent, household.partner, household.children))
@@ -59,7 +54,7 @@ trait HHToTCEligibilityInput extends PeriodEnumToPeriod with HelperManager {
                               children: List[Child]
                             ): List[TCTaxYear] = {
 
-    val now = cCConfig.StartDate
+    val now = cCConfig.startDate
     val april6thCurrentYear = determineApril6DateFromNow(now)
     val claimantList = hhClaimantToTCEligibilityInputClaimant(parent, partner)
     val childList = hhChildToTEligibilityInputChild(children)

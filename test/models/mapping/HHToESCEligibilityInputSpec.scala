@@ -31,16 +31,14 @@ class HHToESCEligibilityInputSpec extends UnitSpec
   with FakeCCEligibilityApplication
   with CCConfigSpec {
 
-  val SUT = new HHToESCEligibilityInput {
-    override val cCConfig: CCConfig = mock[CCConfig]
-  }
+  val SUT = new HHToESCEligibilityInput(mock[CCConfig])
 
   val testYear = LocalDate.now().plusYears(1).getYear
 
   "HHToESCEligibilityInput" should {
 
     "have reference to CCConfig" in {
-      HHToESCEligibilityInput.cCConfig.isInstanceOf[CCConfig] shouldBe true
+      SUT.cCConfig.isInstanceOf[CCConfig] shouldBe true
     }
 
     "convert Household into ESCEligibilityInput" when {
@@ -62,7 +60,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
             List(ESCClaimant(false, true,
               Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List())))
 
-        when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
+        when(SUT.cCConfig.startDate).thenReturn(LocalDate.now())
 
         SUT.convert(household) shouldBe res
       }
@@ -121,7 +119,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
               )
             ))))
 
-        when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
+        when(SUT.cCConfig.startDate).thenReturn(LocalDate.now())
 
         SUT.convert(household) shouldBe res
       }
@@ -150,7 +148,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
               ESCClaimant(true, false,
                 Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0))))), List())))
 
-        when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
+        when(SUT.cCConfig.startDate).thenReturn(LocalDate.now())
 
         SUT.convert(household) shouldBe res
       }
@@ -220,7 +218,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
           )
         )
 
-        when(SUT.cCConfig.StartDate).thenReturn(currentDate)
+        when(SUT.cCConfig.startDate).thenReturn(currentDate)
 
         SUT.convert(household) shouldBe res
       }
@@ -263,7 +261,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
           )
         )
 
-        when(SUT.cCConfig.StartDate).thenReturn(currentDate)
+        when(SUT.cCConfig.startDate).thenReturn(currentDate)
 
         SUT.convert(household) shouldBe res
       }
@@ -286,7 +284,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
             List(ESCClaimant(false, false,
               None, Some(ESCIncome(Some(30000.0), Some(200.0), Some("1200L"))))), List())))
 
-        when(SUT.cCConfig.StartDate).thenReturn(LocalDate.now())
+        when(SUT.cCConfig.startDate).thenReturn(LocalDate.now())
 
         SUT.convert(household) shouldBe res
       }

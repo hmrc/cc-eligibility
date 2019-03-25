@@ -20,7 +20,7 @@ import javax.inject.Inject
 import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 
-class AuditEvents @Inject()(val auditService: AuditService) {
+class AuditEvents @Inject()(auditService: AuditService) {
 
   def auditTFCRequest(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
     auditEvent("TFCRequest", Map("TFCRequest" -> data.toString))
