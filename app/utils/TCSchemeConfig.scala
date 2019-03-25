@@ -18,6 +18,7 @@ package utils
 
 import java.text.SimpleDateFormat
 
+import javax.inject.Inject
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.Configuration
@@ -25,44 +26,38 @@ import play.api.Configuration
 case class TCTaxYearConfig(
                              childAgeLimit: Int,
                              childAgeLimitDisabled: Int,
-                             childAgeLimitEducation : Int,
-                             youngAdultAgeLimit : Int,
-                             minimumHoursWorked : Double,
-                             minimumHoursWorkedIfCouple : Double,
-                             hours30Worked : Double,
-                             currentIncomeFallDifferenceAmount : Int,
-                             currentIncomeRiseDifferenceAmount : Int
+                             childAgeLimitEducation: Int,
+                             youngAdultAgeLimit: Int,
+                             minimumHoursWorked: Double,
+                             minimumHoursWorkedIfCouple: Double,
+                             hours30Worked: Double,
+                             currentIncomeFallDifferenceAmount: Int,
+                             currentIncomeRiseDifferenceAmount: Int
                              )
 
-object TCConfig extends TCConfig
+class TCConfig @Inject()(val config: CCConfig) {
 
-trait TCConfig extends CCConfig with LoadConfig {
+  lazy val childElementLimit: Int = config.conf.getInt("tc.child-element-limit")
+  lazy val childDate6thApril2017: LocalDate = DateTimeFormat.forPattern("dd-MM-yyyy").parseLocalDate(config.conf.getString("tc.child-element-date-constraint"))
 
-  val childElementLimit = conf.getInt("tc.child-element-limit").get
-  val childDate6thApril2017 = DateTimeFormat.forPattern("dd-MM-yyyy").parseLocalDate(conf.getString("tc.child-element-date-constraint").get)
-
-  def getTCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
-    configs.filter(x => {
-      x.getString("rule-date").equals(Some("default"))
-    }).head
+  def getTCConfigDefault(configs: Seq[Configuration]): Configuration = {
+    configs.filter(_.getString("rule-date").contains("default")).head
   }
 
-  def getTCConfigExcludingDefault(configs :Seq[play.api.Configuration]) : Seq[play.api.Configuration] = {
-    configs.filter(x => {
-      !x.getString("rule-date").equals(Some("default"))
-    })
+  def getTCConfigExcludingDefault(configs: Seq[Configuration]): Seq[Configuration] = {
+    configs.filter(!_.getString("rule-date").contains("default"))
   }
-  def getSortedTCConfigExcludingDefault(configsExcludingDefault : Seq[play.api.Configuration]) : Seq[Configuration] = {
+  def getSortedTCConfigExcludingDefault(configsExcludingDefault: Seq[Configuration]): Seq[Configuration] = {
     configsExcludingDefault.sortBy(c => {
       new SimpleDateFormat("dd-MM-yyyy").parse(c.getString("rule-date").get)
     }).reverse
   }
 
-  def getConfigHelper (currentDate : LocalDate, taxYearConfigs : List[Configuration], acc : Option[Configuration], i : Int) : Option[Configuration] = {
+  def getConfigHelper (currentDate: LocalDate, taxYearConfigs: List[Configuration], acc: Option[Configuration], i: Int): Option[Configuration] = {
     taxYearConfigs match {
       case Nil => acc
-      case head :: tail =>
-        val configDate = new SimpleDateFormat("dd-MM-yyyy").parse(head.getString("rule-date").get)
+      case head:: tail =>
+        val configDate = new SimpleDateFormat("dd-MM-yyyy").parse(head.get[String]("rule-date"))
 
         // exit tail recursive
         if (currentDate.toDate.after(configDate) || currentDate.toDate.compareTo(configDate) == 0) {
@@ -73,7 +68,7 @@ trait TCConfig extends CCConfig with LoadConfig {
     }
   }
 
-  def getTCTaxYearConfig(configuration : play.api.Configuration) : TCTaxYearConfig = {
+  def getTCTaxYearConfig(configuration: Configuration): TCTaxYearConfig = {
     val defaultCurrentIncomeRiseDifferenceAmount = 2500
     val defaultCurrentIncomeFallDifferenceAmount = 2500
     val defaultHours30Worked = 30.00
@@ -104,7 +99,7 @@ trait TCConfig extends CCConfig with LoadConfig {
   }
 
   def getConfig(currentDate: LocalDate): TCTaxYearConfig = {
-    val configs : Seq[play.api.Configuration] = conf.getConfigSeq("tc.rule-change").get
+    val configs: Seq[Configuration] = config.oldConf.getConfigSeq("tc.rule-change").get
     val configsExcludingDefault = getTCConfigExcludingDefault(configs)
     val defaultConfig = getTCConfigDefault(configs)
     // ensure the latest date is in the head position
@@ -112,12 +107,11 @@ trait TCConfig extends CCConfig with LoadConfig {
 
     val result = getConfigHelper(currentDate, sorted.toList, None, 0)
 
-    val config : TCTaxYearConfig = result match {
+    result match {
       case Some(x) =>
         getTCTaxYearConfig(x)
       case _ =>
         getTCTaxYearConfig(defaultConfig)
     }
-    config
   }
 }

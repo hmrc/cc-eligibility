@@ -31,16 +31,14 @@ class HHToTCEligibilityInputSpec extends UnitSpec
   with FakeCCEligibilityApplication
   with CCConfigSpec {
 
-  val SUT = new HHToTCEligibilityInput {
-    override val cCConfig: CCConfig = mock[CCConfig]
-  }
+  val SUT = new HHToTCEligibilityInput(mock[CCConfig])
 
   val testYear = LocalDate.now().plusYears(1).getYear
 
   "HHToTCEligibilityInput" should {
 
     "have reference to CCConfig" in {
-      HHToTCEligibilityInput.cCConfig.isInstanceOf[CCConfig] shouldBe true
+      SUT.cCConfig.isInstanceOf[CCConfig] shouldBe true
     }
 
     "convert Household into TCEligibilityInput" when {
@@ -76,7 +74,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
           partner = None
         )
 
-        when(SUT.cCConfig.StartDate).thenReturn(currentDate)
+        when(SUT.cCConfig.startDate).thenReturn(currentDate)
 
         SUT.convert(household) shouldBe TCEligibilityInput(
           List(
@@ -136,7 +134,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
           partner = Some(Claimant(benefits = Some(benefits)))
         )
 
-        when(SUT.cCConfig.StartDate).thenReturn(currentDate)
+        when(SUT.cCConfig.startDate).thenReturn(currentDate)
 
         SUT.convert(household) shouldBe TCEligibilityInput(
           List(
@@ -238,7 +236,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
           )
         )
 
-        when(SUT.cCConfig.StartDate).thenReturn(currentDate)
+        when(SUT.cCConfig.startDate).thenReturn(currentDate)
 
         SUT.convert(household) shouldBe res
       }
@@ -315,7 +313,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
           )
         )
 
-        when(SUT.cCConfig.StartDate).thenReturn(currentDate)
+        when(SUT.cCConfig.startDate).thenReturn(currentDate)
 
         SUT.convert(household) shouldBe res
       }
@@ -387,7 +385,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
         )
       )
 
-      when(SUT.cCConfig.StartDate).thenReturn(currentDate)
+      when(SUT.cCConfig.startDate).thenReturn(currentDate)
 
       SUT.convert(household) shouldBe res
     }
@@ -570,7 +568,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
               Some(TCEducation(false, LocalDate.now()))
             )))))
 
-      when(SUT.cCConfig.StartDate).thenReturn(currentDate)
+      when(SUT.cCConfig.startDate).thenReturn(currentDate)
 
       val output = SUT.convert(hhModel)
       output.isInstanceOf[TCEligibilityInput] shouldBe true

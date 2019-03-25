@@ -1,4 +1,4 @@
-import play.routes.compiler.StaticRoutesGenerator
+import play.routes.compiler.{InjectedRoutesGenerator, StaticRoutesGenerator}
 import play.sbt.routes.RoutesKeys.routesGenerator
 import sbt.Keys._
 import sbt._
@@ -40,9 +40,7 @@ trait MicroService {
       libraryDependencies ++= appDependencies,
       retrieveManaged := true,
       evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
-      routesGenerator := StaticRoutesGenerator,
-      scalaVersion := "2.11.11",
-      crossScalaVersions := Seq("2.11.11"),
+      scalaVersion := "2.11.12",
       ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) },
       resolvers := Seq(
         Resolver.bintrayRepo("hmrc", "releases"),

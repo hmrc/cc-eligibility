@@ -20,8 +20,70 @@ import controllers.FakeCCEligibilityApplication
 import models.input.tc.TCTaxYear
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
+import play.api.Configuration
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
+
+  val mockConfiguration: Configuration = mock[Configuration]
+  val ccConfig= new CCConfig(mock[ServicesConfig], mockConfiguration)
+  val tccConfig = new TCConfig(ccConfig)
+
+  val getConfig: Seq[Configuration] = Seq(
+    Configuration(
+      "rule-date" -> "06-04-2018",
+      "child-age-limit" -> "15",
+      "child-age-limit-disabled" -> "16",
+      "young-adult-education-age-limit" -> "19",
+      "young-adult-age-limit" -> "20",
+      "minimum-hours-worked-per-week" -> "16.00",
+      "minimum-hours-worked-if-couple-per-week" -> "24.00",
+      "hours-30-worked-per-week" -> "30.00",
+      "current-income-fall-difference-amount" -> "2500",
+      "current-income-rise-difference-amount" -> "2500"
+    ),
+    Configuration(
+      "rule-date" -> "06-04-2017",
+      "child-age-limit" -> "15",
+      "child-age-limit-disabled" -> "16",
+      "young-adult-education-age-limit" -> "19",
+      "young-adult-age-limit" -> "20",
+      "minimum-hours-worked-per-week" -> "16.00",
+      "minimum-hours-worked-if-couple-per-week" -> "24.00",
+      "hours-30-worked-per-week" -> "30.00",
+      "current-income-fall-difference-amount" -> "2500",
+      "current-income-rise-difference-amount" -> "2500"
+    ),
+    Configuration(
+      "rule-date" -> "06-04-2016",
+      "child-age-limit" -> "15",
+      "child-age-limit-disabled" -> "16",
+      "young-adult-education-age-limit" -> "19",
+      "young-adult-age-limit" -> "20",
+      "minimum-hours-worked-per-week" -> "16.00",
+      "minimum-hours-worked-if-couple-per-week" -> "24.00",
+      "hours-30-worked-per-week" -> "30.00",
+      "current-income-fall-difference-amount" -> "2500",
+      "current-income-rise-difference-amount" -> "2500"
+    ),
+    Configuration(
+      "rule-date" -> "default",
+      "child-age-limit" -> "15",
+      "child-age-limit-disabled" -> "16",
+      "young-adult-education-age-limit" -> "19",
+      "young-adult-age-limit" -> "20",
+      "minimum-hours-worked-per-week" -> "16.00",
+      "minimum-hours-worked-if-couple-per-week" -> "24.00",
+      "hours-30-worked-per-week" -> "30.00",
+      "current-income-fall-difference-amount" -> "2500",
+      "current-income-rise-difference-amount" -> "2500"
+    )
+  )
+
+  when(mockConfiguration.getConfigSeq(any()))
+    .thenReturn(Some(getConfig))
 
   "TCSchemeConfig" should {
 
@@ -36,7 +98,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
         claimants = List(),
         children = List()
       )
-      TCConfig.september1stForDate(ty.from) shouldBe LocalDate.parse("2015-09-01", formatter)
+      tccConfig.config.september1stForDate(ty.from) shouldBe LocalDate.parse("2015-09-01", formatter)
     }
 
     "return prior 1st september date for current tax year date (as TC TAX YEAR)" in {
@@ -50,32 +112,32 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
         claimants = List(),
         children = List()
       )
-      TCConfig.previousSeptember1stForDate(ty.from) shouldBe LocalDate.parse("2014-09-01", formatter)
+      tccConfig.config.previousSeptember1stForDate(ty.from) shouldBe LocalDate.parse("2014-09-01", formatter)
     }
 
     "(child birthday is before september 1st) return September 1st following child's birthday" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val birthday = LocalDate.parse("2015-06-20", formatter)
-      TCConfig.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2015-09-01", formatter)
+      tccConfig.config.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2015-09-01", formatter)
     }
 
     "(child birthday is after september 1st) return September 1st following child's birthday" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val birthday = LocalDate.parse("2015-09-02", formatter)
-      TCConfig.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2016-09-01", formatter)
+      tccConfig.config.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2016-09-01", formatter)
     }
 
     "(child birthday is on september 1st) return September 1st following child's birthday" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val birthday = LocalDate.parse("2015-09-01", formatter)
-      TCConfig.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2016-09-01", formatter)
+      tccConfig.config.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2016-09-01", formatter)
     }
 
     "(after april before december) determine the correct tax year for a date" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val today = LocalDate.parse("2016-06-20", formatter)
 
-      val taxYear = TCConfig.determineTaxYearFromNow(from = today)
+      val taxYear = tccConfig.config.determineTaxYearFromNow(from = today)
       taxYear shouldBe 2016
     }
 
@@ -83,15 +145,15 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
       val today = LocalDate.parse("2016-02-20", formatter)
 
-      val taxYear = TCConfig.determineTaxYearFromNow(from = today)
+      val taxYear = tccConfig.config.determineTaxYearFromNow(from = today)
       taxYear shouldBe 2015
     }
 
     "get default Tax Year Config" in {
-      val configs : Seq[play.api.Configuration] = app.configuration.getConfigSeq("tc.rule-change").get
-      val defaultTaxYearConfig = TCConfig.getTCConfigDefault(configs)
+      val configs: Seq[Configuration] = app.configuration.getConfigSeq("tc.rule-change").get
+      val defaultTaxYearConfig = tccConfig.getTCConfigDefault(configs)
 
-      val tcTaxYearConfig = TCConfig.getTCTaxYearConfig(defaultTaxYearConfig)
+      val tcTaxYearConfig = tccConfig.getTCTaxYearConfig(defaultTaxYearConfig)
 
       tcTaxYearConfig.childAgeLimit shouldBe 15
       tcTaxYearConfig.childAgeLimitDisabled shouldBe 16
@@ -109,7 +171,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val current = LocalDate.parse("01-01-2014", formatter)
 
-      val result = TCConfig.getConfig(current)
+      val result = tccConfig.getConfig(current)
 
       result.childAgeLimit shouldBe 15
       result.childAgeLimitDisabled shouldBe 16
@@ -128,7 +190,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val current = LocalDate.parse("01-01-2018", formatter)
 
-      val result = TCConfig.getConfig(current)
+      val result = tccConfig.getConfig(current)
 
       result.childAgeLimit shouldBe 15
       result.childAgeLimitDisabled shouldBe 16
@@ -146,7 +208,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val current = LocalDate.parse("01-08-2017", formatter)
 
-      val result = TCConfig.getConfig(current)
+      val result = tccConfig.getConfig(current)
 
       result.childAgeLimit shouldBe 15
       result.childAgeLimitDisabled shouldBe 16
@@ -164,7 +226,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val current = LocalDate.parse("06-04-2017", formatter)
 
-      val result = TCConfig.getConfig(current)
+      val result = tccConfig.getConfig(current)
 
       result.childAgeLimit shouldBe 15
       result.childAgeLimitDisabled shouldBe 16
@@ -182,7 +244,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val current = LocalDate.parse("01-08-2016", formatter)
 
-      val result = TCConfig.getConfig(current)
+      val result = tccConfig.getConfig(current)
 
       result.childAgeLimit shouldBe 15
       result.childAgeLimitDisabled shouldBe 16
@@ -200,7 +262,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val current = LocalDate.parse("06-04-2016", formatter)
 
-      val result = TCConfig.getConfig(current)
+      val result = tccConfig.getConfig(current)
 
       result.childAgeLimit shouldBe 15
       result.childAgeLimitDisabled shouldBe 16
@@ -218,7 +280,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val current = LocalDate.parse("01-08-2015", formatter)
 
-      val result = TCConfig.getConfig(current)
+      val result = tccConfig.getConfig(current)
 
       result.childAgeLimit shouldBe 15
       result.childAgeLimitDisabled shouldBe 16
@@ -236,7 +298,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val formatter = DateTimeFormat.forPattern(pattern)
       val current = LocalDate.parse("06-04-2015", formatter)
 
-      val result = TCConfig.getConfig(current)
+      val result = tccConfig.getConfig(current)
 
       result.childAgeLimit shouldBe 15
       result.childAgeLimitDisabled shouldBe 16

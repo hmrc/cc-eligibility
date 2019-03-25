@@ -16,20 +16,11 @@
 
 package service
 
+import javax.inject.Inject
 import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 
-/**
- * Created by user on 25/04/16.
- */
-object AuditEvents extends AuditEvents {
-
-  override val auditService: AuditService = AuditService
-}
-
-trait AuditEvents {
-
-  val auditService : AuditService
+class AuditEvents @Inject()(auditService: AuditService) {
 
   def auditTFCRequest(data : String) (implicit request: Request[_], hc: HeaderCarrier): Unit = {
     auditEvent("TFCRequest", Map("TFCRequest" -> data.toString))

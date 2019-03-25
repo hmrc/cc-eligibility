@@ -19,6 +19,8 @@ package models.output.tc
 import models.input.tc.TCIncome
 import org.joda.time.LocalDate
 import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.JodaReads._
+import play.api.libs.json.JodaWrites._
 import utils.Periods
 
 case class TCEligibilityOutput(

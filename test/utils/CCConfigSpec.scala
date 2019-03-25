@@ -32,17 +32,17 @@ package utils
  * limitations under the License.
  */
 
-import org.joda.time.format.DateTimeFormat
-import org.scalatestplus.play.OneAppPerSuite
-import play.api.i18n.{Lang, Messages, MessagesApi}
+import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.i18n.{Lang, MessagesApi}
 import uk.gov.hmrc.play.test.UnitSpec
 
-trait CCConfigSpec extends UnitSpec with OneAppPerSuite {
+trait CCConfigSpec extends UnitSpec with GuiceOneAppPerSuite {
 
-  def getMessages = {
+  def getMessages(s: String): String = {
     val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
-    Messages(Lang("en", "uk"), messagesApi)
+    messagesApi(s)(Lang("en"))
   }
 
-  val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+  val formatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd")
 }

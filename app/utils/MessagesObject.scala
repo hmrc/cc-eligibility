@@ -21,6 +21,6 @@ import play.api.i18n.MessagesApi
 
 trait MessagesObject {
 
-  val messages: MessagesApi = Play.current.injector.instanceOf[MessagesApi]
+  lazy val messages: MessagesApi = Play.current.injector.instanceOf[MessagesApi]
 
 }

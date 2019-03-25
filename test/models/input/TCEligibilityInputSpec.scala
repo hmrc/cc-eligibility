@@ -20,13 +20,15 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import models.input.tc._
+import org.mockito.Mockito._
 import org.joda.time.LocalDate
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import play.api.libs.json.{JsValue, Json}
-import utils.Periods
+import utils.{CCConfig, Periods, TFCConfig}
 
-class TCEligibilityInputSpec extends FakeCCEligibilityApplication {
+class TCEligibilityInputSpec extends FakeCCEligibilityApplication with MockitoSugar {
 
   "TCInputEligibility" should {
 
@@ -69,7 +71,19 @@ class TCEligibilityInputSpec extends FakeCCEligibilityApplication {
         val today = LocalDate.parse("2016-08-01", formatter)
         val endDate = LocalDate.parse("2017-04-06", formatter)
 
-        val child = TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)
+        val mockConf = mock[CCConfig]
+
+        val child: TCChild = new TCChild(
+          id = 0,
+          childcareCost = BigDecimal(200.00),
+          childcareCostPeriod = Periods.Monthly,
+          dob = dateOfBirth, disability = TCDisability(disabled = false, severelyDisabled = false),
+          education = None
+        ) {
+          lazy val tFCConfig: TFCConfig = tfcConfig
+        }
+
+        when(mockConf.startDate).thenReturn(today)
 
         val (x, y) = child.isTurning16Before1September(periodStart = today, endDate)
         x shouldBe true

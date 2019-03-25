@@ -16,43 +16,42 @@
 
 package eligibility
 
+import javax.inject.Inject
 import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.input.tfc.TFCEligibilityInput
 import models.output.freeEntitlement.{FifteenHoursEligibilityModel, ThirtyHoursEligibilityModel}
 import org.joda.time.LocalDate
 import play.api.Configuration
+import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{CCConfig, ChildHelper}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object FreeEntitlementEligibility extends FreeEntitlementEligibility{
-  override val tfcEligibility: TFCEligibility = TFCEligibility
-}
 
-trait FreeEntitlementEligibility extends CCConfig with ChildHelper {
+class FreeEntitlementEligibility @Inject()(tfcEligibility: TFCEligibility,
+                                           config: CCConfig) extends ChildHelper(config) {
 
-  val tfcEligibility: TFCEligibility
-  def localDate = StartDate
+  def localDate: LocalDate = config.startDate
 
   private def isChildDOBWithinRollout(dob: LocalDate): Boolean = {
 
     val futureDate = localDate.plusWeeks(2)
-    val freeHoursRollout: Configuration = loadConfigByType("free-hours-rollout")
-    val bornOnOrAfter = dateFormat.parse(freeHoursRollout.getString("born-on-after").get)
+    val freeHoursRollout: Configuration = config.loadConfigByType("free-hours-rollout")
+    val bornOnOrAfter = config.dateFormat.parse(freeHoursRollout.getString("born-on-after").get)
 
     dob.isBefore(futureDate) && !bornOnOrAfter.after(dob.toDate)
   }
 
   private def hasChildAtAge(configField: String, dobs: List[LocalDate], currentDate: LocalDate = localDate): Boolean = {
-    val freeHours: Configuration = loadConfigByType("free-hours")
+    val freeHours: Configuration = config.loadConfigByType("free-hours")
     val ageFilter: List[Int] = freeHours.getString(configField).getOrElse("").split(",").toList.filterNot(_.isEmpty).map(_.toInt)
 
     dobs.exists(dob => ageFilter.contains(age(dob, currentDate)))
   }
 
-  def thirtyHours(tfcEligibilityInput: TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[ThirtyHoursEligibilityModel] = {
+  def thirtyHours(tfcEligibilityInput: TFCEligibilityInput)(implicit req: Request[_], hc: HeaderCarrier): Future[ThirtyHoursEligibilityModel] = {
 
     tfcEligibility.eligibility(tfcEligibilityInput).map { tfcEligibilityResult =>
 
@@ -60,7 +59,7 @@ trait FreeEntitlementEligibility extends CCConfig with ChildHelper {
       val location = tfcEligibilityInput.location
 
       val hasChild3Or4Years: Boolean = hasChildAtAge(
-          configField = s"thirty.${location}",
+          configField = s"thirty.$location",
           dobs = tfcEligibilityInput.children.map(_.dob),
           currentDate = localDate
         )
@@ -82,7 +81,7 @@ trait FreeEntitlementEligibility extends CCConfig with ChildHelper {
     Future {
       FifteenHoursEligibilityModel(
         eligibility = hasChildAtAge(
-          configField = s"fifteen.${location}",
+          configField = s"fifteen.$location",
           dobs = request.childDOBList,
           currentDate = localDate
         )

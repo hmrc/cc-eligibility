@@ -17,34 +17,28 @@
 package controllers.freeEntitlement
 
 import eligibility.FreeEntitlementEligibility
+import javax.inject.Inject
 import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.input.tfc.TFCEligibilityInput
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.Action
+import play.api.mvc.{Action, ControllerComponents}
 import service.AuditEvents
-import uk.gov.hmrc.play.microservice.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object FreeEntitlementController extends FreeEntitlementController {
-  override val auditEvent = AuditEvents
+class FreeEntitlementController @Inject()(auditEvent: AuditEvents,
+                                          freeHoursService: FreeEntitlementEligibility,
+                                          cc: ControllerComponents) extends BackendController(cc) {
 
-  override val freeHoursService: FreeEntitlementEligibility = FreeEntitlementEligibility
-}
-
-trait FreeEntitlementController extends BaseController {
-
-  val auditEvent: AuditEvents
-
-  val freeHoursService: FreeEntitlementEligibility
-
-  def fifteenHours: Action[JsValue] = Action.async(parse.json) {
+  def fifteenHours: Action[JsValue] = Action.
+    async(cc.parsers.json) {
     implicit request =>
       request.body.validate[FreeEntitlementEligibilityInput].fold(
         error => {
-          Logger.warn(s"FreeEntitlementController FreeEntitlement Validation JsError *****${error}")
+          Logger.warn(s"FreeEntitlementController FreeEntitlement Validation JsError *****$error")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
@@ -62,11 +56,11 @@ trait FreeEntitlementController extends BaseController {
       )
   }
 
-  def thirtyHours: Action[JsValue] = Action.async(parse.json) {
+  def thirtyHours: Action[JsValue] = Action.async(cc.parsers.json) {
     implicit request =>
       request.body.validate[TFCEligibilityInput].fold(
         error => {
-          Logger.warn(s"FreeEntitlementController Thirty Hours Free Entitlement Validation JsError *****${error}")
+          Logger.warn(s"FreeEntitlementController Thirty Hours Free Entitlement Validation JsError *****$error")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {

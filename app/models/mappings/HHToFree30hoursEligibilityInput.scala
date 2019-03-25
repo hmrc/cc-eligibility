@@ -19,15 +19,13 @@ package models.mappings
 import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.{Household, LocationEnum}
 
-trait HHToFree30hoursEligibilityInput {
+class HHToFree30hoursEligibilityInput {
 
   def convert(household: Household): FreeEntitlementEligibilityInput = {
-    val location = household.location.getOrElse(LocationEnum.ENGLAND)
-    val childDOBList = household.children.map(_.dob).flatten
+    val location = household.location.getOrElse(LocationEnum.ENGLAND).toString
+    val childDOBList = household.children.flatMap(_.dob)
 
-    FreeEntitlementEligibilityInput(location.toString, childDOBList)
+    FreeEntitlementEligibilityInput(location, childDOBList)
   }
 
 }
-
-object HHToFree30hoursEligibilityInput extends HHToFree30hoursEligibilityInput

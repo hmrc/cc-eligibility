@@ -16,15 +16,16 @@
 
 package eligibility
 
+import javax.inject.Inject
 import models.input.tc.{TCChild, TCEligibilityInput, TCIncome, TCTaxYear}
 import models.output.tc.{TCChildElements, TCDisability, TCEligibilityOutput, TCOutputChild}
 import org.joda.time.LocalDate
-import utils.{MessagesObject, TCConfig}
+import utils.TCConfig
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object TCEligibility extends TCEligibility {
+class TCEligibility @Inject()(tcConfig: TCConfig) extends CCEligibilityHelpers {
 
   private def determineStartDatesOfPeriodsInTaxYear(taxYear: models.input.tc.TCTaxYear): List[LocalDate] = {
     val dates: List[Option[LocalDate]] = for (child <- taxYear.children) yield {
@@ -85,7 +86,7 @@ object TCEligibility extends TCEligibility {
     }
   }
 
-  override def eligibility(request: TCEligibilityInput): Future[TCEligibilityOutput] = {
+  def eligibility(request: TCEligibilityInput): Future[TCEligibilityOutput] = {
 
     val taxyears = constructTaxYearsWithPeriods(request)
     Future {
@@ -97,11 +98,6 @@ object TCEligibility extends TCEligibility {
       )
     }
   }
-}
-
-trait TCEligibility extends CCEligibilityHelpers with MessagesObject {
-
-  def eligibility(request: TCEligibilityInput): Future[TCEligibilityOutput]
 
   def determineHouseholdEligibilityForPeriod(ty: TCTaxYear, periodStart: LocalDate): models.output.tc.TCHouseHoldElements = {
     models.output.tc.TCHouseHoldElements(
@@ -144,8 +140,8 @@ trait TCEligibility extends CCEligibilityHelpers with MessagesObject {
         val child = children.head
         val isChild = child.isChild(periodStart)
         val getsChildElement: Boolean = (
-          child.dob.isBefore(TCConfig.childDate6thApril2017) ||
-            childrenWithChildElement.length < TCConfig.childElementLimit ||
+          child.dob.isBefore(tcConfig.childDate6thApril2017) ||
+            childrenWithChildElement.length < tcConfig.childElementLimit ||
             childrenWithChildElement.contains(child.dob)
           ) && isChild
         val modifiedChildrenWithChildElement = if (getsChildElement) {

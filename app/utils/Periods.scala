@@ -16,6 +16,7 @@
 
 package utils
 
+import play.api.i18n.Lang
 import play.api.libs.json._
 
 object Periods extends Enumeration with MessagesObject {
@@ -33,6 +34,7 @@ object Periods extends Enumeration with MessagesObject {
   implicit def enumWrites: Writes[Period] = EnumUtils.enumWrites
 
   def toString(period: Value): String = {
+    implicit val lang: Lang = Lang("en")
     period match {
       case Weekly => messages("cc.period.weekly")
       case Fortnightly => messages("cc.period.fortnightly")

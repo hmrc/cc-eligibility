@@ -16,23 +16,20 @@
 
 package connectors
 
-import config.{ApplicationConfig, WSHttp}
+import config.ApplicationConfig
+import javax.inject.Inject
 import models.input.CalculatorOutput
 import models.output.CalculatorInput
 import uk.gov.hmrc.http.{HeaderCarrier, HttpPost}
+import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object CalculatorConnector extends CalculatorConnector {
-  override def httpPost: HttpPost = WSHttp
-}
-
-trait CalculatorConnector {
-
-  def httpPost: HttpPost
+class CalculatorConnector @Inject()(applicationConfig: ApplicationConfig,
+                                    http: DefaultHttpClient) {
 
   def getCalculatorResult(calculatorInput: CalculatorInput)(implicit hc: HeaderCarrier): Future[CalculatorOutput] = {
-    httpPost.POST[CalculatorInput, CalculatorOutput](ApplicationConfig.calculatorUrl, calculatorInput)
+    http.POST[CalculatorInput, CalculatorOutput](applicationConfig.calculatorUrl, calculatorInput)
   }
 }
