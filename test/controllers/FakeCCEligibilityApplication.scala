@@ -90,7 +90,7 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
                   ): TFCClaimant ={
     new TFCClaimant(previousIncome, currentIncome, hoursPerWeek, isPartner, disability,
       carersAllowance, minimumEarnings, age, employmentStatus, selfEmployedSelection, maximumEarnings){
-      override lazy val auditEvents: AuditEvents = audits
+       lazy val auditEvents: AuditEvents = audits
     }
   }
 
@@ -101,8 +101,6 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
                dob: LocalDate,
                disability: TFCDisability
               ): TFCChild = {
-    new TFCChild(id, childCareCost, childcareCostPeriod, dob, disability) {
-      override lazy val tFCConfig: TFCConfig = tfcConfig
-    }
+    new TFCChild(id, childCareCost, childcareCostPeriod, dob, disability)
   }
 }

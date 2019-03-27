@@ -18,13 +18,13 @@ package eligibility
 
 
 
+import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
 
 import javax.inject.Inject
 import models.input.tfc.{TFCChild, TFCClaimant, TFCEligibilityInput}
 import models.output.tfc._
 import org.joda.time.LocalDate
-import play.api.Logger
 import play.api.mvc.Request
 import service.AuditEvents
 import uk.gov.hmrc.http.HeaderCarrier
@@ -37,9 +37,49 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
                                tfcRollOutConfig: TFCRolloutSchemeConfig,
                                tFCConfig: TFCConfig) {
 
-  def determineChildStartDateInTFCPeriod(child: models.input.tfc.TFCChild, periodFrom: LocalDate, periodUntil: LocalDate, location: String):Option[LocalDate]={
+  def getWeekEnd(calendar: Calendar, weekStart: Int): Date = {
+    while (calendar.get(Calendar.DAY_OF_WEEK) != weekStart || calendar.get(Calendar.DAY_OF_MONTH) == 1) {
+      calendar.add(Calendar.DATE, 1)
+    }
+    calendar.getTime
+  }
+
+  def firstOfSeptember(septemberCalendar: Calendar, childBirthday: Date, childBirthdayCalendar: Calendar): Date = {
+    septemberCalendar.setFirstDayOfWeek(Calendar.SUNDAY)
+    septemberCalendar.setTime(childBirthday) // today
+    septemberCalendar.set(Calendar.MONTH, Calendar.SEPTEMBER) // september in calendar year
+    septemberCalendar.set(Calendar.DAY_OF_MONTH, 1)
+    septemberCalendar.set(Calendar.YEAR, childBirthdayCalendar.get(Calendar.YEAR))
+    septemberCalendar.getTime
+
+  }
+
+  def endWeek1stOfSeptemberDate(periodStart: LocalDate, location: String, child: TFCChild): Date = {
+    val childBirthday = getChildBirthday(periodStart, location, child)  //child's 11th or 16th Birthday
+    val childBirthdayCalendar: Calendar = Calendar.getInstance()  // todays date
+    childBirthdayCalendar.setTime(childBirthday) // childs date of birth
+    val septemberCalendar = Calendar.getInstance()
+    septemberCalendar.clear()
+    var endWeekOf1stSeptember = firstOfSeptember(septemberCalendar, childBirthday, childBirthdayCalendar) // end date of first week of 1st september
+
+    if (endWeekOf1stSeptember.before(childBirthday) || childBirthday.equals(endWeekOf1stSeptember)) { // end week is before today
+      septemberCalendar.add(Calendar.YEAR, 1) // must be next year (september now+1)
+    }
+
+    endWeekOf1stSeptember = getWeekEnd(septemberCalendar, Calendar.SUNDAY)
+    val dateFormatter = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy")
+    dateFormatter.parse(endWeekOf1stSeptember.toString)
+  }
+
+  def getChildBirthday(periodStart: LocalDate, location: String, child: TFCChild): Date ={
+    val taxYearConfig = tFCConfig.getConfig(periodStart, location)
+    val ageIncrease = if(child.isDisabled) taxYearConfig.childAgeLimitDisabled else taxYearConfig.childAgeLimit
+    child.childsBirthdayDateForAge(ageIncrease)
+  }
+
+  def determineChildStartDateInTFCPeriod(child: TFCChild, periodFrom: LocalDate, periodUntil: LocalDate, location: String):Option[LocalDate]={
     val childDob: Date = child.dob.toDate
-    val childBirthdaySeptDate: Date = child.endWeek1stOfSeptemberDate(periodFrom, location)
+    val childBirthdaySeptDate: Date = endWeek1stOfSeptemberDate(periodFrom, location, child)
 
     childDob match {
       case dob if dob.before(periodFrom.toDate) =>
@@ -52,9 +92,9 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
     }
   }
 
-  def determineChildEndDateInTFCPeriod(child: models.input.tfc.TFCChild, periodFrom: LocalDate, periodUntil: LocalDate, location: String): Option[LocalDate]={
+  def determineChildEndDateInTFCPeriod(child: TFCChild, periodFrom: LocalDate, periodUntil: LocalDate, location: String): Option[LocalDate]={
     val childDob: Date = child.dob.toDate
-    val childBirthdaySeptDate: Date = child.endWeek1stOfSeptemberDate(periodFrom, location)
+    val childBirthdaySeptDate: Date = endWeek1stOfSeptemberDate(periodFrom, location, child)
 
     childDob match {
       case dob if dob.after(periodUntil.toDate) || dob.equals(periodUntil.toDate) => None
@@ -157,7 +197,7 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
       val auditMinEarns = minEarningsParent && minEarningsPartner
 
       if(!auditMinEarns) {
-        tfceEligibilityInput.auditEvents.auditMinEarnings(auditMinEarns)
+        auditEvent.auditMinEarnings(auditMinEarns)
       }
 
       (minEarningsParent, minEarningsPartner) match {
@@ -169,7 +209,7 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
     } else {
 
       if(!minEarningsParent) {
-        tfceEligibilityInput.auditEvents.auditMinEarnings(minEarningsParent)
+        auditEvent.auditMinEarnings(minEarningsParent)
       }
       minEarningsParent
     }
@@ -197,11 +237,11 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
       if(claimant.minimumEarnings.amount >= nmw._1) {
         true
       } else {
-        claimant.auditEvents.auditAgeGroup(user, nmw._2)
+        auditEvent.auditAgeGroup(user, nmw._2)
         claimant.employmentStatus match {
           case Some("selfEmployed") =>
-            claimant.auditEvents.auditSelfEmploymentStatus(user, claimant.employmentStatus.get)
-            claimant.auditEvents.auditSelfEmployedin1st(user, claimant.selfEmployedSelection.getOrElse(false))
+            auditEvent.auditSelfEmploymentStatus(user, claimant.employmentStatus.get)
+            auditEvent.auditSelfEmployedin1st(user, claimant.selfEmployedSelection.getOrElse(false))
             claimant.selfEmployedSelection.getOrElse(false)
           case Some("apprentice") => claimant.minimumEarnings.amount >= taxYearConfig.nmwApprentice
           case _ => false
