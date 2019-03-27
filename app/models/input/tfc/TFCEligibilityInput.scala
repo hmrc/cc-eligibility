@@ -16,19 +16,13 @@
 
 package models.input.tfc
 
-import java.text.SimpleDateFormat
-import java.util.{Calendar, Date}
-
 import config.ConfigConstants
 import models.input.BaseChild
 import org.joda.time.LocalDate
-import play.api.Play
 import play.api.i18n.Lang
 import play.api.libs.functional.syntax._
 import play.api.libs.json.JodaReads._
-import play.api.libs.json.JodaWrites._
 import play.api.libs.json._
-import service.AuditEvents
 import uk.gov.hmrc.http.HeaderCarrier
 import utils._
 
@@ -43,8 +37,6 @@ case class TFCEligibilityInput(
                                 claimants: List[TFCClaimant],
                                 children: List[TFCChild]
                 ) {
-  lazy val auditEvents: AuditEvents = Play.current.injector.asInstanceOf[AuditEvents]
-
   def validMaxEarnings(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
     val parent = claimants.head
     val maxEarningsParent = parent.maximumEarnings
@@ -110,9 +102,6 @@ case class TFCClaimant(
                         selfEmployedSelection: Option[Boolean] = None,
                         maximumEarnings: Option[Boolean] = None
                      ) {
-  lazy val auditEvents: AuditEvents = Play.current.injector.asInstanceOf[AuditEvents]
-//  lazy val tFCConfig: TFCConfig = Play.current.injector.asInstanceOf[TFCConfig]
-
   def totalIncome: BigDecimal = {
     val (currentEmployment, currentvOther, currentPension) = getIncomeElements(previousIncome, currentIncome)
     getTotalTFCIncome(currentEmployment.getOrElse(ConfigConstants.defaultAmount),
@@ -198,59 +187,8 @@ case class TFCChild(
                     disability: TFCDisability
                     ) extends BaseChild {
 
-  lazy val tFCConfig: TFCConfig = Play.current.injector.asInstanceOf[TFCConfig]
-
   def isDisabled: Boolean = {
     disability.severelyDisabled || disability.disabled
-  }
-
-  def getChildBirthday(periodStart: LocalDate, location: String): Date =
-    if(isDisabled) getChild16Birthday(periodStart, location) else getChild11Birthday(periodStart, location)
-
-  def getChild16Birthday(periodStart: LocalDate, location: String): Date = {
-    val taxYearConfig = tFCConfig.getConfig(periodStart, location)
-    val ageIncrease = taxYearConfig.childAgeLimitDisabled
-    childsBirthdayDateForAge(ageIncrease)
-  }
-
-  def getChild11Birthday(periodStart: LocalDate, location: String): Date = {
-    val taxYearConfig = tFCConfig.getConfig(periodStart, location)
-    val ageIncrease = taxYearConfig.childAgeLimit
-    childsBirthdayDateForAge(ageIncrease)
-  }
-
-  def getWeekEnd(calendar: Calendar, weekStart: Int): Date = {
-    while (calendar.get(Calendar.DAY_OF_WEEK) != weekStart || calendar.get(Calendar.DAY_OF_MONTH) == 1) {
-      calendar.add(Calendar.DATE, 1)
-    }
-    calendar.getTime
-  }
-
-  def firstOfSeptember(septemberCalendar: Calendar, childBirthday: Date, childBirthdayCalendar: Calendar): Date = {
-    septemberCalendar.setFirstDayOfWeek(Calendar.SUNDAY)
-    septemberCalendar.setTime(childBirthday) // today
-    septemberCalendar.set(Calendar.MONTH, Calendar.SEPTEMBER) // september in calendar year
-    septemberCalendar.set(Calendar.DAY_OF_MONTH, 1)
-    septemberCalendar.set(Calendar.YEAR, childBirthdayCalendar.get(Calendar.YEAR))
-    septemberCalendar.getTime
-
-  }
-
-  def endWeek1stOfSeptemberDate(periodStart: LocalDate, location: String): Date = {
-    val childBirthday = getChildBirthday(periodStart, location)  //child's 11th or 16th Birthday
-    val childBirthdayCalendar: Calendar = Calendar.getInstance()  // todays date
-    childBirthdayCalendar.setTime(childBirthday) // childs date of birth
-    val septemberCalendar = Calendar.getInstance()
-    septemberCalendar.clear()
-    var endWeekOf1stSeptember = firstOfSeptember(septemberCalendar, childBirthday, childBirthdayCalendar) // end date of first week of 1st september
-
-    if (endWeekOf1stSeptember.before(childBirthday) || childBirthday.equals(endWeekOf1stSeptember)) { // end week is before today
-      septemberCalendar.add(Calendar.YEAR, 1) // must be next year (september now+1)
-    }
-
-    endWeekOf1stSeptember = getWeekEnd(septemberCalendar, Calendar.SUNDAY)
-    val dateFormatter = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy")
-    dateFormatter.parse(endWeekOf1stSeptember.toString)
   }
 }
 

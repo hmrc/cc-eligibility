@@ -20,8 +20,8 @@ addSbtPlugin("com.github.gseitz" % "sbt-release" % "0.8.5")
 
 addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.5.1")
 
-addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "1.14.0")
+addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "1.15.0")
 
-addSbtPlugin("uk.gov.hmrc" % "sbt-git-versioning" % "1.16.0")
+addSbtPlugin("uk.gov.hmrc" % "sbt-git-versioning" % "1.17.0")
 
 addSbtPlugin("uk.gov.hmrc" % "sbt-artifactory" % "0.17.0")
