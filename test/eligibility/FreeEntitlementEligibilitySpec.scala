@@ -102,9 +102,9 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
       ("Location", "TFC Eligibility", "Dates of Birth", "Eligibility Result", "Eligibility Rollout"),
       ("england", true, List(now.minusYears(3).plusDays(1)), false, true),
       ("england", true, List(now.minusYears(3)), true, true),
-      ("england", true, List(now.minusYears(4)), true, false),
-      ("england", true, List(now.minusYears(5).plusDays(1)), true, false),
-      ("england", true, List(now.minusYears(5)), false, false),
+      ("england", true, List(now.minusYears(4)), true, true),
+      ("england", true, List(now.minusYears(5).plusDays(1)), true, true),
+      ("england", true, List(now.minusYears(5)), false, true),
       ("scotland", true, List(now.minusYears(3)), false, true),
       ("northern-ireland", true, List(now.minusYears(3)), false, true),
       ("wales", true, List(now.minusYears(3)), false, true),
@@ -134,7 +134,7 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
           val freeHoursRolloutConfig: Seq[Configuration] = Seq(
             Configuration(
               "rule-date" -> "17-07-2017",
-              "born-on-after" -> s"01-04-$testYear"
+              "born-on-after" -> s"01-04-2013"
             ),
             Configuration(
               "rule-date" -> "default",
