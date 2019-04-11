@@ -15,11 +15,11 @@ private object AppDependencies {
 
   val compile: Seq[ModuleID] = Seq(
     ws,
-    hmrc %% "bootstrap-play-26" % "0.37.0",
-    hmrc %% "govuk-template" % "5.30.0-play-26",
-    hmrc %% "play-ui" % "7.33.0-play-26",
+    hmrc %% "bootstrap-play-26" % "0.38.0",
+    hmrc %% "govuk-template" % "5.31.0-play-26",
+    hmrc %% "play-ui" % "7.38.0-play-26",
     "com.github.fge" % "json-schema-validator" % "2.2.6",
-    "com.kenshoo" %% "metrics-play" % "2.3.0_0.1.8",
+    "com.kenshoo" %% "metrics-play" % "2.3.0_0.2.1",
     typesafe %% "play-json" % "2.6.13",
     typesafe %% "play-json-joda" % "2.6.13"
   )
@@ -32,11 +32,11 @@ private object AppDependencies {
   object Test {
     def apply(): Seq[ModuleID] = new TestDependencies {
       override lazy val test = Seq(
-        "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % scope,
-        "org.scalatest" %% "scalatest" % "3.0.0" % scope,
+        "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.1" % scope,
+        "org.scalatest" %% "scalatest" % "3.0.7" % scope,
         hmrc %% "hmrctest" % "3.6.0-play-26" % scope,
         "org.pegdown" % "pegdown" % "1.6.0" % scope,
-        "org.mockito" % "mockito-core" % "2.18.3" % scope,
+        "org.mockito" % "mockito-core" % "2.27.0" % scope,
         typesafe %% "play-test" % PlayVersion.current % scope
       )
     }.test
