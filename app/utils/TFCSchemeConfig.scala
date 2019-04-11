@@ -82,7 +82,7 @@ class TFCConfig @Inject()(val config: CCConfig) {
     )
   }
 
-  def tfcNoOfPeriods: Short = config.oldConf.getInt("tfc.number.of.periods").getOrElse(4).toShort
+  def tfcNoOfPeriods: Short = config.oldConf.getInt("tax.quarters.multiplier").getOrElse(4).toShort
 
   def getConfig(currentDate: LocalDate, location: String): TFCTaxYearConfig = {
     val configs: Seq[Configuration] = config.oldConf.getConfigSeq("tfc.rule-change").get
