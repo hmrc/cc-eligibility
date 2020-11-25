@@ -9,9 +9,9 @@ object AppDependencies {
 
   val compile: Seq[ModuleID] = Seq(
     ws,
-    hmrc                %% "bootstrap-play-26"        % "1.3.0",
+    hmrc                %% "bootstrap-play-26"        % "1.6.0",
     "com.github.fge"    % "json-schema-validator"     % "2.2.6",
-    typesafe            %% "play-json-joda"           % "2.8.1"
+    typesafe            %% "play-json-joda"           % "2.9.1"
   )
 
   trait TestDependencies {

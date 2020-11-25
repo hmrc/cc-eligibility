@@ -29,13 +29,21 @@ lazy val microservice = Project(appName, file("."))
   .settings(PlayKeys.playDefaultPort := 9375)
   .settings(publishingSettings : _*)
   .settings(
+    scalacOptions += "-P:silencer:pathFilters=routes",
+    scalacOptions += "-P:silencer:lineContentFilters=^\\w",
+    libraryDependencies ++= Seq(
+      compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.1" cross CrossVersion.full),
+      "com.github.ghik" % "silencer-lib" % "1.7.1" % Provided cross CrossVersion.full
+    )
+  )
+  .settings(
     targetJvm := "jvm-1.8",
-    scalaVersion := "2.12.10",
+    scalaVersion := "2.12.12",
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     resolvers := Seq(
-      Resolver.bintrayRepo("hmrc", "releases"),
-      Resolver.jcenterRepo
+          Resolver.bintrayRepo("hmrc", "releases"),
+          Resolver.jcenterRepo
     )
   )
