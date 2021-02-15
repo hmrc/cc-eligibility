@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,20 +25,22 @@ import models.output.tfc.TFCEligibilityOutput
 import org.joda.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.PlaySpec
 import play.api.Configuration
 import play.api.mvc.{AnyContentAsEmpty, Request}
 import play.api.test.FakeRequest
+import play.api.test.Helpers.await
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.play.test.UnitSpec
 import utils.{CCConfig, Periods}
 
 import scala.concurrent.Future
 
-class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityApplication with MockitoSugar {
+class FreeEntitlementEligibilitySpec extends PlaySpec with FakeCCEligibilityApplication with MockitoSugar {
 
   val now: LocalDate = LocalDate.now()
   val mockTFCE: TFCEligibility = mock[TFCEligibility]
@@ -123,7 +125,6 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
           mockTFCE,
           new CCConfig(mock[ServicesConfig], mockConfiguration)
         ) {
-          val testYear: Int = LocalDate.now().minusYears(4).getYear
           val freeHoursConfig: Seq[Configuration] = Seq(
             Configuration(
               "rule-date" -> "default",
@@ -146,7 +147,7 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
             .thenReturn(Some(freeHoursConfig), Some(freeHoursRolloutConfig))
         }
 
-        when(mockTFCE.eligibility(any[models.input.tfc.TFCEligibilityInput])(any[Request[_]], any[HeaderCarrier]))
+        when(mockTFCE.eligibility(any[models.input.tfc.TFCEligibilityInput])(any[HeaderCarrier]))
           .thenReturn(Future.successful(
                 TFCEligibilityOutput(
                   from = now,
@@ -175,7 +176,7 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
                 childcareCostPeriod = Periods.Monthly,
                 dob = dob,
                 disability = TFCDisability()
-              )
+              )(None)
         )
 
         val result = await(freeEntitlementService.thirtyHours(tfcRequest))
@@ -196,7 +197,7 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
     when(mockConfig.loadConfigByType("free-hours")).thenReturn(Configuration(("thirty.england", "3,4")))
     when(mockConfig.loadConfigByType("free-hours-rollout")).thenReturn(Configuration(("born-on-after", "01-04-2013")))
     when(mockConfig.dateFormat).thenReturn(new SimpleDateFormat("dd-MM-yyyy"))
-    when(mockTFCE.eligibility(any[models.input.tfc.TFCEligibilityInput])(any[play.api.mvc.Request[_]], any[HeaderCarrier]))
+    when(mockTFCE.eligibility(any[models.input.tfc.TFCEligibilityInput])(any[HeaderCarrier]))
       .thenReturn( Future.successful(
         TFCEligibilityOutput(
           from = now,
@@ -224,7 +225,7 @@ class FreeEntitlementEligibilitySpec extends UnitSpec with FakeCCEligibilityAppl
         childcareCostPeriod = Periods.Monthly,
         dob = now.minusYears(3),
         disability = TFCDisability()
-      )
+      )(None)
     ))
 
     val result = await(freeEntitlementService.thirtyHours(tfcRequest))

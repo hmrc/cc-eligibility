@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,7 +92,7 @@ class HHToESCEligibilityInput @Inject()(val cCConfig: CCConfig) extends PeriodEn
         disability = ESCDisability(
           disabled = child.disability.exists(d => d.blind || d.disabled),
           severelyDisabled = child.disability.exists(_.severelyDisabled)
-        )
+        ), Some(true)
       )
     }
   }

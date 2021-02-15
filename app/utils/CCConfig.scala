@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,11 +115,11 @@ class CCConfig @Inject()(val conf: ServicesConfig,
   }
 
   private def getConfigDefault(configs: Seq[Configuration]): Configuration = {
-    configs.filter(_.getString("rule-date").contains("default")).head
+    configs.filter(_.get[String]("rule-date").contains("default")).head
   }
 
   private def getConfigExcludingDefault(configs: Seq[Configuration]): Seq[Configuration] = {
-    configs.filterNot(_.getString("rule-date").contains("default")).sortWith(
+    configs.filterNot(_.get[String]("rule-date").contains("default")).sortWith(
       (conf1, conf2) => dateFormat.parse(conf1.get[String]("rule-date")).after(dateFormat.parse(conf2.get[String]("rule-date")))
     )
   }

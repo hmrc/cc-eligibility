@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,17 +19,20 @@ package fixtures
 import models.input.esc.{ESCChild, ESCDisability}
 import models.output
 import org.joda.time.LocalDate
-import utils.Periods
+import utils.{CCConfig, ESCConfig, Periods}
 
 trait ESCChildren {
-  
+
+  def eSCConfig: Option[ESCConfig]
+  def ccConfig: Option[CCConfig]
+
   def buildChild(
                    id: Short = 0,
                    dob: LocalDate = LocalDate.now,
                    childCareCost: BigDecimal = 0,
                    disabled: Boolean = false,
                    severelyDisabled: Boolean = false
-                     ) = ESCChild (
+                     ) = new ESCChild (
     id = id,
     dob = dob,
     childCareCost = childCareCost,
@@ -38,7 +41,7 @@ trait ESCChildren {
       disabled = disabled,
       severelyDisabled = severelyDisabled
     )
-  )
+  )(eSCConfig, ccConfig)
 
   def buildOutputChild(
                         qualifying: Boolean = false,

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,18 +21,26 @@ import fixtures.ESCChildren
 import models.input.esc._
 import models.output.esc.{ESCEligibilityOutput, ESCPeriod}
 import org.joda.time.LocalDate
-import org.scalatest.mockito.MockitoSugar
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.mockito.MockitoSugar
+import utils.{CCConfig, ESCConfig}
 
 import scala.concurrent.Future
 
-class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest.PrivateMethodTester with MockitoSugar with ESCChildren {
+class ESCEligibilitySpec extends FakeCCEligibilityApplication
+  with org.scalatest.PrivateMethodTester with MockitoSugar
+  with ESCChildren {
+
+
+  override def eSCConfig: Option[ESCConfig] = Some(app.injector.instanceOf[ESCConfig])
+  override def ccConfig: Option[CCConfig] = Some(app.injector.instanceOf[CCConfig])
 
   val service = app.injector.instanceOf[ESCEligibility]
 
-  "ESCEligibilityService" should {
+  "ESCEligibilityService" must {
 
     "return a Future[Eligibility] result" in {
-      val result = service.eligibility(ESCEligibilityInput(escTaxYears = List()))
+      val result = service.eligibility(ESCEligibilityInput(escTaxYears = List()), eSCConfig.get, ccConfig.get)
       result.isInstanceOf[Future[ESCEligibilityOutput]] shouldBe true
     }
 
@@ -418,7 +426,6 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val dateOfBirth2 = LocalDate.parse("2016-09-28", formatter)
       val periodStart = LocalDate.parse("2016-06-20", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
-      val september = LocalDate.parse("2016-09-01", formatter)
 
       val child1 = buildChild(dob = dateOfBirth1)
       val child2 = buildChild(dob = dateOfBirth2)
@@ -590,7 +597,6 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with org.scalatest
       val dateOfBirth2 = LocalDate.parse("2016-09-01", formatter)
       val periodStart = LocalDate.parse("2016-06-20", formatter)
       val periodEnd = LocalDate.parse("2017-04-06", formatter)
-      val september = LocalDate.parse("2016-09-01", formatter)
 
       val child1 = buildChild(dob = dateOfBirth1)
       val child2 = buildChild(dob = dateOfBirth2)

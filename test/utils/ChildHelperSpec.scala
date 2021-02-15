@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,8 @@
 package utils
 
 import org.joda.time.LocalDate
-import org.scalatest.mockito.MockitoSugar
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 
@@ -27,7 +28,7 @@ class ChildHelperSpec extends CCConfigSpec with MockitoSugar {
 
   val testClass = new Test
 
-  "age" should {
+  "age" must {
 
     val now = LocalDate.now
     val testCases = Table(

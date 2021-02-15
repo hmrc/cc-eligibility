@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,14 @@ import models._
 import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.mappings.HHToFree30hoursEligibilityInput
 import org.joda.time.LocalDate
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.play.PlaySpec
 
-class HHToFree30hoursEligibilityInputSpec extends UnitSpec with FakeCCEligibilityApplication {
+class HHToFree30hoursEligibilityInputSpec extends PlaySpec with FakeCCEligibilityApplication {
 
   val SUT = new HHToFree30hoursEligibilityInput {}
 
-  "HHToFree30hoursEligibilityInput" should {
+  "HHToFree30hoursEligibilityInput" must {
 
     "given a household with location and children having DOB" in {
       val dob1 = LocalDate.parse("2017-08-01")
@@ -69,23 +70,6 @@ class HHToFree30hoursEligibilityInputSpec extends UnitSpec with FakeCCEligibilit
     }
 
     "given a household with default location and no children" in {
-
-      val children = List(
-        Child(
-          1,
-          "Child1",
-          None,
-          Some(Disability(true, false, false)),
-          Some(ChildCareCost(period = Some(PeriodEnum.MONTHLY)))
-        ),
-        Child(
-          2,
-          "Child2",
-          None,
-          Some(Disability(true, false, false)),
-          Some(ChildCareCost(period = Some(PeriodEnum.MONTHLY)))
-        )
-      )
 
       val household = Household(
         children = List(),

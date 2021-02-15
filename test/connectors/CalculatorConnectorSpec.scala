@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,15 +23,17 @@ import models.output.CalculatorInput
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.mockito.MockitoSugar
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.PlaySpec
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.Future
 
-class CalculatorConnectorSpec extends UnitSpec with MockitoSugar with FakeCCEligibilityApplication with BeforeAndAfterEach {
+class CalculatorConnectorSpec extends PlaySpec with MockitoSugar with FakeCCEligibilityApplication with BeforeAndAfterEach {
 
-  "CalculatorConnector" should {
+  "CalculatorConnector" must {
 
     "get calculator result" in {
       val mockHttp =  mock[DefaultHttpClient]

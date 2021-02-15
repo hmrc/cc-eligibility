@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package utils
 import play.api.i18n.Lang
 import play.api.libs.json._
 
-object Periods extends Enumeration with MessagesObject {
+object Periods extends Enumeration {
   type Period = Value
 
   val Weekly = Value(0, "Week")
@@ -34,14 +34,13 @@ object Periods extends Enumeration with MessagesObject {
   implicit def enumWrites: Writes[Period] = EnumUtils.enumWrites
 
   def toString(period: Value): String = {
-    implicit val lang: Lang = Lang("en")
     period match {
-      case Weekly => messages("cc.period.weekly")
-      case Fortnightly => messages("cc.period.fortnightly")
-      case Monthly => messages("cc.period.monthly")
-      case Quarterly => messages("cc.period.3monthly")
-      case Yearly => messages("cc.period.yearly")
-      case _ => messages("cc.period.invalid")
+      case Weekly => "cc.period.weekly"
+      case Fortnightly => "cc.period.fortnightly"
+      case Monthly => "cc.period.monthly"
+      case Quarterly => "cc.period.3monthly"
+      case Yearly => "cc.period.yearly"
+      case _ => "cc.period.invalid"
     }
   }
 

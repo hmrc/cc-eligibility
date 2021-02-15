@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,15 @@ package models.mapping
 
 import models.PeriodEnum
 import models.mappings.PeriodEnumToPeriod
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.play.PlaySpec
 import utils.Periods
 
-class PeriodEnumToPeriodSpec extends UnitSpec {
+class PeriodEnumToPeriodSpec extends PlaySpec {
 
   val SUT = PeriodEnumToPeriod
 
-  "PeriodEnumToPeriod" should {
+  "PeriodEnumToPeriod" must {
 
     "convert periodEnum to Periods for ESCEligibilityInput" when {
       "periodEnum is weekly" in {

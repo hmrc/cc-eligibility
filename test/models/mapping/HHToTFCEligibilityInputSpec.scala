@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,16 @@ import models.input.tfc._
 import models.mappings._
 import org.joda.time.LocalDate
 import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
-import utils.{CCConfig, Periods, TFCConfig}
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.mockito.MockitoSugar
+import utils.{CCConfig, Periods, TCConfig, TFCConfig}
 
 class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with MockitoSugar {
 
   val mockTFC = mock[TFCConfig]
-  val SUT = new HHToTFCEligibilityInput(mockTFC)
+  val SUT = new HHToTFCEligibilityInput(mockTFC, mock[CCConfig])
 
-  "HHToTFCEligibilityInput" should {
+  "HHToTFCEligibilityInput" must {
 
     "convert Household to TFC Eligibility Input" when {
       "a household with parent, no partner and 2 children" in {
@@ -73,7 +74,7 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
           List(TFCClaimant(None, Some(TFCIncome(Some(25000), Some(1200), Some(6000))), 32.0, false, TFCDisability(false, false), false,
             TFCMinimumEarnings(true, 3900), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), Some(Some(EmploymentStatusEnum.SELFEMPLOYED).toString), Some(true),
             maximumEarnings = Some(false))),
-          List(TFCChild(0, 350, Periods.Monthly, dob, TFCDisability(true, false)),
+          List(TFCChild(0, 350, Periods.Monthly, dob, TFCDisability(true)),
             TFCChild(1, 100, Periods.Monthly, dob, TFCDisability(false, true))))
 
         val mockCC = mock[CCConfig]

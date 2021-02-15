@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,16 @@ import controllers.FakeCCEligibilityApplication
 import fixtures.ESCChildren
 import models.input.esc._
 import org.joda.time.LocalDate
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import play.api.libs.json.{JsValue, Json}
+import utils.{CCConfig, ESCConfig}
 
 class ESCEligibilityInputSpec extends FakeCCEligibilityApplication with ESCChildren {
 
-  "ESCInputEligibility" should {
+  override def eSCConfig: Option[ESCConfig] = Some(app.injector.instanceOf[ESCConfig])
+  override def ccConfig: Option[CCConfig] = Some(app.injector.instanceOf[CCConfig])
+
+  "ESCInputEligibility" must {
 
     "read a valid JSON input and convert to a specific type" in {
       val resource: JsonNode = JsonLoader.fromResource("/json/input/esc/eligibility_input_test.json")
@@ -56,7 +61,7 @@ class ESCEligibilityInputSpec extends FakeCCEligibilityApplication with ESCChild
     }
   }
 
-  "Child" should {
+  "Child" must {
 
     "(ESC)(< 0) determine if the child is qualifying for esc" in {
       val dateOfBirth = LocalDate.parse("2016-08-31", formatter)
@@ -136,7 +141,7 @@ class ESCEligibilityInputSpec extends FakeCCEligibilityApplication with ESCChild
     }
   }
 
-  "Claimant" should {
+  "Claimant" must {
 
     "Employer providing vouchers determine if claimants qualifies for esc (receives vouchers)" in {
       val claimant = ESCClaimant(isPartner = false, employerProvidesESC = true)

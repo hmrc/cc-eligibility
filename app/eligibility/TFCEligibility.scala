@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -174,7 +174,7 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
     }
   }
 
-  def eligibility(request: TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
+  def eligibility(request: TFCEligibilityInput)(implicit hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
     val outputPeriods = determineTFCPeriods(request)
     val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && validHouseholdMinimumEarnings(request) && request.validMaxEarnings
     Future {
@@ -188,7 +188,7 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
     }
   }
 
-  def validHouseholdMinimumEarnings(tfceEligibilityInput: TFCEligibilityInput)(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
+  def validHouseholdMinimumEarnings(tfceEligibilityInput: TFCEligibilityInput)(implicit hc: HeaderCarrier): Boolean = {
     val parent = tfceEligibilityInput.claimants.head
     val minEarningsParent = satisfyMinimumEarnings(tfceEligibilityInput.from, tfceEligibilityInput.location, parent)
     if(tfceEligibilityInput.claimants.length > 1) {
@@ -225,7 +225,7 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
 
 
   def satisfyMinimumEarnings(periodStart: LocalDate, location:String, claimant: TFCClaimant)
-                            (implicit req: Request[_], hc: HeaderCarrier): Boolean = {
+                            (implicit hc: HeaderCarrier): Boolean = {
 
     val user = if(!claimant.isPartner) "Parent" else "Partner"
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,5 +24,6 @@ import play.api.libs.json.{Json, Writes}
 case class CalculatorInput(tc: Option[TCEligibilityOutput], tfc: Option[TFCEligibilityOutput], esc: Option[ESCEligibilityOutput])
 
 object CalculatorInput {
+
   implicit val calculatorInput: Writes[CalculatorInput] = Json.writes[CalculatorInput]
 }

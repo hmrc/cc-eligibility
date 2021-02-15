@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,11 +30,11 @@ case class ESCTaxYearConfig(
 class ESCConfig @Inject()(val config: CCConfig) {
 
   def getESCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
-    configs.filter(_.getString("rule-date").contains("default")).head
+    configs.filter(_.get[String]("rule-date").contains("default")).head
   }
 
   def getESCConfigExcludingDefault(configs :Seq[play.api.Configuration]) : Seq[play.api.Configuration] = {
-    configs.filter(!_.getString("rule-date").contains("default"))
+    configs.filter(!_.get[String]("rule-date").contains("default"))
   }
 
   def getSortedESCConfigExcludingDefault(configsExcludingDefault : Seq[play.api.Configuration]) : Seq[play.api.Configuration] = {
@@ -47,7 +47,7 @@ class ESCConfig @Inject()(val config: CCConfig) {
     taxYearConfigs match {
       case Nil => acc
       case head :: tail =>
-        val configDate = new SimpleDateFormat("dd-MM-yyyy").parse(head.getString("rule-date").get)
+        val configDate = new SimpleDateFormat("dd-MM-yyyy").parse(head.get[String]("rule-date"))
 
         // exit tail recursive
         if (currentDate.toDate.after(configDate) || currentDate.toDate.compareTo(configDate) == 0) {
@@ -60,8 +60,8 @@ class ESCConfig @Inject()(val config: CCConfig) {
 
   def getESCTaxYearConfig(configuration : play.api.Configuration) : ESCTaxYearConfig = {
     ESCTaxYearConfig(
-      childAgeLimit = configuration.getInt("child-age-limit").get,
-      childAgeLimitDisabled = configuration.getInt("child-age-limit-disabled").get
+      childAgeLimit = configuration.get[Int]("child-age-limit"),
+      childAgeLimitDisabled = configuration.get[Int]("child-age-limit-disabled")
     )
   }
 

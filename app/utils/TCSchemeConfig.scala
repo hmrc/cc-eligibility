@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,15 +41,15 @@ class TCConfig @Inject()(val config: CCConfig) {
   lazy val childDate6thApril2017: LocalDate = DateTimeFormat.forPattern("dd-MM-yyyy").parseLocalDate(config.conf.getString("tc.child-element-date-constraint"))
 
   def getTCConfigDefault(configs: Seq[Configuration]): Configuration = {
-    configs.filter(_.getString("rule-date").contains("default")).head
+    configs.filter(_.get[String]("rule-date").contains("default")).head
   }
 
   def getTCConfigExcludingDefault(configs: Seq[Configuration]): Seq[Configuration] = {
-    configs.filter(!_.getString("rule-date").contains("default"))
+    configs.filter(!_.get[String]("rule-date").contains("default"))
   }
   def getSortedTCConfigExcludingDefault(configsExcludingDefault: Seq[Configuration]): Seq[Configuration] = {
     configsExcludingDefault.sortBy(c => {
-      new SimpleDateFormat("dd-MM-yyyy").parse(c.getString("rule-date").get)
+      new SimpleDateFormat("dd-MM-yyyy").parse(c.get[String]("rule-date"))
     }).reverse
   }
 
@@ -80,20 +80,20 @@ class TCConfig @Inject()(val config: CCConfig) {
     val defaultChildAgeLimit = 15
 
     TCTaxYearConfig(
-      childAgeLimit = configuration.getInt("child-age-limit").getOrElse(defaultChildAgeLimit),
-      childAgeLimitDisabled = configuration.getInt("child-age-limit-disabled").getOrElse(defaultChildAgeLimitDisabled),
-      childAgeLimitEducation = configuration.getInt("young-adult-education-age-limit").
+      childAgeLimit = configuration.getOptional[Int]("child-age-limit").getOrElse(defaultChildAgeLimit),
+      childAgeLimitDisabled = configuration.getOptional[Int]("child-age-limit-disabled").getOrElse(defaultChildAgeLimitDisabled),
+      childAgeLimitEducation = configuration.getOptional[Int]("young-adult-education-age-limit").
         getOrElse(defaultChildLimitEducation),
-      youngAdultAgeLimit = configuration.getInt("young-adult-age-limit").
+      youngAdultAgeLimit = configuration.getOptional[Int]("young-adult-age-limit").
         getOrElse(defaultYoungAdultAgeLimit),
-      minimumHoursWorked = configuration.getDouble("minimum-hours-worked-per-week")
+      minimumHoursWorked = configuration.getOptional[Double]("minimum-hours-worked-per-week")
         .getOrElse(defaultMinimumHoursWorked),
-      minimumHoursWorkedIfCouple = configuration.getDouble("minimum-hours-worked-if-couple-per-week")
+      minimumHoursWorkedIfCouple = configuration.getOptional[Double]("minimum-hours-worked-if-couple-per-week")
         .getOrElse(defaultMinimumHoursWorkedIfCouple),
-      hours30Worked = configuration.getDouble("hours-30-worked-per-week").getOrElse(defaultHours30Worked),
-      currentIncomeFallDifferenceAmount = configuration.getInt("current-income-fall-difference-amount").
+      hours30Worked = configuration.getOptional[Double]("hours-30-worked-per-week").getOrElse(defaultHours30Worked),
+      currentIncomeFallDifferenceAmount = configuration.getOptional[Int]("current-income-fall-difference-amount").
         getOrElse(defaultCurrentIncomeFallDifferenceAmount),
-      currentIncomeRiseDifferenceAmount = configuration.getInt("current-income-rise-difference-amount").
+      currentIncomeRiseDifferenceAmount = configuration.getOptional[Int]("current-income-rise-difference-amount").
         getOrElse(defaultCurrentIncomeRiseDifferenceAmount)
     )
   }

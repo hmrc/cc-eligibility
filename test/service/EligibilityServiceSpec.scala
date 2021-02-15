@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,19 +28,21 @@ import models.output.tfc._
 import models.output.{EscClaimantEligibility, Scheme, SchemeResults, TaxCreditsEligibility}
 import models.{Claimant, Household, LocationEnum, SchemeEnum}
 import org.joda.time.LocalDate
-import org.mockito.ArgumentMatchers._
+import org.mockito.ArgumentMatchers.{any, _}
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.PlaySpec
 import play.api.mvc.Request
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
+import utils.{CCConfig, ESCConfig}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication with MockitoSugar {
+class EligibilityServiceSpec extends PlaySpec with FakeCCEligibilityApplication with MockitoSugar {
 
   val mockCalc     = mock[CalculatorConnector]
   val mockESC      = mock[ESCEligibility]
@@ -51,6 +53,8 @@ class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication 
   val mockHHToTFC  = mock[HHToTFCEligibilityInput]
   val mockHHToESC  = mock[HHToESCEligibilityInput]
   val mockHHTOFree = mock[HHToFree30hoursEligibilityInput]
+  val mockESCConfig = mock[ESCConfig]
+  val mockCCConfig = mock[CCConfig]
 
 
   class ServiceTest extends EligibilityService(
@@ -62,14 +66,15 @@ class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication 
     mockHHToTCE,
     mockHHToTFC,
     mockHHToESC,
-    mockHHTOFree
+    mockESCConfig,
+    mockCCConfig
   ){
     override def eligibility(request: Household)(implicit req: Request[_], hc: HeaderCarrier): Future[SchemeResults] = super.eligibility(request)
   }
 
   val SUT = new ServiceTest
 
-  "EligibilityService" should {
+  "EligibilityService" must {
     "return SchemesResult" when {
       "household request is received" in {
 
@@ -83,10 +88,10 @@ class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication 
 
         val expectedResult = SchemeResults(List(tfcSchemeOutput, tcSchemeOutput, escSchemeOutput), true, true)
 
-        when(mockESC.eligibility(any())).thenReturn(Future(escEligibilityOutputAllTrue))
+        when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(escEligibilityOutputAllTrue))
         when(mockTCE.eligibility(any())).thenReturn(Future(tcEligibilityOutputAllTrue))
-        when(mockTFC.eligibility(any())(any(), any())).thenReturn(Future(tfcEligibilityOutputRolloutTrue))
-        when(mockFree.thirtyHours(any())(any(), any())).thenReturn(Future(thirtyHoursEligibilityOutput))
+        when(mockTFC.eligibility(any())(any())).thenReturn(Future(tfcEligibilityOutputRolloutTrue))
+        when(mockFree.thirtyHours(any())(any())).thenReturn(Future(thirtyHoursEligibilityOutput))
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueAll))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
@@ -103,10 +108,10 @@ class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication 
 
         val expectedResult = SchemeResults(List(tfcSchemeOutput, tcSchemeOutput, escSchemeOutput), false, false)
 
-        when(mockESC.eligibility(any())).thenReturn(Future(escEligibilityOutputAllTrue))
+        when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(escEligibilityOutputAllTrue))
         when(mockTCE.eligibility(any())).thenReturn(Future(mock[TCEligibilityOutput]))
-        when(mockTFC.eligibility(any())(any(), any())).thenReturn(Future(mock[TFCEligibilityOutput]))
-        when(mockFree.thirtyHours(any())(any(), any())).thenReturn(Future(mock[ThirtyHoursEligibilityModel]))
+        when(mockTFC.eligibility(any())(any())).thenReturn(Future(mock[TFCEligibilityOutput]))
+        when(mockFree.thirtyHours(any())(any())).thenReturn(Future(mock[ThirtyHoursEligibilityModel]))
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueOnlyESC))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
@@ -123,10 +128,10 @@ class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication 
 
         val expectedResult = SchemeResults(List(tfcSchemeOutput, tcSchemeOutput, escSchemeOutput), false, false)
 
-        when(mockESC.eligibility(any())).thenReturn(Future(mock[ESCEligibilityOutput]))
+        when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(mock[ESCEligibilityOutput]))
         when(mockTCE.eligibility(any())).thenReturn(Future(tcEligibilityOutputAllTrue))
-        when(mockTFC.eligibility(any())(any(), any())).thenReturn(Future(mock[TFCEligibilityOutput]))
-        when(mockFree.thirtyHours(any())(any(), any())).thenReturn(Future(mock[ThirtyHoursEligibilityModel]))
+        when(mockTFC.eligibility(any())(any())).thenReturn(Future(mock[TFCEligibilityOutput]))
+        when(mockFree.thirtyHours(any())(any())).thenReturn(Future(mock[ThirtyHoursEligibilityModel]))
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueOnlyTC))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
@@ -143,10 +148,10 @@ class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication 
 
         val expectedResult = SchemeResults(List(tfcSchemeOutput, tcSchemeOutput, escSchemeOutput), false, false)
 
-        when(mockESC.eligibility(any())).thenReturn(Future(mock[ESCEligibilityOutput]))
+        when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(mock[ESCEligibilityOutput]))
         when(mockTCE.eligibility(any())).thenReturn(Future(mock[TCEligibilityOutput]))
-        when(mockTFC.eligibility(any())(any(), any())).thenReturn(Future(tfcEligibilityOutputTrue))
-        when(mockFree.thirtyHours(any())(any(), any())).thenReturn(Future(mock[ThirtyHoursEligibilityModel]))
+        when(mockTFC.eligibility(any())(any())).thenReturn(Future(tfcEligibilityOutputTrue))
+        when(mockFree.thirtyHours(any())(any())).thenReturn(Future(mock[ThirtyHoursEligibilityModel]))
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueOnlyTFC))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
@@ -163,10 +168,10 @@ class EligibilityServiceSpec extends UnitSpec with FakeCCEligibilityApplication 
 
         val expectedResult = SchemeResults(List(tfcSchemeOutput, tcSchemeOutput, escSchemeOutput), false, false)
 
-        when(mockESC.eligibility(any())).thenReturn(Future(mock[ESCEligibilityOutput]))
+        when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(mock[ESCEligibilityOutput]))
         when(mockTCE.eligibility(any())).thenReturn(Future(mock[TCEligibilityOutput]))
-        when(mockTFC.eligibility(any())(any(), any())).thenReturn(mock[TFCEligibilityOutput])
-        when(mockFree.thirtyHours(any())(any(), any())).thenReturn(Future(mock[ThirtyHoursEligibilityModel]))
+        when(mockTFC.eligibility(any())(any())).thenReturn(mock[TFCEligibilityOutput])
+        when(mockFree.thirtyHours(any())(any())).thenReturn(Future(mock[ThirtyHoursEligibilityModel]))
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueNone))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult

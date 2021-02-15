@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,12 @@ package models.mapping
 
 import controllers.FakeCCEligibilityApplication
 import models.LocationEnum
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.play.PlaySpec
 
-class LocationEnumSpec extends UnitSpec with FakeCCEligibilityApplication {
+class LocationEnumSpec extends PlaySpec with FakeCCEligibilityApplication {
 
-  "LocationEnum" should {
+  "LocationEnum" must {
     "have toString" when {
       "LocationEnum is ENGLAND" in {
         LocationEnum.ENGLAND.toString shouldBe "england"

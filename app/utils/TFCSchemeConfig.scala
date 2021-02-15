@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat
 import javax.inject.{Inject, Singleton}
 import org.joda.time.LocalDate
 import play.api.Configuration
+import scala.collection.JavaConverters.asScalaBufferConverter
 
 case class TFCTaxYearConfig(
                              childAgeLimit: Int,
@@ -39,11 +40,11 @@ case class TFCTaxYearConfig(
 class TFCConfig @Inject()(val config: CCConfig) {
 
   def getTFCConfigDefault(configs: Seq[Configuration]): Configuration = {
-    configs.filter(_.getString("rule-date").contains("default")).head
+    configs.filter(_.get[String]("rule-date").contains("default")).head
   }
 
   def getTFCConfigExcludingDefault(configs: Seq[Configuration]): Seq[Configuration] = {
-    configs.filter(!_.getString("rule-date").contains("default"))
+    configs.filter(!_.get[String]("rule-date").contains("default"))
   }
   def getSortedTFCConfigExcludingDefault(configsExcludingDefault: Seq[Configuration]): Seq[Configuration]= {
     configsExcludingDefault.sortBy(c => {
@@ -55,7 +56,7 @@ class TFCConfig @Inject()(val config: CCConfig) {
     taxYearConfigs match {
       case Nil => acc
       case head:: tail =>
-        val configDate = new SimpleDateFormat("dd-MM-yyyy").parse(head.getString("rule-date").get)
+        val configDate = new SimpleDateFormat("dd-MM-yyyy").parse(head.get[String]("rule-date"))
 
         // exit tail recursive
         if (currentDate.toDate.after(configDate) || currentDate.toDate.compareTo(configDate) == 0) {
@@ -72,7 +73,7 @@ class TFCConfig @Inject()(val config: CCConfig) {
       childAgeLimitDisabled = configuration.get[Int]("child-age-limit-disabled"),
       minimumHoursWorked = configuration.get[Double]("minimum-hours-worked-per-week"),
       maxIncomePerClaimant = configuration.get[Double]("maximum-income-per-claimant"),
-      personalAllowancePerClaimant = configuration.getDouble({location} + ".personal-allowance").
+      personalAllowancePerClaimant = configuration.getOptional[Double]({location} + ".personal-allowance").
         getOrElse(configuration.get[Double]("default.personal-allowance")),
       nmwApprentice = configuration.get[Int]("nmw.apprentice"),
       nmwUnder18 = configuration.get[Int]("nmw.under-18"),

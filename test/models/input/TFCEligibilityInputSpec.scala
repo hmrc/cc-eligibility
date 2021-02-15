@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ import controllers.FakeCCEligibilityApplication
 import models.input.tfc._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import org.scalatest.mockito.MockitoSugar
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.test.FakeRequest
 import utils.{CCConfigSpec, Periods, TFCConfig}
@@ -31,7 +32,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
 
   implicit val req = FakeRequest()
 
-  "TFCEInputEligibility" should {
+  "TFCEInputEligibility" must {
 
     val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
     val fromDate = LocalDate.parse("2000-08-27", formatter)
@@ -79,43 +80,43 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
       }
     }
 
-    "Child" should {
+    "Child" must {
 
       "Determine disability status if child is disabled" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
-        val child = TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
-          TFCDisability(disabled = true))
+        val child = new TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
+          TFCDisability(disabled = true))(None)
         child.isDisabled shouldBe true
       }
 
       "Determine disability status if child is severely disabled" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
-        val child = TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
-          TFCDisability(severelyDisabled = true))
+        val child = new TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
+          TFCDisability(severelyDisabled = true))(None)
         child.isDisabled shouldBe true
       }
 
       "Determine disability status if child is not disabled and not severely disabled" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
-        val child = TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
-          TFCDisability())
+        val child = new TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
+          TFCDisability())(None)
         child.isDisabled shouldBe false
       }
 
       "Determine disability status if child is disabled and severely disabled" in {
         val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
-        val child = TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
-          TFCDisability(disabled = true, severelyDisabled = true))
+        val child = new TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
+          TFCDisability(disabled = true, severelyDisabled = true))(None)
         child.isDisabled shouldBe true
       }
     }
 
 
-    "getNWMPerAge checks" should {
+    "getNWMPerAge checks" must {
 
       val tfcConfig = app.injector.instanceOf[TFCConfig]
 
@@ -145,7 +146,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
       }
     }
 
-    "validMaxEarnings" should {
+    "validMaxEarnings" must {
 
       val claimant = TFCClaimant(hoursPerWeek = 16.50, disability = TFCDisability(), minimumEarnings =
         TFCMinimumEarnings(), age = None)
@@ -156,63 +157,63 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
       "return true when its single parent journey when parent max earnings does not exist" in {
         val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant), List())
 
-        tfc.validMaxEarnings(req, hc) shouldBe true
+        tfc.validMaxEarnings() shouldBe true
       }
 
       "return true when its single parent journey and max earnings is false" in {
         val parent = claimant.copy(maximumEarnings = Some(false))
         val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(parent), List())
 
-        tfc.validMaxEarnings(req, hc) shouldBe true
+        tfc.validMaxEarnings() shouldBe true
       }
 
       //This test is for live service (old one)
       "return true when journey is with partner and max earnings for both parents does not exist" in {
         val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england", List(claimant, partner), List())
 
-        tfc.validMaxEarnings(req, hc) shouldBe true
+        tfc.validMaxEarnings() shouldBe true
       }
 
       "return true when journey is with partner and both parents have max earnings as false" in {
         val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england",
           List(claimant.copy(maximumEarnings = Some(false)), partner.copy(maximumEarnings = Some(false))), List())
 
-        tfc.validMaxEarnings(req, hc) shouldBe true
+        tfc.validMaxEarnings() shouldBe true
       }
 
       "return true when journey is with partner, parent has false for max earnings and partner max earnings does not exist" in {
         val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england",
           List(claimant.copy(maximumEarnings = Some(false)), partner), List())
 
-        tfc.validMaxEarnings(req, hc) shouldBe true
+        tfc.validMaxEarnings() shouldBe true
       }
 
       "return true when journey is with partner, partner has false for max earnings and parent max earnings does not exist" in {
         val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england",
           List(claimant, partner.copy(maximumEarnings = Some(false))), List())
 
-        tfc.validMaxEarnings(req, hc) shouldBe true
+        tfc.validMaxEarnings() shouldBe true
       }
 
       "return false when journey is with partner and both parents have max earnings as true" in {
         val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england",
           List(claimant.copy(maximumEarnings = Some(true)), partner.copy(maximumEarnings = Some(true))), List())
 
-        tfc.validMaxEarnings(req, hc) shouldBe false
+        tfc.validMaxEarnings() shouldBe false
       }
 
       "return true when journey is with partner, partner has true for max earnings and parent max earnings does not exist" in {
         val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england",
           List(claimant, partner.copy(maximumEarnings = Some(true))), List())
 
-        tfc.validMaxEarnings(req, hc) shouldBe false
+        tfc.validMaxEarnings() shouldBe false
       }
 
       "return true when journey is with partner, parent has true for max earnings and partner max earnings does not exist" in {
         val tfc = TFCEligibilityInput(from = fromDate, numberOfPeriods = 1, location = "england",
           List(claimant.copy(maximumEarnings = Some(true)), partner), List())
 
-        tfc.validMaxEarnings(req, hc) shouldBe false
+        tfc.validMaxEarnings() shouldBe false
       }
     }
 

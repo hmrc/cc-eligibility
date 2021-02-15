@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,25 +20,25 @@ import eligibility.FreeEntitlementEligibility
 import javax.inject.Inject
 import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.input.tfc.TFCEligibilityInput
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import service.AuditEvents
-import uk.gov.hmrc.play.bootstrap.controller.BackendController
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class FreeEntitlementController @Inject()(auditEvent: AuditEvents,
                                           freeHoursService: FreeEntitlementEligibility,
-                                          cc: ControllerComponents) extends BackendController(cc) {
+                                          cc: ControllerComponents) extends BackendController(cc) with Logging {
 
   def fifteenHours: Action[JsValue] = Action.
     async(cc.parsers.json) {
     implicit request =>
       request.body.validate[FreeEntitlementEligibilityInput].fold(
         error => {
-          Logger.warn(s"FreeEntitlementController FreeEntitlement Validation JsError *****$error")
+          logger.warn(s"FreeEntitlementController FreeEntitlement Validation JsError *****$error")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
@@ -49,7 +49,7 @@ class FreeEntitlementController @Inject()(auditEvent: AuditEvents,
               Ok(Json.toJson(response))
           } recover {
             case e: Exception =>
-              Logger.warn(s"FreeEntitlementController FreeEntitlement Eligibility Exception: ${e.getMessage}")
+              logger.warn(s"FreeEntitlementController FreeEntitlement Eligibility Exception: ${e.getMessage}")
               InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
           }
         }
@@ -60,7 +60,7 @@ class FreeEntitlementController @Inject()(auditEvent: AuditEvents,
     implicit request =>
       request.body.validate[TFCEligibilityInput].fold(
         error => {
-          Logger.warn(s"FreeEntitlementController Thirty Hours Free Entitlement Validation JsError *****$error")
+          logger.warn(s"FreeEntitlementController Thirty Hours Free Entitlement Validation JsError *****$error")
           Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
@@ -69,7 +69,7 @@ class FreeEntitlementController @Inject()(auditEvent: AuditEvents,
             Ok(Json.toJson(response))
           }.recover {
             case e: Exception =>
-              Logger.warn(s"FreeEntitlementController Thirty Hours Free Entitlement Eligibility Exception: ${e.getMessage}")
+              logger.warn(s"FreeEntitlementController Thirty Hours Free Entitlement Eligibility Exception: ${e.getMessage}")
               InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
           }
         }

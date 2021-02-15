@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,11 @@ package models.input
 
 import java.util.{Calendar, Date}
 
+import com.google.inject.Inject
 import org.joda.time.LocalDate
 import play.api.Play
+import play.api.i18n.MessagesApi
+import play.api.inject.Injector
 import utils.CCConfig
 
 trait BaseTaxYear {
@@ -27,11 +30,9 @@ trait BaseTaxYear {
   def until : LocalDate
 }
 
-trait BaseChild {
+abstract class BaseChild @Inject()(ccConfig: Option[CCConfig]) {
   def id : Short
   def dob : LocalDate
-
-  lazy val ccConfig: CCConfig = Play.current.injector.instanceOf[CCConfig]
 
   def isBeingBornInTaxYear(taxYear: BaseTaxYear) : (Boolean, LocalDate) = {
     val dateOfBirth = dob.toDate
@@ -41,7 +42,7 @@ trait BaseChild {
   }
 
   private def isSplittingPeriod1stSeptBeforeEndDate(claimDate: LocalDate, years: Int, september1 : LocalDate) = {
-    val previousSeptember1 = ccConfig.previousSeptember1stForDate(claimDate)
+    val previousSeptember1 = ccConfig.get.previousSeptember1stForDate(claimDate)
     val childBirthday = childsBirthdayDateForAge(years)
     childBirthday match {
       //if child's 15/16(if disabled) birthday after 1st September of current tax year no split is required
@@ -59,7 +60,7 @@ trait BaseChild {
 
   // TODO REMOVE THE BIRTHDAY IS AFTER PERIOD START DATE?
   def isSplittingPeriodOn1stSeptemberForYear(claimDate: LocalDate, endDate : LocalDate, years: Int) : (Boolean, LocalDate) = {
-    val september1 = ccConfig.september1stForDate(claimDate)
+    val september1 = ccConfig.get.september1stForDate(claimDate)
     val requiresSplit = september1 match {
       //if child's 15/16(if disabled) birthday after end date of current tax year no split is required
       case date if date.toDate.after(endDate.toDate) =>

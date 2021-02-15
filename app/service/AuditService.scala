@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,12 +28,12 @@ import scala.concurrent.Future
 class AuditService @Inject()(val auditConnector: AuditConnector) {
 
   def sendEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)
-               (implicit request: Request[_], hc: HeaderCarrier): Future[AuditResult] = {
+               (implicit hc: HeaderCarrier): Future[AuditResult] = {
     auditConnector.sendEvent(buildEvent(auditType, details, sessionId))
   }
 
   def buildEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)
-                (implicit request: Request[_], hc: HeaderCarrier): DataEvent = {
+                (implicit hc: HeaderCarrier): DataEvent = {
     DataEvent(
       auditSource =  "cc-eligibility",
       auditType = auditType,

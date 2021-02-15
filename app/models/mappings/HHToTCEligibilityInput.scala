@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@ import javax.inject.Inject
 import models._
 import models.input.tc._
 import org.joda.time.LocalDate
-import utils.{CCConfig, HelperManager}
+import utils.{CCConfig, HelperManager, TCConfig}
 
-class HHToTCEligibilityInput @Inject()(val cCConfig: CCConfig) extends PeriodEnumToPeriod with HelperManager {
+class HHToTCEligibilityInput @Inject()(val cCConfig: CCConfig, tcConfig: TCConfig) extends PeriodEnumToPeriod with HelperManager {
 
   def convert(household: Household): TCEligibilityInput = {
     TCEligibilityInput(taxYears = createTaxYears(household.parent, household.partner, household.children))
@@ -89,7 +89,7 @@ class HHToTCEligibilityInput @Inject()(val cCConfig: CCConfig) extends PeriodEnu
       disability = TCDisability(claimant.benefits.exists(_.disabilityBenefits), claimant.benefits.exists(_.highRateDisabilityBenefits)),
       carersAllowance = claimant.benefits.exists(_.carersAllowance),
       incomeBenefits = claimant.benefits.fold(false)(c=>c.incomeBenefits)
-    )
+    )(Some(tcConfig))
 
   }
   private def hhClaimantToTCEligibilityInputClaimant(hhParent: Claimant, hhPartner: Option[Claimant]): List[TCClaimant] = {
@@ -103,18 +103,24 @@ class HHToTCEligibilityInput @Inject()(val cCConfig: CCConfig) extends PeriodEnu
   }
 
   private def hhChildToTEligibilityInputChild(hhChildren: List[Child]): List[TCChild] = {
+
     hhChildren map (child => {
       TCChild(
-        id = child.id,
-        childcareCost = child.childcareCost.flatMap(_.amount).getOrElse(BigDecimal(0)),
-        childcareCostPeriod = convert(child.childcareCost.flatMap(_.period).getOrElse(PeriodEnum.MONTHLY)),
-        dob = child.dob.get,
-        disability = TCDisability(
+        child.id,
+        child.childcareCost.flatMap(_.amount).getOrElse(BigDecimal(0)),
+        convert(child.childcareCost.flatMap(_.period).getOrElse(PeriodEnum.MONTHLY)),
+        child.dob.get,
+        TCDisability(
           disabled = child.disability.exists(d => d.blind || d.disabled),
           severelyDisabled = child.disability.exists(_.severelyDisabled)
         ),
-        education = Some(TCEducation(child.education.exists(_.inEducation),
-          startDate = child.education.flatMap(x => x.startDate).getOrElse(LocalDate.now()))))
+        Some(
+          TCEducation(
+            child.education.exists(_.inEducation),
+            startDate = child.education.flatMap(x => x.startDate).getOrElse(LocalDate.now())
+          )
+        )
+      ,None, None, Some(true))
     })
   }
 }
