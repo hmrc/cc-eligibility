@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,12 @@ import models.output.tc._
 import models.output.tfc._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import play.api.libs.json._
 
 class JSONFactorySpec extends FakeCCEligibilityApplication {
 
-  "JSONFactory" should {
+  "JSONFactory" must {
 
     "Return a valid output JSON when error sequence and status are passed" in {
       val status = 400
@@ -169,7 +170,6 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
 
     "Return a valid TFC response with eligibility result" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
       val from = LocalDate.parse("2015-06-30", formatter)
 
       val outputClaimant = models.output.tfc.TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -264,14 +264,11 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
 
     "Return a valid ESC response with eligibility result" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
-      val dateOfBirth1 = LocalDate.parse("2015-07-01", formatter)
-      val dateOfBirth2 = LocalDate.parse("2002-06-27", formatter)
       val periodStart = LocalDate.parse("2015-06-20", formatter)
       val periodEnd = LocalDate.parse("2016-04-06", formatter)
 
       val outputClaimant1 = models.output.esc.ESCClaimant(
         qualifying = true,
-        isPartner = false,
         eligibleMonthsInPeriod = 11,
         vouchers = true
       )
@@ -285,7 +282,6 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
           ),
           children = List(
             models.output.esc.ESCChild(
-              qualifying = false,
               childCareCost = 100,
               childCareCostPeriod = Periods.Monthly
             )
@@ -294,7 +290,7 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
       )
 
       val outputTaxYear = models.output.esc.ESCTaxYear(from = periodStart, until = periodEnd, periods = escPeriods)
-      val escEligibilityModel = ESCEligibilityOutput(taxYears = List(outputTaxYear))
+      val escEligibilityModel =   ESCEligibilityOutput(taxYears = List(outputTaxYear))
 
       val outputJson = Json.parse(
         s"""

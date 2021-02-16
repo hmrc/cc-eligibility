@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,25 @@
 
 package eligibility
 
+import javax.inject.Inject
 import models.input.esc._
 import models.output
+import models.output.esc
 import models.output.esc.ESCEligibilityOutput
 import org.joda.time.LocalDate
+import utils.{CCConfig, ESCConfig}
 
 import scala.annotation.tailrec
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ESCEligibility extends CCEligibilityHelpers {
+class ESCEligibility () extends CCEligibilityHelpers {
 
   def generateSplitDates(taxYear: ESCTaxYear): List[LocalDate] = {
-      val dates: List[Option[LocalDate]] = for (child <- taxYear.children) yield {
-        val isBeingBorn = child.isBeingBornInTaxYear(taxYear)
-        val turns15 = child.isTurning15Before1September(taxYear.from, taxYear.until)
-        val turns16 = child.isTurning16Before1September(taxYear.from, taxYear.until)
+    val dates: List[Option[LocalDate]] = for (child <- taxYear.children) yield {
+      val isBeingBorn = child.isBeingBornInTaxYear(taxYear)
+      val turns15 = child.isTurning15Before1September(taxYear.from, taxYear.until)
+      val turns16 = child.isTurning16Before1September(taxYear.from, taxYear.until)
 
       if (isBeingBorn._1) {
         Some(isBeingBorn._2)
@@ -156,7 +159,18 @@ class ESCEligibility extends CCEligibilityHelpers {
     (eligibility, parentEligibility, partnerEligibility)
   }
 
-  def eligibility(request: ESCEligibilityInput): Future[ESCEligibilityOutput] = {
+  def eligibility(request: ESCEligibilityInput, eSCConfig: ESCConfig, ccConfig: CCConfig): Future[ESCEligibilityOutput] = {
+    if(request.escTaxYears.nonEmpty) {
+      val childrenWithConfig = request.escTaxYears.head.children.map(x => x.createWithConfig(x, eSCConfig, ccConfig))
+      val escTaxYearWithConfig = request.escTaxYears.map(x => new ESCTaxYear(x.from, x.until, x.claimants, childrenWithConfig))
+      val escEligibilityInputWithConfig = ESCEligibilityInput(escTaxYearWithConfig, request.location)
+      processEligibility(escEligibilityInputWithConfig)
+    }else {
+      processEligibility(request)
+    }
+  }
+
+  private def processEligibility(request: ESCEligibilityInput) = {
     val constructTaxYears = constructTaxYearsWithPeriods(request.escTaxYears)
     val (eligibility, parentEligibility, partnerEligibility) = determineESCEligibility(constructTaxYears)
     Future {

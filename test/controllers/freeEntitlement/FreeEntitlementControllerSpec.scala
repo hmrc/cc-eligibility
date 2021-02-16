@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,21 +24,22 @@ import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.output.freeEntitlement.{FifteenHoursEligibilityModel, ThirtyHoursEligibilityModel}
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.play.PlaySpec
 import play.api.http.Status.{NOT_FOUND, OK}
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{POST, route, _}
 import service.AuditEvents
-import uk.gov.hmrc.play.test.UnitSpec
 import play.api.test.Helpers._
 
 import scala.concurrent.Future
 
-class FreeEntitlementControllerSpec extends UnitSpec with FakeCCEligibilityApplication {
+class FreeEntitlementControllerSpec extends PlaySpec with FakeCCEligibilityApplication {
 
   val mockFee: FreeEntitlementEligibility = mock[FreeEntitlementEligibility]
 
-  "fifteenHours" should {
+  "fifteenHours" must {
     "not return NOT_FOUND endpoint" in {
       val result = route(app, FakeRequest(POST, "/cc-eligibility/fifteen-hours-entitlement/eligibility"))
       result.isDefined shouldBe true
@@ -94,7 +95,7 @@ class FreeEntitlementControllerSpec extends UnitSpec with FakeCCEligibilityAppli
     }
   }
 
-  "thirtyHours" should {
+  "thirtyHours" must {
     "not return NOT_FOUND endpoint" in {
       val result = route(app, FakeRequest(POST, "/cc-eligibility/thirty-hours-entitlement/eligibility"))
       result.isDefined shouldBe true
@@ -111,7 +112,7 @@ class FreeEntitlementControllerSpec extends UnitSpec with FakeCCEligibilityAppli
       val inputJson: JsValue = Json.obj()
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(mockFee.thirtyHours(any())(any(), any()))
+      when(mockFee.thirtyHours(any())(any()))
         .thenReturn(Future.successful(ThirtyHoursEligibilityModel(true, true)))
 
       val result = await(testController.thirtyHours(request))
@@ -129,7 +130,7 @@ class FreeEntitlementControllerSpec extends UnitSpec with FakeCCEligibilityAppli
       val inputJson: JsValue = Json.parse(inputResource.toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(mockFee.thirtyHours(any())(any(), any()))
+      when(mockFee.thirtyHours(any())(any()))
         .thenReturn(Future.successful(ThirtyHoursEligibilityModel(true, true)))
 
       val result = await(testController.thirtyHours(request))
@@ -147,7 +148,7 @@ class FreeEntitlementControllerSpec extends UnitSpec with FakeCCEligibilityAppli
       val inputJson: JsValue = Json.parse(inputResource.toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(mockFee.thirtyHours(any())(any(), any()))
+      when(mockFee.thirtyHours(any())(any()))
         .thenReturn(Future.failed(new RuntimeException))
 
       val result = await(testController.thirtyHours(request))

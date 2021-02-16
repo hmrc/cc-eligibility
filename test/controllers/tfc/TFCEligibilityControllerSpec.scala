@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import org.joda.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
@@ -60,11 +61,11 @@ class TFCEligibilityControllerSpec extends CCConfigSpec
   ).withHeaders(CONTENT_TYPE -> "application/json")
 
   before{
-    when(SUT.tfcEligibility.eligibility(any[TFCEligibilityInput]())(any[play.api.mvc.Request[_]], any[HeaderCarrier])).
+    when(SUT.tfcEligibility.eligibility(any[TFCEligibilityInput]())(any[HeaderCarrier])).
       thenReturn(Future.successful(validTFCEligibilityOutput))
   }
 
-  "TFCEligibilityController" should {
+  "TFCEligibilityController" must {
 
     "not return NOT_FOUND endpoint" in {
       val result = route(app, FakeRequest(POST, "/cc-eligibility/tax-free-childcare/eligibility"))
@@ -82,7 +83,7 @@ class TFCEligibilityControllerSpec extends CCConfigSpec
     }
 
     "return Internal Server Error with error message if an exception is thrown during eligibility" in {
-      when(SUT.tfcEligibility.eligibility(any[TFCEligibilityInput]())(any[play.api.mvc.Request[_]], any[HeaderCarrier])).
+      when(SUT.tfcEligibility.eligibility(any[TFCEligibilityInput]())(any[HeaderCarrier])).
         thenReturn(Future.failed(new Exception("Something bad happened in Eligibility")))
 
       val outputJSON = Json.parse(

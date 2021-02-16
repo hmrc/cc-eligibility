@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,11 @@ import models.input.tc.TCEligibilityInput
 import models.output.tc.TCEligibilityOutput
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
+import play.api.test.Helpers.await
 import service.AuditEvents
 
 import scala.concurrent.Future
@@ -34,7 +36,7 @@ class TCEligibilityControllerSpec extends FakeCCEligibilityApplication {
 
   val mockTCE: TCEligibility = mock[TCEligibility]
 
-  "TCEligibilityController" should {
+  "TCEligibilityController" must {
     "Accept valid json and should return Json body" in {
 
       val controller = new TCEligibilityController (

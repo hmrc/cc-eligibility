@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,15 @@ import javax.inject.Inject
 import models.input.tc.{TCChild, TCEligibilityInput, TCIncome, TCTaxYear}
 import models.output.tc.{TCChildElements, TCDisability, TCEligibilityOutput, TCOutputChild}
 import org.joda.time.LocalDate
-import utils.TCConfig
+import utils.{CCConfig, TCConfig}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class TCEligibility @Inject()(tcConfig: TCConfig) extends CCEligibilityHelpers {
+class TCEligibility @Inject()(tcConfig: TCConfig, ccConfig: CCConfig) extends CCEligibilityHelpers {
 
-  private def determineStartDatesOfPeriodsInTaxYear(taxYear: models.input.tc.TCTaxYear): List[LocalDate] = {
+  private def determineStartDatesOfPeriodsInTaxYear(taxYearIn: models.input.tc.TCTaxYear): List[LocalDate] = {
+    val taxYear = taxYearIn.createNewWithConfig(taxYearIn, tcConfig, ccConfig)
     val dates: List[Option[LocalDate]] = for (child <- taxYear.children) yield {
       val isBeingBorn = child.isBeingBornInTaxYear(taxYear)
       val turns15 = child.isTurning15Before1September(taxYear.from, taxYear.until)
@@ -53,7 +54,8 @@ class TCEligibility @Inject()(tcConfig: TCConfig) extends CCEligibilityHelpers {
     sorted.distinct
   }
 
-  private def determinePeriodsForTaxYear(ty: models.input.tc.TCTaxYear): List[models.output.tc.TCPeriod] = {
+  private def determinePeriodsForTaxYear(tyIn: models.input.tc.TCTaxYear): List[models.output.tc.TCPeriod] = {
+    val ty = tyIn.createNewWithConfig(tyIn, tcConfig, ccConfig)
     // get all date ranges of splits for tax year
     val datesOfChanges = determineStartDatesOfPeriodsInTaxYear(ty)
     // multiple periods have been identified

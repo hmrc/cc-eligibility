@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,9 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
+import org.mockito.internal.matchers.Any
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks.forAll
 import org.scalatest.prop.Tables.Table
 import play.api.Configuration
@@ -29,7 +31,7 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 class TFCSchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar {
 
-  "TFC Scheme Config" should {
+  "TFC Scheme Config" must {
 
     "return 1st september date for current tax year date" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
@@ -67,16 +69,16 @@ class TFCSchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar
       val defaultConfig = tfcConfig.getTFCConfigDefault(configs)
 
       val resultTaxYearConfig = TFCTaxYearConfig(
-        childAgeLimit = defaultConfig.getInt("child-age-limit").get,
-        childAgeLimitDisabled = defaultConfig.getInt("child-age-limit-disabled").get,
-        minimumHoursWorked = defaultConfig.getDouble("minimum-hours-worked-per-week").get,
-        maxIncomePerClaimant = defaultConfig.getDouble("maximum-income-per-claimant").get,
-        personalAllowancePerClaimant = defaultConfig.getDouble("default.personal-allowance").get,
-        nmwApprentice = defaultConfig.getInt("nmw.apprentice").get,
-        nmwUnder18 = defaultConfig.getInt("nmw.under-18").get,
-        nmw18To20 = defaultConfig.getInt("nmw.18-20").get,
-        nmw21To24 = defaultConfig.getInt("nmw.21-24").get,
-        nmw25Over = defaultConfig.getInt("nmw.over-25").get
+        childAgeLimit = defaultConfig.get[Int]("child-age-limit"),
+        childAgeLimitDisabled = defaultConfig.get[Int]("child-age-limit-disabled"),
+        minimumHoursWorked = defaultConfig.get[Double]("minimum-hours-worked-per-week"),
+        maxIncomePerClaimant = defaultConfig.get[Double]("maximum-income-per-claimant"),
+        personalAllowancePerClaimant = defaultConfig.get[Double]("default.personal-allowance"),
+        nmwApprentice = defaultConfig.get[Int]("nmw.apprentice"),
+        nmwUnder18 = defaultConfig.get[Int]("nmw.under-18"),
+        nmw18To20 = defaultConfig.get[Int]("nmw.18-20"),
+        nmw21To24 = defaultConfig.get[Int]("nmw.21-24"),
+        nmw25Over = defaultConfig.get[Int]("nmw.over-25")
       )
 
       resultTaxYearConfig.childAgeLimit shouldBe 11

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,13 @@ package utils
 import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 
 class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
 
   val escConfig = app.injector.instanceOf[ESCConfig]
 
-  "ESC Scheme Config" should {
+  "ESC Scheme Config" must {
 
     "return 1st september date for current tax year date (as ESC TAX YEAR)" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
@@ -59,8 +60,8 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
       val defaultConfig = escConfig.getESCConfigDefault(configs)
 
       val resultTaxYearConfig = ESCTaxYearConfig(
-        childAgeLimit = defaultConfig.getInt("child-age-limit").get,
-        childAgeLimitDisabled = defaultConfig.getInt("child-age-limit-disabled").get
+        childAgeLimit = defaultConfig.get[Int]("child-age-limit"),
+        childAgeLimitDisabled = defaultConfig.get[Int]("child-age-limit-disabled")
       )
 
       resultTaxYearConfig.childAgeLimit shouldBe 15

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,14 +24,15 @@ import models.output.tc.{TCEligibilityOutput, TCTaxYear}
 import models.output.tfc._
 import models.output.{EscClaimantEligibility, Scheme, SchemeResults, TaxCreditsEligibility}
 import org.joda.time.LocalDate
-import org.scalatest.mockito.MockitoSugar
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.mockito.MockitoSugar
 import utils.{CCConfigSpec, Periods}
 
 class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
 
   val SUT = SchemeResultsBuilder
 
-  "SchemeResultsBuilder" should {
+  "SchemeResultsBuilder" must {
 
     " throw an exception" when {
       "trying to build a scheme object and ESC claimant is missing" in {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package models.input.tfc
 
+import com.google.inject.Inject
 import config.ConfigConstants
 import models.input.BaseChild
 import org.joda.time.LocalDate
@@ -24,6 +25,7 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.JodaReads._
 import play.api.libs.json._
 import uk.gov.hmrc.http.HeaderCarrier
+import utils.Periods.Period
 import utils._
 
 /*
@@ -37,7 +39,7 @@ case class TFCEligibilityInput(
                                 claimants: List[TFCClaimant],
                                 children: List[TFCChild]
                 ) {
-  def validMaxEarnings(implicit req: play.api.mvc.Request[_], hc: HeaderCarrier): Boolean = {
+  def validMaxEarnings(): Boolean = {
     val parent = claimants.head
     val maxEarningsParent = parent.maximumEarnings
 
@@ -59,7 +61,7 @@ case class TFCEligibilityInput(
 
 }
 
-object TFCEligibilityInput extends CCFormat with MessagesObject {
+object TFCEligibilityInput extends CCFormat {
 
   implicit val lang: Lang = Lang("en")
 
@@ -75,8 +77,8 @@ object TFCEligibilityInput extends CCFormat with MessagesObject {
     (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
       (JsPath \ "numberOfPeriods").read[Short].orElse(Reads.pure(1)) and
         (JsPath \ "location").read[String] and
-          (JsPath \ "claimants").read[List[TFCClaimant]].filter(JsonValidationError(messages("cc.elig.claimant.max.min")))(x => claimantValidation(x)) and
-            (JsPath \ "children").read[List[TFCChild]].filter(JsonValidationError(messages("cc.elig.children.max.25")))(x => maxChildValidation(x))
+          (JsPath \ "claimants").read[List[TFCClaimant]].filter(JsonValidationError("At least one claimant or at max 2 claimants allowed"))(x => claimantValidation(x)) and
+            (JsPath \ "children").read[List[TFCChild]].filter(JsonValidationError("Max 25 children allowed"))(x => maxChildValidation(x))
     )(TFCEligibilityInput.apply _)
 }
 
@@ -179,20 +181,19 @@ object TFCDisability {
     )(TFCDisability.apply _)
 }
 
-case class TFCChild(
+case class TFCChild @Inject() (
                     id: Short,
                     childcareCost: BigDecimal = BigDecimal(0.00),
                     childcareCostPeriod: Periods.Period = Periods.Monthly,
                     dob: LocalDate,
-                    disability: TFCDisability
-                    ) extends BaseChild {
+                    disability: TFCDisability) (ccConfig: Option[CCConfig]) extends BaseChild(ccConfig) {
 
   def isDisabled: Boolean = {
     disability.severelyDisabled || disability.disabled
   }
 }
 
-object TFCChild extends CCFormat with MessagesObject {
+object TFCChild extends CCFormat {
 
   implicit val lang: Lang = Lang("en")
 
@@ -204,11 +205,21 @@ object TFCChild extends CCFormat with MessagesObject {
     cost >= BigDecimal(0.00)
   }
 
+  def apply(id: Short, childcareCost: BigDecimal, childcareCostPeriod: Period, dob: LocalDate,
+            disability: TFCDisability): TFCChild = {
+    new TFCChild(id, childcareCost, childcareCostPeriod, dob, disability)(None)
+  }
+
+  def apply(id: Short, childcareCost: BigDecimal, childcareCostPeriod: Period, dob: LocalDate,
+            disability: TFCDisability, ccConfig: CCConfig, dummyValue: Option[Boolean]): TFCChild = {
+    new TFCChild(id, childcareCost, childcareCostPeriod, dob, disability)(Some(ccConfig))
+  }
+
   implicit val childReads: Reads[TFCChild] = (
-    (JsPath \ "id").read[Short].filter(JsonValidationError(messages("cc.elig.id.should.not.be.less.than.0")))(x => validID(x)) and
-      (JsPath \ "childcareCost").read[BigDecimal].filter(JsonValidationError(messages("cc.elig.childcare.spend.too.low")))(x => childSpendValidation(x)) and
+    (JsPath \ "id").read[Short].filter(JsonValidationError("Child ID should not be less than 0"))(x => validID(x)) and
+      (JsPath \ "childcareCost").read[BigDecimal].filter(JsonValidationError("Childcare Spend cost should not be less than 0.00"))(x => childSpendValidation(x)) and
         (JsPath \ "childcareCostPeriod").read[Periods.Period] and
           (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
             (JsPath \ "disability").read[TFCDisability]
-    )(TFCChild.apply _)
+    )(TFCChild.apply(_,_,_,_,_))
 }

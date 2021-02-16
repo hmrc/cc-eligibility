@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ class TFCRolloutSchemeConfig @Inject()(config: CCConfig) {
   def isChildEligibleForTFCRollout(child: TFCChild, isEligibleForTFC: Boolean): Boolean = {
     val tfcRollout: Configuration = config.loadConfigByType("tfc-rollout")
     val bornOnOrAfter = config.dateFormat.parse(tfcRollout.get[String]("born-on-after"))
-    val isAvailableForAllDisabled: Boolean = tfcRollout.getBoolean("all-disabled").getOrElse(false)
+    val isAvailableForAllDisabled: Boolean = tfcRollout.getOptional[Boolean]("all-disabled").getOrElse(false)
 
     isEligibleForTFC && child.dob.isBefore(futureDate) && ((child.isDisabled && isAvailableForAllDisabled) || !bornOnOrAfter.after(child.dob.toDate))
   }

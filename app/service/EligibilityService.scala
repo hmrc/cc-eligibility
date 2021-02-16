@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import models.mappings._
 import models.output.{CalculatorInput, SchemeResults}
 import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
+import utils.{CCConfig, ESCConfig}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -37,13 +38,13 @@ class EligibilityService @Inject()(calcConnector: CalculatorConnector,
                                    TCEligibilityInput: HHToTCEligibilityInput,
                                    TFCEligibilityInput: HHToTFCEligibilityInput,
                                    ESCEligibilityInput: HHToESCEligibilityInput,
-                                   FreeEntitlementEligibilityInput: HHToFree30hoursEligibilityInput){
+                                   eSCConfig: ESCConfig, cCConfig: CCConfig){
 
   def eligibility(request: Household)(implicit req: Request[_], hc: HeaderCarrier): Future[SchemeResults] = {
     for {
       tcEligibility <- tc.eligibility(TCEligibilityInput.convert(request))
       tfcEligibility <- tfc.eligibility(TFCEligibilityInput.convert(request))
-      escEligibility <- esc.eligibility(ESCEligibilityInput.convert(request))
+      escEligibility <- esc.eligibility(ESCEligibilityInput.convert(request), eSCConfig, cCConfig)
       thirtyHoursEligibility <- thirtyHours.thirtyHours(TFCEligibilityInput.convert(request))
 
       calcInput = CalculatorInput(if (tcEligibility.eligible) Some(tcEligibility) else None,
@@ -53,6 +54,9 @@ class EligibilityService @Inject()(calcConnector: CalculatorConnector,
 
       calcOutput <- {
         if (calcInput.esc.isDefined || calcInput.tc.isDefined || calcInput.tfc.isDefined) {
+          if(calcInput.esc.isDefined){
+            println("")
+          }
           calcConnector.getCalculatorResult(calcInput)
         } else {
           Future(CalculatorOutput())

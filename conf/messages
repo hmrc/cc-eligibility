@@ -1,8 +1,8 @@
-cc.elig.id.should.not.be.less.than.0 = Child ID should not be less than 0
-cc.elig.childcare.spend.too.low = Childcare Spend cost should not be less than 0.00
-cc.elig.children.max.25 = Max 25 children allowed
-cc.elig.claimant.max.min = At least one claimant or at max 2 claimants allowed
-cc.elig.income.less.than.0 = Gross or Net Income should not be less than 0.00
+-cc.elig.id.should.not.be.less.than.0 = Child ID should not be less than 0
+-cc.elig.childcare.spend.too.low = Childcare Spend cost should not be less than 0.00
+-cc.elig.children.max.25 = Max 25 children allowed
+-cc.elig.claimant.max.min = At least one claimant or at max 2 claimants allowed
+-cc.elig.income.less.than.0 = Gross or Net Income should not be less than 0.00
 cc.elig.blank = ""
-cc.elig.tax.year.min = At least one tax year required
-cc.elig.wrong.type = Wrong type of Request
+-cc.elig.tax.year.min = At least one tax year required
+-cc.elig.wrong.type = Wrong type of Request

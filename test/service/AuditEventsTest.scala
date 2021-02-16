@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,11 @@
 
 package service
 
+import akka.stream.Materializer
 import controllers.FakeCCEligibilityApplication
-import org.scalatest.mockito.MockitoSugar
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.inject.ApplicationLifecycle
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
@@ -32,7 +35,10 @@ import scala.concurrent.{ExecutionContext, Future}
   */
 class AuditEventsTest extends FakeCCEligibilityApplication with MockitoSugar {
 
-  def createObservableAuditConnector = new ObservableAuditConnector {}
+  def createObservableAuditConnector = new ObservableAuditConnector {
+    override def materializer: Materializer = ???
+    override def lifecycle: ApplicationLifecycle = ???
+  }
 
   def createAuditor(observableAuditConnector: ObservableAuditConnector): AuditEvents = {
 
@@ -60,8 +66,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with MockitoSugar {
     }
   }
 
-  "Audit Events" should {
-    implicit val request = FakeRequest()
+  "Audit Events" must {
     implicit val hc = new HeaderCarrier()
 
     "audit request received for TFC - success " in {
@@ -72,7 +77,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with MockitoSugar {
 
       val event = observableAuditConnector.events.head
 
-      event.auditType should equal("TFCRequest")
+      event.auditType must equal("TFCRequest")
       event.detail("TFCRequest") should startWith("Data")
 
     }
@@ -86,7 +91,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with MockitoSugar {
 
       val event = observableAuditConnector.events.head
 
-      event.auditType should equal("TFCResponse")
+      event.auditType must equal("TFCResponse")
       event.detail("TFCResponse") should startWith("Data")
 
     }
@@ -100,7 +105,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with MockitoSugar {
 
       val event = observableAuditConnector.events.head
 
-      event.auditType should equal("TCRequest")
+      event.auditType must equal("TCRequest")
       event.detail("TCRequest") should startWith("Data")
 
     }
@@ -114,7 +119,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with MockitoSugar {
 
       val event = observableAuditConnector.events.head
 
-      event.auditType should equal("TCResponse")
+      event.auditType must equal("TCResponse")
       event.detail("TCResponse") should startWith("Data")
 
     }
@@ -128,7 +133,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with MockitoSugar {
 
       val event = observableAuditConnector.events.head
 
-      event.auditType should equal("ESCRequest")
+      event.auditType must equal("ESCRequest")
       event.detail("ESCRequest") should startWith("Data")
 
     }
@@ -142,7 +147,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with MockitoSugar {
 
       val event = observableAuditConnector.events.head
 
-      event.auditType should equal("ESCResponse")
+      event.auditType must equal("ESCResponse")
       event.detail("ESCResponse") should startWith("Data")
 
     }
@@ -156,7 +161,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with MockitoSugar {
 
       val event = observableAuditConnector.events.head
 
-      event.auditType should equal("FreeEntitlmentRequest")
+      event.auditType must equal("FreeEntitlmentRequest")
       event.detail("FreeEntitlmentRequest") should startWith("Data")
 
     }
@@ -170,7 +175,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with MockitoSugar {
 
       val event = observableAuditConnector.events.head
 
-      event.auditType should equal("FreeEntitlmentResponse")
+      event.auditType must equal("FreeEntitlmentResponse")
       event.detail("FreeEntitlmentResponse") should startWith("Data")
 
     }
@@ -184,7 +189,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with MockitoSugar {
 
       val event = observableAuditConnector.events.head
 
-      event.auditType should equal("HouseholdRequest")
+      event.auditType must equal("HouseholdRequest")
       event.detail("HouseholdRequest") should startWith("Data")
 
     }
@@ -198,7 +203,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with MockitoSugar {
 
       val event = observableAuditConnector.events.head
 
-      event.auditType should equal("HouseholdResponse")
+      event.auditType must equal("HouseholdResponse")
       event.detail("HouseholdResponse") should startWith("Data")
 
     }

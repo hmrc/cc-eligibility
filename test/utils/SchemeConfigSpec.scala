@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,8 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
@@ -32,7 +33,7 @@ class SchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar {
     app.injector.instanceOf[Configuration]
   )
 
-  "SchemeConfig" should {
+  "SchemeConfig" must {
 
     "return 1st september date for current tax year date" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
@@ -87,7 +88,7 @@ class SchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar {
   val mockServiceConf: ServicesConfig = mock[ServicesConfig]
   val mockConfiguration: Configuration = mock[Configuration]
 
-  "loadConfigByType" should {
+  "loadConfigByType" must {
     "return config" when {
       "configType is passed" in {
         val testConfig = new CCConfig(mockServiceConf, mockConfiguration)

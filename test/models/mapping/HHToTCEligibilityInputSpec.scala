@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,20 +22,21 @@ import models.input.tc._
 import models.mappings._
 import org.joda.time.LocalDate
 import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
-import uk.gov.hmrc.play.test.UnitSpec
-import utils.{CCConfig, CCConfigSpec, HelperManager, Periods}
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.PlaySpec
+import utils.{CCConfig, CCConfigSpec, HelperManager, Periods, TCConfig}
 
-class HHToTCEligibilityInputSpec extends UnitSpec
+class HHToTCEligibilityInputSpec extends PlaySpec
   with MockitoSugar
   with FakeCCEligibilityApplication
   with CCConfigSpec {
 
-  val SUT = new HHToTCEligibilityInput(mock[CCConfig])
+  val SUT = new HHToTCEligibilityInput(mock[CCConfig], mock[TCConfig])
 
   val testYear = LocalDate.now().plusYears(1).getYear
 
-  "HHToTCEligibilityInput" should {
+  "HHToTCEligibilityInput" must {
 
     "have reference to CCConfig" in {
       SUT.cCConfig.isInstanceOf[CCConfig] shouldBe true
@@ -99,7 +100,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
               ),
               currentHouseholdIncome = Some(TCIncome()),
               claimants = List(
-                TCClaimant(0, false, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)
+                TCClaimant(0, false, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)(None)
               ),
               children = List.empty
             ),
@@ -109,7 +110,7 @@ class HHToTCEligibilityInputSpec extends UnitSpec
               previousHouseholdIncome = Some(TCIncome()),
               currentHouseholdIncome = Some(TCIncome()),
               claimants = List(
-                TCClaimant(0, false, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)
+                TCClaimant(0, false, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)(None)
               ),
               children = List.empty
             )
@@ -144,8 +145,8 @@ class HHToTCEligibilityInputSpec extends UnitSpec
               previousHouseholdIncome = Some(TCIncome()),
               currentHouseholdIncome = Some(TCIncome()),
               claimants = List(
-                TCClaimant(0, false, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false),
-                TCClaimant(0, true, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)
+                TCClaimant(0, false, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)(None),
+                TCClaimant(0, true, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)(None)
               ),
               children = List()
             ),
@@ -155,8 +156,8 @@ class HHToTCEligibilityInputSpec extends UnitSpec
               previousHouseholdIncome = Some(TCIncome()),
               currentHouseholdIncome = Some(TCIncome()),
               claimants = List(
-                TCClaimant(0, false, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false),
-                TCClaimant(0, true, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)
+                TCClaimant(0, false, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)(None),
+                TCClaimant(0, true, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)(None)
               ),
               children = List()
             )
@@ -166,7 +167,6 @@ class HHToTCEligibilityInputSpec extends UnitSpec
 
       "given a household with parent, a partner and children with startDate after April 6" in {
         val currentDate = LocalDate.parse("2017-08-01")
-        val fourthApril = LocalDate.parse("2018-04-06")
 
         val dob = currentDate.minusYears(2)
         val benefits: Benefits = Benefits(
@@ -199,8 +199,8 @@ class HHToTCEligibilityInputSpec extends UnitSpec
               Some(TCIncome()),
               Some(TCIncome()),
               List(
-                TCClaimant(0, false, TCDisability(true, true), carersAllowance = true,incomeBenefits =  false),
-                TCClaimant(0, true, TCDisability(true, true), carersAllowance = true,incomeBenefits =  false)
+                TCClaimant(0, false, TCDisability(true, true), carersAllowance = true,incomeBenefits =  false)(None),
+                TCClaimant(0, true, TCDisability(true, true), carersAllowance = true,incomeBenefits =  false)(None)
               ),
               List(
                 TCChild(
@@ -219,8 +219,8 @@ class HHToTCEligibilityInputSpec extends UnitSpec
               Some(TCIncome()),
               Some(TCIncome()),
               List(
-                TCClaimant(0, false, TCDisability(true, true), carersAllowance = true,incomeBenefits =  false),
-                TCClaimant(0, true, TCDisability(true, true), carersAllowance = true,incomeBenefits =  false)
+                TCClaimant(0, false, TCDisability(true, true), carersAllowance = true,incomeBenefits =  false)(None),
+                TCClaimant(0, true, TCDisability(true, true), carersAllowance = true,incomeBenefits =  false)(None)
               ),
               List(
                 TCChild(
@@ -276,8 +276,8 @@ class HHToTCEligibilityInputSpec extends UnitSpec
               Some(TCIncome()),
               Some(TCIncome()),
               List(
-                TCClaimant(0, false, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false),
-                TCClaimant(0, true, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)
+                TCClaimant(0, false, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)(None),
+                TCClaimant(0, true, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)(None)
               ),
               List(
                 TCChild(
@@ -296,8 +296,8 @@ class HHToTCEligibilityInputSpec extends UnitSpec
               Some(TCIncome()),
               Some(TCIncome()),
               List(
-                TCClaimant(0, false, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false),
-                TCClaimant(0, true, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)
+                TCClaimant(0, false, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)(None),
+                TCClaimant(0, true, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)(None)
               ),
               List(
                 TCChild(
@@ -348,8 +348,8 @@ class HHToTCEligibilityInputSpec extends UnitSpec
             Some(TCIncome()),
             Some(TCIncome()),
             List(
-              TCClaimant(0, false, TCDisability(true, true), carersAllowance = true,incomeBenefits =  false),
-              TCClaimant(0, true, TCDisability(true, true), carersAllowance = true,incomeBenefits =  false)
+              TCClaimant(0, false, TCDisability(true, true), carersAllowance = true,incomeBenefits =  false)(None),
+              TCClaimant(0, true, TCDisability(true, true), carersAllowance = true,incomeBenefits =  false)(None)
             ),
             List(
               TCChild(
@@ -368,8 +368,8 @@ class HHToTCEligibilityInputSpec extends UnitSpec
             Some(TCIncome()),
             Some(TCIncome()),
             List(
-              TCClaimant(0, false, TCDisability(true, true), carersAllowance = true,incomeBenefits =  false),
-              TCClaimant(0, true, TCDisability(true, true), carersAllowance = true,incomeBenefits =  false)
+              TCClaimant(0, false, TCDisability(true, true), carersAllowance = true,incomeBenefits =  false)(None),
+              TCClaimant(0, true, TCDisability(true, true), carersAllowance = true,incomeBenefits =  false)(None)
             ),
             List(
               TCChild(
@@ -488,8 +488,8 @@ class HHToTCEligibilityInputSpec extends UnitSpec
             )
           ),
           List(
-            TCClaimant(40, false, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false),
-            TCClaimant(40, true, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)
+            TCClaimant(40, false, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)(None),
+            TCClaimant(40, true, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)(None)
           ),
           List(TCChild(
             0,
@@ -549,8 +549,8 @@ class HHToTCEligibilityInputSpec extends UnitSpec
               )
             )
           ),
-          List(TCClaimant(40, false, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false),
-            TCClaimant(40, true, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)),
+          List(TCClaimant(40, false, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)(None),
+            TCClaimant(40, true, TCDisability(false, false), carersAllowance = true,incomeBenefits =  false)(None)),
           List(TCChild(
             0,
             350,

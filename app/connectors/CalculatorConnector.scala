@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ class CalculatorConnector @Inject()(applicationConfig: ApplicationConfig,
                                     http: DefaultHttpClient) {
 
   def getCalculatorResult(calculatorInput: CalculatorInput)(implicit hc: HeaderCarrier): Future[CalculatorOutput] = {
+    import uk.gov.hmrc.http.HttpReads.Implicits._
     http.POST[CalculatorInput, CalculatorOutput](applicationConfig.calculatorUrl, calculatorInput)
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,12 @@ import models.input.esc._
 import models.mappings._
 import org.joda.time.LocalDate
 import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
-import uk.gov.hmrc.play.test.UnitSpec
-import utils.{CCConfig, CCConfigSpec, Periods, HelperManager}
+import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.play.PlaySpec
+import utils.{CCConfig, CCConfigSpec, HelperManager, Periods}
 
-class HHToESCEligibilityInputSpec extends UnitSpec
+class HHToESCEligibilityInputSpec extends PlaySpec
   with MockitoSugar
   with FakeCCEligibilityApplication
   with CCConfigSpec {
@@ -35,7 +36,7 @@ class HHToESCEligibilityInputSpec extends UnitSpec
 
   val testYear = LocalDate.now().plusYears(1).getYear
 
-  "HHToESCEligibilityInput" should {
+  "HHToESCEligibilityInput" must {
 
     "have reference to CCConfig" in {
       SUT.cCConfig.isInstanceOf[CCConfig] shouldBe true
@@ -67,7 +68,6 @@ class HHToESCEligibilityInputSpec extends UnitSpec
 
       "given a household with parent not working, partner working and single child" in {
 
-        val currentDate = LocalDate.parse("2017-08-01")
         val dob = LocalDate.now().minusYears(2)
 
         val children = List(

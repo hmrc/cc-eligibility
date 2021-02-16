@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package utils
 
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.json._
 
-object EnumUtils {
+object EnumUtils extends Logging {
 
   def enumReads[E <: Enumeration](enum: E): Reads[E#Value] =
     new Reads[E#Value] {
@@ -29,12 +29,12 @@ object EnumUtils {
             JsSuccess(enum.withName(s))
           } catch {
             case _: NoSuchElementException =>
-              Logger.warn(s"EnumUtils.enumReads - Enumeration expected of type: '${enum.getClass}', but it does not appear to contain the value: '$s'")
+              logger.warn(s"EnumUtils.enumReads - Enumeration expected of type: '${enum.getClass}', but it does not appear to contain the value: '$s'")
               JsError(s"Enumeration expected of type: '${enum.getClass}', but it does not appear to contain the value: '$s'")
           }
         }
         case _ =>
-          Logger.warn("EnumUtils.enumReads - String value expected")
+          logger.warn("EnumUtils.enumReads - String value expected")
           JsError("String value expected")
       }
     }

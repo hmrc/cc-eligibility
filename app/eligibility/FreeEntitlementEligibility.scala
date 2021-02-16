@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,19 +39,19 @@ class FreeEntitlementEligibility @Inject()(tfcEligibility: TFCEligibility,
 
     val futureDate = localDate.plusWeeks(2)
     val freeHoursRollout: Configuration = config.loadConfigByType("free-hours-rollout")
-    val bornOnOrAfter = config.dateFormat.parse(freeHoursRollout.getString("born-on-after").get)
+    val bornOnOrAfter = config.dateFormat.parse(freeHoursRollout.get[String]("born-on-after"))
 
     dob.isBefore(futureDate) && !bornOnOrAfter.after(dob.toDate)
   }
 
   private def hasChildAtAge(configField: String, dobs: List[LocalDate], currentDate: LocalDate = localDate): Boolean = {
     val freeHours: Configuration = config.loadConfigByType("free-hours")
-    val ageFilter: List[Int] = freeHours.getString(configField).getOrElse("").split(",").toList.filterNot(_.isEmpty).map(_.toInt)
+    val ageFilter: List[Int] = freeHours.getOptional[String](configField).getOrElse("").split(",").toList.filterNot(_.isEmpty).map(_.toInt)
 
     dobs.exists(dob => ageFilter.contains(age(dob, currentDate)))
   }
 
-  def thirtyHours(tfcEligibilityInput: TFCEligibilityInput)(implicit req: Request[_], hc: HeaderCarrier): Future[ThirtyHoursEligibilityModel] = {
+  def thirtyHours(tfcEligibilityInput: TFCEligibilityInput)(implicit hc: HeaderCarrier): Future[ThirtyHoursEligibilityModel] = {
 
     tfcEligibility.eligibility(tfcEligibilityInput).map { tfcEligibilityResult =>
 

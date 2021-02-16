@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import org.scalatest.Matchers.convertToAnyShouldWrapper
 import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
@@ -85,7 +86,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
   when(mockConfiguration.getConfigSeq(any()))
     .thenReturn(Some(getConfig))
 
-  "TCSchemeConfig" should {
+  "TCSchemeConfig" must {
 
     "return 1st september date for current tax year date (as TC TAX YEAR)" in {
       val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
@@ -97,7 +98,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
         until = until,
         claimants = List(),
         children = List()
-      )
+      )(None)
       tccConfig.config.september1stForDate(ty.from) shouldBe LocalDate.parse("2015-09-01", formatter)
     }
 
@@ -111,7 +112,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
         until = until,
         claimants = List(),
         children = List()
-      )
+      )(None)
       tccConfig.config.previousSeptember1stForDate(ty.from) shouldBe LocalDate.parse("2014-09-01", formatter)
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@ import javax.inject.Inject
 import models._
 import models.input.tfc._
 import play.api.Logger
-import utils.TFCConfig
+import utils.{CCConfig, TFCConfig}
 
-class HHToTFCEligibilityInput @Inject()(tFCConfig: TFCConfig) extends PeriodEnumToPeriod {
+class HHToTFCEligibilityInput @Inject()(tFCConfig: TFCConfig, ccConfig: CCConfig) extends PeriodEnumToPeriod {
 
   def convert(hh: Household): TFCEligibilityInput = {
     TFCEligibilityInput(
@@ -30,8 +30,7 @@ class HHToTFCEligibilityInput @Inject()(tFCConfig: TFCConfig) extends PeriodEnum
       numberOfPeriods = tFCConfig.tfcNoOfPeriods,
       location = hh.location.getOrElse(LocationEnum.ENGLAND.toString).toString,
       claimants = hhClaimantToTFCEligibilityInputClaimant(hh.parent, hh.partner),
-      children = hhChildToTFCEligibilityInputChild(hh.children)
-    )
+      children = hhChildToTFCEligibilityInputChild(hh.children))
   }
 
   private def hhClaimantToTFCEligibilityInputClaimant(hhParent: Claimant, hhPartner: Option[Claimant]): List[TFCClaimant] = {
@@ -86,14 +85,14 @@ class HHToTFCEligibilityInput @Inject()(tFCConfig: TFCConfig) extends PeriodEnum
   private def hhChildToTFCEligibilityInputChild(hhChildren: List[Child]): List[TFCChild] = {
     hhChildren map (child => {
       TFCChild(
-        id = child.id,
-        childcareCost = child.childcareCost.flatMap(_.amount).getOrElse(BigDecimal(0)),
-        childcareCostPeriod = convert(child.childcareCost.flatMap(_.period).getOrElse(PeriodEnum.MONTHLY)),
-        dob = child.dob.get,
-        disability = TFCDisability(
+        child.id,
+        child.childcareCost.flatMap(_.amount).getOrElse(BigDecimal(0)),
+        convert(child.childcareCost.flatMap(_.period).getOrElse(PeriodEnum.MONTHLY)),
+        child.dob.get,
+        TFCDisability(
           disabled = child.disability.exists(d => d.blind || d.disabled),
           severelyDisabled = child.disability.exists(_.severelyDisabled)
-        )
+        ), ccConfig, Some(true)
       )
     })
   }
