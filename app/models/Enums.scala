@@ -46,7 +46,7 @@ object LocationEnum extends Enumeration {
 
 object AgeRangeEnum extends Enumeration {
   type AgeRangeEnum = Value
-  val UNDER18, EIGHTEENTOTWENTY, TWENTYONETOTWENTYFOUR, OVERTWENTYFOUR = Value
+  val UNDER18, EIGHTEENTOTWENTY, TWENTYONETOTWENTYTWO, OVERTWENTYTWO = Value
 
   val enumReads: Reads[AgeRangeEnum] = EnumUtils.enumReads(AgeRangeEnum)
 
