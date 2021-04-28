@@ -20,11 +20,11 @@ import controllers.FakeCCEligibilityApplication
 import models.input.tc.TCTaxYear
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.Matchers.convertToAnyShouldWrapper
 import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import scala.collection.JavaConverters.asScalaBufferConverter
 
 class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
 
@@ -83,8 +83,8 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
     )
   )
 
-  when(mockConfiguration.getConfigSeq(any()))
-    .thenReturn(Some(getConfig))
+  val configuration: Configuration = Configuration("tc" -> Map("rule-change" -> getConfig.map(_.entrySet.toMap)))
+  when(mockConfiguration.underlying).thenReturn(configuration.underlying)
 
   "TCSchemeConfig" must {
 
@@ -151,7 +151,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
     }
 
     "get default Tax Year Config" in {
-      val configs: Seq[Configuration] = app.configuration.getConfigSeq("tc.rule-change").get
+      val configs: Seq[Configuration] = app.configuration.underlying.getConfigList("tc.rule-change").asScala.map(Configuration(_))
       val defaultTaxYearConfig = tccConfig.getTCConfigDefault(configs)
 
       val tcTaxYearConfig = tccConfig.getTCTaxYearConfig(defaultTaxYearConfig)

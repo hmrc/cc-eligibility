@@ -69,7 +69,7 @@ class EligibilityServiceSpec extends PlaySpec with FakeCCEligibilityApplication 
     mockESCConfig,
     mockCCConfig
   ){
-    override def eligibility(request: Household)(implicit req: Request[_], hc: HeaderCarrier): Future[SchemeResults] = super.eligibility(request)
+    override def eligibility(request: Household)(implicit hc: HeaderCarrier): Future[SchemeResults] = super.eligibility(request)
   }
 
   val SUT = new ServiceTest
@@ -77,8 +77,6 @@ class EligibilityServiceSpec extends PlaySpec with FakeCCEligibilityApplication 
   "EligibilityService" must {
     "return SchemesResult" when {
       "household request is received" in {
-
-        implicit val req: Request[_] = FakeRequest()
 
         val request = Household(children = Nil, parent = Claimant(), partner = None)
 
@@ -99,8 +97,6 @@ class EligibilityServiceSpec extends PlaySpec with FakeCCEligibilityApplication 
 
       "household request is received and only ESC Eligibility is true" in {
 
-        implicit val req = FakeRequest()
-
         val request = Household(children = Nil, parent = Claimant(), partner = None)
         val tfcSchemeOutput = Scheme(SchemeEnum.TFCELIGIBILITY, 0, None, None)
         val tcSchemeOutput = Scheme(SchemeEnum.TCELIGIBILITY, 0, None, Some(TaxCreditsEligibility(false,false)))
@@ -118,8 +114,6 @@ class EligibilityServiceSpec extends PlaySpec with FakeCCEligibilityApplication 
       }
 
       "household request is received and only TC Eligibility is true" in {
-
-        implicit val req = FakeRequest()
 
         val request = Household(children = Nil, parent = Claimant(), partner = None)
         val tfcSchemeOutput = Scheme(SchemeEnum.TFCELIGIBILITY, 0, None, None)
@@ -139,8 +133,6 @@ class EligibilityServiceSpec extends PlaySpec with FakeCCEligibilityApplication 
 
       "household request is received and only TFC Eligibility is true" in {
 
-        implicit val req = FakeRequest()
-
         val request = Household(children = Nil, parent = Claimant(), partner = None)
         val tfcSchemeOutput = Scheme(SchemeEnum.TFCELIGIBILITY, 1000, None, None)
         val tcSchemeOutput = Scheme(SchemeEnum.TCELIGIBILITY, 0, None, Some(TaxCreditsEligibility(false,false)))
@@ -158,8 +150,6 @@ class EligibilityServiceSpec extends PlaySpec with FakeCCEligibilityApplication 
       }
 
       "household request is received and TFC Eligibility, ESC Eligibility, TC Eligibility are false" in {
-
-        implicit val req = FakeRequest()
 
         val request = Household(children = Nil, parent = Claimant(), partner = None)
         val tfcSchemeOutput = Scheme(SchemeEnum.TFCELIGIBILITY, 0, None, None)

@@ -17,7 +17,6 @@
 package eligibility
 
 import java.text.SimpleDateFormat
-
 import controllers.FakeCCEligibilityApplication
 import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.input.tfc._
@@ -25,6 +24,7 @@ import models.output.tfc.TFCEligibilityOutput
 import org.joda.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
+import org.mockito.stubbing.OngoingStubbing
 import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
@@ -38,6 +38,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import utils.{CCConfig, Periods}
 
+import java.util
 import scala.concurrent.Future
 
 class FreeEntitlementEligibilitySpec extends PlaySpec with FakeCCEligibilityApplication with MockitoSugar {
@@ -117,7 +118,6 @@ class FreeEntitlementEligibilitySpec extends PlaySpec with FakeCCEligibilityAppl
     forAll(testCases) { case (location, tfcEligibilityVal, dobs, isEligible, isRollout) =>
       s"location = $location, tfcEligibilty = $tfcEligibilityVal, dobs = $dobs then isEligible should be $isEligible and rollout " +
         s"should be $isRollout" in {
-        implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
         implicit val hc: HeaderCarrier = HeaderCarrier()
         val mockConfiguration: Configuration = mock[Configuration]
 
@@ -143,8 +143,11 @@ class FreeEntitlementEligibilitySpec extends PlaySpec with FakeCCEligibilityAppl
             )
           )
 
-          when(mockConfiguration.getConfigSeq(any()))
-            .thenReturn(Some(freeHoursConfig), Some(freeHoursRolloutConfig))
+          val configuration: Configuration = Configuration(
+            "free-hours-rollout" -> freeHoursRolloutConfig.map(_.entrySet.toMap),
+            "free-hours" -> freeHoursConfig.map(_.entrySet.toMap))
+
+          when(mockConfiguration.underlying).thenReturn(configuration.underlying)
         }
 
         when(mockTFCE.eligibility(any[models.input.tfc.TFCEligibilityInput])(any[HeaderCarrier]))
@@ -187,7 +190,6 @@ class FreeEntitlementEligibilitySpec extends PlaySpec with FakeCCEligibilityAppl
   }
 
   "determine eligiblity correctly for thirtyHours when it's next year" in {
-    implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val mockConfig = mock[CCConfig]
     val freeEntitlementService: FreeEntitlementEligibility = new FreeEntitlementEligibility(mockTFCE, mockConfig) {

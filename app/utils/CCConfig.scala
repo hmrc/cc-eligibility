@@ -21,8 +21,8 @@ import java.util.Calendar
 
 import javax.inject.Inject
 import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
 import play.api.Configuration
+import scala.collection.JavaConverters.asScalaBufferConverter
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 class CCConfig @Inject()(val conf: ServicesConfig,
@@ -106,7 +106,7 @@ class CCConfig @Inject()(val conf: ServicesConfig,
   }
 
   def loadConfigByType(configType: String, currentDate: LocalDate = LocalDate.now): Configuration = {
-    val configs: Seq[Configuration] = oldConf.getConfigSeq(configType).get
+    val configs: Seq[Configuration] = oldConf.underlying.getConfigList(configType).asScala.map(Configuration(_))
     val configExcludingDefault: Seq[Configuration] = getConfigExcludingDefault(configs)
     configExcludingDefault.find(conf => {
       val ruleDate = dateFormat.parse(conf.get[String]("rule-date"))
