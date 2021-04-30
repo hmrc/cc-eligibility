@@ -19,15 +19,14 @@ package utils
 import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
-import org.mockito.internal.matchers.Any
 import org.scalatest.Matchers.convertToAnyShouldWrapper
-import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks.forAll
 import org.scalatest.prop.Tables.Table
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import scala.collection.JavaConverters.asScalaBufferConverter
 
 class TFCSchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar {
 
@@ -50,22 +49,16 @@ class TFCSchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar
     "determine number of periods for TFC" in {
 
       val mockServicesConf = mock[Configuration]
-      val testObj = new TFCConfig(
-        new CCConfig(mock[ServicesConfig], mockServicesConf)
-      )
+      val testObj = new TFCConfig(new CCConfig(mock[ServicesConfig], mockServicesConf))
 
-      when(
-        mockServicesConf.getInt(anyString())
-      ).thenReturn(
-        None
-      )
+      when(mockServicesConf.getOptional[Int]("tax.quarters.multiplier")).thenReturn(None)
 
       val result = testObj.tfcNoOfPeriods
       result shouldBe 4
     }
 
     "get default Tax Year Config" in {
-      val configs : Seq[play.api.Configuration] = app.configuration.getConfigSeq("tfc.rule-change").get
+      val configs : Seq[play.api.Configuration] = app.configuration.underlying.getConfigList("tfc.rule-change").asScala.map(Configuration(_))
       val defaultConfig = tfcConfig.getTFCConfigDefault(configs)
 
       val resultTaxYearConfig = TFCTaxYearConfig(

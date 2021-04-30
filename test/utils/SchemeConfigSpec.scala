@@ -92,9 +92,14 @@ class SchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar {
     "return config" when {
       "configType is passed" in {
         val testConfig = new CCConfig(mockServiceConf, mockConfiguration)
-        val configurationObject = Configuration(("rule-date", "2017-07-04"))
+        val configurationObject: Seq[Configuration] = Seq(
+          Configuration(
+            "rule-date" -> "2017-07-04"
+          ))
 
-        when(mockConfiguration.getConfigSeq(any())).thenReturn(Some(Seq(configurationObject, configurationObject)))
+        val configuration: Configuration = Configuration("tfc-rollout" ->configurationObject.map(_.entrySet.toMap))
+
+        when(mockConfiguration.underlying).thenReturn(configuration.underlying)
         testConfig.loadConfigByType("tfc-rollout").isInstanceOf[Configuration] shouldBe true
       }
     }

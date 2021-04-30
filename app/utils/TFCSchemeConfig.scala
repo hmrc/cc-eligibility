@@ -83,10 +83,10 @@ class TFCConfig @Inject()(val config: CCConfig) {
     )
   }
 
-  def tfcNoOfPeriods: Short = config.oldConf.getInt("tax.quarters.multiplier").getOrElse(4).toShort
+  def tfcNoOfPeriods: Short = config.oldConf.getOptional[Int]("tax.quarters.multiplier").getOrElse(4).toShort
 
   def getConfig(currentDate: LocalDate, location: String): TFCTaxYearConfig = {
-    val configs: Seq[Configuration] = config.oldConf.getConfigSeq("tfc.rule-change").get
+    val configs: Seq[Configuration] = config.oldConf.underlying.getConfigList("tfc.rule-change").asScala.map(Configuration(_))
     val configsExcludingDefault = getTFCConfigExcludingDefault(configs)
     val defaultConfig = getTFCConfigDefault(configs)
     // ensure the latest date is in the head position

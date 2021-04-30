@@ -40,7 +40,7 @@ class EligibilityService @Inject()(calcConnector: CalculatorConnector,
                                    ESCEligibilityInput: HHToESCEligibilityInput,
                                    eSCConfig: ESCConfig, cCConfig: CCConfig){
 
-  def eligibility(request: Household)(implicit req: Request[_], hc: HeaderCarrier): Future[SchemeResults] = {
+  def eligibility(request: Household)(implicit hc: HeaderCarrier): Future[SchemeResults] = {
     for {
       tcEligibility <- tc.eligibility(TCEligibilityInput.convert(request))
       tfcEligibility <- tfc.eligibility(TFCEligibilityInput.convert(request))

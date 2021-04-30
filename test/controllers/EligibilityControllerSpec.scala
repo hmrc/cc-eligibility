@@ -55,7 +55,7 @@ class EligibilityControllerSpec extends FakeCCEligibilityApplication {
       val inputJson = Json.parse(JsonLoader.fromResource("/household/eligibility_input_household.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibilityService.eligibility(any[Household]())(any(), any())).thenReturn(Future.successful(SchemeResults(List())))
+      when(controller.eligibilityService.eligibility(any[Household]())(any())).thenReturn(Future.successful(SchemeResults(List())))
       val result = Await.result(controller.eligible(request), Duration(2, "seconds"))
       status(result) shouldBe Status.OK
     }
@@ -64,7 +64,7 @@ class EligibilityControllerSpec extends FakeCCEligibilityApplication {
       val inputJson = Json.parse(JsonLoader.fromResource("/household/incorrect_date_format.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibilityService.eligibility(any[Household]())(any(), any())).thenReturn(Future.successful(mock[SchemeResults]))
+      when(controller.eligibilityService.eligibility(any[Household]())(any())).thenReturn(Future.successful(mock[SchemeResults]))
       val result = Await.result(controller.eligible(request), Duration(2, "seconds"))
       status(result) shouldBe Status.BAD_REQUEST
     }
@@ -73,7 +73,7 @@ class EligibilityControllerSpec extends FakeCCEligibilityApplication {
       val inputJson = Json.parse(JsonLoader.fromResource("/household/no_claimants.json").toString)
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibilityService.eligibility(any[Household]())(any(), any())).thenReturn(Future.successful(mock[SchemeResults]))
+      when(controller.eligibilityService.eligibility(any[Household]())(any())).thenReturn(Future.successful(mock[SchemeResults]))
       val result = Await.result(controller.eligible(request), Duration(2, "seconds"))
       status(result) shouldBe 400
     }
@@ -84,7 +84,7 @@ class EligibilityControllerSpec extends FakeCCEligibilityApplication {
       val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Household]
 
-      when(controller.eligibilityService.eligibility(mockEq(JsonResult.get))(any(),any())).
+      when(controller.eligibilityService.eligibility(mockEq(JsonResult.get))(any())).
         thenReturn(Future.failed(new Exception("Something bad happened in Eligibility")))
 
       val result = Await.result(controller.eligible(request), Duration(2, "seconds"))

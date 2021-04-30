@@ -22,6 +22,7 @@ import javax.inject.Inject
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import play.api.Configuration
+import scala.collection.JavaConverters.asScalaBufferConverter
 
 case class TCTaxYearConfig(
                              childAgeLimit: Int,
@@ -99,7 +100,7 @@ class TCConfig @Inject()(val config: CCConfig) {
   }
 
   def getConfig(currentDate: LocalDate): TCTaxYearConfig = {
-    val configs: Seq[Configuration] = config.oldConf.getConfigSeq("tc.rule-change").get
+    val configs: Seq[Configuration] = config.oldConf.underlying.getConfigList("tc.rule-change").asScala.map(Configuration(_))
     val configsExcludingDefault = getTCConfigExcludingDefault(configs)
     val defaultConfig = getTCConfigDefault(configs)
     // ensure the latest date is in the head position

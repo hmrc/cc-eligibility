@@ -20,6 +20,8 @@ import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.Matchers.convertToAnyShouldWrapper
+import play.api.Configuration
+import scala.collection.JavaConverters.asScalaBufferConverter
 
 class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
 
@@ -56,7 +58,7 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
     }
 
     "get default Tax Year Config" in {
-      val configs : Seq[play.api.Configuration] = app.configuration.getConfigSeq("esc.rule-change").get
+      val configs : Seq[play.api.Configuration] = app.configuration.underlying.getConfigList("esc.rule-change").asScala.map(Configuration(_))
       val defaultConfig = escConfig.getESCConfigDefault(configs)
 
       val resultTaxYearConfig = ESCTaxYearConfig(
