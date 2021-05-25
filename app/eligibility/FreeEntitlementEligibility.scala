@@ -44,7 +44,7 @@ class FreeEntitlementEligibility @Inject()(tfcEligibility: TFCEligibility,
     dob.isBefore(futureDate) && !bornOnOrAfter.after(dob.toDate)
   }
 
-  private def hasChildAtAge(configField: String, dobs: List[LocalDate], currentDate: LocalDate = localDate): Boolean = {
+  private def hasChildAtAge(configField: String, dobs: List[LocalDate], currentDate: LocalDate): Boolean = {
     val freeHours: Configuration = config.loadConfigByType("free-hours")
     val ageFilter: List[Int] = freeHours.getOptional[String](configField).getOrElse("").split(",").toList.filterNot(_.isEmpty).map(_.toInt)
 

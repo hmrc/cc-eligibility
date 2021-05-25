@@ -31,20 +31,20 @@ import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
-  * Created by user on 25/04/16.
-  */
+ * Created by user on 25/04/16.
+ */
 class AuditEventsTest extends FakeCCEligibilityApplication with MockitoSugar {
 
   def createObservableAuditConnector = new ObservableAuditConnector {
-    override def materializer: Materializer = ???
-    override def lifecycle: ApplicationLifecycle = ???
+    def auditChannel: uk.gov.hmrc.play.audit.http.connector.AuditChannel = ???
+    def auditCounter: uk.gov.hmrc.play.audit.http.connector.AuditCounter = ???
   }
 
   def createAuditor(observableAuditConnector: ObservableAuditConnector): AuditEvents = {
 
     val testAuditService = new AuditService(observableAuditConnector)
 
-    new AuditEvents (
+    new AuditEvents(
       testAuditService
     )
   }

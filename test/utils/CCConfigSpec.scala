@@ -62,13 +62,12 @@ trait CCConfigSpec extends PlaySpec {
     new GuiceApplicationBuilder()
       .disable[com.kenshoo.play.metrics.PlayModule]
       .disable[com.kenshoo.play.metrics.MetricsController]
-      .configure(Configuration("metrics.enabled" -> false))
+      .configure(Configuration("metrics.enabled" -> true))
       .configure(Configuration("metrics.jvm" -> false))
       .configure(config)
       .build()
 
   def bindModules: Seq[GuiceableModule] = Seq()
-
 
   def getMessages(s: String): String = {
     val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
