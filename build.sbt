@@ -2,7 +2,6 @@ import uk.gov.hmrc.DefaultBuildSettings.targetJvm
 
 lazy val appName = "cc-eligibility"
 lazy val appDependencies : Seq[ModuleID] = ???
-lazy val plugins : Seq[Plugins] = Seq(SbtGitVersioning)
 
 lazy val playSettings : Seq[Setting[_]] = Seq.empty
 
@@ -17,7 +16,7 @@ lazy val scoverageSettings = {
 }
 
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(Seq(play.sbt.PlayScala) ++ plugins : _*)
+  .enablePlugins(Seq(play.sbt.PlayScala) : _*)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(majorVersion := 1)
   .settings(playSettings ++ scoverageSettings : _*)
