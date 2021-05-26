@@ -1,14 +1,9 @@
 import uk.gov.hmrc.DefaultBuildSettings.targetJvm
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
 lazy val appName = "cc-eligibility"
 lazy val appDependencies : Seq[ModuleID] = ???
-lazy val plugins : Seq[Plugins] = Seq(
-  SbtAutoBuildPlugin,
-  SbtGitVersioning,
-  SbtDistributablesPlugin,
-  SbtArtifactory
-)
+lazy val plugins : Seq[Plugins] = Seq(SbtGitVersioning)
+
 lazy val playSettings : Seq[Setting[_]] = Seq.empty
 
 lazy val scoverageSettings = {
@@ -27,7 +22,6 @@ lazy val microservice = Project(appName, file("."))
   .settings(majorVersion := 1)
   .settings(playSettings ++ scoverageSettings : _*)
   .settings(PlayKeys.playDefaultPort := 9375)
-  .settings(publishingSettings : _*)
   .settings(
     scalacOptions += "-P:silencer:pathFilters=routes",
     scalacOptions += "-P:silencer:lineContentFilters=^\\w",
@@ -41,9 +35,8 @@ lazy val microservice = Project(appName, file("."))
     scalaVersion := "2.12.12",
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
-    evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
-    resolvers := Seq(
-          Resolver.bintrayRepo("hmrc", "releases"),
-          Resolver.jcenterRepo
-    )
+    evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
+  )
+  .settings(
+    isPublicArtefact := true
   )
