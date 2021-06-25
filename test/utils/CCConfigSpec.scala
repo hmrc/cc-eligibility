@@ -33,12 +33,13 @@ package utils
  */
 
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
-import org.scalatestplus.play.PlaySpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import play.api.{Application, Configuration}
 import play.api.i18n.{Lang, MessagesApi}
 import play.api.inject.guice.{GuiceApplicationBuilder, GuiceableModule}
 
-trait CCConfigSpec extends PlaySpec {
+trait CCConfigSpec extends AnyWordSpec with Matchers {
 
   val config: Map[String, _] = Map(
     "csrf.sign.tokens" -> false,

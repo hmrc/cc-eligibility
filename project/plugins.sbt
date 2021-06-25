@@ -3,13 +3,13 @@ resolvers += Resolver.url("HMRC-open-artefacts-ivy", url("https://open.artefacts
 
 addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "3.0.0")
 
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.7.9")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.7")
 
 addSbtPlugin("org.ensime" % "sbt-ensime" % "2.6.1")
 
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.6.1")
+addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.8.2")
 
 addSbtPlugin("org.irundaia.sbt" % "sbt-sassify" % "1.5.1")
 

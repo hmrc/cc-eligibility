@@ -23,7 +23,7 @@ import models.input.tc.TCEligibilityInput
 import models.output.tc.TCEligibilityOutput
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers
 import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
@@ -32,7 +32,7 @@ import service.AuditEvents
 
 import scala.concurrent.Future
 
-class TCEligibilityControllerSpec extends FakeCCEligibilityApplication {
+class TCEligibilityControllerSpec extends FakeCCEligibilityApplication with Matchers {
 
   val mockTCE: TCEligibility = mock[TCEligibility]
 

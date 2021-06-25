@@ -1,5 +1,4 @@
 import uk.gov.hmrc.DefaultBuildSettings.targetJvm
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
 lazy val appName = "cc-eligibility"
 lazy val appDependencies : Seq[ModuleID] = ???
@@ -12,7 +11,7 @@ lazy val scoverageSettings = {
   import scoverage._
   Seq(
     ScoverageKeys.coverageExcludedPackages :=  "<empty>;Reverse.*;.*Routes.*;routes_routing.*;uk.gov.hmrc;config.*;",
-    ScoverageKeys.coverageMinimum := 95,
+    ScoverageKeys.coverageMinimumStmtTotal := 95,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true
   )

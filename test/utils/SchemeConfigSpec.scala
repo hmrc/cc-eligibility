@@ -21,7 +21,6 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig

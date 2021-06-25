@@ -16,20 +16,13 @@
 
 package controllers
 
-import java.nio.charset.Charset
-
-import akka.stream.Materializer
-import models.ChildCareCost
 import models.input.tfc._
 import org.joda.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatest.Suite
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContent, ControllerComponents, DefaultMessagesActionBuilderImpl, PlayBodyParsers, Result}
-import play.api.test.Helpers.{await, defaultAwaitTimeout, stubBodyParser, stubMessagesApi}
+import play.api.test.Helpers.{stubBodyParser, stubMessagesApi}
 import service.AuditEvents
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{CCConfigSpec, Periods, TCConfig, TFCConfig}
@@ -37,11 +30,9 @@ import java.nio.charset.Charset
 
 import akka.stream.Materializer
 import akka.util.ByteString
-import org.scalatest.{Matchers, OptionValues, WordSpecLike}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.language.implicitConversions
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

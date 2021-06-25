@@ -21,18 +21,17 @@ import models.Household
 import models.output.SchemeResults
 import org.mockito.ArgumentMatchers.{eq => mockEq, _}
 import org.mockito.Mockito._
-import org.scalatest.Matchers.convertToAnyShouldWrapper
-import org.scalatestplus.mockito.MockitoSugar
+import org.scalatest.matchers.should.Matchers
 import play.api.http.Status
 import play.api.libs.json.Json
-import play.api.mvc.{AnyContentAsEmpty, ControllerComponents}
+import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import service.{AuditEvents, EligibilityService}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class EligibilityControllerSpec extends FakeCCEligibilityApplication {
+class EligibilityControllerSpec extends FakeCCEligibilityApplication with Matchers {
 
   implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 

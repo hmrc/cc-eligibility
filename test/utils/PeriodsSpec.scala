@@ -17,7 +17,6 @@
 package utils
 
 import controllers.FakeCCEligibilityApplication
-import org.scalatest.Matchers.convertToAnyShouldWrapper
 import play.api.libs.json.{JsError, JsString, Json}
 
 /**

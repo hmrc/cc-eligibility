@@ -24,7 +24,6 @@ import models.output.tc.{TCEligibilityOutput, TCTaxYear}
 import models.output.tfc._
 import models.output.{EscClaimantEligibility, Scheme, SchemeResults, TaxCreditsEligibility}
 import org.joda.time.LocalDate
-import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatestplus.mockito.MockitoSugar
 import utils.{CCConfigSpec, Periods}
 
