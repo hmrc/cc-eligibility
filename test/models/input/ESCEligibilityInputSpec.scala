@@ -22,7 +22,6 @@ import controllers.FakeCCEligibilityApplication
 import fixtures.ESCChildren
 import models.input.esc._
 import org.joda.time.LocalDate
-import org.scalatest.Matchers.convertToAnyShouldWrapper
 import play.api.libs.json.{JsValue, Json}
 import utils.{CCConfig, ESCConfig}
 

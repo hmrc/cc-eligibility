@@ -18,10 +18,9 @@ package models.mapping
 
 import controllers.FakeCCEligibilityApplication
 import models.LocationEnum
-import org.scalatest.Matchers.convertToAnyShouldWrapper
-import org.scalatestplus.play.PlaySpec
+import org.scalatest.wordspec.AnyWordSpec
 
-class LocationEnumSpec extends PlaySpec with FakeCCEligibilityApplication {
+class LocationEnumSpec extends AnyWordSpec with FakeCCEligibilityApplication {
 
   "LocationEnum" must {
     "have toString" when {

@@ -22,7 +22,6 @@ import models.output.tc._
 import models.output.tfc._
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import org.scalatest.Matchers.convertToAnyShouldWrapper
 import play.api.libs.json._
 
 class JSONFactorySpec extends FakeCCEligibilityApplication {

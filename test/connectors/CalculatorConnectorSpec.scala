@@ -23,15 +23,13 @@ import models.output.CalculatorInput
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.PlaySpec
-import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.Future
 
-class CalculatorConnectorSpec extends PlaySpec with MockitoSugar with FakeCCEligibilityApplication with BeforeAndAfterEach {
+class CalculatorConnectorSpec extends AnyWordSpec with MockitoSugar with FakeCCEligibilityApplication with BeforeAndAfterEach {
 
   "CalculatorConnector" must {
 

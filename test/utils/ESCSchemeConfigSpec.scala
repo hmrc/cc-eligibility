@@ -19,7 +19,6 @@ package utils
 import controllers.FakeCCEligibilityApplication
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import org.scalatest.Matchers.convertToAnyShouldWrapper
 import play.api.Configuration
 import scala.collection.JavaConverters.asScalaBufferConverter
 

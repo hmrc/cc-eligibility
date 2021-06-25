@@ -25,18 +25,18 @@ import models.output.tc.{TCChildElements, TCEligibilityOutput}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.scalatest.PrivateMethodTester
+import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import utils.{CCConfig, Periods, TCConfig}
-import org.scalatest.Matchers.convertToAnyShouldWrapper
 import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import scala.concurrent.Future
 
-class TCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodTester with MockitoSugar {
+class TCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodTester with MockitoSugar with Matchers {
 
   val ccConfig = new CCConfig(
     app.injector.instanceOf[ServicesConfig],

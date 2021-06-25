@@ -30,11 +30,8 @@ import models.{Claimant, Household, LocationEnum, SchemeEnum}
 import org.joda.time.LocalDate
 import org.mockito.ArgumentMatchers.{any, _}
 import org.mockito.Mockito._
-import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.PlaySpec
-import play.api.mvc.Request
-import play.api.test.FakeRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{CCConfig, ESCConfig}
 
@@ -42,7 +39,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class EligibilityServiceSpec extends PlaySpec with FakeCCEligibilityApplication with MockitoSugar {
+class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplication with MockitoSugar {
 
   val mockCalc     = mock[CalculatorConnector]
   val mockESC      = mock[ESCEligibility]

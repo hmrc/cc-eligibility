@@ -24,8 +24,7 @@ import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.output.freeEntitlement.{FifteenHoursEligibilityModel, ThirtyHoursEligibilityModel}
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
-import org.scalatest.Matchers.convertToAnyShouldWrapper
-import org.scalatestplus.play.PlaySpec
+import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status.{NOT_FOUND, OK}
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
@@ -35,7 +34,7 @@ import play.api.test.Helpers._
 
 import scala.concurrent.Future
 
-class FreeEntitlementControllerSpec extends PlaySpec with FakeCCEligibilityApplication {
+class FreeEntitlementControllerSpec extends AnyWordSpec with FakeCCEligibilityApplication {
 
   val mockFee: FreeEntitlementEligibility = mock[FreeEntitlementEligibility]
 

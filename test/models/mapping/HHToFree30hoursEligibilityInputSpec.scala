@@ -21,10 +21,9 @@ import models._
 import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.mappings.HHToFree30hoursEligibilityInput
 import org.joda.time.LocalDate
-import org.scalatest.Matchers.convertToAnyShouldWrapper
-import org.scalatestplus.play.PlaySpec
+import org.scalatest.wordspec.AnyWordSpec
 
-class HHToFree30hoursEligibilityInputSpec extends PlaySpec with FakeCCEligibilityApplication {
+class HHToFree30hoursEligibilityInputSpec extends AnyWordSpec with FakeCCEligibilityApplication {
 
   val SUT = new HHToFree30hoursEligibilityInput {}
 

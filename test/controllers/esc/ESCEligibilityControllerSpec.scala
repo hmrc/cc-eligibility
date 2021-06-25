@@ -24,16 +24,16 @@ import models.output.esc.ESCEligibilityOutput
 import org.joda.time.LocalDate
 import org.mockito.ArgumentMatchers.{eq => mockEq, _}
 import org.mockito.Mockito._
-import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatest.matchers.should.Matchers
 import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import service.AuditEvents
-import utils.{CCConfig, ESCConfig, TCConfig}
+import utils.{CCConfig, ESCConfig}
 
 import scala.concurrent.Future
 
-class ESCEligibilityControllerSpec extends FakeCCEligibilityApplication {
+class ESCEligibilityControllerSpec extends FakeCCEligibilityApplication with Matchers {
 
   val eSCEligibility: ESCEligibility = mock[ESCEligibility]
   val escConfig = app.injector.instanceOf[ESCConfig]

@@ -22,12 +22,11 @@ import models.input.esc._
 import models.mappings._
 import org.joda.time.LocalDate
 import org.mockito.Mockito.when
-import org.scalatest.Matchers.convertToAnyShouldWrapper
+import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.PlaySpec
 import utils.{CCConfig, CCConfigSpec, HelperManager, Periods}
 
-class HHToESCEligibilityInputSpec extends PlaySpec
+class HHToESCEligibilityInputSpec extends AnyWordSpec
   with MockitoSugar
   with FakeCCEligibilityApplication
   with CCConfigSpec {

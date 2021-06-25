@@ -18,11 +18,11 @@ package models.mapping
 
 import models.PeriodEnum
 import models.mappings.PeriodEnumToPeriod
-import org.scalatest.Matchers.convertToAnyShouldWrapper
-import org.scalatestplus.play.PlaySpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import utils.Periods
 
-class PeriodEnumToPeriodSpec extends PlaySpec {
+class PeriodEnumToPeriodSpec extends AnyWordSpec with Matchers{
 
   val SUT = PeriodEnumToPeriod
 

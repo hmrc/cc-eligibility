@@ -19,9 +19,10 @@ package fixtures
 import models.input.esc.{ESCChild, ESCDisability}
 import models.output
 import org.joda.time.LocalDate
+import org.scalatest.matchers.should.Matchers
 import utils.{CCConfig, ESCConfig, Periods}
 
-trait ESCChildren {
+trait ESCChildren extends Matchers{
 
   def eSCConfig: Option[ESCConfig]
   def ccConfig: Option[CCConfig]

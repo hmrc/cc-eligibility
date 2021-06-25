@@ -21,8 +21,8 @@ import models.input.tfc._
 import models.output.tfc.{TFCEligibilityOutput, TFCOutputChild, TFCOutputClaimant, TFCPeriod}
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
-import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatest.PrivateMethodTester
+import org.scalatest.matchers.should.Matchers
 import play.api.libs.json.Json
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
@@ -31,7 +31,7 @@ import utils.{Periods, TFCConfig}
 
 import scala.concurrent.Future
 
-class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodTester {
+class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodTester with Matchers {
 
   implicit val req: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 

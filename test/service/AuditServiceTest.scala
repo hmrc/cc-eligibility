@@ -21,7 +21,6 @@ import org.mockito.ArgumentMatchers.any
 import uk.gov.hmrc.play.audit.http.connector.AuditResult.Success
 import org.scalatestplus.mockito.MockitoSugar
 import org.mockito.Mockito._
-import org.scalatest.Matchers.convertToAnyShouldWrapper
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.http.{ForwardedFor, HeaderCarrier, HeaderNames, SessionId}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector

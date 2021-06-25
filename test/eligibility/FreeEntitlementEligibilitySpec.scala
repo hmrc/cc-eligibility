@@ -17,6 +17,7 @@
 package eligibility
 
 import java.text.SimpleDateFormat
+
 import controllers.FakeCCEligibilityApplication
 import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.input.tfc._
@@ -24,24 +25,19 @@ import models.output.tfc.TFCEligibilityOutput
 import org.joda.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.mockito.stubbing.OngoingStubbing
-import org.scalatest.Matchers.convertToAnyShouldWrapper
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.PlaySpec
 import play.api.Configuration
-import play.api.mvc.{AnyContentAsEmpty, Request}
-import play.api.test.FakeRequest
-import play.api.test.Helpers.await
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import utils.{CCConfig, Periods}
 
-import java.util
+import org.scalatest.wordspec.AnyWordSpec
+
 import scala.concurrent.Future
 
-class FreeEntitlementEligibilitySpec extends PlaySpec with FakeCCEligibilityApplication with MockitoSugar {
+class FreeEntitlementEligibilitySpec extends AnyWordSpec with FakeCCEligibilityApplication with MockitoSugar {
 
   val now: LocalDate = LocalDate.now()
   val mockTFCE: TFCEligibility = mock[TFCEligibility]
