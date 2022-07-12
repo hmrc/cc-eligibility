@@ -16,12 +16,11 @@
 
 package service
 
-import akka.stream.Materializer
 import controllers.FakeCCEligibilityApplication
 import org.scalatest.matchers.should.Matchers
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
-import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
+import uk.gov.hmrc.play.audit.http.connector.{AuditChannel, AuditConnector, AuditResult, DatastreamMetrics}
 import uk.gov.hmrc.play.audit.model.DataEvent
 
 import scala.collection.mutable.ListBuffer
@@ -33,8 +32,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class AuditEventsTest extends FakeCCEligibilityApplication with Matchers {
 
   def createObservableAuditConnector = new ObservableAuditConnector {
-    def auditChannel: uk.gov.hmrc.play.audit.http.connector.AuditChannel = ???
-    def auditCounter: uk.gov.hmrc.play.audit.http.connector.AuditCounter = ???
+    def auditChannel: AuditChannel = ???
+
+    override def datastreamMetrics: DatastreamMetrics = ???
   }
 
   def createAuditor(observableAuditConnector: ObservableAuditConnector): AuditEvents = {
