@@ -55,7 +55,6 @@ class EligibilityService @Inject()(calcConnector: CalculatorConnector,
       calcOutput <- {
         if (calcInput.esc.isDefined || calcInput.tc.isDefined || calcInput.tfc.isDefined) {
           if(calcInput.esc.isDefined){
-            println("")
           }
           calcConnector.getCalculatorResult(calcInput)
         } else {
