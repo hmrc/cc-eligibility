@@ -38,6 +38,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with Matchers {
   }
 
   def createAuditor(observableAuditConnector: ObservableAuditConnector): AuditEvents = {
+    implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 
     val testAuditService = new AuditService(observableAuditConnector)
 

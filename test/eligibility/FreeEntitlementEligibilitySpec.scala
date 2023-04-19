@@ -35,9 +35,11 @@ import utils.{CCConfig, Periods}
 
 import org.scalatest.wordspec.AnyWordSpec
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class FreeEntitlementEligibilitySpec extends AnyWordSpec with FakeCCEligibilityApplication with MockitoSugar {
+
+  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 
   val now: LocalDate = LocalDate.now()
   val mockTFCE: TFCEligibility = mock[TFCEligibility]

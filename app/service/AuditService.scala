@@ -21,10 +21,10 @@ import uk.gov.hmrc.http.{HeaderCarrier, HeaderNames}
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.model.DataEvent
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class AuditService @Inject()(val auditConnector: AuditConnector) {
+class AuditService @Inject()(val auditConnector: AuditConnector)
+                            (implicit ec: ExecutionContext) {
 
   def sendEvent(auditType:String, details: Map[String, String], sessionId: Option[String] = None)
                (implicit hc: HeaderCarrier): Future[AuditResult] = {

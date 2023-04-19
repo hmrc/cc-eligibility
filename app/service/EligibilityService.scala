@@ -23,12 +23,10 @@ import models.Household
 import models.input.CalculatorOutput
 import models.mappings._
 import models.output.{CalculatorInput, SchemeResults}
-import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{CCConfig, ESCConfig}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class EligibilityService @Inject()(calcConnector: CalculatorConnector,
                                    esc: ESCEligibility,
@@ -38,7 +36,8 @@ class EligibilityService @Inject()(calcConnector: CalculatorConnector,
                                    TCEligibilityInput: HHToTCEligibilityInput,
                                    TFCEligibilityInput: HHToTFCEligibilityInput,
                                    ESCEligibilityInput: HHToESCEligibilityInput,
-                                   eSCConfig: ESCConfig, cCConfig: CCConfig){
+                                   eSCConfig: ESCConfig, cCConfig: CCConfig)
+                                  (implicit ec: ExecutionContext){
 
   def eligibility(request: Household)(implicit hc: HeaderCarrier): Future[SchemeResults] = {
     for {

@@ -22,16 +22,15 @@ import models.input.tfc.TFCEligibilityInput
 import models.output.freeEntitlement.{FifteenHoursEligibilityModel, ThirtyHoursEligibilityModel}
 import org.joda.time.LocalDate
 import play.api.Configuration
-import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{CCConfig, ChildHelper}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 
 class FreeEntitlementEligibility @Inject()(tfcEligibility: TFCEligibility,
-                                           config: CCConfig) extends ChildHelper(config) {
+                                           config: CCConfig)
+                                          (implicit ec: ExecutionContext) extends ChildHelper(config) {
 
   def localDate: LocalDate = config.startDate
 

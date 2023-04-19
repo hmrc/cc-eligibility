@@ -30,11 +30,12 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{POST, route, _}
 import service.AuditEvents
-import play.api.test.Helpers._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class FreeEntitlementControllerSpec extends AnyWordSpec with FakeCCEligibilityApplication {
+
+  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 
   val mockFee: FreeEntitlementEligibility = mock[FreeEntitlementEligibility]
 

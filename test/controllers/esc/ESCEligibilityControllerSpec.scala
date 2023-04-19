@@ -31,9 +31,11 @@ import play.api.test.FakeRequest
 import service.AuditEvents
 import utils.{CCConfig, ESCConfig}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class ESCEligibilityControllerSpec extends FakeCCEligibilityApplication with Matchers {
+
+  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 
   val eSCEligibility: ESCEligibility = mock[ESCEligibility]
   val escConfig = app.injector.instanceOf[ESCConfig]

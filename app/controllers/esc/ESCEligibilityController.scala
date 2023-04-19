@@ -26,13 +26,13 @@ import service.AuditEvents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import utils.{CCConfig, ESCConfig}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class ESCEligibilityController @Inject()(escEligibility: ESCEligibility,
                                          auditEvent: AuditEvents,
                                          cc: ControllerComponents,
-                                         eSCConfig: ESCConfig, cCConfig: CCConfig) extends BackendController(cc) with Logging {
+                                         eSCConfig: ESCConfig, cCConfig: CCConfig)
+                                        (implicit ec: ExecutionContext) extends BackendController(cc) with Logging {
 
   def eligible : Action[JsValue] = Action.async(cc.parsers.json) {
     implicit request =>

@@ -16,19 +16,17 @@
 
 package eligibility
 
-import javax.inject.Inject
 import models.input.esc._
 import models.output
-import models.output.esc
 import models.output.esc.ESCEligibilityOutput
 import org.joda.time.LocalDate
 import utils.{CCConfig, ESCConfig}
 
+import javax.inject.Inject
 import scala.annotation.tailrec
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class ESCEligibility () extends CCEligibilityHelpers {
+class ESCEligibility @Inject()()(implicit ec: ExecutionContext) extends CCEligibilityHelpers {
 
   def generateSplitDates(taxYear: ESCTaxYear): List[LocalDate] = {
     val dates: List[Option[LocalDate]] = for (child <- taxYear.children) yield {

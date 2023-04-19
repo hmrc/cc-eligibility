@@ -26,12 +26,12 @@ import play.api.mvc.{Action, ControllerComponents}
 import service.AuditEvents
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class FreeEntitlementController @Inject()(auditEvent: AuditEvents,
                                           freeHoursService: FreeEntitlementEligibility,
-                                          cc: ControllerComponents) extends BackendController(cc) with Logging {
+                                          cc: ControllerComponents)
+                                         (implicit ec: ExecutionContext) extends BackendController(cc) with Logging {
 
   def fifteenHours: Action[JsValue] = Action.
     async(cc.parsers.json) {

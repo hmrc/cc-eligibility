@@ -27,12 +27,13 @@ import org.scalatest.matchers.should.Matchers
 import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import play.api.test.Helpers.await
 import service.AuditEvents
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class TCEligibilityControllerSpec extends FakeCCEligibilityApplication with Matchers {
+
+  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 
   val mockTCE: TCEligibility = mock[TCEligibility]
 

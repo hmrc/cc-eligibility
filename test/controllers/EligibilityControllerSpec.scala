@@ -29,9 +29,11 @@ import play.api.test.FakeRequest
 import service.{AuditEvents, EligibilityService}
 
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 class EligibilityControllerSpec extends FakeCCEligibilityApplication with Matchers {
+
+  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 
   implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
