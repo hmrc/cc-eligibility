@@ -1,5 +1,3 @@
-import uk.gov.hmrc.DefaultBuildSettings.targetJvm
-
 lazy val appName = "cc-eligibility"
 lazy val appDependencies : Seq[ModuleID] = ???
 lazy val plugins : Seq[Plugins] = Seq(
@@ -32,7 +30,6 @@ lazy val microservice = Project(appName, file("."))
     )
   )
   .settings(
-    targetJvm := "jvm-1.8",
     scalaVersion := "2.12.12",
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,

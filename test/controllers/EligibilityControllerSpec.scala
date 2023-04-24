@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +29,11 @@ import play.api.test.FakeRequest
 import service.{AuditEvents, EligibilityService}
 
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{Await, ExecutionContext, Future}
 
 class EligibilityControllerSpec extends FakeCCEligibilityApplication with Matchers {
+
+  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 
   implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 

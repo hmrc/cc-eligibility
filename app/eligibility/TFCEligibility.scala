@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,17 +25,16 @@ import javax.inject.Inject
 import models.input.tfc.{TFCChild, TFCClaimant, TFCEligibilityInput}
 import models.output.tfc._
 import org.joda.time.LocalDate
-import play.api.mvc.Request
 import service.AuditEvents
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{TFCConfig, TFCRolloutSchemeConfig}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class TFCEligibility @Inject()(auditEvent: AuditEvents,
                                tfcRollOutConfig: TFCRolloutSchemeConfig,
-                               tFCConfig: TFCConfig) {
+                               tFCConfig: TFCConfig)
+                              (implicit ec: ExecutionContext) {
 
   def getWeekEnd(calendar: Calendar, weekStart: Int): Date = {
     while (calendar.get(Calendar.DAY_OF_WEEK) != weekStart || calendar.get(Calendar.DAY_OF_MONTH) == 1) {

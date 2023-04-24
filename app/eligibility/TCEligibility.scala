@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,11 @@ import models.output.tc.{TCChildElements, TCDisability, TCEligibilityOutput, TCO
 import org.joda.time.LocalDate
 import utils.{CCConfig, TCConfig}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class TCEligibility @Inject()(tcConfig: TCConfig, ccConfig: CCConfig) extends CCEligibilityHelpers {
+class TCEligibility @Inject()(tcConfig: TCConfig,
+                              ccConfig: CCConfig)
+                             (implicit ec: ExecutionContext) extends CCEligibilityHelpers {
 
   private def determineStartDatesOfPeriodsInTaxYear(taxYearIn: models.input.tc.TCTaxYear): List[LocalDate] = {
     val taxYear = taxYearIn.createNewWithConfig(taxYearIn, tcConfig, ccConfig)

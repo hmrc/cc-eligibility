@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,12 @@ import play.api.mvc.{Action, ControllerComponents}
 import service.{AuditEvents, EligibilityService}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class EligibilityController @Inject ()(val eligibilityService: EligibilityService,
                                        val auditEvent: AuditEvents,
-                                       cc: ControllerComponents) extends BackendController(cc) with Logging {
+                                       cc: ControllerComponents)
+                                      (implicit ec: ExecutionContext) extends BackendController(cc) with Logging {
 
   def eligible : Action[JsValue] = Action.async(cc.parsers.json) {
     implicit request =>

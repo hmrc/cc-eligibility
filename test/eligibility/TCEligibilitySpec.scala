@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,9 +34,11 @@ import utils.{CCConfig, Periods, TCConfig}
 import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class TCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodTester with MockitoSugar with Matchers {
+
+  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 
   val ccConfig = new CCConfig(
     app.injector.instanceOf[ServicesConfig],

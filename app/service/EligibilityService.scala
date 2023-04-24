@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,10 @@ import models.Household
 import models.input.CalculatorOutput
 import models.mappings._
 import models.output.{CalculatorInput, SchemeResults}
-import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{CCConfig, ESCConfig}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class EligibilityService @Inject()(calcConnector: CalculatorConnector,
                                    esc: ESCEligibility,
@@ -38,7 +36,8 @@ class EligibilityService @Inject()(calcConnector: CalculatorConnector,
                                    TCEligibilityInput: HHToTCEligibilityInput,
                                    TFCEligibilityInput: HHToTFCEligibilityInput,
                                    ESCEligibilityInput: HHToESCEligibilityInput,
-                                   eSCConfig: ESCConfig, cCConfig: CCConfig){
+                                   eSCConfig: ESCConfig, cCConfig: CCConfig)
+                                  (implicit ec: ExecutionContext){
 
   def eligibility(request: Household)(implicit hc: HeaderCarrier): Future[SchemeResults] = {
     for {
@@ -55,7 +54,6 @@ class EligibilityService @Inject()(calcConnector: CalculatorConnector,
       calcOutput <- {
         if (calcInput.esc.isDefined || calcInput.tc.isDefined || calcInput.tfc.isDefined) {
           if(calcInput.esc.isDefined){
-            println("")
           }
           calcConnector.getCalculatorResult(calcInput)
         } else {

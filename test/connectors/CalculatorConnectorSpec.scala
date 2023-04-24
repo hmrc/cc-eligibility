@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,11 @@ import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class CalculatorConnectorSpec extends AnyWordSpec with MockitoSugar with FakeCCEligibilityApplication with BeforeAndAfterEach {
+
+  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 
   "CalculatorConnector" must {
 
