@@ -1,6 +1,6 @@
 {
   "parent": {
-    "ageRange": "TWENTYONETOTWENTYTWO",
+    "ageRange": "TWENTYONEOROVER",
     "benefits": {
       "disabilityBenefits": true,
       "highRateDisabilityBenefits": false,
