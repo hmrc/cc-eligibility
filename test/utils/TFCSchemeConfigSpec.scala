@@ -17,29 +17,31 @@
 package utils
 
 import controllers.FakeCCEligibilityApplication
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import org.mockito.Mockito.when
 import org.scalatest.prop.TableDrivenPropertyChecks.forAll
 import org.scalatest.prop.Tables.Table
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import scala.collection.JavaConverters.asScalaBufferConverter
+
+import scala.jdk.CollectionConverters.ListHasAsScala
 
 class TFCSchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar {
 
   "TFC Scheme Config" must {
 
     "return 1st september date for current tax year date" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val from = LocalDate.parse("2016-06-20", formatter)
 
       tfcConfig.config.september1stForDate(from) shouldBe LocalDate.parse("2016-09-01", formatter)
     }
 
     "return prior 1st september date for current tax year date" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val from = LocalDate.parse("2016-06-20", formatter)
 
       tfcConfig.config.previousSeptember1stForDate(from) shouldBe LocalDate.parse("2015-09-01", formatter)
@@ -57,7 +59,7 @@ class TFCSchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar
     }
 
     "get default Tax Year Config" in {
-      val configs : Seq[play.api.Configuration] = app.configuration.underlying.getConfigList("tfc.rule-change").asScala.map(Configuration(_))
+      val configs : Seq[play.api.Configuration] = app.configuration.underlying.getConfigList("tfc.rule-change").asScala.map(Configuration(_)).toSeq
       val defaultConfig = tfcConfig.getTFCConfigDefault(configs)
 
       val resultTaxYearConfig = TFCTaxYearConfig(
@@ -107,7 +109,7 @@ class TFCSchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar
         s"$minimumHoursWorked maxIncomePerClaimant: $maxIncomePerClaimant personalAllowancePerClaimant: $personalAllowancePerClaimant " +
         s"nmwApprentice: $nmwApprentice nmwUnder18: $nmwUnder18 nmw18To20: $nmw18To20 nmw21To24: $nmw21To24 nmwOver25: $nmwOver25)" in {
         val pattern = "dd-MM-yyyy"
-        val formatter = DateTimeFormat.forPattern(pattern)
+        val formatter = DateTimeFormatter.ofPattern(pattern)
         val current = LocalDate.parse(date, formatter)
 
         val result = tfcConfig.getConfig(current, "england")

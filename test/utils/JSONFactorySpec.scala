@@ -20,8 +20,8 @@ import controllers.FakeCCEligibilityApplication
 import models.output.esc.{ESCEligibilityOutput, ESCPeriod}
 import models.output.tc._
 import models.output.tfc._
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import play.api.libs.json._
 
 class JSONFactorySpec extends FakeCCEligibilityApplication {
@@ -94,7 +94,7 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
     }
 
     "Return a valid response with eligibility result" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val periodStartDate = LocalDate.parse("2014-09-01", formatter)
       val periodEndDate = LocalDate.parse("2015-04-05", formatter)
 
@@ -111,14 +111,14 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
                 "eligible": true,
                 "taxYears": [
                   {
-                    "from": "${periodStartDate.toString("yyyy-MM-dd")}",
-                    "until": "${periodEndDate.toString("yyyy-MM-dd")}",
+                    "from": "${periodStartDate.toString}",
+                    "until": "${periodEndDate.toString}",
                     "currentHouseholdIncome": {},
                     "previousHouseholdIncome": {},
                     "periods": [
                       {
-                        "from": "${periodStartDate.toString("yyyy-MM-dd")}",
-                        "until": "${periodEndDate.toString("yyyy-MM-dd")}",
+                        "from": "${periodStartDate.toString}",
+                        "until": "${periodEndDate.toString}",
                         "householdElements": {
                           "basic": true,
                           "hours30": false,
@@ -168,7 +168,7 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
     }
 
     "Return a valid TFC response with eligibility result" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val from = LocalDate.parse("2015-06-30", formatter)
 
       val outputClaimant = models.output.tfc.TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -262,7 +262,7 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
     }
 
     "Return a valid ESC response with eligibility result" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val periodStart = LocalDate.parse("2015-06-20", formatter)
       val periodEnd = LocalDate.parse("2016-04-06", formatter)
 

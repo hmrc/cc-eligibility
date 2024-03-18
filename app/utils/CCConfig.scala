@@ -18,12 +18,16 @@ package utils
 
 import java.text.SimpleDateFormat
 import java.util.Calendar
-
 import javax.inject.Inject
-import org.joda.time.LocalDate
+import java.time.LocalDate
+import java.util.Date
 import play.api.Configuration
-import scala.collection.JavaConverters.asScalaBufferConverter
+
+import java.time.ZoneId.systemDefault
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+
+import scala.jdk.CollectionConverters.ListHasAsScala
+
 
 class CCConfig @Inject()(val conf: ServicesConfig,
                          val oldConf: Configuration) {
@@ -31,6 +35,14 @@ class CCConfig @Inject()(val conf: ServicesConfig,
   val dateFormat = new SimpleDateFormat("dd-MM-yyyy")
 
   def startDate: LocalDate = LocalDate.now()
+
+  def toDate(localDate: LocalDate): Date = {
+    Date.from(localDate.atStartOfDay(systemDefault).toInstant)
+  }
+
+  def toLocalDate(date: Date): LocalDate = {
+    date.toInstant.atZone(systemDefault).toLocalDate
+  }
 
 
   private def calendar(year: Int, month: Int, day: Int): Calendar = {
@@ -47,7 +59,7 @@ class CCConfig @Inject()(val conf: ServicesConfig,
   private def birthDayCalendar(date: LocalDate): Calendar = {
     val calendar  = Calendar.getInstance()
     calendar.clear()
-    calendar.setTime(date.toDate)
+    calendar.setTime(toDate(date))
 
     calendar
   }
@@ -56,14 +68,14 @@ class CCConfig @Inject()(val conf: ServicesConfig,
     val currentYear = determineTaxYearFromNow(date)
 
      val september1 = calendar(currentYear, Calendar.SEPTEMBER, 1).getTime
-    LocalDate.fromDateFields(september1)
+      toLocalDate(september1)
   }
 
   def previousSeptember1stForDate(date: LocalDate) : LocalDate = {
     val currentYear = determineTaxYearFromNow(date)
 
     val september1 = calendar(currentYear-1, Calendar.SEPTEMBER, 1).getTime
-    LocalDate.fromDateFields(september1)
+    toLocalDate(september1)
   }
 
   def september1stFollowingChildBirthday(childBirthday: LocalDate) : LocalDate = {
@@ -82,7 +94,7 @@ class CCConfig @Inject()(val conf: ServicesConfig,
     }
 
     val september1 = septemberCalendar.getTime
-    LocalDate.fromDateFields(september1)
+    toLocalDate(september1)
   }
 
   def determineTaxYearFromNow(from: LocalDate) : Int = {
@@ -90,7 +102,7 @@ class CCConfig @Inject()(val conf: ServicesConfig,
     val currentCalendar = birthDayCalendar(from)
 
     val periodYear = currentCalendar.get(Calendar.YEAR)
-    val periodStart = from.toDate
+    val periodStart = toDate(from)
 
     val january1st = calendar(periodYear, Calendar.JANUARY, 1).getTime
 
@@ -106,11 +118,11 @@ class CCConfig @Inject()(val conf: ServicesConfig,
   }
 
   def loadConfigByType(configType: String, currentDate: LocalDate = LocalDate.now): Configuration = {
-    val configs: Seq[Configuration] = oldConf.underlying.getConfigList(configType).asScala.map(Configuration(_))
+    val configs: Seq[Configuration] = oldConf.underlying.getConfigList(configType).asScala.map(Configuration(_)).toSeq
     val configExcludingDefault: Seq[Configuration] = getConfigExcludingDefault(configs)
     configExcludingDefault.find(conf => {
       val ruleDate = dateFormat.parse(conf.get[String]("rule-date"))
-      currentDate.toDate.compareTo(ruleDate) >= 0
+      toDate(currentDate).compareTo(ruleDate) >= 0
     }).getOrElse(getConfigDefault(configs))
   }
 

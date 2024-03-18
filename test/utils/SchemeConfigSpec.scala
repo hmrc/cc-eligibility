@@ -17,8 +17,8 @@
 package utils
 
 import controllers.FakeCCEligibilityApplication
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
@@ -35,14 +35,14 @@ class SchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar {
   "SchemeConfig" must {
 
     "return 1st september date for current tax year date" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val from = LocalDate.parse("2015-06-20", formatter)
 
       ccConfig.september1stForDate(from) shouldBe LocalDate.parse("2015-09-01", formatter)
     }
 
     "return prior 1st september date for current tax year date" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val from = LocalDate.parse("2015-06-20", formatter)
 
       ccConfig.previousSeptember1stForDate(from) shouldBe LocalDate.parse("2014-09-01", formatter)
@@ -50,25 +50,25 @@ class SchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar {
 
 
     "(child birthday is before september 1st) return September 1st following child's birthday" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val birthday = LocalDate.parse("2015-06-20", formatter)
       ccConfig.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2015-09-01", formatter)
     }
 
     "(child birthday is after september 1st) return September 1st following child's birthday" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val birthday = LocalDate.parse("2015-09-02", formatter)
       ccConfig.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2016-09-01", formatter)
     }
 
     "(child birthday is on september 1st) return September 1st following child's birthday" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val birthday = LocalDate.parse("2015-09-01", formatter)
       ccConfig.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2016-09-01", formatter)
     }
 
     "(after april before december) determine the correct tax year for a date" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val today = LocalDate.parse("2016-06-20", formatter)
 
       val taxYear = ccConfig.determineTaxYearFromNow(from = today)
@@ -76,7 +76,7 @@ class SchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar {
     }
 
     "(after december before april) determine the correct tax year for a date" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val today = LocalDate.parse("2016-02-20", formatter)
 
       val taxYear = ccConfig.determineTaxYearFromNow(from = today)

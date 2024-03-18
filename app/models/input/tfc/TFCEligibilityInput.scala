@@ -19,12 +19,10 @@ package models.input.tfc
 import com.google.inject.Inject
 import config.ConfigConstants
 import models.input.BaseChild
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import play.api.i18n.Lang
 import play.api.libs.functional.syntax._
-import play.api.libs.json.JodaReads._
 import play.api.libs.json._
-import uk.gov.hmrc.http.HeaderCarrier
 import utils.Periods.Period
 import utils._
 
@@ -74,7 +72,7 @@ object TFCEligibilityInput extends CCFormat {
   }
 
   implicit val tfcReads: Reads[TFCEligibilityInput] = (
-    (JsPath \ "from").read[LocalDate](jodaLocalDateReads(datePattern)) and
+    (JsPath \ "from").read[LocalDate] and
       (JsPath \ "numberOfPeriods").read[Short].orElse(Reads.pure(1)) and
         (JsPath \ "location").read[String] and
           (JsPath \ "claimants").read[List[TFCClaimant]].filter(JsonValidationError("At least one claimant or at max 2 claimants allowed"))(x => claimantValidation(x)) and
@@ -219,7 +217,7 @@ object TFCChild extends CCFormat {
     (JsPath \ "id").read[Short].filter(JsonValidationError("Child ID should not be less than 0"))(x => validID(x)) and
       (JsPath \ "childcareCost").read[BigDecimal].filter(JsonValidationError("Childcare Spend cost should not be less than 0.00"))(x => childSpendValidation(x)) and
         (JsPath \ "childcareCostPeriod").read[Periods.Period] and
-          (JsPath \ "dob").read[LocalDate](jodaLocalDateReads(datePattern)) and
+          (JsPath \ "dob").read[LocalDate] and
             (JsPath \ "disability").read[TFCDisability]
     )(TFCChild.apply(_,_,_,_,_))
 }

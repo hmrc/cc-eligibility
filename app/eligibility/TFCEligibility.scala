@@ -24,7 +24,7 @@ import java.util.{Calendar, Date}
 import javax.inject.Inject
 import models.input.tfc.{TFCChild, TFCClaimant, TFCEligibilityInput}
 import models.output.tfc._
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import service.AuditEvents
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{TFCConfig, TFCRolloutSchemeConfig}
@@ -77,30 +77,30 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
   }
 
   def determineChildStartDateInTFCPeriod(child: TFCChild, periodFrom: LocalDate, periodUntil: LocalDate, location: String):Option[LocalDate]={
-    val childDob: Date = child.dob.toDate
+    val childDob: Date = tFCConfig.config.toDate(child.dob)
     val childBirthdaySeptDate: Date = endWeek1stOfSeptemberDate(periodFrom, location, child)
 
     childDob match {
-      case dob if dob.before(periodFrom.toDate) =>
+      case dob if dob.before(tFCConfig.config.toDate(periodFrom)) =>
         childBirthdaySeptDate match {
-          case septDate if septDate.after(periodFrom.toDate) => Some(periodFrom)
+          case septDate if septDate.after(tFCConfig.config.toDate(periodFrom)) => Some(periodFrom)
           case _ => None
         }
-      case dob if dob.before(periodUntil.toDate) => Some(child.dob)
+      case dob if dob.before(tFCConfig.config.toDate(periodUntil)) => Some(child.dob)
       case _ => None
     }
   }
 
   def determineChildEndDateInTFCPeriod(child: TFCChild, periodFrom: LocalDate, periodUntil: LocalDate, location: String): Option[LocalDate]={
-    val childDob: Date = child.dob.toDate
+    val childDob: Date = tFCConfig.config.toDate(child.dob)
     val childBirthdaySeptDate: Date = endWeek1stOfSeptemberDate(periodFrom, location, child)
 
     childDob match {
-      case dob if dob.after(periodUntil.toDate) || dob.equals(periodUntil.toDate) => None
+      case dob if dob.after(tFCConfig.config.toDate(periodUntil)) || dob.equals(tFCConfig.config.toDate(periodUntil)) => None
       case _ =>
         childBirthdaySeptDate match {
-          case septDate if septDate.after(periodUntil.toDate) => Some(periodUntil)
-          case septDate if septDate.after(periodFrom.toDate) => Some(LocalDate.fromDateFields(septDate))
+          case septDate if septDate.after(tFCConfig.config.toDate(periodUntil)) => Some(periodUntil)
+          case septDate if septDate.after(tFCConfig.config.toDate(periodFrom)) => Some(tFCConfig.config.toLocalDate(septDate))
           case _ => None
         }
     }
@@ -123,12 +123,12 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
 
     val currentCalendar = Calendar.getInstance()
     currentCalendar.clear()
-    currentCalendar.setTime(tfcEligibilityInput.from.toDate)
+    currentCalendar.setTime(tFCConfig.config.toDate(tfcEligibilityInput.from))
 
     val periods = for(i <- 1 to tfcEligibilityInput.numberOfPeriods) yield {
-      val startDate = LocalDate.fromDateFields(currentCalendar.getTime)
+      val startDate = tFCConfig.config.toLocalDate(currentCalendar.getTime)
       currentCalendar.add(Calendar.MONTH, 3)
-      val untilDate = LocalDate.fromDateFields(currentCalendar.getTime)
+      val untilDate = tFCConfig.config.toLocalDate(currentCalendar.getTime)
       val outputClaimants = determineClaimantsEligibility(tfcEligibilityInput.claimants, startDate, tfcEligibilityInput.location)
       val location = if(tfcEligibilityInput.claimants.isEmpty) "default" else tfcEligibilityInput.location
       val outputChildren = determineChildrenEligibility(tfcEligibilityInput.children, startDate, untilDate, location)
@@ -175,7 +175,7 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
 
   def eligibility(request: TFCEligibilityInput)(implicit hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
     val outputPeriods = determineTFCPeriods(request)
-    val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && validHouseholdMinimumEarnings(request) && request.validMaxEarnings
+    val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && validHouseholdMinimumEarnings(request) && request.validMaxEarnings()
     Future {
       TFCEligibilityOutput(
         from = request.from,

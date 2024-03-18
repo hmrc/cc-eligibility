@@ -19,14 +19,14 @@ package eligibility
 import models.input.esc._
 import models.output
 import models.output.esc.ESCEligibilityOutput
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import utils.{CCConfig, ESCConfig}
 
 import javax.inject.Inject
 import scala.annotation.tailrec
 import scala.concurrent.{ExecutionContext, Future}
 
-class ESCEligibility @Inject()()(implicit ec: ExecutionContext) extends CCEligibilityHelpers {
+class ESCEligibility @Inject()(config: CCConfig)(implicit ec: ExecutionContext) extends CCEligibilityHelpers {
 
   def generateSplitDates(taxYear: ESCTaxYear): List[LocalDate] = {
     val dates: List[Option[LocalDate]] = for (child <- taxYear.children) yield {
@@ -44,7 +44,7 @@ class ESCEligibility @Inject()()(implicit ec: ExecutionContext) extends CCEligib
         None
       }
     }
-    dates.flatten.distinct.sortBy(x => x.toDate.getTime)
+    dates.flatten.distinct.sortBy(x => config.toDate(x).getTime)
   }
 
   def determineStartDatesOfPeriodsInTaxYear(taxYear: ESCTaxYear): List[LocalDate] = {
@@ -57,7 +57,7 @@ class ESCEligibility @Inject()()(implicit ec: ExecutionContext) extends CCEligib
   def numberOfQualifyingMonthsForPeriod(qualifying: Boolean, periodStart: LocalDate, periodEnd: LocalDate): Int = {
     qualifying match {
       case true =>
-        (periodEnd.getYear - periodStart.getYear) * 12 + (periodEnd.getMonthOfYear - periodStart.getMonthOfYear)
+        (periodEnd.getYear - periodStart.getYear) * 12 + (periodEnd.getMonthValue - periodStart.getMonthValue)
       case _ =>
         0
     }

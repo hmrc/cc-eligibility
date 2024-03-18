@@ -16,7 +16,8 @@
 
 package utils
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
+import scala.math.Ordered.orderingToOrdered
 
 class ChildHelper(ccConfig: CCConfig) {
 
@@ -26,8 +27,8 @@ class ChildHelper(ccConfig: CCConfig) {
     } else {
       val age: Int = currentDate.getYear - dob.getYear
       if (
-        (currentDate.getMonthOfYear < dob.getMonthOfYear)
-          || (currentDate.getMonthOfYear == dob.getMonthOfYear && currentDate.getDayOfMonth < dob.getDayOfMonth)
+        (currentDate.getMonth < dob.getMonth)
+          || (currentDate.getMonth == dob.getMonth && currentDate.getDayOfMonth < dob.getDayOfMonth)
       ) {
         age - 1
       }

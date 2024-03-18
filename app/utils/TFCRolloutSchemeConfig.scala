@@ -18,8 +18,9 @@ package utils
 
 import javax.inject.Inject
 import models.input.tfc.TFCChild
-import org.joda.time.LocalDate
 import play.api.Configuration
+
+import java.time.LocalDate
 
 class TFCRolloutSchemeConfig @Inject()(config: CCConfig) {
 
@@ -30,7 +31,7 @@ class TFCRolloutSchemeConfig @Inject()(config: CCConfig) {
     val bornOnOrAfter = config.dateFormat.parse(tfcRollout.get[String]("born-on-after"))
     val isAvailableForAllDisabled: Boolean = tfcRollout.getOptional[Boolean]("all-disabled").getOrElse(false)
 
-    isEligibleForTFC && child.dob.isBefore(futureDate) && ((child.isDisabled && isAvailableForAllDisabled) || !bornOnOrAfter.after(child.dob.toDate))
+    isEligibleForTFC && child.dob.isBefore(futureDate) && ((child.isDisabled && isAvailableForAllDisabled) || !bornOnOrAfter.after(config.toDate(child.dob)))
   }
 
 }

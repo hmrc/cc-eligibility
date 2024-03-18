@@ -17,11 +17,12 @@
 package utils
 
 import java.text.SimpleDateFormat
-
 import javax.inject.Inject
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import play.api.Configuration
-import scala.collection.JavaConverters.asScalaBufferConverter
+
+import scala.jdk.CollectionConverters.ListHasAsScala
+
 
 case class ESCTaxYearConfig(
                              childAgeLimit: Int,
@@ -51,7 +52,7 @@ class ESCConfig @Inject()(val config: CCConfig) {
         val configDate = new SimpleDateFormat("dd-MM-yyyy").parse(head.get[String]("rule-date"))
 
         // exit tail recursive
-        if (currentDate.toDate.after(configDate) || currentDate.toDate.compareTo(configDate) == 0) {
+        if (config.toDate(currentDate).after(configDate) || config.toDate(currentDate).compareTo(configDate) == 0) {
           getConfigHelper(currentDate, Nil, Some(head), i)
         } else {
           getConfigHelper(currentDate, tail, acc, i)
@@ -68,7 +69,7 @@ class ESCConfig @Inject()(val config: CCConfig) {
 
   def getConfig(currentDate: LocalDate): ESCTaxYearConfig = {
     val configs : Seq[play.api.Configuration] = config.oldConf.underlying.
-      getConfigList("esc.rule-change").asScala.map(Configuration(_))
+      getConfigList("esc.rule-change").asScala.map(Configuration(_)).toSeq
     val configsExcludingDefault = getESCConfigExcludingDefault(configs)
     val defaultConfig = getESCConfigDefault(configs)
     // ensure the latest date is in the head position

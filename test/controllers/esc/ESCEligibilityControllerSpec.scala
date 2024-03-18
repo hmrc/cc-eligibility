@@ -21,7 +21,7 @@ import controllers.FakeCCEligibilityApplication
 import eligibility.ESCEligibility
 import models.input.esc.ESCEligibilityInput
 import models.output.esc.ESCEligibilityOutput
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.ArgumentMatchers.{eq => mockEq, _}
 import org.mockito.Mockito._
 import org.scalatest.matchers.should.Matchers

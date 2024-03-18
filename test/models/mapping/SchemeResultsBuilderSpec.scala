@@ -23,7 +23,7 @@ import models.output.esc.{ESCEligibilityOutput, ESCTaxYear}
 import models.output.tc.{TCEligibilityOutput, TCTaxYear}
 import models.output.tfc._
 import models.output.{EscClaimantEligibility, Scheme, SchemeResults, TaxCreditsEligibility}
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.scalatestplus.mockito.MockitoSugar
 import utils.{CCConfigSpec, Periods}
 

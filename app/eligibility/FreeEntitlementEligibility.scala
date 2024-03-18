@@ -20,7 +20,7 @@ import javax.inject.Inject
 import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.input.tfc.TFCEligibilityInput
 import models.output.freeEntitlement.{FifteenHoursEligibilityModel, ThirtyHoursEligibilityModel}
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import play.api.Configuration
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{CCConfig, ChildHelper}
@@ -40,7 +40,7 @@ class FreeEntitlementEligibility @Inject()(tfcEligibility: TFCEligibility,
     val freeHoursRollout: Configuration = config.loadConfigByType("free-hours-rollout")
     val bornOnOrAfter = config.dateFormat.parse(freeHoursRollout.get[String]("born-on-after"))
 
-    dob.isBefore(futureDate) && !bornOnOrAfter.after(dob.toDate)
+    dob.isBefore(futureDate) && !bornOnOrAfter.after(config.toDate(dob))
   }
 
   private def hasChildAtAge(configField: String, dobs: List[LocalDate], currentDate: LocalDate): Boolean = {

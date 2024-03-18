@@ -4,16 +4,12 @@ import sbt._
 
 object AppDependencies {
 
-  private val typesafe = "com.typesafe.play"
-  private val hmrc = "uk.gov.hmrc"
-
-  private val bootstrapVersion = "7.15.0"
+  private val bootstrapVersion = "8.5.0"
 
   val compile: Seq[ModuleID] = Seq(
     ws,
-    hmrc                %% "bootstrap-backend-play-28" % bootstrapVersion,
-    "com.github.fge"    % "json-schema-validator"      % "2.2.14",
-    typesafe            %% "play-json-joda"            % "2.9.4"
+    "uk.gov.hmrc"                  %% "bootstrap-backend-play-30" % bootstrapVersion,
+    "com.github.java-json-tools"   % "json-schema-validator"      % "2.2.14"
   )
 
   trait TestDependencies {
@@ -24,11 +20,10 @@ object AppDependencies {
   object Test {
     def apply(): Seq[ModuleID] = new TestDependencies {
       override lazy val test = Seq(
-        "uk.gov.hmrc"               %% "bootstrap-test-play-28"     % bootstrapVersion     % scope,
+        "uk.gov.hmrc"               %% "bootstrap-test-play-30"     % bootstrapVersion     % scope,
         "org.scalatestplus"         %% "scalatestplus-mockito"      % "1.0.0-M2"           % scope,
         "org.pegdown"               % "pegdown"                     % "1.6.0"              % scope,
-        "org.mockito"               % "mockito-core"                % "5.3.0"              % scope,
-        typesafe                    %% "play-test"                  % PlayVersion.current  % scope
+        "org.playframework"         %% "play-test"                  % PlayVersion.current  % scope
       )
     }.test
   }

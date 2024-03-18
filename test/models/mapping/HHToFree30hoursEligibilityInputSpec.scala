@@ -20,7 +20,7 @@ import controllers.FakeCCEligibilityApplication
 import models._
 import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.mappings.HHToFree30hoursEligibilityInput
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.scalatest.wordspec.AnyWordSpec
 
 class HHToFree30hoursEligibilityInputSpec extends AnyWordSpec with FakeCCEligibilityApplication {

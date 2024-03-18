@@ -21,7 +21,7 @@ import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import models.input.tc._
 import org.mockito.Mockito._
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
@@ -380,7 +380,7 @@ class TCEligibilityInputSpec extends FakeCCEligibilityApplication with MockitoSu
       }
 
       "(Young adult < 16) determine if get young adult element" in {
-        val dateOfBirth = LocalDate.parse("20010-08-31", formatter)
+        val dateOfBirth = LocalDate.parse("2010-08-31", formatter)
         val today = LocalDate.parse("2016-08-31", formatter)
 
         val child = new TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)(tcConfigOption, ccConfigOption)
@@ -482,21 +482,21 @@ class TCEligibilityInputSpec extends FakeCCEligibilityApplication with MockitoSu
         val dateOfBirth = LocalDate.parse("2001-09-27", formatter)
 
         val child = new TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)(tcConfigOption, ccConfigOption)
-        child.childsBirthdayDateForAge(years = 20) shouldBe LocalDate.parse("2021-09-27", formatter).toDate
+        child.childsBirthdayDateForAge(years = 20) shouldBe ccConfigOption.get.toDate(LocalDate.parse("2021-09-27", formatter))
       }
 
       "(15 years old) determine child's birthday for an age" in {
         val dateOfBirth = LocalDate.parse("2001-09-27", formatter)
 
         val child = new TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)(tcConfigOption, ccConfigOption)
-        child.childsBirthdayDateForAge(years = 15) shouldBe LocalDate.parse("2016-09-27", formatter).toDate
+        child.childsBirthdayDateForAge(years = 15) shouldBe ccConfigOption.get.toDate(LocalDate.parse("2016-09-27", formatter))
       }
 
       "(5 years old) determine child's birthday for an age" in {
         val dateOfBirth = LocalDate.parse("2001-09-27", formatter)
 
         val child = new TCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = TCDisability(disabled = false, severelyDisabled = false), education = None)(tcConfigOption, ccConfigOption)
-        child.childsBirthdayDateForAge(years = 5) shouldBe LocalDate.parse("2006-09-27", formatter).toDate
+        child.childsBirthdayDateForAge(years = 5) shouldBe ccConfigOption.get.toDate(LocalDate.parse("2006-09-27", formatter))
       }
 
       "(Child < 0) determine if child gets child element" in {

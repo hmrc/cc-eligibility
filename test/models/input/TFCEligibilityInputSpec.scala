@@ -20,8 +20,8 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import models.input.tfc._
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.test.FakeRequest
@@ -33,7 +33,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
 
   "TFCEInputEligibility" must {
 
-    val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val fromDate = LocalDate.parse("2000-08-27", formatter)
 
     "Read a valid JSON input and convert to a specific type" in {
@@ -82,7 +82,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
     "Child" must {
 
       "Determine disability status if child is disabled" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
         val child = new TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
           TFCDisability(disabled = true))(None)
@@ -90,7 +90,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
       }
 
       "Determine disability status if child is severely disabled" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
         val child = new TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
           TFCDisability(severelyDisabled = true))(None)
@@ -98,7 +98,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
       }
 
       "Determine disability status if child is not disabled and not severely disabled" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
         val child = new TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
           TFCDisability())(None)
@@ -106,7 +106,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
       }
 
       "Determine disability status if child is disabled and severely disabled" in {
-        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
         val child = new TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
           TFCDisability(disabled = true, severelyDisabled = true))(None)
