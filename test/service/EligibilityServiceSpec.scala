@@ -27,8 +27,8 @@ import models.output.tc.{TCEligibilityOutput, TCTaxYear}
 import models.output.tfc._
 import models.output.{EscClaimantEligibility, Scheme, SchemeResults, TaxCreditsEligibility}
 import models.{Claimant, Household, LocationEnum, SchemeEnum}
-import org.joda.time.LocalDate
-import org.mockito.ArgumentMatchers.{any, _}
+import java.time.LocalDate
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar

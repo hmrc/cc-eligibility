@@ -17,7 +17,7 @@
 package eligibility
 
 import models.input.BaseTaxYear
-import org.joda.time.LocalDate
+import java.time.LocalDate
 
 trait CCEligibilityHelpers {
 

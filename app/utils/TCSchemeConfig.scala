@@ -17,13 +17,12 @@
 package utils
 
 import java.text.SimpleDateFormat
-
 import javax.inject.Inject
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
 import play.api.Configuration
-import scala.collection.JavaConverters.asScalaBufferConverter
 
+import java.time.format.DateTimeFormatter
+import scala.jdk.CollectionConverters.ListHasAsScala
 case class TCTaxYearConfig(
                              childAgeLimit: Int,
                              childAgeLimitDisabled: Int,
@@ -39,7 +38,7 @@ case class TCTaxYearConfig(
 class TCConfig @Inject()(val config: CCConfig) {
 
   lazy val childElementLimit: Int = config.conf.getInt("tc.child-element-limit")
-  lazy val childDate6thApril2017: LocalDate = DateTimeFormat.forPattern("dd-MM-yyyy").parseLocalDate(config.conf.getString("tc.child-element-date-constraint"))
+  lazy val childDate6thApril2017: LocalDate = LocalDate.parse(config.conf.getString("tc.child-element-date-constraint"), DateTimeFormatter.ofPattern("dd-MM-yyyy"))
 
   def getTCConfigDefault(configs: Seq[Configuration]): Configuration = {
     configs.filter(_.get[String]("rule-date").contains("default")).head
@@ -61,7 +60,7 @@ class TCConfig @Inject()(val config: CCConfig) {
         val configDate = new SimpleDateFormat("dd-MM-yyyy").parse(head.get[String]("rule-date"))
 
         // exit tail recursive
-        if (currentDate.toDate.after(configDate) || currentDate.toDate.compareTo(configDate) == 0) {
+        if (config.toDate(currentDate).after(configDate) || config.toDate(currentDate).compareTo(configDate) == 0) {
           getConfigHelper(currentDate, Nil, Some(head), i)
         } else {
           getConfigHelper(currentDate, tail, acc, i)
@@ -100,7 +99,7 @@ class TCConfig @Inject()(val config: CCConfig) {
   }
 
   def getConfig(currentDate: LocalDate): TCTaxYearConfig = {
-    val configs: Seq[Configuration] = config.oldConf.underlying.getConfigList("tc.rule-change").asScala.map(Configuration(_))
+    val configs: Seq[Configuration] = config.oldConf.underlying.getConfigList("tc.rule-change").asScala.map(Configuration(_)).toSeq
     val configsExcludingDefault = getTCConfigExcludingDefault(configs)
     val defaultConfig = getTCConfigDefault(configs)
     // ensure the latest date is in the head position

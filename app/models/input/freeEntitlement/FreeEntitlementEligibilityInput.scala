@@ -16,10 +16,8 @@
 
 package models.input.freeEntitlement
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import play.api.libs.json.Json
-import play.api.libs.json.JodaReads._
-import play.api.libs.json.JodaWrites._
 
 case class FreeEntitlementEligibilityInput(claimantLocation: String,
                                            childDOBList: List[LocalDate])

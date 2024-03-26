@@ -19,7 +19,7 @@ package eligibility
 import javax.inject.Inject
 import models.input.tc.{TCChild, TCEligibilityInput, TCIncome, TCTaxYear}
 import models.output.tc.{TCChildElements, TCDisability, TCEligibilityOutput, TCOutputChild}
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import utils.{CCConfig, TCConfig}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -51,7 +51,7 @@ class TCEligibility @Inject()(tcConfig: TCConfig,
 
     val filtered = dates.flatten
     val inserted: List[LocalDate] = filtered.:::(List(taxYear.from))
-    val sorted = inserted.sortBy(x => x.toDate.getTime)
+    val sorted = inserted.sortBy(x => ccConfig.toDate(x).getTime)
     sorted.distinct
   }
 

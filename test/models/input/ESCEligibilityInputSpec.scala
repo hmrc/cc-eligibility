@@ -21,7 +21,7 @@ import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import fixtures.ESCChildren
 import models.input.esc._
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import play.api.libs.json.{JsValue, Json}
 import utils.{CCConfig, ESCConfig}
 

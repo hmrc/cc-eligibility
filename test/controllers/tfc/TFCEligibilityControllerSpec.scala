@@ -21,7 +21,7 @@ import controllers.FakeCCEligibilityApplication
 import eligibility.TFCEligibility
 import models.input.tfc.TFCEligibilityInput
 import models.output.tfc.TFCEligibilityOutput
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter

@@ -20,7 +20,7 @@ import controllers.FakeCCEligibilityApplication
 import models._
 import models.input.esc._
 import models.mappings._
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar

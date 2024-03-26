@@ -22,8 +22,8 @@ import controllers.FakeCCEligibilityApplication
 import models.input.tc._
 import models.output
 import models.output.tc.{TCChildElements, TCEligibilityOutput}
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+
+import java.time.LocalDate
 import org.scalatest.PrivateMethodTester
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
@@ -34,6 +34,7 @@ import utils.{CCConfig, Periods, TCConfig}
 import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
+import java.time.format.DateTimeFormatter
 import scala.concurrent.{ExecutionContext, Future}
 
 class TCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodTester with MockitoSugar with Matchers {
@@ -65,7 +66,7 @@ class TCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodT
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = TCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))(tcConfigOption)
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
       val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 1
@@ -78,7 +79,7 @@ class TCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodT
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = TCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))(tcConfigOption)
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
       val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 2
@@ -92,7 +93,7 @@ class TCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodT
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = TCTaxYear(from = startTaxYear, until = endTaxYear, claimants = List(), children = List(child))(tcConfigOption)
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
       val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 2
@@ -107,7 +108,7 @@ class TCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodT
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = TCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child, childTurns19))(tcConfigOption)
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
       val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 3
@@ -122,7 +123,7 @@ class TCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodT
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = TCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child, dateOfBirth20))(tcConfigOption)
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
       val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 2
@@ -138,7 +139,7 @@ class TCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodT
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = TCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child, child1Turns20, child2Turns20))(tcConfigOption)
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
       val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 3
@@ -153,7 +154,7 @@ class TCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodT
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = TCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child, child1Turns20))(tcConfigOption)
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
       val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 3
@@ -171,7 +172,7 @@ class TCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodT
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = TCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child, child1Turns20, child2Turns15))(tcConfigOption)
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
       val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 4
@@ -184,7 +185,7 @@ class TCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodT
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = TCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))(tcConfigOption)
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
       val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 2
@@ -1025,7 +1026,7 @@ class TCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodT
     }
 
     "populate the household elements model for a period (couple, 1st claimant > 16h, non disabled, 2nd claimant 8h, non disabled, 1 qualifying child)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth1 = LocalDate.parse("2003-08-31", formatter)
       val periodStartDate = LocalDate.parse("2016-09-01", formatter)
       val periodEndDate = LocalDate.parse("2016-12-01", formatter)

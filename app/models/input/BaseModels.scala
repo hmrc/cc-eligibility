@@ -19,10 +19,7 @@ package models.input
 import java.util.{Calendar, Date}
 
 import com.google.inject.Inject
-import org.joda.time.LocalDate
-import play.api.Play
-import play.api.i18n.MessagesApi
-import play.api.inject.Injector
+import java.time.LocalDate
 import utils.CCConfig
 
 trait BaseTaxYear {
@@ -35,9 +32,9 @@ abstract class BaseChild @Inject()(ccConfig: Option[CCConfig]) {
   def dob : LocalDate
 
   def isBeingBornInTaxYear(taxYear: BaseTaxYear) : (Boolean, LocalDate) = {
-    val dateOfBirth = dob.toDate
+    val dateOfBirth = ccConfig.get.toDate(dob)
 
-    val requiresSplit = dateOfBirth.after(taxYear.from.toDate) && dateOfBirth.before(taxYear.until.toDate)
+    val requiresSplit = dateOfBirth.after(ccConfig.get.toDate(taxYear.from)) && dateOfBirth.before(ccConfig.get.toDate(taxYear.until))
     (requiresSplit, dob)
   }
 
@@ -46,12 +43,12 @@ abstract class BaseChild @Inject()(ccConfig: Option[CCConfig]) {
     val childBirthday = childsBirthdayDateForAge(years)
     childBirthday match {
       //if child's 15/16(if disabled) birthday after 1st September of current tax year no split is required
-      case birthday if birthday.after(september1.toDate) =>
+      case birthday if birthday.after(ccConfig.get.toDate(september1)) =>
         false
       //if child's 15/16(if disabled) birthday is after the 1st September of previous tax year,
       // child is eligible until the 1st September of the current year
-      case birthday if (birthday.after(previousSeptember1.toDate)
-        || birthday.equals(previousSeptember1.toDate)) && claimDate.toDate.before(september1.toDate) =>
+      case birthday if (birthday.after(ccConfig.get.toDate(previousSeptember1))
+        || birthday.equals(ccConfig.get.toDate(previousSeptember1))) && ccConfig.get.toDate(claimDate).before(ccConfig.get.toDate(september1)) =>
         true
       case _ =>
         false
@@ -63,17 +60,17 @@ abstract class BaseChild @Inject()(ccConfig: Option[CCConfig]) {
     val september1 = ccConfig.get.september1stForDate(claimDate)
     val requiresSplit = september1 match {
       //if child's 15/16(if disabled) birthday after end date of current tax year no split is required
-      case date if date.toDate.after(endDate.toDate) =>
+      case date if ccConfig.get.toDate(date).after(ccConfig.get.toDate(endDate)) =>
         false
       case _ =>
         isSplittingPeriod1stSeptBeforeEndDate(claimDate, years, september1)
     }
-    (requiresSplit, LocalDate.fromDateFields(september1.toDate))
+    (requiresSplit, september1)
   }
 
   def childsBirthdayDateForAge(years: Int) : Date = {
     val dobCalendar = Calendar.getInstance()
-    dobCalendar.setTime(dob.toDate)
+    dobCalendar.setTime(ccConfig.get.toDate(dob))
     dobCalendar.add(Calendar.YEAR, years)
     val childBirthday = dobCalendar.getTime
     childBirthday
@@ -81,10 +78,10 @@ abstract class BaseChild @Inject()(ccConfig: Option[CCConfig]) {
 
   def age(now : LocalDate) : Int = {
     val dobCalendar : Calendar = Calendar.getInstance()
-    dobCalendar.setTime(dob.toDate)
+    dobCalendar.setTime(ccConfig.get.toDate(dob))
 
     val today = Calendar.getInstance()
-    today.setTime(now.toDate)
+    today.setTime(ccConfig.get.toDate(now))
 
     if (dobCalendar.after(today)) {
       -1

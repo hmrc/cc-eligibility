@@ -16,7 +16,6 @@
 
 package utils
 
-import play.api.i18n.Lang
 import play.api.libs.json._
 
 object Periods extends Enumeration {

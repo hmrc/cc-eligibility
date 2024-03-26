@@ -17,7 +17,6 @@
 package service
 
 import javax.inject.Inject
-import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 
 class AuditEvents @Inject()(auditService: AuditService) {

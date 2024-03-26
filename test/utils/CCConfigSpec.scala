@@ -32,12 +32,13 @@ package utils
  * limitations under the License.
  */
 
-import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.{Application, Configuration}
 import play.api.i18n.{Lang, MessagesApi}
 import play.api.inject.guice.{GuiceApplicationBuilder, GuiceableModule}
+
+import java.time.format.DateTimeFormatter
 
 trait CCConfigSpec extends AnyWordSpec with Matchers {
 
@@ -61,8 +62,6 @@ trait CCConfigSpec extends AnyWordSpec with Matchers {
 
   lazy val app: Application =
     new GuiceApplicationBuilder()
-      .disable[com.kenshoo.play.metrics.PlayModule]
-      .disable[com.kenshoo.play.metrics.MetricsController]
       .configure(Configuration("metrics.enabled" -> true))
       .configure(Configuration("metrics.jvm" -> false))
       .configure(config)
@@ -75,5 +74,5 @@ trait CCConfigSpec extends AnyWordSpec with Matchers {
     messagesApi(s)(Lang("en"))
   }
 
-  val formatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+  val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 }

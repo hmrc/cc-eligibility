@@ -20,7 +20,7 @@ import controllers.FakeCCEligibilityApplication
 import fixtures.ESCChildren
 import models.input.esc._
 import models.output.esc.{ESCEligibilityOutput, ESCPeriod}
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import utils.{CCConfig, ESCConfig}
@@ -51,7 +51,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
       val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 1
@@ -64,7 +64,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
       val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 2
@@ -77,7 +77,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
       val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 1
@@ -90,7 +90,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
       val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 2
@@ -103,7 +103,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val endTaxYear = LocalDate.parse("2017-04-06", formatter)
       val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]]('determineStartDatesOfPeriodsInTaxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
       val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
 
       result.length shouldBe 2
@@ -2397,7 +2397,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
     }
 
     "(Single tax year) calculate qualifying months period start 1st of the month" in {
-      val ty1periodStart = LocalDate.parse("2016-04-1", formatter)
+      val ty1periodStart = LocalDate.parse("2016-04-01", formatter)
       val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val result = service.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)

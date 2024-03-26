@@ -19,16 +19,17 @@ package eligibility
 import controllers.FakeCCEligibilityApplication
 import models.input.tfc._
 import models.output.tfc.{TFCEligibilityOutput, TFCOutputChild, TFCOutputClaimant, TFCPeriod}
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+
+import java.time.LocalDate
 import org.scalatest.PrivateMethodTester
 import org.scalatest.matchers.should.Matchers
 import play.api.libs.json.Json
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import service.AuditEvents
-import utils.{Periods, TFCConfig}
+import utils.{CCConfig, Periods, TFCConfig}
 
+import java.time.format.DateTimeFormatter
 import scala.concurrent.Future
 
 class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodTester with Matchers {
@@ -36,11 +37,12 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
   implicit val req: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
   lazy val tfcEligibility: TFCEligibility = app.injector.instanceOf[TFCEligibility]
+  lazy val ccConfig: CCConfig = app.injector.instanceOf[CCConfig]
 
   "TFCEligibility" must {
 
     "determine childs Birthday(11th or 16th) where child is not disable" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
       val current = LocalDate.parse("2017-08-01", formatter)
       val child = new TFCChild(
@@ -48,13 +50,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         childcareCost = BigDecimal(300.00),
         childcareCostPeriod = Periods.Monthly,
         dob = dateOfBirth,
-        disability = TFCDisability())(None)
+        disability = TFCDisability())(Some(ccConfig))
       val child11Birthday = tfcEligibility.getChildBirthday(current, "england", child)
-      LocalDate.fromDateFields(child11Birthday) shouldBe LocalDate.parse("2016-08-27", formatter)
+      ccConfig.toLocalDate(child11Birthday) shouldBe LocalDate.parse("2016-08-27", formatter)
     }
 
     "determine childs Birthday (11th or 16th) where child is disabled" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2000-09-27", formatter)
       val current = LocalDate.parse("2017-08-01", formatter)
       val child = new TFCChild(
@@ -62,13 +64,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         childcareCost = BigDecimal(300.00),
         childcareCostPeriod = Periods.Monthly,
         dob = dateOfBirth,
-        disability = TFCDisability(disabled = true))(None)
+        disability = TFCDisability(disabled = true))(Some(ccConfig))
       val child11Birthday = tfcEligibility.getChildBirthday(current, "england", child)
-      LocalDate.fromDateFields(child11Birthday) shouldBe LocalDate.parse("2016-09-27", formatter)
+      ccConfig.toLocalDate(child11Birthday) shouldBe LocalDate.parse("2016-09-27", formatter)
     }
 
     "determine end of Week following 1st September Date where child is not disabled" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
       val current = LocalDate.parse("2017-08-01", formatter)
       val child = new TFCChild(
@@ -76,13 +78,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         childcareCost = BigDecimal(300.00),
         childcareCostPeriod = Periods.Monthly,
         dob = dateOfBirth,
-        disability = TFCDisability())(None)
+        disability = TFCDisability())(Some(ccConfig))
       val endWeek1stOfSeptemberDate = tfcEligibility.endWeek1stOfSeptemberDate(current, "england", child)
-      LocalDate.fromDateFields(endWeek1stOfSeptemberDate) shouldBe LocalDate.parse("2016-09-04", formatter)
+      ccConfig.toLocalDate(endWeek1stOfSeptemberDate) shouldBe LocalDate.parse("2016-09-04", formatter)
     }
 
     "determine end of Week following 1st September Date where child is not disabled, dob after 1st Sept" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-09-12", formatter)
       val current = LocalDate.parse("2017-08-01", formatter)
       val child = new TFCChild(
@@ -90,13 +92,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         childcareCost = BigDecimal(300.00),
         childcareCostPeriod = Periods.Monthly,
         dob = dateOfBirth,
-        disability = TFCDisability())(None)
+        disability = TFCDisability())(Some(ccConfig))
       val endWeek1stOfSeptemberDate = tfcEligibility.endWeek1stOfSeptemberDate(current, "england", child)
-      LocalDate.fromDateFields(endWeek1stOfSeptemberDate) shouldBe LocalDate.parse("2017-09-03", formatter)
+      ccConfig.toLocalDate(endWeek1stOfSeptemberDate) shouldBe LocalDate.parse("2017-09-03", formatter)
     }
 
     "determine end of Week following 1st September Date where child is disabled" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
       val current = LocalDate.parse("2017-08-01", formatter)
       val child = new TFCChild(
@@ -104,13 +106,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         childcareCost = BigDecimal(300.00),
         childcareCostPeriod = Periods.Monthly,
         dob = dateOfBirth,
-        disability = TFCDisability(disabled = true))(None)
+        disability = TFCDisability(disabled = true))(Some(ccConfig))
       val endWeek1stOfSeptemberDate = tfcEligibility.endWeek1stOfSeptemberDate(current, "england", child)
-      LocalDate.fromDateFields(endWeek1stOfSeptemberDate) shouldBe LocalDate.parse("2021-09-05", formatter)
+      ccConfig.toLocalDate(endWeek1stOfSeptemberDate) shouldBe LocalDate.parse("2021-09-05", formatter)
     }
 
     "determine end of Week following 1st September Date where child is disabled, dob after 1st Sept" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-09-12", formatter)
       val current = LocalDate.parse("2017-08-01", formatter)
       val child = new TFCChild(
@@ -118,9 +120,9 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         childcareCost = BigDecimal(300.00),
         childcareCostPeriod = Periods.Monthly,
         dob = dateOfBirth,
-        disability = TFCDisability(disabled = true))(None)
+        disability = TFCDisability(disabled = true))(Some(ccConfig))
       val endWeek1stOfSeptemberDate = tfcEligibility.endWeek1stOfSeptemberDate(current, "england", child)
-      LocalDate.fromDateFields(endWeek1stOfSeptemberDate) shouldBe LocalDate.parse("2022-09-04", formatter)
+      ccConfig.toLocalDate(endWeek1stOfSeptemberDate) shouldBe LocalDate.parse("2022-09-04", formatter)
     }
 
     "satisfyMinimumEarnings remaining checks" must {
@@ -188,7 +190,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "return a Future[TFCEligibilityOutput] result" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val today = LocalDate.parse("2016-08-27", formatter)
       val tfcEligibilityInput = TFCEligibilityInput(from = today, numberOfPeriods = 3, location = "england", claimants = List(), children = List())
       val result = tfcEligibility.eligibility(tfcEligibilityInput)
@@ -196,7 +198,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine claimant's eligibility if qualifies all rules" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val current = LocalDate.parse("2017-08-01", formatter)
       val claimant = testClaimant(hoursPerWeek = 3.50, disability = TFCDisability(), minimumEarnings = TFCMinimumEarnings(), age = None)
 
@@ -210,7 +212,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine claimant's and partner's eligibility if qualifies for all rules" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val current = LocalDate.parse("2017-08-01", formatter)
 
       val claimant = testClaimant(hoursPerWeek = 16.99,
@@ -232,7 +234,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine claimant's eligibility if claimant fails maximum earnings rule" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val claimantIncome = Some(TFCIncome(Some(1199999.0),Some(100.0),Some(100.0)))
       val claimant = testClaimant(currentIncome = claimantIncome,
         hoursPerWeek = 9.50,
@@ -249,7 +251,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine claimant's eligibility if partner fails max earnings rule" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val current = LocalDate.parse("2017-08-01", formatter)
       val claimantIncome = Some(TFCIncome(Some(99999.0),Some(100.0),Some(100.0)))
       val claimant2Income = Some(TFCIncome(Some(1199999.0),Some(100.0),Some(100.0)))
@@ -275,13 +277,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine periods(4 periods) based on from (claim date) and until date of TFC for eligible claimant" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2013-01-27", formatter)
       val from = LocalDate.parse("2016-10-15", formatter)
       val claimant = testClaimant(hoursPerWeek = 16.50,
         disability = TFCDisability(), minimumEarnings = TFCMinimumEarnings(), age = None)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability())
+        disability = TFCDisability(), Some(ccConfig))
       val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 4, location = "england", List(claimant), List(child))
 
       val result = tfcEligibility.determineTFCPeriods(tfc)
@@ -339,13 +341,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine periods(2 periods) based on from (claim date) and until date of TFC for eligible claimant" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
       val from = LocalDate.parse("2016-08-31", formatter)
       val claimant = testClaimant(hoursPerWeek = 16.50,
         disability = TFCDisability(), minimumEarnings = TFCMinimumEarnings(), age = None)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability())
+        disability = TFCDisability(), Some(ccConfig))
       val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 2, location = "england", List(claimant), List(child))
       val result = tfcEligibility.determineTFCPeriods(tfc)
 
@@ -382,14 +384,14 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine periods(1 period) based on from (claim date) and until date of TFC for failed partner eligibility(hours)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2003-08-27", formatter)
       val from = LocalDate.parse("2016-08-27", formatter)
       val claimant = testClaimant(hoursPerWeek = 16.50,
         disability = TFCDisability(), minimumEarnings = TFCMinimumEarnings(), age = None)
       val partner = testClaimant(hoursPerWeek = 5.50, isPartner = true,
         disability = TFCDisability(), minimumEarnings = TFCMinimumEarnings(), age = None)
-      val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = TFCDisability())
+      val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability = TFCDisability(), Some(ccConfig))
       val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 1, location = "england", List(claimant, partner), List(child))
       val result = tfcEligibility.determineTFCPeriods(tfc)
 
@@ -413,96 +415,96 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine child's start date in a TFC period where child is born on the period start date (in current period)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2016-08-01", formatter)
       val from = LocalDate.parse("2016-08-01", formatter)
       val until = LocalDate.parse("2016-11-01", formatter)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability())
+        disability = TFCDisability(), Some(ccConfig))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = tfcEligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
       result shouldBe Some(dateOfBirth)
     }
 
     "determine child's start date in a TFC period where child is yet to be born (in current period)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2016-08-27", formatter)
       val from = LocalDate.parse("2016-08-01", formatter)
       val until = LocalDate.parse("2016-11-01", formatter)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability())
+        disability = TFCDisability(), Some(ccConfig))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = tfcEligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
       result shouldBe Some(dateOfBirth)
     }
 
     "determine child's start date in a TFC period where child is yet to be born (after current period)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2016-12-27", formatter)
       val from = LocalDate.parse("2016-08-01", formatter)
       val until = LocalDate.parse("2016-11-01", formatter)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability())
+        disability = TFCDisability(), Some(ccConfig))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = tfcEligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
       result shouldBe None
     }
 
     "determine child's start date in a TFC period where child is eligible (in current period)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2013-12-27", formatter)
       val from = LocalDate.parse("2016-08-01", formatter)
       val until = LocalDate.parse("2016-11-01", formatter)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability())
+        disability = TFCDisability(), Some(ccConfig))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = tfcEligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
       result shouldBe Some(from)
     }
 
     "determine child's start date in a TFC period where child 11th birthday is in current period" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-12-27", formatter)
       val from = LocalDate.parse("2016-08-01", formatter)
       val until = LocalDate.parse("2016-11-01", formatter)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability())
+        disability = TFCDisability(), Some(ccConfig))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = tfcEligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
       result shouldBe Some(from)
     }
 
     "determine child's start date in a TFC period where child 11th birthday sept date is before current period" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2003-08-27", formatter)
       val from = LocalDate.parse("2016-08-01", formatter)
       val until = LocalDate.parse("2016-11-01", formatter)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability())
+        disability = TFCDisability(), Some(ccConfig))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = tfcEligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
       result shouldBe None
     }
 
     "determine child's start date in a TFC period where child 11th birthday sept date is after current period" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
       val from = LocalDate.parse("2016-04-01", formatter)
       val until = LocalDate.parse("2016-07-01", formatter)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability())
+        disability = TFCDisability(), Some(ccConfig))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = tfcEligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
       result shouldBe Some(from)
     }
 
     "determine child's start date in a TFC period where child 11th birthday sept date is within current period" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-04-27", formatter)
       val from = LocalDate.parse("2016-08-01", formatter)
       val until = LocalDate.parse("2016-11-01", formatter)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability())
+        disability = TFCDisability(), Some(ccConfig))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = tfcEligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
       result shouldBe Some(from)
@@ -510,112 +512,112 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
 
 
     "determine child's start date in a TFC period where child(disabled) 16th birthday sept date is within current period" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("1999-09-27", formatter)
       val from = LocalDate.parse("2016-09-06", formatter)
       val until = LocalDate.parse("2016-11-01", formatter)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability(disabled = true))
+        disability = TFCDisability(disabled = true), Some(ccConfig))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val childSeptDate = tfcEligibility.endWeek1stOfSeptemberDate(from, "england", child)
-      LocalDate.fromDateFields(childSeptDate) shouldBe LocalDate.parse("2016-09-04", formatter)
+      ccConfig.toLocalDate(childSeptDate) shouldBe LocalDate.parse("2016-09-04", formatter)
       val result = tfcEligibility.determineChildStartDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
       result shouldBe None
     }
 
     "determine child's end date in a TFC period where the birthday after period end date" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2016-11-27", formatter)
       val from = LocalDate.parse("2016-09-01", formatter)
       val until = LocalDate.parse("2016-11-01", formatter)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = tfcEligibility.determineChildEndDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
       result shouldBe None
     }
 
     "determine child's end date in a TFC period where the birthday is on period until date" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2016-11-01", formatter)
       val from = LocalDate.parse("2016-09-01", formatter)
       val until = LocalDate.parse("2016-11-01", formatter)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = tfcEligibility.determineChildEndDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
       result shouldBe None
     }
 
     "determine child's end date in a TFC period where the birthday is within the TFC period" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2016-10-01", formatter)
       val from = LocalDate.parse("2016-09-01", formatter)
       val until = LocalDate.parse("2016-11-01", formatter)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = tfcEligibility.determineChildEndDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
       result shouldBe Some(until)
     }
 
     "determine child's end date in a TFC period where the birthday is before TFC period start date" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2016-06-01", formatter)
       val from = LocalDate.parse("2016-09-01", formatter)
       val until = LocalDate.parse("2016-11-01", formatter)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = tfcEligibility.determineChildEndDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
       result shouldBe Some(until)
     }
 
     "determine child's end date in a TFC period where the 11th birthday sept date is after TFC period until date" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-06-01", formatter)
       val from = LocalDate.parse("2016-04-01", formatter)
       val until = LocalDate.parse("2016-07-01", formatter)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = tfcEligibility.determineChildEndDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
       result shouldBe Some(until)
     }
 
     "determine child's end date in a TFC period where the 11th birthday sept date is within TFC period" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-06-01", formatter)
       val from = LocalDate.parse("2016-08-01", formatter)
       val until = LocalDate.parse("2016-11-01", formatter)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val childSeptDate = tfcEligibility.endWeek1stOfSeptemberDate(from, "england", child)
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = tfcEligibility.determineChildEndDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
-      result shouldBe Some(LocalDate.fromDateFields(childSeptDate))
+      result shouldBe Some(ccConfig.toLocalDate(childSeptDate))
     }
 
     "determine child's end date in a TFC period where the 11th birthday sept date is before TFC period" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-06-01", formatter)
       val from = LocalDate.parse("2016-10-01", formatter)
       val until = LocalDate.parse("2017-01-01", formatter)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val tfcPeriod = TFCPeriod(from = from, until = until, periodEligibility = false, claimants = List(), children = List())
       val result = tfcEligibility.determineChildEndDateInTFCPeriod(child, tfcPeriod.from, tfcPeriod.until, "england")
       result shouldBe None
     }
 
     "determine periods(2 period) based on from (claim date) and until date of TFC for one eligible child" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2003-08-27", formatter)
       val from = LocalDate.parse("2016-08-27", formatter)
       val claimant = testClaimant(hoursPerWeek = 16.50, isPartner = false,
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
       val child = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val tfc = TFCEligibilityInput(from = from, 1, location = "england", List(claimant), List(child))
       val result = tfcEligibility.determineTFCPeriods(tfc)
 
@@ -637,12 +639,12 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "populate child output model for eligible child" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2003-08-27", formatter)
       val from = LocalDate.parse("2016-08-27", formatter)
       val until = LocalDate.parse("2016-11-27", formatter)
       val child = testChild(id = 2, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val result = tfcEligibility.determineChildrenEligibility(List(child), from, until, "england")
 
       result shouldBe List(
@@ -660,16 +662,16 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine child eligibility for 1 period - for 2 children where 1 child is disabled" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirthChild1 = LocalDate.parse("2003-07-27", formatter)
       val dateOfBirthChild2 = LocalDate.parse("2005-08-21", formatter)
       val from = LocalDate.parse("2016-09-27", formatter)
       val claimant = testClaimant(hoursPerWeek = 16.50, isPartner = false,
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
       val child1 = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
-        disability = TFCDisability(disabled = true, severelyDisabled = false))
+        disability = TFCDisability(disabled = true, severelyDisabled = false), Some(ccConfig))
       val child2 = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val tfc = TFCEligibilityInput(from = from, 1, location = "england", List(claimant), List(child1, child2))
       val result = tfcEligibility.determineTFCPeriods(tfc)
 
@@ -694,7 +696,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine child eligibility-2 period - 3 children - 1 child is disabled & eligible, 1 - not eligible and 1 child - eligible for 1 period" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirthChild1 = LocalDate.parse("2002-07-27", formatter)
       val dateOfBirthChild2 = LocalDate.parse("2016-12-21", formatter)
       val dateOfBirthChild3 = LocalDate.parse("2005-08-21", formatter)
@@ -702,11 +704,11 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val claimant = testClaimant(hoursPerWeek = 16.50, isPartner = false,
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
       val child1 = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val child2 = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val child3 = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild3,
-        disability = TFCDisability(disabled = true, severelyDisabled = false))
+        disability = TFCDisability(disabled = true, severelyDisabled = false), Some(ccConfig))
       val tfc = TFCEligibilityInput(from = from, 2, location = "england", List(claimant), List(child1, child2, child3))
       val result = tfcEligibility.determineTFCPeriods(tfc)
 
@@ -749,7 +751,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine child eligibility-8 periods - 3 children " in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirthChild1 = LocalDate.parse("2005-07-01", formatter)
       val dateOfBirthChild2 = LocalDate.parse("2001-05-10", formatter)
       val dateOfBirthChild3 = LocalDate.parse("2018-02-15", formatter)
@@ -757,11 +759,11 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val claimant = testClaimant(hoursPerWeek = 16.50, isPartner = false,
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
       val child1 = testChild(id = 1, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val child2 = testChild(id = 2, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
-        disability = TFCDisability(disabled = true, severelyDisabled = false))
+        disability = TFCDisability(disabled = true, severelyDisabled = false), Some(ccConfig))
       val child3 = testChild(id = 3, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild3,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val tfc = TFCEligibilityInput(from = from, 8, location = "england", List(claimant), List(child1, child2, child3))
       val result = tfcEligibility.determineTFCPeriods(tfc)
 
@@ -903,7 +905,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine child eligibility-4 periods - 2 children " in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirthChild1 = LocalDate.parse("2005-07-01", formatter)
       val dateOfBirthChild2 = LocalDate.parse("2001-05-10", formatter)
 
@@ -911,9 +913,9 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val claimant = testClaimant(hoursPerWeek = 16.50, isPartner = false,
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
       val child1 = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val child2 = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
-        disability = TFCDisability(disabled = true, severelyDisabled = false))
+        disability = TFCDisability(disabled = true, severelyDisabled = false), Some(ccConfig))
 
       val tfc = TFCEligibilityInput(from = from, 4, location = "england", List(claimant), List(child1, child2))
       val result = tfcEligibility.determineTFCPeriods(tfc)
@@ -983,7 +985,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine child eligibility-6 periods - 3 children " in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirthChild1 = LocalDate.parse("2002-10-11", formatter)
       val dateOfBirthChild2 = LocalDate.parse("2003-09-17", formatter)
       val dateOfBirthChild3 = LocalDate.parse("2011-03-18", formatter)
@@ -991,11 +993,11 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val claimant = testClaimant(hoursPerWeek = 16.50, isPartner = false,
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
       val child1 = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val child2 = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
-        disability = TFCDisability(disabled = true, severelyDisabled = false))
+        disability = TFCDisability(disabled = true, severelyDisabled = false), Some(ccConfig))
       val child3 = testChild(id = 0, childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild3,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val tfc = TFCEligibilityInput(from = from, 6, location = "england", List(claimant), List(child1, child2, child3))
       val result = tfcEligibility.determineTFCPeriods(tfc)
 
@@ -1102,7 +1104,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine child eligibility-3 periods - 2 children " in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirthChild1 = LocalDate.parse("2006-07-01", formatter)
       val dateOfBirthChild2 = LocalDate.parse("2003-05-10", formatter)
 
@@ -1113,9 +1115,9 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
 
       val child1 = testChild(id = 0,  childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val child2 = testChild(id = 0,  childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
-        disability = TFCDisability(disabled = true, severelyDisabled = false))
+        disability = TFCDisability(disabled = true, severelyDisabled = false), Some(ccConfig))
 
       val tfc = TFCEligibilityInput(from = from, 3, location = "england", List(claimant, claimant1), List(child1, child2))
       val result = tfcEligibility.determineTFCPeriods(tfc)
@@ -1173,7 +1175,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine child eligibility-5 periods - 3 children " in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirthChild1 = LocalDate.parse("2005-10-11", formatter)
       val dateOfBirthChild2 = LocalDate.parse("2006-10-17", formatter)
       val dateOfBirthChild3 = LocalDate.parse("2018-03-18", formatter)
@@ -1185,11 +1187,11 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
 
       val child1 = testChild(id = 0,  childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
-        disability = TFCDisability(disabled = true, severelyDisabled = false))
+        disability = TFCDisability(disabled = true, severelyDisabled = false), Some(ccConfig))
       val child2 = testChild(id = 0,  childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val child3 = testChild(id = 0,  childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild3,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val tfc = TFCEligibilityInput(from = from, 5, location = "england", List(claimant, claimant1), List(child1, child2, child3))
       val result = tfcEligibility.determineTFCPeriods(tfc)
 
@@ -1286,16 +1288,16 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine child eligibility-7 periods - 2 children " in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirthChild1 = LocalDate.parse("2007-06-15", formatter)
       val dateOfBirthChild2 = LocalDate.parse("2009-01-01", formatter)
       val from = LocalDate.parse("2016-01-15", formatter)
       val claimant = testClaimant(hoursPerWeek = 16.50, isPartner = false,
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
       val child1 = testChild(id = 0,  childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
-        disability = TFCDisability(disabled = true, severelyDisabled = false))
+        disability = TFCDisability(disabled = true, severelyDisabled = false), Some(ccConfig))
       val child2 = testChild(id = 0,  childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val tfc = TFCEligibilityInput(from = from, 7, location = "england", List(claimant), List(child1, child2))
       val result = tfcEligibility.determineTFCPeriods(tfc)
 
@@ -1404,16 +1406,16 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine child eligibility-8 periods - 2 children (both disabled) " in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirthChild1 = LocalDate.parse("2005-07-01", formatter)
       val dateOfBirthChild2 = LocalDate.parse("2000-12-10", formatter)
       val from = LocalDate.parse("2016-07-31", formatter)
       val claimant = testClaimant(hoursPerWeek = 16.50, isPartner = false,
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
       val child1 = testChild(id = 0,  childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
-        disability = TFCDisability(disabled = true, severelyDisabled = false))
+        disability = TFCDisability(disabled = true, severelyDisabled = false), Some(ccConfig))
       val child2 = testChild(id = 0,  childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
-        disability = TFCDisability(disabled = true, severelyDisabled = false))
+        disability = TFCDisability(disabled = true, severelyDisabled = false), Some(ccConfig))
       val tfc = TFCEligibilityInput(from = from, 8, location = "england", List(claimant), List(child1, child2))
       val result = tfcEligibility.determineTFCPeriods(tfc)
 
@@ -1538,7 +1540,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine child eligibility-4 periods - 2 children - both do not qualify" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirthChild1 = LocalDate.parse("2002-07-01", formatter)
       val dateOfBirthChild2 = LocalDate.parse("2017-06-01", formatter)
 
@@ -1546,9 +1548,9 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val claimant = testClaimant(hoursPerWeek = 16.50, isPartner = false,
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
       val child1 = testChild(id = 0,  childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
       val child2 = testChild(id = 0,  childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
-        disability = TFCDisability(disabled = false, severelyDisabled = false))
+        disability = TFCDisability(disabled = false, severelyDisabled = false), Some(ccConfig))
 
       val tfc = TFCEligibilityInput(from = from, 4, location = "england", List(claimant), List(child1, child2))
       val result = tfcEligibility.determineTFCPeriods(tfc)
@@ -1616,7 +1618,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine child eligibility-4 periods - 2 children - both disabled - both do not qualify" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirthChild1 = LocalDate.parse("1999-07-01", formatter)
       val dateOfBirthChild2 = LocalDate.parse("1994-06-01", formatter)
 
@@ -1624,9 +1626,9 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val claimant = testClaimant(hoursPerWeek = 16.50, isPartner = false,
         disability = TFCDisability(), carersAllowance = false, minimumEarnings = TFCMinimumEarnings(), age = None)
       val child1 = testChild(id = 0,  childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild1,
-        disability = TFCDisability(disabled = true, severelyDisabled = false))
+        disability = TFCDisability(disabled = true, severelyDisabled = false), Some(ccConfig))
       val child2 = testChild(id = 0,  childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirthChild2,
-        disability = TFCDisability(disabled = true, severelyDisabled = false))
+        disability = TFCDisability(disabled = true, severelyDisabled = false), Some(ccConfig))
 
       val tfc = TFCEligibilityInput(from = from, 4, location = "england", List(claimant), List(child1, child2))
       val result = tfcEligibility.determineTFCPeriods(tfc)
@@ -1694,7 +1696,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine period eligibility for 1 period - 1 qualifying child" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = false, isPartner = false)
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
@@ -1708,7 +1710,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
 
 
     "determine period eligibility for 1 period - 1 qualifying child, partner exists " in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val outputClaimant1 = TFCOutputClaimant(qualifying = true, isPartner = true)
 
@@ -1723,7 +1725,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine period eligibility for 1 period - 1 qualifying child, partner exists does not qualify " in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val outputClaimant1 = TFCOutputClaimant(qualifying = false, isPartner = true)
 
@@ -1738,7 +1740,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine period eligibility for 1 period - 1 qualifying child, partner exists, claimant does not qualify " in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = false, isPartner = false)
       val outputClaimant1 = TFCOutputClaimant(qualifying = true, isPartner = true)
 
@@ -1753,7 +1755,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine period eligibility for 1 period - 1 child, not qualifying, partner not qualifying, claimant does not qualify " in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = false, isPartner = false)
       val outputClaimant1 = TFCOutputClaimant(qualifying = false, isPartner = true)
 
@@ -1768,7 +1770,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine period eligibility for 1 period - 1 child, not qualifying, 1 partner qualifying " in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = false, isPartner = false)
       val outputClaimant1 = TFCOutputClaimant(qualifying = true, isPartner = true)
 
@@ -1783,7 +1785,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine period eligibility for 1 period - no qualifying child and non qual claimant" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = false, isPartner = false)
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
@@ -1797,7 +1799,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
 
 
     "determine period eligibility for 1 period - 1 qualifying child and qual claimant" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
@@ -1810,7 +1812,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine period eligibility for 1 period - non qualifying child and qualifying claimant with weekly cost" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
@@ -1823,7 +1825,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine period eligibility for 1 period - non qualifying child and qualifying claimant" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
@@ -1836,7 +1838,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine period eligibility for 1 period - 2 children, both qualifying" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
@@ -1851,7 +1853,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine period eligibility for 1 period - 2 children, both non qualifying" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
@@ -1866,7 +1868,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine period eligibility for 1 period - 2 children, one qualifying" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1 = LocalDate.parse("2016-09-27", formatter)
       val untilPeriod1 = LocalDate.parse("2016-12-27", formatter)
@@ -1881,7 +1883,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine period eligibility for 1 period - 2 children, one qualifying, one claimaint qualifying" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val outputClaimant1 = TFCOutputClaimant(qualifying = false, isPartner = false)
 
@@ -1898,7 +1900,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine period eligibility for 1 period - 2 children, one qualifying, both claimaints qualifying" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val outputClaimant1 = TFCOutputClaimant(qualifying = true, isPartner = false)
 
@@ -1915,7 +1917,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine period eligibility for 1 period - 3 children, all qualifying, both claimaints qualifying" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val outputClaimant1 = TFCOutputClaimant(qualifying = true, isPartner = false)
 
@@ -1934,7 +1936,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine period eligibility for 1 period - 3 children, all non qualifying, both claimaints qualifying" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val outputClaimant1 = TFCOutputClaimant(qualifying = true, isPartner = false)
 
@@ -1953,7 +1955,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine household if claimant fails eligibility" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
       val from = LocalDate.parse("2016-03-30", formatter)
       val claimantIncome = Some(TFCIncome(Some(1199999.0),Some(100.0),Some(100.0)))
@@ -1962,7 +1964,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         disability = TFCDisability(), minimumEarnings = TFCMinimumEarnings(), age = None)
       val child = testChild(id = 0,  childCareCost = BigDecimal(200.00),
         childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability())
+        disability = TFCDisability(), Some(ccConfig))
       val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 1, location = "england", List(claimant), List(child))
       val result = await(tfcEligibility.eligibility(tfc))
 
@@ -1977,13 +1979,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine household if claimant has eligibility - 2 periods" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2005-08-27", formatter)
       val from = LocalDate.parse("2016-06-30", formatter)
       val claimant = testClaimant(hoursPerWeek = 16.50,
         disability = TFCDisability(), minimumEarnings = TFCMinimumEarnings(), age = None)
       val child = testChild(id = 0,  childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability())
+        disability = TFCDisability(), Some(ccConfig))
       val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 2, location = "england", List(claimant), List(child))
       val result = await(tfcEligibility.eligibility(tfc))
 
@@ -2017,13 +2019,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine household if claimant and child has eligibility - 2 periods" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2006-08-27", formatter)
       val from = LocalDate.parse("2016-06-30", formatter)
       val claimant = testClaimant(hoursPerWeek = 16.50,
         disability = TFCDisability(), minimumEarnings = TFCMinimumEarnings(), age = None)
       val child = testChild(id = 0,  childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability())
+        disability = TFCDisability(), Some(ccConfig))
       val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 2, location = "england", List(claimant), List(child))
       val result = await(tfcEligibility.eligibility(tfc))
 
@@ -2056,13 +2058,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
     }
 
     "determine household if claimant has eligibility and child does not have eligibility- 3 periods" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2002-08-27", formatter)
       val from = LocalDate.parse("2016-06-30", formatter)
       val claimant = testClaimant(hoursPerWeek = 16.50,
         disability = TFCDisability(), minimumEarnings = TFCMinimumEarnings(amount = 120.0), maximumEarnings =  Some(false), age = None)
       val child = testChild(id = 0,  childCareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth,
-        disability = TFCDisability())
+        disability = TFCDisability(), Some(ccConfig))
       val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 3, location = "england", List(claimant), List(child))
       val result = await(tfcEligibility.eligibility(tfc))
 

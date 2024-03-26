@@ -18,12 +18,10 @@ package models.input.tc
 
 import javax.inject.Inject
 import models.input.BaseChild
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import play.api.Play
 import play.api.i18n.Lang
 import play.api.libs.functional.syntax._
-import play.api.libs.json.JodaReads._
-import play.api.libs.json.JodaWrites._
 import play.api.libs.json._
 import utils.Periods.Period
 import utils.{CCConfig, Periods, TCConfig}
@@ -120,9 +118,9 @@ case class TCChild @Inject() (
     val ageIncrease = taxYearConfig.youngAdultAgeLimit
     val childsBirthday = childsBirthdayDateForAge(ageIncrease)
 
-    val requiresSplit = childsBirthday.after(taxYear.from.toDate) && childsBirthday.before(taxYear.until.toDate)
+    val requiresSplit = childsBirthday.after(ccConfig.get.toDate(taxYear.from)) && childsBirthday.before(ccConfig.get.toDate(taxYear.until))
 
-    (requiresSplit, LocalDate.fromDateFields(childsBirthday))
+    (requiresSplit, ccConfig.get.toLocalDate(childsBirthday))
   }
 
   def getsDisabilityElement(periodStart: LocalDate): Boolean = {
@@ -139,8 +137,8 @@ case class TCChild @Inject() (
     val childAge = age(periodStart)
 
     val child16Birthday = childsBirthdayDateForAge(years = threshold16)
-    val september1stFollowing16thBirthday = tCConfig.get.config.september1stFollowingChildBirthday(LocalDate.fromDateFields(child16Birthday))
-    val septemberRule = periodStart.toDate.before(september1stFollowing16thBirthday.toDate)
+    val september1stFollowing16thBirthday = tCConfig.get.config.september1stFollowingChildBirthday(ccConfig.get.toLocalDate(child16Birthday))
+    val septemberRule = ccConfig.get.toDate(periodStart).before(ccConfig.get.toDate(september1stFollowing16thBirthday))
 
     // child is born > -1 && hasn't passed their 16th birthday september checkpoint
     childAge > -1 && septemberRule
@@ -163,7 +161,7 @@ case class TCChild @Inject() (
           val childsStartEducationAgeLimit: Int = taxYearConfig.childAgeLimitEducation
           val childs19thBirthday = childsBirthdayDateForAge(years = childsStartEducationAgeLimit)
           val educationStartDate = x.startDate
-          educationStartDate.toDate.before(childs19thBirthday)
+          ccConfig.get.toDate(educationStartDate).before(childs19thBirthday)
         } else {
           false
         }
@@ -181,13 +179,13 @@ case class TCChild @Inject() (
     val child16Birthday = childsBirthdayDateForAge(years = threshold16)
     val child15Birthday = childsBirthdayDateForAge(years = threshold15)
 
-    val september1stFollowing16thBirthday = tCConfig.get.config.september1stFollowingChildBirthday(LocalDate.fromDateFields(child16Birthday))
-    val september1stFollowing15thBirthday = tCConfig.get.config.september1stFollowingChildBirthday(LocalDate.fromDateFields(child15Birthday))
+    val september1stFollowing16thBirthday = tCConfig.get.config.september1stFollowingChildBirthday(ccConfig.get.toLocalDate(child16Birthday))
+    val september1stFollowing15thBirthday = tCConfig.get.config.september1stFollowingChildBirthday(ccConfig.get.toLocalDate(child15Birthday))
 
-    val disabledBirthdayRule = periodStart.toDate.before(september1stFollowing16thBirthday.toDate)
+    val disabledBirthdayRule = ccConfig.get.toDate(periodStart).before(ccConfig.get.toDate(september1stFollowing16thBirthday))
     val disabledAgeRule = childAge > -1 && childAge <= threshold16
 
-    val birthdayRule = periodStart.toDate.before(september1stFollowing15thBirthday.toDate)
+    val birthdayRule = ccConfig.get.toDate(periodStart).before(ccConfig.get.toDate(september1stFollowing15thBirthday))
     val abledAgeRule = childAge > -1 && childAge <= threshold15
 
     if (isDisabled) {

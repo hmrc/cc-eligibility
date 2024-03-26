@@ -17,7 +17,8 @@
 package controllers
 
 import models.input.tfc._
-import org.joda.time.LocalDate
+
+import java.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatest.Suite
 import org.scalatestplus.mockito.MockitoSugar
@@ -25,15 +26,15 @@ import play.api.mvc.{AnyContent, ControllerComponents, DefaultMessagesActionBuil
 import play.api.test.Helpers.{stubBodyParser, stubMessagesApi}
 import service.AuditEvents
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.{CCConfigSpec, Periods, TCConfig, TFCConfig}
-import java.nio.charset.Charset
+import utils.{CCConfig, CCConfigSpec, Periods, TCConfig, TFCConfig}
 
-import akka.stream.Materializer
-import akka.util.ByteString
+import java.nio.charset.Charset
+import org.apache.pekko.stream.Materializer
+import org.apache.pekko.util.ByteString
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 
-import scala.language.implicitConversions
+import scala.language.{implicitConversions, postfixOps}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -80,9 +81,10 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
                  childCareCost: BigDecimal,
                  childcareCostPeriod: Periods.Period = Periods.Monthly,
                  dob: LocalDate,
-                 disability: TFCDisability
+                 disability: TFCDisability,
+                 ccConfig: Option[CCConfig] = None
                ): TFCChild = {
-    new TFCChild(id, childCareCost, childcareCostPeriod, dob, disability)(None)
+    new TFCChild(id, childCareCost, childcareCostPeriod, dob, disability)(ccConfig)
   }
 
   def jsonBodyOf(result: Result)(implicit mat: Materializer): JsValue = {

@@ -18,12 +18,14 @@ package utils
 
 import controllers.FakeCCEligibilityApplication
 import models.input.tc.TCTaxYear
-import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
+
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import org.mockito.Mockito.when
 import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import scala.collection.JavaConverters.asScalaBufferConverter
+
+import scala.jdk.CollectionConverters.ListHasAsScala
 
 class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
 
@@ -88,7 +90,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
   "TCSchemeConfig" must {
 
     "return 1st september date for current tax year date (as TC TAX YEAR)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val from = LocalDate.parse("2015-06-20", formatter)
       val until = LocalDate.parse("2016-04-05", formatter)
 
@@ -102,7 +104,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
     }
 
     "return prior 1st september date for current tax year date (as TC TAX YEAR)" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val from = LocalDate.parse("2015-06-20", formatter)
       val until = LocalDate.parse("2016-04-05", formatter)
 
@@ -116,25 +118,25 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
     }
 
     "(child birthday is before september 1st) return September 1st following child's birthday" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val birthday = LocalDate.parse("2015-06-20", formatter)
       tccConfig.config.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2015-09-01", formatter)
     }
 
     "(child birthday is after september 1st) return September 1st following child's birthday" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val birthday = LocalDate.parse("2015-09-02", formatter)
       tccConfig.config.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2016-09-01", formatter)
     }
 
     "(child birthday is on september 1st) return September 1st following child's birthday" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val birthday = LocalDate.parse("2015-09-01", formatter)
       tccConfig.config.september1stFollowingChildBirthday(childBirthday = birthday) shouldBe LocalDate.parse("2016-09-01", formatter)
     }
 
     "(after april before december) determine the correct tax year for a date" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val today = LocalDate.parse("2016-06-20", formatter)
 
       val taxYear = tccConfig.config.determineTaxYearFromNow(from = today)
@@ -142,7 +144,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
     }
 
     "(after december before april) determine the correct tax year for a date" in {
-      val formatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val today = LocalDate.parse("2016-02-20", formatter)
 
       val taxYear = tccConfig.config.determineTaxYearFromNow(from = today)
@@ -150,7 +152,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
     }
 
     "get default Tax Year Config" in {
-      val configs: Seq[Configuration] = app.configuration.underlying.getConfigList("tc.rule-change").asScala.map(Configuration(_))
+      val configs: Seq[Configuration] = app.configuration.underlying.getConfigList("tc.rule-change").asScala.map(Configuration(_)).toSeq
       val defaultTaxYearConfig = tccConfig.getTCConfigDefault(configs)
 
       val tcTaxYearConfig = tccConfig.getTCTaxYearConfig(defaultTaxYearConfig)
@@ -168,7 +170,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
 
     "return default tax year rule" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val current = LocalDate.parse("01-01-2014", formatter)
 
       val result = tccConfig.getConfig(current)
@@ -187,7 +189,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
 
     "return 2018 tax year rule as 2017" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val current = LocalDate.parse("01-01-2018", formatter)
 
       val result = tccConfig.getConfig(current)
@@ -205,7 +207,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
 
     "return 2017 tax year rule" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val current = LocalDate.parse("01-08-2017", formatter)
 
       val result = tccConfig.getConfig(current)
@@ -223,7 +225,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
 
     "return 2017 tax year rule on the date of change" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val current = LocalDate.parse("06-04-2017", formatter)
 
       val result = tccConfig.getConfig(current)
@@ -241,7 +243,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
 
     "return 2016 tax year rule" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val current = LocalDate.parse("01-08-2016", formatter)
 
       val result = tccConfig.getConfig(current)
@@ -259,7 +261,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
 
     "return 2016 tax year rule on the date of change" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val current = LocalDate.parse("06-04-2016", formatter)
 
       val result = tccConfig.getConfig(current)
@@ -277,7 +279,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
 
     "return 2015 tax year rule" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val current = LocalDate.parse("01-08-2015", formatter)
 
       val result = tccConfig.getConfig(current)
@@ -295,7 +297,7 @@ class TCSchemeConfigSpec extends FakeCCEligibilityApplication {
 
     "return 2015 tax year rule on the date of change" in {
       val pattern = "dd-MM-yyyy"
-      val formatter = DateTimeFormat.forPattern(pattern)
+      val formatter = DateTimeFormatter.ofPattern(pattern)
       val current = LocalDate.parse("06-04-2015", formatter)
 
       val result = tccConfig.getConfig(current)

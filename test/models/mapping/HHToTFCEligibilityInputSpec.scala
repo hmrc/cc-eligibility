@@ -20,7 +20,7 @@ import controllers.FakeCCEligibilityApplication
 import models._
 import models.input.tfc._
 import models.mappings._
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import utils.{CCConfig, Periods, TCConfig, TFCConfig}

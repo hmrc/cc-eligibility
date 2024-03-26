@@ -19,7 +19,7 @@ package models.mappings
 import javax.inject.Inject
 import models._
 import models.input.tc._
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import utils.{CCConfig, HelperManager, TCConfig}
 
 class HHToTCEligibilityInput @Inject()(val cCConfig: CCConfig, tcConfig: TCConfig) extends PeriodEnumToPeriod with HelperManager {
@@ -84,7 +84,7 @@ class HHToTCEligibilityInput @Inject()(val cCConfig: CCConfig, tcConfig: TCConfi
 
   private def createClaimant(claimant: Claimant, isPartner: Boolean): TCClaimant = {
     TCClaimant(
-      hoursPerWeek = claimant.hours.getOrElse(BigDecimal(0.0)).doubleValue(),
+      hoursPerWeek = claimant.hours.getOrElse(BigDecimal(0.0)).doubleValue,
       isPartner = isPartner,
       disability = TCDisability(claimant.benefits.exists(_.disabilityBenefits), claimant.benefits.exists(_.highRateDisabilityBenefits)),
       carersAllowance = claimant.benefits.exists(_.carersAllowance),

@@ -17,12 +17,12 @@
 package eligibility
 
 import java.text.SimpleDateFormat
-
 import controllers.FakeCCEligibilityApplication
 import models.input.freeEntitlement.FreeEntitlementEligibilityInput
 import models.input.tfc._
 import models.output.tfc.TFCEligibilityOutput
-import org.joda.time.LocalDate
+
+import java.time.LocalDate
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.prop.TableDrivenPropertyChecks._
@@ -32,9 +32,10 @@ import play.api.Configuration
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import utils.{CCConfig, Periods}
-
 import org.scalatest.wordspec.AnyWordSpec
 
+import java.time.ZoneId.systemDefault
+import java.util.Date
 import scala.concurrent.{ExecutionContext, Future}
 
 class FreeEntitlementEligibilitySpec extends AnyWordSpec with FakeCCEligibilityApplication with MockitoSugar {
@@ -197,6 +198,7 @@ class FreeEntitlementEligibilitySpec extends AnyWordSpec with FakeCCEligibilityA
     when(mockConfig.loadConfigByType("free-hours")).thenReturn(Configuration(("thirty.england", "3,4")))
     when(mockConfig.loadConfigByType("free-hours-rollout")).thenReturn(Configuration(("born-on-after", "01-04-2013")))
     when(mockConfig.dateFormat).thenReturn(new SimpleDateFormat("dd-MM-yyyy"))
+    when(mockConfig.toDate(any[LocalDate])).thenReturn(Date.from(now.minusYears(3).atStartOfDay(systemDefault).toInstant))
     when(mockTFCE.eligibility(any[models.input.tfc.TFCEligibilityInput])(any[HeaderCarrier]))
       .thenReturn( Future.successful(
         TFCEligibilityOutput(
@@ -225,7 +227,7 @@ class FreeEntitlementEligibilitySpec extends AnyWordSpec with FakeCCEligibilityA
         childcareCostPeriod = Periods.Monthly,
         dob = now.minusYears(3),
         disability = TFCDisability()
-      )(None)
+      )(Some(mockConfig))
     ))
 
     val result = await(freeEntitlementService.thirtyHours(tfcRequest))

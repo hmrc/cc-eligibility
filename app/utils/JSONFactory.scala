@@ -23,17 +23,17 @@ object JSONFactory extends JSONFactory
 
 trait JSONFactory {
 
-  def generateErrorJSON(status: Int, errors: Either[Seq[(JsPath, Seq[JsonValidationError])], Exception]): JsObject = {
+  def generateErrorJSON(status: Int, errors: Either[collection.Seq[(JsPath, collection.Seq[JsonValidationError])], Exception]): JsObject = {
     errors match {
       case Left(e) =>
-        val errorsSequence = errorBuilder(e)
+        val errorsSequence = errorBuilder(e.toSeq)
         Json.obj("status" -> status, "errors" -> errorsSequence)
       case Right(e) =>
         Json.obj("status" -> status, "error" -> s"${e.getMessage}")
     }
   }
 
-  def errorBuilder(errors: Seq[(JsPath, Seq[JsonValidationError])]): JsArray = {
+  def errorBuilder(errors: Seq[(JsPath, collection.Seq[JsonValidationError])]): JsArray = {
     if(errors.nonEmpty) {
         JsArray(
           errors.map {
