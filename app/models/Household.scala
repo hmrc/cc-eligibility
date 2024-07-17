@@ -22,7 +22,7 @@ import models.EmploymentStatusEnum.EmploymentStatusEnum
 import models.LocationEnum.LocationEnum
 import models.PeriodEnum.PeriodEnum
 import models.YesNoUnsureEnum.YesNoUnsureEnum
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 import java.time.LocalDate
 
@@ -34,7 +34,7 @@ case class StatutoryIncome(
                           )
 
 object StatutoryIncome {
-  implicit val formatStatutoryIncome = Json.format[StatutoryIncome]
+  implicit val formatStatutoryIncome: OFormat[StatutoryIncome] = Json.format[StatutoryIncome]
 }
 
 case class Income(
@@ -47,7 +47,7 @@ case class Income(
                  )
 
 object Income {
-  implicit val formatIncome = Json.format[Income]
+  implicit val formatIncome: OFormat[Income] = Json.format[Income]
 }
 
 case class Benefits(
@@ -58,7 +58,7 @@ case class Benefits(
                    )
 
 object Benefits {
-  implicit val formatBenefits = Json.format[Benefits]
+  implicit val formatBenefits: OFormat[Benefits] = Json.format[Benefits]
 }
 
 case class MinimumEarnings(
@@ -68,7 +68,7 @@ case class MinimumEarnings(
                           )
 
 object MinimumEarnings {
-  implicit val formatMinimumEarnings = Json.format[MinimumEarnings]
+  implicit val formatMinimumEarnings: OFormat[MinimumEarnings] = Json.format[MinimumEarnings]
 }
 
 case class Disability(
@@ -78,7 +78,7 @@ case class Disability(
                      )
 
 object Disability {
-  implicit val formatDisability = Json.format[Disability]
+  implicit val formatDisability: OFormat[Disability] = Json.format[Disability]
 }
 
 case class ChildCareCost(
@@ -87,7 +87,7 @@ case class ChildCareCost(
                         )
 
 object ChildCareCost {
-  implicit val formatChildCareCost = Json.format[ChildCareCost]
+  implicit val formatChildCareCost: OFormat[ChildCareCost] = Json.format[ChildCareCost]
 }
 
 case class Education(
@@ -96,7 +96,7 @@ case class Education(
                     )
 
 object Education {
-  implicit val formatEducation = Json.format[Education]
+  implicit val formatEducation: OFormat[Education] = Json.format[Education]
 }
 
 case class Child(
@@ -109,7 +109,7 @@ case class Child(
                 )
 
 object Child {
-  implicit val formatChild = Json.format[Child]
+  implicit val formatChild: OFormat[Child] = Json.format[Child]
 }
 
 case class Claimant(
@@ -124,7 +124,7 @@ case class Claimant(
                    )
 
 object Claimant {
-  implicit val formatClaimant = Json.format[Claimant]
+  implicit val formatClaimant: OFormat[Claimant] = Json.format[Claimant]
 }
 
 case class Household(
@@ -136,5 +136,5 @@ case class Household(
                     )
 
 object Household {
-  implicit val formatHousehold = Json.format[Household]
+  implicit val formatHousehold: OFormat[Household] = Json.format[Household]
 }

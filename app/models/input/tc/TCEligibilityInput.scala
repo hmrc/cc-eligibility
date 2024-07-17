@@ -16,15 +16,15 @@
 
 package models.input.tc
 
-import javax.inject.Inject
 import models.input.BaseChild
-import java.time.LocalDate
-import play.api.Play
 import play.api.i18n.Lang
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import utils.Periods.Period
 import utils.{CCConfig, Periods, TCConfig}
+
+import java.time.LocalDate
+import javax.inject.Inject
 
 case class TCDisability(
                          disabled: Boolean,
@@ -261,7 +261,7 @@ case class TCTaxYear (
                       children: List[TCChild]
                       ) (tCConfig: Option[TCConfig]) extends models.input.BaseTaxYear() {
 
-  def createNewWithConfig(taxYear: TCTaxYear, tcConfigIn: TCConfig, ccConfigIn: CCConfig) = {
+  def createNewWithConfig(taxYear: TCTaxYear, tcConfigIn: TCConfig, ccConfigIn: CCConfig): TCTaxYear = {
 
     val childList = taxYear.children.map(x => x.createNewWithConfig(x, tcConfigIn, ccConfigIn))
     val claimaintList = taxYear.claimants.map(x => x.createNewWithConfig(x, tcConfigIn))
@@ -410,7 +410,7 @@ case class TCEligibilityInput(
                                )
 
 object TCEligibilityInput {
-  def validateTaxYear(taxYears: List[TCTaxYear]): Boolean = taxYears.nonEmpty
+  private def validateTaxYear(taxYears: List[TCTaxYear]): Boolean = taxYears.nonEmpty
 
   implicit val tcEligibilityReads: Reads[TCEligibilityInput] =
     (JsPath \ "taxYears").read[List[TCTaxYear]]

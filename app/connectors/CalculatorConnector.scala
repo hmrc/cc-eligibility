@@ -20,7 +20,7 @@ import config.ApplicationConfig
 import javax.inject.Inject
 import models.input.CalculatorOutput
 import models.output.CalculatorInput
-import uk.gov.hmrc.http.{HeaderCarrier}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 import scala.concurrent.{ExecutionContext, Future}

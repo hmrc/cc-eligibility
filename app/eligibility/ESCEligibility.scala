@@ -55,11 +55,10 @@ class ESCEligibility @Inject()(config: CCConfig)(implicit ec: ExecutionContext) 
   }
 
   def numberOfQualifyingMonthsForPeriod(qualifying: Boolean, periodStart: LocalDate, periodEnd: LocalDate): Int = {
-    qualifying match {
-      case true =>
-        (periodEnd.getYear - periodStart.getYear) * 12 + (periodEnd.getMonthValue - periodStart.getMonthValue)
-      case _ =>
-        0
+    if (qualifying) {
+      (periodEnd.getYear - periodStart.getYear) * 12 + (periodEnd.getMonthValue - periodStart.getMonthValue)
+    } else {
+      0
     }
   }
 

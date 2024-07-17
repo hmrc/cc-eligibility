@@ -26,7 +26,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.prop.Tables.Table
 import play.api.libs.json.{JsValue, Json}
-import utils.{CCConfig, Periods, TCConfig, TFCConfig}
+import utils.{CCConfig, Periods, TCConfig}
 
 class TCEligibilityInputSpec extends FakeCCEligibilityApplication with MockitoSugar {
 

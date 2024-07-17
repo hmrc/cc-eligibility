@@ -176,8 +176,8 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
       val outputUntilPeriod1 = LocalDate.parse("2015-09-30", formatter)
       val outputStartPeriod2 = LocalDate.parse("2015-09-30", formatter)
       val outputUntilPeriod2 = LocalDate.parse("2015-12-30", formatter)
-      val outputPeriodChild1 = models.output.tfc.TFCOutputChild(id = 0, qualifying = true, from = Some(outputStartPeriod1), until = Some(outputUntilPeriod1), tfcRollout = false)
-      val outputPeriodChild2 = models.output.tfc.TFCOutputChild(id = 0, childcareCostPeriod=Periods.Weekly, qualifying = true, from = Some(outputStartPeriod2), until = Some(outputUntilPeriod2), tfcRollout = false)
+      val outputPeriodChild1 = models.output.tfc.TFCOutputChild(id = 0, qualifying = true, from = Some(outputStartPeriod1), until = Some(outputUntilPeriod1))
+      val outputPeriodChild2 = models.output.tfc.TFCOutputChild(id = 0, childcareCostPeriod=Periods.Weekly, qualifying = true, from = Some(outputStartPeriod2), until = Some(outputUntilPeriod2))
 
       val tfcPeriods = List(
         TFCPeriod(from = outputStartPeriod1,
@@ -191,7 +191,7 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
           claimants = List(outputClaimant),
           children = List(outputPeriodChild2))
       )
-      val tfcEligibilityModel = TFCEligibilityOutput(from = from, until = tfcPeriods.last.until, householdEligibility = true, periods = tfcPeriods, tfcRollout = false)
+      val tfcEligibilityModel = TFCEligibilityOutput(from = from, until = tfcPeriods.last.until, householdEligibility = true, periods = tfcPeriods)
 
       val outputJson = Json.parse(
         s"""
@@ -199,7 +199,6 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
           "from": "2015-06-30",
           "until": "2015-12-30",
           "householdEligibility": true,
-           "tfcRollout":false,
            "periods": [
             {
               "from" : "2015-06-30",
@@ -217,7 +216,6 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
                 "qualifying" : true,
                 "from" : "2015-06-30",
                 "until" : "2015-09-30",
-                "tfcRollout":false,
                 "childcareCost":0,
                 "childcareCostPeriod": "Month",
                 "disability": {
@@ -243,7 +241,6 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
                 "qualifying" : true,
                 "from" : "2015-09-30",
                 "until" : "2015-12-30",
-                "tfcRollout":false,
                 "childcareCost":0,
                 "childcareCostPeriod": "Week",
                 "disability": {
@@ -308,7 +305,7 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
                            "isPartner":false,
                            "eligibleMonthsInPeriod":11,
                            "vouchers":true,
-                           "escStartDate":"${LocalDate.now().toString()}"
+                           "escStartDate":"${LocalDate.now().toString}"
                         }
                      ],
                      "children": [

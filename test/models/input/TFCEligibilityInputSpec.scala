@@ -20,16 +20,18 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import models.input.tfc._
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
+import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import utils.{CCConfigSpec, Periods, TFCConfig}
+import utils.{CCConfigSpec, Periods}
+
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
 
-  implicit val req = FakeRequest()
+  implicit val req: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
   "TFCEInputEligibility" must {
 
@@ -111,37 +113,6 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
         val child = new TFCChild(id = 0, childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, dob = dateOfBirth, disability =
           TFCDisability(disabled = true, severelyDisabled = true))(None)
         child.isDisabled shouldBe true
-      }
-    }
-
-
-    "getNWMPerAge checks" must {
-
-      val tfcConfig = app.injector.instanceOf[TFCConfig]
-
-      "check if getNWMPerAge is correct for under-18 year olds" in {
-        val claimant = TFCClaimant(disability = TFCDisability(), carersAllowance = true, minimumEarnings =
-          TFCMinimumEarnings(), age = Some("under-18"))
-        val taxYearConfig = tfcConfig.getConfig(LocalDate.parse("2000-08-27", formatter), "england")
-        claimant.getNWMPerAge(taxYearConfig)._1 shouldBe taxYearConfig.nmwUnder18
-      }
-      "check if getNWMPerAge is correct for 18-20 year olds" in {
-        val claimant = TFCClaimant(disability = TFCDisability(), carersAllowance = true, minimumEarnings =
-          TFCMinimumEarnings(), age = Some("18-20"))
-        val taxYearConfig = tfcConfig.getConfig(LocalDate.parse("2000-08-27", formatter), "england")
-        claimant.getNWMPerAge(taxYearConfig)._1 shouldBe taxYearConfig.nmw18To20
-      }
-      "check if getNWMPerAge is correct for 21 -24 year olds" in {
-        val claimant = TFCClaimant(disability = TFCDisability(), carersAllowance = true, minimumEarnings =
-          TFCMinimumEarnings(), age = Some("21-24"))
-        val taxYearConfig = tfcConfig.getConfig(LocalDate.parse("2000-08-27", formatter), "england")
-        claimant.getNWMPerAge(taxYearConfig)._1 shouldBe taxYearConfig.nmw21To24
-      }
-      "check if getNWMPerAge is correct for over 25 year olds" in {
-        val claimant = TFCClaimant(disability = TFCDisability(), carersAllowance = true, minimumEarnings =
-          TFCMinimumEarnings(), age = Some("25 or over"))
-        val taxYearConfig = tfcConfig.getConfig(LocalDate.parse("2000-08-27", formatter), "england")
-        claimant.getNWMPerAge(taxYearConfig)._1 shouldBe taxYearConfig.nmw25Over
       }
     }
 

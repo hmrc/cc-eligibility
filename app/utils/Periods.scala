@@ -31,23 +31,4 @@ object Periods extends Enumeration {
   implicit val enumReads: Reads[Period] = EnumUtils.enumReads(Periods)
 
   implicit def enumWrites: Writes[Period] = EnumUtils.enumWrites
-
-  def toString(period: Value): String = {
-    period match {
-      case Weekly => "cc.period.weekly"
-      case Fortnightly => "cc.period.fortnightly"
-      case Monthly => "cc.period.monthly"
-      case Quarterly => "cc.period.3monthly"
-      case Yearly => "cc.period.yearly"
-      case _ => "cc.period.invalid"
-    }
-  }
-
-  def toPeriod(period: String): Value = {
-    period.toLowerCase match {
-      case "monthly" => Monthly
-      case "3-monthly" => Quarterly
-      case _ => INVALID
-    }
-  }
 }

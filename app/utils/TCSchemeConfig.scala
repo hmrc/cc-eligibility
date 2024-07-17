@@ -44,10 +44,10 @@ class TCConfig @Inject()(val config: CCConfig) {
     configs.filter(_.get[String]("rule-date").contains("default")).head
   }
 
-  def getTCConfigExcludingDefault(configs: Seq[Configuration]): Seq[Configuration] = {
+  private def getTCConfigExcludingDefault(configs: Seq[Configuration]): Seq[Configuration] = {
     configs.filter(!_.get[String]("rule-date").contains("default"))
   }
-  def getSortedTCConfigExcludingDefault(configsExcludingDefault: Seq[Configuration]): Seq[Configuration] = {
+  private def getSortedTCConfigExcludingDefault(configsExcludingDefault: Seq[Configuration]): Seq[Configuration] = {
     configsExcludingDefault.sortBy(c => {
       new SimpleDateFormat("dd-MM-yyyy").parse(c.get[String]("rule-date"))
     }).reverse

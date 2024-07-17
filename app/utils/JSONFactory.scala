@@ -33,7 +33,7 @@ trait JSONFactory {
     }
   }
 
-  def errorBuilder(errors: Seq[(JsPath, collection.Seq[JsonValidationError])]): JsArray = {
+  private def errorBuilder(errors: Seq[(JsPath, collection.Seq[JsonValidationError])]): JsArray = {
     if(errors.nonEmpty) {
         JsArray(
           errors.map {

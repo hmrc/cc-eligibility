@@ -19,9 +19,11 @@ package eligibility
 import javax.inject.Inject
 import models.input.tc.{TCChild, TCEligibilityInput, TCIncome, TCTaxYear}
 import models.output.tc.{TCChildElements, TCDisability, TCEligibilityOutput, TCOutputChild}
+
 import java.time.LocalDate
 import utils.{CCConfig, TCConfig}
 
+import scala.annotation.tailrec
 import scala.concurrent.{ExecutionContext, Future}
 
 class TCEligibility @Inject()(tcConfig: TCConfig,
@@ -135,6 +137,7 @@ class TCEligibility @Inject()(tcConfig: TCConfig,
 
   def determineChildrenEligibilityForPeriod(children: List[TCChild], periodStart: LocalDate): List[TCOutputChild] = {
 
+    @tailrec
     def helper(children: List[TCChild], outputChildren: List[TCOutputChild], childrenWithChildElement: List[LocalDate]): List[TCOutputChild] = {
       if (children.isEmpty) {
         outputChildren

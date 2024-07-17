@@ -16,11 +16,11 @@
 
 package models.mappings
 
-import javax.inject.Inject
 import models._
 import models.input.tfc._
-import play.api.Logger
 import utils.{CCConfig, TFCConfig}
+
+import javax.inject.Inject
 
 class HHToTFCEligibilityInput @Inject()(tFCConfig: TFCConfig, ccConfig: CCConfig) extends PeriodEnumToPeriod {
 
@@ -35,10 +35,10 @@ class HHToTFCEligibilityInput @Inject()(tFCConfig: TFCConfig, ccConfig: CCConfig
 
   private def hhClaimantToTFCEligibilityInputClaimant(hhParent: Claimant, hhPartner: Option[Claimant]): List[TFCClaimant] = {
 
-    val parent: TFCClaimant = createClaimant(hhParent, false)
+    val parent: TFCClaimant = createClaimant(hhParent, isPartner = false)
 
     if (hhPartner.isDefined) {
-      List(parent, createClaimant(hhPartner.get, true))
+      List(parent, createClaimant(hhPartner.get, isPartner = true))
     } else {
       List(parent)
     }
@@ -63,13 +63,12 @@ class HHToTFCEligibilityInput @Inject()(tFCConfig: TFCConfig, ccConfig: CCConfig
   private def hhMinimumEarningsToTFCMinimumEarnings(hhMinimumEarnings: Option[MinimumEarnings]): TFCMinimumEarnings = {
 
     hhMinimumEarnings match {
-      case Some(earnings) => {
+      case Some(earnings) =>
         if (earnings.amount <= BigDecimal(0.00)) {
           TFCMinimumEarnings(selection = false, amount = BigDecimal(0.00))
         } else {
           TFCMinimumEarnings(amount = earnings.amount)
         }
-      }
       case None => TFCMinimumEarnings() //default values will be used
     }
   }
