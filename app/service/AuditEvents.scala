@@ -21,60 +21,12 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 class AuditEvents @Inject()(auditService: AuditService) {
 
-  def auditTFCRequest(data : String) (implicit hc: HeaderCarrier): Unit = {
-    auditEvent("TFCRequest", Map("TFCRequest" -> data.toString))
-  }
-
-  def auditTFCResponse(data : String) (implicit hc: HeaderCarrier): Unit = {
-    auditEvent("TFCResponse", Map("TFCResponse" -> data.toString))
-  }
-
-  def auditTCRequest(data : String) (implicit hc: HeaderCarrier): Unit = {
-    auditEvent("TCRequest", Map("TCRequest" -> data.toString))
-  }
-
-  def auditTCResponse(data : String) (implicit hc: HeaderCarrier): Unit = {
-    auditEvent("TCResponse", Map("TCResponse" -> data.toString))
-  }
-
-  def auditESCRequest(data : String) (implicit hc: HeaderCarrier): Unit = {
-    auditEvent("ESCRequest", Map("ESCRequest" -> data.toString))
-  }
-
-  def auditESCResponse(data : String) (implicit hc: HeaderCarrier): Unit = {
-    auditEvent("ESCResponse", Map("ESCResponse" -> data.toString))
-  }
-
-  def auditMinEarnings(data : Boolean) (implicit hc: HeaderCarrier): Unit = {
-    auditEvent("HouseholdMinimumEarnings", Map("failedHouseholdMinimumEarnings" -> data.toString))
-  }
-
-  def auditAgeGroup(user: String, data : String) (implicit hc: HeaderCarrier): Unit = {
-    auditEvent("HouseholdMinimumEarnings", Map(s"$user-failedAgeGroup" -> data.toString))
-  }
-
-  def auditSelfEmploymentStatus(user: String, data : String) (implicit hc: HeaderCarrier): Unit = {
-    auditEvent("HouseholdMinimumEarnings", Map(s"$user-selfEmployedUsers" -> data.toString))
-  }
-
-  def auditSelfEmployedin1st(user: String, data : Boolean) (implicit hc: HeaderCarrier): Unit = {
-    auditEvent("HouseholdMinimumEarnings", Map(s"$user-selfEmployedin1stYear" -> data.toString))
-  }
-
-  def auditFreeEntitlementRequest(data : String) (implicit hc: HeaderCarrier): Unit = {
-    auditEvent("FreeEntitlmentRequest", Map("FreeEntitlmentRequest" -> data.toString))
-  }
-
-  def auditFreeEntitlementResponse(data : String) (implicit hc: HeaderCarrier): Unit = {
-    auditEvent("FreeEntitlmentResponse", Map("FreeEntitlmentResponse" -> data.toString))
-  }
-
   def auditHouseholdRequest(data : String) (implicit hc: HeaderCarrier): Unit = {
-    auditEvent("HouseholdRequest", Map("HouseholdRequest" -> data.toString))
+    auditEvent("HouseholdRequest", Map("HouseholdRequest" -> data))
   }
 
   def auditHouseholdResponse(data : String) (implicit hc: HeaderCarrier): Unit = {
-    auditEvent("HouseholdResponse", Map("HouseholdResponse" -> data.toString))
+    auditEvent("HouseholdResponse", Map("HouseholdResponse" -> data))
   }
 
   private def auditEvent(auditEventType : String, data: Map[String, String]) (implicit hc: HeaderCarrier): Unit = {

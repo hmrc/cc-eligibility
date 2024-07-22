@@ -24,7 +24,7 @@ import play.api.i18n.Lang
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import utils.Periods.Period
-import utils.{CCConfig, CCFormat, ESCConfig, Periods}
+import utils.{CCConfig, ESCConfig, Periods}
 
 case class ESCEligibilityInput(escTaxYears: List[ESCTaxYear],
                                location: Option[LocationEnum] = None)
@@ -40,7 +40,7 @@ case class ESCTaxYear(
                        children: List[ESCChild]
                   ) extends BaseTaxYear
 
-object ESCTaxYear extends CCFormat {
+object ESCTaxYear {
 
   implicit val lang: Lang = Lang("en")
 
@@ -67,7 +67,7 @@ case class ESCIncome(
                     )
 
 object ESCIncome {
-  implicit val incomeFormat = Json.format[ESCIncome]
+  implicit val incomeFormat: OFormat[ESCIncome] = Json.format[ESCIncome]
 }
 
 case class ESCClaimant(
@@ -81,7 +81,7 @@ case class ESCClaimant(
   }
 }
 
-object ESCClaimant extends CCFormat {
+object ESCClaimant {
   implicit val claimantReads: Reads[ESCClaimant] = (
     (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "employerProvidesESC").read[Boolean].orElse(Reads.pure(false)) and
@@ -138,7 +138,7 @@ case class ESCChild @Inject() (
 
 }
 
-object ESCChild extends CCFormat {
+object ESCChild {
   def validID(id: Short): Boolean = {
     id >= 0
   }

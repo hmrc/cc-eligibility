@@ -20,7 +20,6 @@ import models.SchemeEnum
 import models.input.CalculatorOutput
 import models.output.esc.ESCEligibilityOutput
 import models.output.tc.TCEligibilityOutput
-import models.output.tfc.TFCEligibilityOutput
 import models.output.{EscClaimantEligibility, Scheme, SchemeResults, TaxCreditsEligibility}
 
 trait SchemeResultsBuilder{
@@ -43,7 +42,7 @@ trait SchemeResultsBuilder{
     schemeResultsIn.copy(schemes = newList)
   }
 
-  def buildTFCResults(tfcEligibilityOutput: TFCEligibilityOutput, calculatorOutput: Option[CalculatorOutput] = None, schemeResultsIn: SchemeResults): SchemeResults = {
+  def buildTFCResults(calculatorOutput: Option[CalculatorOutput] = None, schemeResultsIn: SchemeResults): SchemeResults = {
 
     val tfcAmount = calculatorOutput.flatMap(_.tfcAmount).getOrElse(BigDecimal(0))
 
@@ -55,8 +54,7 @@ trait SchemeResultsBuilder{
     val newList = if(isTFCSchemaPresent) schemeResultsIn.schemes.map(scheme => if(scheme.name == SchemeEnum.TFCELIGIBILITY) newScheme else scheme)
     else  newScheme :: schemeResultsIn.schemes
 
-    val rollout = tfcEligibilityOutput.tfcRollout
-    schemeResultsIn.copy(schemes = newList, tfcRollout = rollout)
+    schemeResultsIn.copy(schemes = newList)
   }
 
   def buildTCResults(tcEligibilityOutput: TCEligibilityOutput, calculatorOutput: Option[CalculatorOutput] = None, schemeResultsIn: SchemeResults): SchemeResults = {

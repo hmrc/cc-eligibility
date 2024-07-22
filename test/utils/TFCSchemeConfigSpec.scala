@@ -67,12 +67,7 @@ class TFCSchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar
         childAgeLimitDisabled = defaultConfig.get[Int]("child-age-limit-disabled"),
         minimumHoursWorked = defaultConfig.get[Double]("minimum-hours-worked-per-week"),
         maxIncomePerClaimant = defaultConfig.get[Double]("maximum-income-per-claimant"),
-        personalAllowancePerClaimant = defaultConfig.get[Double]("default.personal-allowance"),
-        nmwApprentice = defaultConfig.get[Int]("nmw.apprentice"),
-        nmwUnder18 = defaultConfig.get[Int]("nmw.under-18"),
-        nmw18To20 = defaultConfig.get[Int]("nmw.18-20"),
-        nmw21To24 = defaultConfig.get[Int]("nmw.21-24"),
-        nmw25Over = defaultConfig.get[Int]("nmw.over-25")
+        personalAllowancePerClaimant = defaultConfig.get[Double]("default.personal-allowance")
       )
 
       resultTaxYearConfig.childAgeLimit shouldBe 11
@@ -80,11 +75,6 @@ class TFCSchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar
       resultTaxYearConfig.minimumHoursWorked shouldBe 16.00
       resultTaxYearConfig.maxIncomePerClaimant shouldBe 100000.00
       resultTaxYearConfig.personalAllowancePerClaimant shouldBe 11500.00
-      resultTaxYearConfig.nmwApprentice shouldBe 56
-      resultTaxYearConfig.nmwUnder18 shouldBe 64
-      resultTaxYearConfig.nmw18To20 shouldBe 89
-      resultTaxYearConfig.nmw21To24 shouldBe 112
-      resultTaxYearConfig.nmw25Over shouldBe 120
     }
 
     val testCases = Table(
@@ -118,11 +108,6 @@ class TFCSchemeConfigSpec extends FakeCCEligibilityApplication with MockitoSugar
         result.minimumHoursWorked shouldBe minimumHoursWorked
         result.maxIncomePerClaimant shouldBe maxIncomePerClaimant
         result.personalAllowancePerClaimant shouldBe personalAllowancePerClaimant
-        result.nmwApprentice shouldBe nmwApprentice
-        result.nmwUnder18 shouldBe nmwUnder18
-        result.nmw18To20 shouldBe nmw18To20
-        result.nmw21To24 shouldBe nmw21To24
-        result.nmw25Over shouldBe nmwOver25
       }
     }
   }

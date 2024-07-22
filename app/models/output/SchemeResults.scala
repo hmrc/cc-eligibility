@@ -18,7 +18,7 @@ package models.output
 
 import models.SchemeEnum
 import models.SchemeEnum.SchemeEnum
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class EscClaimantEligibility(
                                    parent: Boolean = false,
@@ -26,7 +26,7 @@ case class EscClaimantEligibility(
                                  )
 
 object EscClaimantEligibility {
-  implicit val escClaimantEligibilityFormat = Json.format[EscClaimantEligibility]
+  implicit val escClaimantEligibilityFormat: OFormat[EscClaimantEligibility] = Json.format[EscClaimantEligibility]
 }
 
 case class TaxCreditsEligibility(
@@ -35,7 +35,7 @@ case class TaxCreditsEligibility(
                                  )
 
 object TaxCreditsEligibility {
-  implicit val taxCreditsEligibilityFormat = Json.format[TaxCreditsEligibility]
+  implicit val taxCreditsEligibilityFormat: OFormat[TaxCreditsEligibility] = Json.format[TaxCreditsEligibility]
 }
 
 case class Scheme(name: SchemeEnum,
@@ -43,22 +43,20 @@ case class Scheme(name: SchemeEnum,
                   escClaimantEligibility: Option[EscClaimantEligibility] = None,
                   taxCreditsEligibility: Option[TaxCreditsEligibility] = None
                  ) {
-  val missingEscClaimantEligibility = (name == SchemeEnum.ESCELIGIBILITY && escClaimantEligibility == None)
-  val missingTaxCreditsEligibility = (name == SchemeEnum.TCELIGIBILITY && taxCreditsEligibility == None)
+  private val missingEscClaimantEligibility = name == SchemeEnum.ESCELIGIBILITY && escClaimantEligibility.isEmpty
+  private val missingTaxCreditsEligibility = name == SchemeEnum.TCELIGIBILITY && taxCreditsEligibility.isEmpty
   require(!missingEscClaimantEligibility,"Missing values for escClaimantEligibility")
   require(!missingTaxCreditsEligibility,"Missing values for taxCreditsEligibility")
 }
 
 object Scheme {
-  implicit val schemeFormat = Json.format[Scheme]
+  implicit val schemeFormat: OFormat[Scheme] = Json.format[Scheme]
 }
 
 case class SchemeResults (
-                           schemes: List[Scheme],
-                           tfcRollout: Boolean = false,
-                           thirtyHrsRollout: Boolean = false
+                           schemes: List[Scheme]
                          )
 
 object SchemeResults {
-  implicit val schemeResultsformats = Json.format[SchemeResults]
+  implicit val schemeResultsformats: OFormat[SchemeResults] = Json.format[SchemeResults]
 }

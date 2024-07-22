@@ -18,32 +18,29 @@ package eligibility
 
 
 
-import java.text.SimpleDateFormat
-import java.util.{Calendar, Date}
-
-import javax.inject.Inject
 import models.input.tfc.{TFCChild, TFCClaimant, TFCEligibilityInput}
 import models.output.tfc._
-import java.time.LocalDate
 import service.AuditEvents
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.{TFCConfig, TFCRolloutSchemeConfig}
+import utils.TFCConfig
 
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.{Calendar, Date}
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TFCEligibility @Inject()(auditEvent: AuditEvents,
-                               tfcRollOutConfig: TFCRolloutSchemeConfig,
                                tFCConfig: TFCConfig)
                               (implicit ec: ExecutionContext) {
 
-  def getWeekEnd(calendar: Calendar, weekStart: Int): Date = {
-    while (calendar.get(Calendar.DAY_OF_WEEK) != weekStart || calendar.get(Calendar.DAY_OF_MONTH) == 1) {
+  private def getWeekEnd(calendar: Calendar): Date = {
+    while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY || calendar.get(Calendar.DAY_OF_MONTH) == 1) {
       calendar.add(Calendar.DATE, 1)
     }
     calendar.getTime
   }
 
-  def firstOfSeptember(septemberCalendar: Calendar, childBirthday: Date, childBirthdayCalendar: Calendar): Date = {
+  private def firstOfSeptember(septemberCalendar: Calendar, childBirthday: Date, childBirthdayCalendar: Calendar): Date = {
     septemberCalendar.setFirstDayOfWeek(Calendar.SUNDAY)
     septemberCalendar.setTime(childBirthday) // today
     septemberCalendar.set(Calendar.MONTH, Calendar.SEPTEMBER) // september in calendar year
@@ -65,7 +62,7 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
       septemberCalendar.add(Calendar.YEAR, 1) // must be next year (september now+1)
     }
 
-    endWeekOf1stSeptember = getWeekEnd(septemberCalendar, Calendar.SUNDAY)
+    endWeekOf1stSeptember = getWeekEnd(septemberCalendar)
     val dateFormatter = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy")
     dateFormatter.parse(endWeekOf1stSeptember.toString)
   }
@@ -156,7 +153,6 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
         qualifying = childEligibility,
         from = qualifyStartDate,
         until = qualifyEndDate,
-        tfcRollout = tfcRollOutConfig.isChildEligibleForTFCRollout(child, childEligibility),
         childcareCost = child.childcareCost,
         childcareCostPeriod = child.childcareCostPeriod,
         disability = models.output.tfc.TFCDisability(child.disability.disabled,child.disability.severelyDisabled)
@@ -173,79 +169,22 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
     }
   }
 
-  def eligibility(request: TFCEligibilityInput)(implicit hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
+  def eligibility(request: TFCEligibilityInput): Future[TFCEligibilityOutput] = {
     val outputPeriods = determineTFCPeriods(request)
-    val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && validHouseholdMinimumEarnings(request) && request.validMaxEarnings()
+    val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && request.validMaxEarnings()
     Future {
       TFCEligibilityOutput(
         from = request.from,
         until = outputPeriods.last.until,
         householdEligibility = householdEligibility,
-        periods = outputPeriods,
-        tfcRollout = outputPeriods.exists(_.children.exists(_.tfcRollout))
+        periods = outputPeriods
       )
     }
   }
 
-  def validHouseholdMinimumEarnings(tfceEligibilityInput: TFCEligibilityInput)(implicit hc: HeaderCarrier): Boolean = {
-    val parent = tfceEligibilityInput.claimants.head
-    val minEarningsParent = satisfyMinimumEarnings(tfceEligibilityInput.from, tfceEligibilityInput.location, parent)
-    if(tfceEligibilityInput.claimants.length > 1) {
-      val partner = tfceEligibilityInput.claimants.last
-      val minEarningsPartner = satisfyMinimumEarnings(tfceEligibilityInput.from, tfceEligibilityInput.location, partner)
-      val auditMinEarns = minEarningsParent && minEarningsPartner
-
-      if(!auditMinEarns) {
-        auditEvent.auditMinEarnings(auditMinEarns)
-      }
-
-      (minEarningsParent, minEarningsPartner) match {
-        case (true, true) => true
-        case (true, false) => partner.carersAllowance
-        case (false, true) => parent.carersAllowance
-        case _ => false
-      }
-    } else {
-
-      if(!minEarningsParent) {
-        auditEvent.auditMinEarnings(minEarningsParent)
-      }
-      minEarningsParent
-    }
-  }
-
-
-  def isTotalIncomeLessThan100000(periodStart: LocalDate, location: String, claimant: TFCClaimant): Boolean = {
+  private def isTotalIncomeLessThan100000(periodStart: LocalDate, location: String, claimant: TFCClaimant): Boolean = {
     val taxYearConfig = tFCConfig.getConfig(periodStart, location)
     val maximumTotalIncome: Double = taxYearConfig.maxIncomePerClaimant
     claimant.totalIncome <= maximumTotalIncome
-  }
-
-
-
-  def satisfyMinimumEarnings(periodStart: LocalDate, location:String, claimant: TFCClaimant)
-                            (implicit hc: HeaderCarrier): Boolean = {
-
-    val user = if(!claimant.isPartner) "Parent" else "Partner"
-
-    val taxYearConfig = tFCConfig.getConfig(periodStart, location)
-    if(claimant.minimumEarnings.selection) {
-      true
-    } else {
-      val nmw = claimant.getNWMPerAge(taxYearConfig)
-      if(claimant.minimumEarnings.amount >= nmw._1) {
-        true
-      } else {
-        auditEvent.auditAgeGroup(user, nmw._2)
-        claimant.employmentStatus match {
-          case Some("selfEmployed") =>
-            auditEvent.auditSelfEmploymentStatus(user, claimant.employmentStatus.get)
-            auditEvent.auditSelfEmployedin1st(user, claimant.selfEmployedSelection.getOrElse(false))
-            claimant.selfEmployedSelection.getOrElse(false)
-          case Some("apprentice") => claimant.minimumEarnings.amount >= taxYearConfig.nmwApprentice
-          case _ => false
-        }
-      }
-    }
   }
 }

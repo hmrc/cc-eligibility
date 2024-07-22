@@ -23,7 +23,7 @@ import models.mappings._
 import java.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import utils.{CCConfig, Periods, TCConfig, TFCConfig}
+import utils.{CCConfig, Periods, TFCConfig}
 
 class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with MockitoSugar {
 

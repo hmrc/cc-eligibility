@@ -60,7 +60,7 @@ class ESCConfig @Inject()(val config: CCConfig) {
     }
   }
 
-  def getESCTaxYearConfig(configuration : play.api.Configuration) : ESCTaxYearConfig = {
+  private def getESCTaxYearConfig(configuration : play.api.Configuration) : ESCTaxYearConfig = {
     ESCTaxYearConfig(
       childAgeLimit = configuration.get[Int]("child-age-limit"),
       childAgeLimitDisabled = configuration.get[Int]("child-age-limit-disabled")

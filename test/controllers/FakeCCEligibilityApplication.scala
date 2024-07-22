@@ -17,26 +17,23 @@
 package controllers
 
 import models.input.tfc._
-
-import java.time.LocalDate
+import org.apache.pekko.stream.Materializer
+import org.apache.pekko.util.ByteString
 import org.mockito.Mockito.when
 import org.scalatest.Suite
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.mvc.{AnyContent, ControllerComponents, DefaultMessagesActionBuilderImpl, PlayBodyParsers, Result}
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc._
 import play.api.test.Helpers.{stubBodyParser, stubMessagesApi}
 import service.AuditEvents
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.{CCConfig, CCConfigSpec, Periods, TCConfig, TFCConfig}
+import utils._
 
 import java.nio.charset.Charset
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.util.ByteString
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.Result
-
-import scala.language.{implicitConversions, postfixOps}
+import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.language.{implicitConversions, postfixOps}
 
 
 trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
@@ -48,7 +45,7 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
   val mockCC: ControllerComponents = mock[ControllerComponents]
   val mockParser: PlayBodyParsers = mock[PlayBodyParsers]
 
-  implicit lazy val tcConfig = app.injector.instanceOf[TCConfig]
+  implicit lazy val tcConfig: TCConfig = app.injector.instanceOf[TCConfig]
 
   when(mockCC.actionBuilder)
     .thenReturn(new DefaultMessagesActionBuilderImpl(stubBodyParser[AnyContent](), stubMessagesApi()))

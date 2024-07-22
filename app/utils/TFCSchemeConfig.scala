@@ -29,12 +29,7 @@ case class TFCTaxYearConfig(
                              childAgeLimitDisabled: Int,
                              minimumHoursWorked: Double,
                              maxIncomePerClaimant: Double,
-                             personalAllowancePerClaimant: Double,
-                             nmwApprentice: Int,
-                             nmwUnder18: Int,
-                             nmw18To20: Int,
-                             nmw21To24: Int,
-                             nmw25Over: Int
+                             personalAllowancePerClaimant: Double
                              )
 
 @Singleton
@@ -44,10 +39,10 @@ class TFCConfig @Inject()(val config: CCConfig) {
     configs.filter(_.get[String]("rule-date").contains("default")).head
   }
 
-  def getTFCConfigExcludingDefault(configs: Seq[Configuration]): Seq[Configuration] = {
+  private def getTFCConfigExcludingDefault(configs: Seq[Configuration]): Seq[Configuration] = {
     configs.filter(!_.get[String]("rule-date").contains("default"))
   }
-  def getSortedTFCConfigExcludingDefault(configsExcludingDefault: Seq[Configuration]): Seq[Configuration]= {
+  private def getSortedTFCConfigExcludingDefault(configsExcludingDefault: Seq[Configuration]): Seq[Configuration]= {
     configsExcludingDefault.sortBy(c => {
       new SimpleDateFormat("dd-MM-yyyy").parse(c.get[String]("rule-date"))
     }).reverse
@@ -68,19 +63,14 @@ class TFCConfig @Inject()(val config: CCConfig) {
     }
   }
 
-  def getTFCTaxYearConfig(configuration: Configuration, location: String): TFCTaxYearConfig = {
+  private def getTFCTaxYearConfig(configuration: Configuration, location: String): TFCTaxYearConfig = {
     TFCTaxYearConfig(
       childAgeLimit = configuration.get[Int]("child-age-limit"),
       childAgeLimitDisabled = configuration.get[Int]("child-age-limit-disabled"),
       minimumHoursWorked = configuration.get[Double]("minimum-hours-worked-per-week"),
       maxIncomePerClaimant = configuration.get[Double]("maximum-income-per-claimant"),
       personalAllowancePerClaimant = configuration.getOptional[Double]({location} + ".personal-allowance").
-        getOrElse(configuration.get[Double]("default.personal-allowance")),
-      nmwApprentice = configuration.get[Int]("nmw.apprentice"),
-      nmwUnder18 = configuration.get[Int]("nmw.under-18"),
-      nmw18To20 = configuration.get[Int]("nmw.18-20"),
-      nmw21To24 = configuration.get[Int]("nmw.21-24"),
-      nmw25Over = configuration.get[Int]("nmw.over-25")
+        getOrElse(configuration.get[Double]("default.personal-allowance"))
     )
   }
 

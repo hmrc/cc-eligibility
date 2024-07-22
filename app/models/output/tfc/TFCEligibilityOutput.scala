@@ -24,7 +24,6 @@ case class TFCEligibilityOutput(
                                 from: LocalDate,
                                 until: LocalDate,
                                 householdEligibility: Boolean,
-                                tfcRollout: Boolean,
                                 periods: List[TFCPeriod]
                                 )
 
@@ -58,7 +57,6 @@ case class TFCOutputChild(
                         qualifying: Boolean,
                         from: Option[LocalDate],
                         until: Option[LocalDate],
-                        tfcRollout: Boolean, //Not required in frontend
                         childcareCost: BigDecimal = BigDecimal(0),
                         childcareCostPeriod: Periods.Period = Periods.Monthly,
                         disability: TFCDisability = TFCDisability()

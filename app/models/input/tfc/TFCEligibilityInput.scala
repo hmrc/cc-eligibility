@@ -59,7 +59,7 @@ case class TFCEligibilityInput(
 
 }
 
-object TFCEligibilityInput extends CCFormat {
+object TFCEligibilityInput {
 
   implicit val lang: Lang = Lang("en")
 
@@ -86,7 +86,7 @@ case class TFCIncome(
                    otherIncome: Option[BigDecimal]
                  )
 object TFCIncome {
-  implicit val formats = Json.format[TFCIncome]
+  implicit val formats: OFormat[TFCIncome] = Json.format[TFCIncome]
 }
 
 case class TFCClaimant(
@@ -128,13 +128,6 @@ case class TFCClaimant(
                                  otherIncome: BigDecimal,
                                  pension: BigDecimal) = {
     employmentIncome + otherIncome - pension * ConfigConstants.noOfMonths
-  }
-
-  def getNWMPerAge(taxYearConfig: TFCTaxYearConfig): (Int, String) = age match {
-    case Some("under-18") => (taxYearConfig.nmwUnder18, "under-18")
-    case Some("18-20") => (taxYearConfig.nmw18To20, "18-20")
-    case Some("21-24") => (taxYearConfig.nmw21To24, "21-24")
-    case _ => (taxYearConfig.nmw25Over, "25 or over") //25 or over
   }
 }
 
@@ -191,7 +184,7 @@ case class TFCChild @Inject() (
   }
 }
 
-object TFCChild extends CCFormat {
+object TFCChild {
 
   implicit val lang: Lang = Lang("en")
 

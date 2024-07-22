@@ -17,7 +17,7 @@
 package service
 
 import connectors.CalculatorConnector
-import eligibility.{ESCEligibility, FreeEntitlementEligibility, TCEligibility, TFCEligibility}
+import eligibility.{ESCEligibility, TCEligibility, TFCEligibility}
 import javax.inject.Inject
 import models.Household
 import models.input.CalculatorOutput
@@ -32,7 +32,6 @@ class EligibilityService @Inject()(calcConnector: CalculatorConnector,
                                    esc: ESCEligibility,
                                    tc: TCEligibility,
                                    tfc: TFCEligibility,
-                                   thirtyHours: FreeEntitlementEligibility,
                                    TCEligibilityInput: HHToTCEligibilityInput,
                                    TFCEligibilityInput: HHToTFCEligibilityInput,
                                    ESCEligibilityInput: HHToESCEligibilityInput,
@@ -44,17 +43,16 @@ class EligibilityService @Inject()(calcConnector: CalculatorConnector,
       tcEligibility <- tc.eligibility(TCEligibilityInput.convert(request))
       tfcEligibility <- tfc.eligibility(TFCEligibilityInput.convert(request))
       escEligibility <- esc.eligibility(ESCEligibilityInput.convert(request), eSCConfig, cCConfig)
-      thirtyHoursEligibility <- thirtyHours.thirtyHours(TFCEligibilityInput.convert(request))
 
-      calcInput = CalculatorInput(if (tcEligibility.eligible) Some(tcEligibility) else None,
+      calcInput = CalculatorInput(
+        if (tcEligibility.eligible) Some(tcEligibility) else None,
         if (tfcEligibility.householdEligibility) Some(tfcEligibility) else None,
-        if (escEligibility.eligibility) Some(escEligibility) else None)
+        if (escEligibility.eligibility) Some(escEligibility) else None
+      )
 
 
       calcOutput <- {
         if (calcInput.esc.isDefined || calcInput.tc.isDefined || calcInput.tfc.isDefined) {
-          if(calcInput.esc.isDefined){
-          }
           calcConnector.getCalculatorResult(calcInput)
         } else {
           Future(CalculatorOutput())
@@ -65,8 +63,8 @@ class EligibilityService @Inject()(calcConnector: CalculatorConnector,
 
       val escResult: SchemeResults = SchemeResultsBuilder.buildESCResults(escEligibility, Some(calcOutput), SchemeResults(List()))
       val tcResult: SchemeResults = SchemeResultsBuilder.buildTCResults(tcEligibility, Some(calcOutput), escResult)
-      val tfcResult: SchemeResults = SchemeResultsBuilder.buildTFCResults(tfcEligibility, Some(calcOutput), tcResult)
-      tfcResult.copy(thirtyHrsRollout = thirtyHoursEligibility.rollout)
+      val tfcResult: SchemeResults = SchemeResultsBuilder.buildTFCResults(Some(calcOutput), tcResult)
+      tfcResult
     }
 
   }

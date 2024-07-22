@@ -18,11 +18,10 @@ package service
 
 import connectors.CalculatorConnector
 import controllers.FakeCCEligibilityApplication
-import eligibility.{ESCEligibility, FreeEntitlementEligibility, TCEligibility, TFCEligibility}
+import eligibility.{ESCEligibility, TCEligibility, TFCEligibility}
 import models.input.CalculatorOutput
-import models.mappings.{HHToESCEligibilityInput, HHToFree30hoursEligibilityInput, HHToTCEligibilityInput, HHToTFCEligibilityInput}
+import models.mappings.{HHToESCEligibilityInput, HHToTCEligibilityInput, HHToTFCEligibilityInput}
 import models.output.esc.{ESCEligibilityOutput, ESCTaxYear}
-import models.output.freeEntitlement.ThirtyHoursEligibilityModel
 import models.output.tc.{TCEligibilityOutput, TCTaxYear}
 import models.output.tfc._
 import models.output.{EscClaimantEligibility, Scheme, SchemeResults, TaxCreditsEligibility}
@@ -45,11 +44,9 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
   val mockESC      = mock[ESCEligibility]
   val mockTCE      = mock[TCEligibility]
   val mockTFC      = mock[TFCEligibility]
-  val mockFree     = mock[FreeEntitlementEligibility]
   val mockHHToTCE  = mock[HHToTCEligibilityInput]
   val mockHHToTFC  = mock[HHToTFCEligibilityInput]
   val mockHHToESC  = mock[HHToESCEligibilityInput]
-  val mockHHTOFree = mock[HHToFree30hoursEligibilityInput]
   val mockESCConfig = mock[ESCConfig]
   val mockCCConfig = mock[CCConfig]
 
@@ -59,7 +56,6 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
     mockESC,
     mockTCE,
     mockTFC,
-    mockFree,
     mockHHToTCE,
     mockHHToTFC,
     mockHHToESC,
@@ -81,12 +77,11 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
         val tcSchemeOutput = Scheme(SchemeEnum.TCELIGIBILITY, 1000, None, Some(TaxCreditsEligibility(true,true)))
         val escSchemeOutput = Scheme(SchemeEnum.ESCELIGIBILITY, 1000, Some(EscClaimantEligibility(true,true)), None)
 
-        val expectedResult = SchemeResults(List(tfcSchemeOutput, tcSchemeOutput, escSchemeOutput), true, true)
+        val expectedResult = SchemeResults(List(tfcSchemeOutput, tcSchemeOutput, escSchemeOutput))
 
         when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(escEligibilityOutputAllTrue))
         when(mockTCE.eligibility(any())).thenReturn(Future(tcEligibilityOutputAllTrue))
-        when(mockTFC.eligibility(any())(any())).thenReturn(Future(tfcEligibilityOutputRolloutTrue))
-        when(mockFree.thirtyHours(any())(any())).thenReturn(Future(thirtyHoursEligibilityOutput))
+        when(mockTFC.eligibility(any())).thenReturn(Future(tfcEligibilityOutputRolloutTrue))
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueAll))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
@@ -99,12 +94,11 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
         val tcSchemeOutput = Scheme(SchemeEnum.TCELIGIBILITY, 0, None, Some(TaxCreditsEligibility(false,false)))
         val escSchemeOutput = Scheme(SchemeEnum.ESCELIGIBILITY, 1000, Some(EscClaimantEligibility(true,true)), None)
 
-        val expectedResult = SchemeResults(List(tfcSchemeOutput, tcSchemeOutput, escSchemeOutput), false, false)
+        val expectedResult = SchemeResults(List(tfcSchemeOutput, tcSchemeOutput, escSchemeOutput))
 
         when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(escEligibilityOutputAllTrue))
         when(mockTCE.eligibility(any())).thenReturn(Future(mock[TCEligibilityOutput]))
-        when(mockTFC.eligibility(any())(any())).thenReturn(Future(mock[TFCEligibilityOutput]))
-        when(mockFree.thirtyHours(any())(any())).thenReturn(Future(mock[ThirtyHoursEligibilityModel]))
+        when(mockTFC.eligibility(any())).thenReturn(Future(mock[TFCEligibilityOutput]))
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueOnlyESC))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
@@ -117,12 +111,11 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
         val tcSchemeOutput = Scheme(SchemeEnum.TCELIGIBILITY, 1000, None, Some(TaxCreditsEligibility(true,true)))
         val escSchemeOutput = Scheme(SchemeEnum.ESCELIGIBILITY, 0, Some(EscClaimantEligibility(false,false)), None)
 
-        val expectedResult = SchemeResults(List(tfcSchemeOutput, tcSchemeOutput, escSchemeOutput), false, false)
+        val expectedResult = SchemeResults(List(tfcSchemeOutput, tcSchemeOutput, escSchemeOutput))
 
         when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(mock[ESCEligibilityOutput]))
         when(mockTCE.eligibility(any())).thenReturn(Future(tcEligibilityOutputAllTrue))
-        when(mockTFC.eligibility(any())(any())).thenReturn(Future(mock[TFCEligibilityOutput]))
-        when(mockFree.thirtyHours(any())(any())).thenReturn(Future(mock[ThirtyHoursEligibilityModel]))
+        when(mockTFC.eligibility(any())).thenReturn(Future(mock[TFCEligibilityOutput]))
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueOnlyTC))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
@@ -135,12 +128,11 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
         val tcSchemeOutput = Scheme(SchemeEnum.TCELIGIBILITY, 0, None, Some(TaxCreditsEligibility(false,false)))
         val escSchemeOutput = Scheme(SchemeEnum.ESCELIGIBILITY, 0, Some(EscClaimantEligibility(false,false)), None)
 
-        val expectedResult = SchemeResults(List(tfcSchemeOutput, tcSchemeOutput, escSchemeOutput), false, false)
+        val expectedResult = SchemeResults(List(tfcSchemeOutput, tcSchemeOutput, escSchemeOutput))
 
         when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(mock[ESCEligibilityOutput]))
         when(mockTCE.eligibility(any())).thenReturn(Future(mock[TCEligibilityOutput]))
-        when(mockTFC.eligibility(any())(any())).thenReturn(Future(tfcEligibilityOutputTrue))
-        when(mockFree.thirtyHours(any())(any())).thenReturn(Future(mock[ThirtyHoursEligibilityModel]))
+        when(mockTFC.eligibility(any())).thenReturn(Future(tfcEligibilityOutputTrue))
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueOnlyTFC))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
@@ -153,12 +145,11 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
         val tcSchemeOutput = Scheme(SchemeEnum.TCELIGIBILITY, 0, None, Some(TaxCreditsEligibility(false,false)))
         val escSchemeOutput = Scheme(SchemeEnum.ESCELIGIBILITY, 0, Some(EscClaimantEligibility(false,false)), None)
 
-        val expectedResult = SchemeResults(List(tfcSchemeOutput, tcSchemeOutput, escSchemeOutput), false, false)
+        val expectedResult = SchemeResults(List(tfcSchemeOutput, tcSchemeOutput, escSchemeOutput))
 
         when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(mock[ESCEligibilityOutput]))
         when(mockTCE.eligibility(any())).thenReturn(Future(mock[TCEligibilityOutput]))
-        when(mockTFC.eligibility(any())(any())).thenReturn(mock[TFCEligibilityOutput])
-        when(mockFree.thirtyHours(any())(any())).thenReturn(Future(mock[ThirtyHoursEligibilityModel]))
+        when(mockTFC.eligibility(any())).thenReturn(mock[TFCEligibilityOutput])
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueNone))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
@@ -176,14 +167,12 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
     qualifying = true,
     from = None,
     until = None,
-    tfcRollout = false,
     childcareCost = BigDecimal(0),
     disability = TFCDisability())
 
   lazy val tfcEligibilityOutputTrue = TFCEligibilityOutput(from = LocalDate.now(),
     until  = LocalDate.now(),
     householdEligibility  = true,
-    tfcRollout  = false,
     periods = List(TFCPeriod(from = LocalDate.now(),
       until  = LocalDate.now(),
       periodEligibility = true,
@@ -193,14 +182,11 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
   lazy val tfcEligibilityOutputRolloutTrue = TFCEligibilityOutput(from = LocalDate.now(),
     until  = LocalDate.now(),
     householdEligibility  = true,
-    tfcRollout  = true,
     periods = List(TFCPeriod(from = LocalDate.now(),
       until  = LocalDate.now(),
       periodEligibility = true,
       claimants = List(tfcOutputparent, tfcOutputpartner),
       children = List(tfcOutputCChild))))
-
-  val thirtyHoursEligibilityOutput = ThirtyHoursEligibilityModel(true, true)
 
   val calcOutputValueAll: CalculatorOutput = CalculatorOutput(Some(BigDecimal(1000)),
     Some(BigDecimal(1000)), Some(BigDecimal(1000)))

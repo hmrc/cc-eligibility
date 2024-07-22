@@ -1,15 +1,5 @@
 # micro-service specific routes
 
-POST    /tax-credits/eligibility                    @controllers.tc.TCEligibilityController.eligible
-
-POST    /tax-free-childcare/eligibility             @controllers.tfc.TFCEligibilityController.eligible
-
-POST    /employer-supported-childcare/eligibility   @controllers.esc.ESCEligibilityController.eligible
-
-POST    /fifteen-hours-entitlement/eligibility      @controllers.freeEntitlement.FreeEntitlementController.fifteenHours
-
-POST    /thirty-hours-entitlement/eligibility       @controllers.freeEntitlement.FreeEntitlementController.thirtyHours
-
 POST    /eligibility                                @controllers.EligibilityController.eligible
 
 ##########################################################################################################
