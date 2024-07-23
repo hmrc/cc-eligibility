@@ -81,7 +81,7 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
 
         when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(escEligibilityOutputAllTrue))
         when(mockTCE.eligibility(any())).thenReturn(Future(tcEligibilityOutputAllTrue))
-        when(mockTFC.eligibility(any())).thenReturn(Future(tfcEligibilityOutputRolloutTrue))
+        when(mockTFC.eligibility(any())(any())).thenReturn(Future(tfcEligibilityOutputRolloutTrue))
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueAll))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
@@ -98,7 +98,7 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
 
         when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(escEligibilityOutputAllTrue))
         when(mockTCE.eligibility(any())).thenReturn(Future(mock[TCEligibilityOutput]))
-        when(mockTFC.eligibility(any())).thenReturn(Future(mock[TFCEligibilityOutput]))
+        when(mockTFC.eligibility(any())(any())).thenReturn(Future(mock[TFCEligibilityOutput]))
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueOnlyESC))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
@@ -115,7 +115,7 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
 
         when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(mock[ESCEligibilityOutput]))
         when(mockTCE.eligibility(any())).thenReturn(Future(tcEligibilityOutputAllTrue))
-        when(mockTFC.eligibility(any())).thenReturn(Future(mock[TFCEligibilityOutput]))
+        when(mockTFC.eligibility(any())(any())).thenReturn(Future(mock[TFCEligibilityOutput]))
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueOnlyTC))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
@@ -132,7 +132,7 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
 
         when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(mock[ESCEligibilityOutput]))
         when(mockTCE.eligibility(any())).thenReturn(Future(mock[TCEligibilityOutput]))
-        when(mockTFC.eligibility(any())).thenReturn(Future(tfcEligibilityOutputTrue))
+        when(mockTFC.eligibility(any())(any())).thenReturn(Future(tfcEligibilityOutputTrue))
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueOnlyTFC))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
@@ -149,7 +149,7 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
 
         when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(mock[ESCEligibilityOutput]))
         when(mockTCE.eligibility(any())).thenReturn(Future(mock[TCEligibilityOutput]))
-        when(mockTFC.eligibility(any())).thenReturn(mock[TFCEligibilityOutput])
+        when(mockTFC.eligibility(any())(any())).thenReturn(mock[TFCEligibilityOutput])
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueNone))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult

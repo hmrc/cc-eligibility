@@ -21,6 +21,10 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 class AuditEvents @Inject()(auditService: AuditService) {
 
+  def auditMinEarnings(data : Boolean) (implicit hc: HeaderCarrier): Unit = {
+    auditEvent("HouseholdMinimumEarnings", Map("failedHouseholdMinimumEarnings" -> data.toString))
+  }
+
   def auditHouseholdRequest(data : String) (implicit hc: HeaderCarrier): Unit = {
     auditEvent("HouseholdRequest", Map("HouseholdRequest" -> data))
   }
