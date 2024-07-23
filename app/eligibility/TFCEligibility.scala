@@ -21,6 +21,7 @@ package eligibility
 import models.input.tfc.{TFCChild, TFCClaimant, TFCEligibilityInput}
 import models.output.tfc._
 import service.AuditEvents
+import uk.gov.hmrc.http.HeaderCarrier
 import utils.TFCConfig
 
 import java.text.SimpleDateFormat
@@ -169,9 +170,9 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
     }
   }
 
-  def eligibility(request: TFCEligibilityInput): Future[TFCEligibilityOutput] = {
+  def eligibility(request: TFCEligibilityInput)(implicit hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
     val outputPeriods = determineTFCPeriods(request)
-    val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && request.validMaxEarnings()
+    val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && validHouseholdMinimumEarnings(request) && request.validMaxEarnings()
     Future {
       TFCEligibilityOutput(
         from = request.from,
@@ -179,6 +180,33 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
         householdEligibility = householdEligibility,
         periods = outputPeriods
       )
+    }
+  }
+
+  private def validHouseholdMinimumEarnings(tfcEligibilityInput: TFCEligibilityInput)(implicit hc: HeaderCarrier): Boolean = {
+    val parent = tfcEligibilityInput.claimants.head
+    val minEarningsParent = parent.minimumEarnings.selection
+    if(tfcEligibilityInput.claimants.length > 1) {
+      val partner = tfcEligibilityInput.claimants.last
+      val minEarningsPartner = partner.minimumEarnings.selection
+      val auditMinEarns = minEarningsParent && minEarningsPartner
+
+      if(!auditMinEarns) {
+        auditEvent.auditMinEarnings(auditMinEarns)
+      }
+
+      (minEarningsParent, minEarningsPartner) match {
+        case (true, true) => true
+        case (true, false) => partner.carersAllowance
+        case (false, true) => parent.carersAllowance
+        case _ => false
+      }
+    } else {
+
+      if(!minEarningsParent) {
+        auditEvent.auditMinEarnings(minEarningsParent)
+      }
+      minEarningsParent
     }
   }
 

@@ -11,16 +11,6 @@ The Eligibility micro-service common to all the schemes (Tax, Credit, Tax-Free C
 The service will accept the parent details and children details as input request in json format and returns whether the scheme, parent and/or children are eligible to apply in
 a json format.
 
-* **Endpoint URLs**
-
-  * **TC  :**  /cc-eligibility/tax-credits/eligibility
-
-  * **ESC :**  /cc-eligibility/employer-vouchers/eligibility
-
-  * **TFC :**  /cc-eligibility/tax-free-childcare/eligibility
-
-
-
 * **Port Number**
 
   * **CC Eligibility :** 9375
@@ -30,13 +20,6 @@ a json format.
 * **Method:**
 
   All requests are of type `POST`
-
-
-For TC Eligibility documentation, please click [here](README_TC.md).
-
-For ESC Eligibility documentation, please click [here](README_ESC.md).
-
-For TFC Eligibility documentation, please click [here](README_TFC.md).
 
 
 ## License
