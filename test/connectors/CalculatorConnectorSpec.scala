@@ -25,18 +25,18 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
-
+import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
 import scala.concurrent.{ExecutionContext, Future}
 
 class CalculatorConnectorSpec extends AnyWordSpec with MockitoSugar with FakeCCEligibilityApplication with BeforeAndAfterEach {
 
   implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
+  val requestBuilder: RequestBuilder = mock[RequestBuilder]
 
   "CalculatorConnector" must {
 
     "get calculator result" in {
-      val mockHttp =  mock[DefaultHttpClient]
+      val mockHttp =  mock[HttpClientV2]
       val testCalculatorConnector = new CalculatorConnector(app.injector.instanceOf[ApplicationConfig], mockHttp)
 
       val testOutput = CalculatorOutput(
@@ -45,9 +45,10 @@ class CalculatorConnectorSpec extends AnyWordSpec with MockitoSugar with FakeCCE
         escAmount = Some(300)
       )
 
-      when(mockHttp.POST[CalculatorInput, CalculatorOutput](anyString, any(), any())(any(), any(), any(), any()))
+      when(mockHttp.post(any)(any)).thenReturn(requestBuilder)
+      when(requestBuilder.withBody(any)(any, any, any)).thenReturn(requestBuilder)
+      when(requestBuilder.execute[CalculatorOutput](any, any))
         .thenReturn(Future.successful(testOutput))
-
       val result = testCalculatorConnector.getCalculatorResult(CalculatorInput(tc = None, tfc = None, esc = None))
       await(result) shouldBe testOutput
     }

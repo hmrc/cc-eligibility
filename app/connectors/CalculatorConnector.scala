@@ -17,20 +17,22 @@
 package connectors
 
 import config.ApplicationConfig
+
 import javax.inject.Inject
 import models.input.CalculatorOutput
 import models.output.CalculatorInput
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
+import play.api.libs.json.Json
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
+import uk.gov.hmrc.http.client.HttpClientV2
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class CalculatorConnector @Inject()(applicationConfig: ApplicationConfig,
-                                    http: DefaultHttpClient)
+                                    http: HttpClientV2)
                                    (implicit ec: ExecutionContext) {
 
   def getCalculatorResult(calculatorInput: CalculatorInput)(implicit hc: HeaderCarrier): Future[CalculatorOutput] = {
-    import uk.gov.hmrc.http.HttpReads.Implicits._
-    http.POST[CalculatorInput, CalculatorOutput](applicationConfig.calculatorUrl, calculatorInput)
+    val url = s"${applicationConfig.calculatorUrl}"
+    http.post(url"$url").withBody(Json.toJson(calculatorInput)).execute[CalculatorOutput]
   }
 }
