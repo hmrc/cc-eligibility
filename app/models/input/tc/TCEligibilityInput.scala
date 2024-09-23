@@ -17,6 +17,7 @@
 package models.input.tc
 
 import models.input.BaseChild
+import models.LocationEnum
 import play.api.i18n.Lang
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
@@ -44,11 +45,12 @@ case class TCClaimant(
                      disability: TCDisability,
                      carersAllowance: Boolean,
                      incomeBenefits: Boolean,
+                     scottishCarersAllowance: Boolean
                    ) (tcConfig: Option[TCConfig]){
 
   def createNewWithConfig(claimant: TCClaimant, tCConfigIn: TCConfig): TCClaimant = {
     new TCClaimant(claimant.hoursPerWeek, claimant.isPartner, claimant.disability,
-      claimant.carersAllowance, claimant.incomeBenefits)(Some(tCConfigIn))
+      claimant.carersAllowance, claimant.incomeBenefits, claimant.scottishCarersAllowance)(Some(tCConfigIn))
   }
 
   def getDisabilityElement(periodStart: LocalDate): Boolean = {
@@ -70,8 +72,9 @@ object TCClaimant {
       (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
         (JsPath \ "disability").read[TCDisability] and
           (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false)) and
-      (JsPath \ "incomeBenefits").read[Boolean].orElse(Reads.pure(false))
-    ) (TCClaimant.apply(_,_,_,_,_)(None))
+      (JsPath \ "incomeBenefits").read[Boolean].orElse(Reads.pure(false)) and
+      (JsPath \ "scottishCarersAllowance").read[Boolean].orElse(Reads.pure(false))
+    ) (TCClaimant.apply(_,_,_,_,_,_)(None))
 
 }
 
@@ -274,45 +277,57 @@ case class TCTaxYear (
     children.exists(child => child.isChild(periodStart) || child.getsYoungAdultElement(periodStart))
   }
 
-  def householdGetsChildcareElement(periodStart: LocalDate): Boolean = {
-    claimantsGetChildcareElement(periodStart) && children.exists(_.getsChildcareElement(periodStart))
+  def householdGetsChildcareElement(periodStart: LocalDate, location: LocationEnum.Value): Boolean = {
+    claimantsGetChildcareElement(periodStart, location) && children.exists(_.getsChildcareElement(periodStart))
   }
 
-  def claimantsGetChildcareElement(periodStart: LocalDate): Boolean = {
-    def isClaimantDisabledOrCarer(person: TCClaimant) = {
-      determineClaimantDisabilityOrSeverity(person) || person.carersAllowance
+  def claimantsGetChildcareElement(periodStart: LocalDate, location: LocationEnum.Value): Boolean = {
+    def isClaimantDisabledOrCarer(person: TCClaimant, location: LocationEnum.Value) = {
+      println("I am inside isClaimantDisabledOrCarer ")
+      println(s"location - $location")
+
+      if (location == LocationEnum.SCOTLAND) {
+        println("I am inside SCOTLAND ")
+        val parentdas = determineClaimantDisabilityOrSeverity(person)
+        val partnersds = person.scottishCarersAllowance
+        println(s"determineClaimantDisabilityOrSeverity(person) $parentdas ")
+        println(s"person.scottishCarersAllowance $partnersds ")
+        determineClaimantDisabilityOrSeverity(person) || person.scottishCarersAllowance
+      } else {
+        determineClaimantDisabilityOrSeverity(person) || person.carersAllowance
+      }
     }
 
     val parent = claimants.head
     if (isCouple) {
       val partner = claimants.last
       (
-        parent.isWorkingAtLeast16HoursPerWeek(periodStart) && (partner.isWorkingAtLeast16HoursPerWeek(periodStart) || isClaimantDisabledOrCarer(partner))
+        parent.isWorkingAtLeast16HoursPerWeek(periodStart) && (partner.isWorkingAtLeast16HoursPerWeek(periodStart) || isClaimantDisabledOrCarer(partner, location))
         ) || (
-        partner.isWorkingAtLeast16HoursPerWeek(periodStart) && isClaimantDisabledOrCarer(parent)
+        partner.isWorkingAtLeast16HoursPerWeek(periodStart) && isClaimantDisabledOrCarer(parent, location)
         )
     } else {
       parent.isWorkingAtLeast16HoursPerWeek(periodStart)
     }
   }
 
-  def gets2ndAdultElement(now: LocalDate = LocalDate.now): Boolean = isCouple && getBasicElement(now)
+  def gets2ndAdultElement(now: LocalDate = LocalDate.now, location: LocationEnum.Value): Boolean = isCouple && getBasicElement(now, location)
 
   def isCouple: Boolean = claimants.length > 1 && claimants.length < 3
 
-  def getBasicElement(periodStart: LocalDate): Boolean = {
-    isHouseholdQualifyingForWTC(periodStart) && householdHasChildOrYoungPerson(periodStart)
+  def getBasicElement(periodStart: LocalDate, location: LocationEnum.Value): Boolean = {
+    isHouseholdQualifyingForWTC(periodStart, location) && householdHasChildOrYoungPerson(periodStart)
   }
 
-  def isHouseholdQualifyingForWTC(periodStart: LocalDate): Boolean = {
+  def isHouseholdQualifyingForWTC(periodStart: LocalDate, location: LocationEnum.Value): Boolean = {
     if (isCouple) {
-      doesHouseHoldQualify(periodStart)
+      doesHouseHoldQualify(periodStart, location)
     } else {
       claimants.head.isWorkingAtLeast16HoursPerWeek(periodStart)
     }
   }
 
-  private def doesHouseHoldQualify(periodStart: LocalDate): Boolean = {
+  private def doesHouseHoldQualify(periodStart: LocalDate, location: LocationEnum.Value): Boolean = {
 
     def determineWorking16hours(person: TCClaimant): Boolean =
       person.isWorkingAtLeast16HoursPerWeek(periodStart)
@@ -328,9 +343,16 @@ case class TCTaxYear (
 
     def isOneOfCoupleDisabled = determineClaimantDisabilityOrSeverity(parent) || determineClaimantDisabilityOrSeverity(partner)
 
-    def isOneOfCoupleCarer = parent.carersAllowance || partner.carersAllowance
-
-    isOneOfCoupleWorking16h && (isOneOfCoupleDisabled || isOneOfCoupleCarer || isCoupleWorking24Hours)
+    def isOneOfCoupleCarer(location: LocationEnum.Value) =  if (location == LocationEnum.SCOTLAND) {
+                                                  val parentdas = parent.carersAllowance
+                                                  val partnersds = partner.scottishCarersAllowance
+                                                  println(s"parentdas  $parentdas ")
+                                                  println(s"partnersds $partnersds ")
+                                                  parent.scottishCarersAllowance || partner.scottishCarersAllowance
+                                                } else {
+                                                  parent.scottishCarersAllowance || partner.carersAllowance
+                                                }
+    isOneOfCoupleWorking16h && (isOneOfCoupleDisabled || isOneOfCoupleCarer(location) || isCoupleWorking24Hours)
   }
 
   private def determineClaimantDisabilityOrSeverity(claimant: TCClaimant): Boolean = {
@@ -406,14 +428,15 @@ object TCTaxYear {
 }
 
 case class TCEligibilityInput(
-                               taxYears: List[TCTaxYear]
+                               taxYears: List[TCTaxYear], location: LocationEnum.Value
                                )
 
 object TCEligibilityInput {
   private def validateTaxYear(taxYears: List[TCTaxYear]): Boolean = taxYears.nonEmpty
 
-  implicit val tcEligibilityReads: Reads[TCEligibilityInput] =
-    (JsPath \ "taxYears").read[List[TCTaxYear]]
-      .filter(JsonValidationError("At least one tax year required"))(x => validateTaxYear(x))
-      .map { ty => TCEligibilityInput(ty) }
+  implicit val tcEligibilityReads: Reads[TCEligibilityInput] = (
+    (JsPath \ "taxYears").read[List[TCTaxYear]] and
+    (JsPath \ "location").read[LocationEnum.Value]
+    )(TCEligibilityInput.apply _).filter(JsonValidationError("At least one tax year required"))(x => validateTaxYear(x.taxYears))
+
 }

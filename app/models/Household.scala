@@ -54,7 +54,8 @@ case class Benefits(
                     disabilityBenefits: Boolean = false,
                     highRateDisabilityBenefits: Boolean = false,
                     incomeBenefits: Boolean = false,
-                    carersAllowance: Boolean = false
+                    carersAllowance: Boolean = false,
+                    scottishCarersAllowance: Boolean = false
                    )
 
 object Benefits {

@@ -25,7 +25,10 @@ import utils.{CCConfig, HelperManager, TCConfig}
 class HHToTCEligibilityInput @Inject()(val cCConfig: CCConfig, tcConfig: TCConfig) extends PeriodEnumToPeriod with HelperManager {
 
   def convert(household: Household): TCEligibilityInput = {
-    TCEligibilityInput(taxYears = createTaxYears(household.parent, household.partner, household.children))
+    TCEligibilityInput(
+      taxYears = createTaxYears(household.parent, household.partner, household.children),
+      location = household.location.get
+    )
   }
 
   private def buildIncome(parentIncome: Option[Income], partnerIncome: Option[Income]): TCIncome = {
@@ -88,7 +91,8 @@ class HHToTCEligibilityInput @Inject()(val cCConfig: CCConfig, tcConfig: TCConfi
       isPartner = isPartner,
       disability = TCDisability(claimant.benefits.exists(_.disabilityBenefits), claimant.benefits.exists(_.highRateDisabilityBenefits)),
       carersAllowance = claimant.benefits.exists(_.carersAllowance),
-      incomeBenefits = claimant.benefits.fold(false)(c=>c.incomeBenefits)
+      incomeBenefits = claimant.benefits.fold(false)(c=>c.incomeBenefits),
+      scottishCarersAllowance = claimant.benefits.fold(false)(c=>c.scottishCarersAllowance)
     )(Some(tcConfig))
 
   }

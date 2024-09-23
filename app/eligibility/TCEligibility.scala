@@ -19,6 +19,7 @@ package eligibility
 import javax.inject.Inject
 import models.input.tc.{TCChild, TCEligibilityInput, TCIncome, TCTaxYear}
 import models.output.tc.{TCChildElements, TCDisability, TCEligibilityOutput, TCOutputChild}
+import models.LocationEnum
 
 import java.time.LocalDate
 import utils.{CCConfig, TCConfig}
@@ -57,7 +58,7 @@ class TCEligibility @Inject()(tcConfig: TCConfig,
     sorted.distinct
   }
 
-  private def determinePeriodsForTaxYear(tyIn: models.input.tc.TCTaxYear): List[models.output.tc.TCPeriod] = {
+  private def determinePeriodsForTaxYear(tyIn: models.input.tc.TCTaxYear, location: LocationEnum.Value): List[models.output.tc.TCPeriod] = {
     val ty = tyIn.createNewWithConfig(tyIn, tcConfig, ccConfig)
     // get all date ranges of splits for tax year
     val datesOfChanges = determineStartDatesOfPeriodsInTaxYear(ty)
@@ -66,7 +67,7 @@ class TCEligibility @Inject()(tcConfig: TCConfig,
       val fromAndUntil = fromAndUntilDateForPeriod(date, i, datesOfChanges, ty)
       val claimantsEligibility = determineClaimantsEligibilityForPeriod(ty)
       val childrenEligibility = determineChildrenEligibilityForPeriod(ty.children, periodStart = fromAndUntil._1)
-      val householdEligibility = determineHouseholdEligibilityForPeriod(ty, periodStart = fromAndUntil._1)
+      val householdEligibility = determineHouseholdEligibilityForPeriod(ty, periodStart = fromAndUntil._1, location: LocationEnum.Value)
 
       models.output.tc.TCPeriod(
         from = fromAndUntil._1,
@@ -86,7 +87,7 @@ class TCEligibility @Inject()(tcConfig: TCConfig,
         until = ty.until,
         previousHouseholdIncome = ty.previousHouseholdIncome.getOrElse(TCIncome()),
         currentHouseholdIncome = ty.currentHouseholdIncome.getOrElse(TCIncome()),
-        periods = determinePeriodsForTaxYear(ty)
+        periods = determinePeriodsForTaxYear(ty, request.location)
       )
     }
   }
@@ -104,15 +105,16 @@ class TCEligibility @Inject()(tcConfig: TCConfig,
     }
   }
 
-  def determineHouseholdEligibilityForPeriod(ty: TCTaxYear, periodStart: LocalDate): models.output.tc.TCHouseHoldElements = {
+  def determineHouseholdEligibilityForPeriod(ty: TCTaxYear, periodStart: LocalDate, location: LocationEnum.Value): models.output.tc.TCHouseHoldElements = {
+    println("I am inside determineHouseholdEligibilityForPeriod ")
     models.output.tc.TCHouseHoldElements(
-      basic = ty.getBasicElement(periodStart),
+      basic = ty.getBasicElement(periodStart, location),
       hours30 = ty.gets30HoursElement(periodStart),
-      childcare = ty.householdGetsChildcareElement(periodStart),
+      childcare = ty.householdGetsChildcareElement(periodStart, location),
       loneParent = ty.getsLoneParentElement(periodStart),
-      secondParent = ty.gets2ndAdultElement(periodStart),
+      secondParent = ty.gets2ndAdultElement(periodStart, location),
       family = ty.getsFamilyElement(periodStart),
-      wtc = ty.isHouseholdQualifyingForWTC(periodStart),
+      wtc = ty.isHouseholdQualifyingForWTC(periodStart, location),
       ctc = ty.isHouseholdQualifyingForCTC(periodStart)
     )
   }

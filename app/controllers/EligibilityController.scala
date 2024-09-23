@@ -43,6 +43,7 @@ class EligibilityController @Inject ()(val eligibilityService: EligibilityServic
           eligibilityService.eligibility(result).map {
             response =>
               auditEvent.auditHouseholdResponse(Json.toJson(response).toString())
+              println(s" response recived $response")
               Ok(Json.toJson(response))
           } recover {
             case e: Exception =>

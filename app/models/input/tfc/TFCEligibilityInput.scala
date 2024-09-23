@@ -96,6 +96,7 @@ case class TFCClaimant(
                         isPartner: Boolean = false,
                         disability: TFCDisability,
                         carersAllowance: Boolean = false,
+                        scottishCarersAllowance: Boolean = false,
                         minimumEarnings: TFCMinimumEarnings,
                         age: Option[String],
                         employmentStatus: Option[String] = None,
@@ -140,11 +141,12 @@ object TFCClaimant {
           (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
             (JsPath \ "disability").read[TFCDisability] and
               (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false)) and
-                (JsPath \ "minimumEarnings").read[TFCMinimumEarnings] and
-                  (JsPath \ "age").readNullable[String] and
-                    (JsPath \ "employmentStatus").readNullable[String] and
-                      (JsPath \ "selfEmployedSelection").readNullable[Boolean] and
-                        (JsPath \ "maximumEarnings").readNullable[Boolean]
+                (JsPath \ "scottishCarersAllowance").read[Boolean].orElse(Reads.pure(false)) and
+                  (JsPath \ "minimumEarnings").read[TFCMinimumEarnings] and
+                    (JsPath \ "age").readNullable[String] and
+                      (JsPath \ "employmentStatus").readNullable[String] and
+                        (JsPath \ "selfEmployedSelection").readNullable[Boolean] and
+                          (JsPath \ "maximumEarnings").readNullable[Boolean]
     )(TFCClaimant.apply _)
 }
 

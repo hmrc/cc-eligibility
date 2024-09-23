@@ -52,6 +52,7 @@ class HHToTFCEligibilityInput @Inject()(tFCConfig: TFCConfig, ccConfig: CCConfig
       isPartner = isPartner,
       disability = TFCDisability(claimant.benefits.exists(_.disabilityBenefits), claimant.benefits.exists(_.highRateDisabilityBenefits)),
       carersAllowance = claimant.benefits.exists(_.carersAllowance),
+      scottishCarersAllowance = claimant.benefits.exists(_.scottishCarersAllowance),
       minimumEarnings = hhMinimumEarningsToTFCMinimumEarnings(claimant.minimumEarnings),
       age = claimant.ageRange.map(_.toString),
       employmentStatus = claimant.minimumEarnings.map(_.employmentStatus.toString),

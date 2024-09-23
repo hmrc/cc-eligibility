@@ -39,6 +39,7 @@ class EligibilityService @Inject()(calcConnector: CalculatorConnector,
                                   (implicit ec: ExecutionContext){
 
   def eligibility(request: Household)(implicit hc: HeaderCarrier): Future[SchemeResults] = {
+    println(s"Request body received $request")
     for {
       tcEligibility <- tc.eligibility(TCEligibilityInput.convert(request))
       tfcEligibility <- tfc.eligibility(TFCEligibilityInput.convert(request))

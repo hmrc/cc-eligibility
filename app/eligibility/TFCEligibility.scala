@@ -19,6 +19,7 @@ package eligibility
 
 
 import models.input.tfc.{TFCChild, TFCClaimant, TFCEligibilityInput}
+import models.LocationEnum
 import models.output.tfc._
 import service.AuditEvents
 import uk.gov.hmrc.http.HeaderCarrier
@@ -194,11 +195,16 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
       if(!auditMinEarns) {
         auditEvent.auditMinEarnings(auditMinEarns)
       }
-
+      println("Helloooooooo in validHouseholdMinimumEarnings")
       (minEarningsParent, minEarningsPartner) match {
         case (true, true) => true
-        case (true, false) => partner.carersAllowance
-        case (false, true) => parent.carersAllowance
+        case (true, false) | (false, true) => if (tfcEligibilityInput.location == LocationEnum.SCOTLAND.toString) {
+                                                    val partnersds = parent.scottishCarersAllowance
+                                                    println(s"parent.scottishCarersAllowance $partnersds ")
+                                                  parent.scottishCarersAllowance
+                                              } else {
+                                                  parent.carersAllowance
+                                              }
         case _ => false
       }
     } else {
