@@ -24,7 +24,6 @@ import service.AuditEvents
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TFCConfig
 
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.{Calendar, Date}
 import javax.inject.Inject
@@ -57,15 +56,13 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
     childBirthdayCalendar.setTime(childBirthday) // childs date of birth
     val septemberCalendar = Calendar.getInstance()
     septemberCalendar.clear()
-    var endWeekOf1stSeptember = firstOfSeptember(septemberCalendar, childBirthday, childBirthdayCalendar) // end date of first week of 1st september
+    val endWeekOf1stSeptember = firstOfSeptember(septemberCalendar, childBirthday, childBirthdayCalendar) // end date of first week of 1st september
 
     if (endWeekOf1stSeptember.before(childBirthday) || childBirthday.equals(endWeekOf1stSeptember)) { // end week is before today
       septemberCalendar.add(Calendar.YEAR, 1) // must be next year (september now+1)
     }
 
-    endWeekOf1stSeptember = getWeekEnd(septemberCalendar)
-    val dateFormatter = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy")
-    dateFormatter.parse(endWeekOf1stSeptember.toString)
+    getWeekEnd(septemberCalendar)
   }
 
   def getChildBirthday(periodStart: LocalDate, location: String, child: TFCChild): Date ={

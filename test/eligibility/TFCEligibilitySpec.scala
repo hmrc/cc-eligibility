@@ -53,7 +53,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       ccConfig.toLocalDate(child11Birthday) shouldBe LocalDate.parse("2016-08-27", formatter)
     }
 
-    "determine childs Birthday (11th or 16th) where child is disabled" in {
+    "determine child's Birthday (11th or 16th) where child is disabled" in {
       val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val dateOfBirth = LocalDate.parse("2000-09-27", formatter)
       val current = LocalDate.parse("2017-08-01", formatter)
@@ -587,7 +587,6 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
           qualifying = false,
           from = None,
           until = None,
-         
           BigDecimal(200.00),
           childcareCostPeriod=Periods.Monthly,
           models.output.tfc.TFCDisability(false,false)
