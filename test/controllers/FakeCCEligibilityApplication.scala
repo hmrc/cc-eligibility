@@ -58,7 +58,6 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
   def testClaimant(
                     previousIncome: Option[TFCIncome] = None,
                     currentIncome: Option[TFCIncome] = None,
-                    hoursPerWeek: Double = 0.00,
                     isPartner: Boolean = false,
                     disability: TFCDisability,
                     carersAllowance: Boolean = false,
@@ -68,7 +67,7 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
                     selfEmployedSelection: Option[Boolean] = None,
                     maximumEarnings: Option[Boolean] = None
                   ): TFCClaimant ={
-    new TFCClaimant(previousIncome, currentIncome, hoursPerWeek, isPartner, disability,
+    new TFCClaimant(previousIncome, currentIncome,isPartner, disability,
       carersAllowance, minimumEarnings, age, employmentStatus, selfEmployedSelection, maximumEarnings){
     }
   }
