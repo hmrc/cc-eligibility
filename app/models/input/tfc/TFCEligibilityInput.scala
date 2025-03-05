@@ -92,7 +92,6 @@ object TFCIncome {
 case class TFCClaimant(
                         previousIncome: Option[TFCIncome] = None,
                         currentIncome: Option[TFCIncome] = None,
-                        hoursPerWeek: Double = 0.00,
                         isPartner: Boolean = false,
                         disability: TFCDisability,
                         carersAllowance: Boolean = false,
@@ -136,7 +135,6 @@ object TFCClaimant {
   implicit val claimantReads: Reads[TFCClaimant] = (
     (JsPath \ "previousIncome").readNullable[TFCIncome] and
       (JsPath \ "currentIncome").readNullable[TFCIncome] and
-        (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
           (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
             (JsPath \ "disability").read[TFCDisability] and
               (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false)) and
