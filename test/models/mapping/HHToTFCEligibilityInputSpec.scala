@@ -114,7 +114,6 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
             benefits = Some(546),
             statutoryIncome = None
           )),
-          hours = Some(34),
           minimumEarnings = Some(MinimumEarnings(BigDecimal(0), Some(EmploymentStatusEnum.SELFEMPLOYED), Some(true))),
           escVouchers = Some(YesNoUnsureEnum.YES)
         )
@@ -128,7 +127,6 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
             benefits = Some(546),
             statutoryIncome = None
           )),
-          hours = Some(21),
           minimumEarnings = None,
           escVouchers = Some(YesNoUnsureEnum.NOTSURE)
         )

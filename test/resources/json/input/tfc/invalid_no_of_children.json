@@ -4,7 +4,6 @@
       "location": "england",
       "claimants": [
         {
-          "hoursPerWeek": 30.00,
           "isPartner": false,
           "totalIncome": 0.00,
           "disability": {
