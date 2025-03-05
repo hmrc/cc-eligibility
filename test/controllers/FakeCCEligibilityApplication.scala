@@ -45,7 +45,7 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
   val mockCC: ControllerComponents = mock[ControllerComponents]
   val mockParser: PlayBodyParsers = mock[PlayBodyParsers]
 
-  implicit lazy val tcConfig: TCConfig = app.injector.instanceOf[TCConfig]
+
 
   when(mockCC.actionBuilder)
     .thenReturn(new DefaultMessagesActionBuilderImpl(stubBodyParser[AnyContent](), stubMessagesApi()))

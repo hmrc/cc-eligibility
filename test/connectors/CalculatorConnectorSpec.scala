@@ -49,7 +49,7 @@ class CalculatorConnectorSpec extends AnyWordSpec with MockitoSugar with FakeCCE
       when(requestBuilder.withBody(any)(any, any, any)).thenReturn(requestBuilder)
       when(requestBuilder.execute[CalculatorOutput](any, any))
         .thenReturn(Future.successful(testOutput))
-      val result = testCalculatorConnector.getCalculatorResult(CalculatorInput(tc = None, tfc = None, esc = None))
+      val result = testCalculatorConnector.getCalculatorResult(CalculatorInput( tfc = None, esc = None))
       await(result) shouldBe testOutput
     }
 

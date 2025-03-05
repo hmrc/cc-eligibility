@@ -21,7 +21,7 @@ import utils.EnumUtils
 
 object CreditsEnum extends Enumeration {
   type CreditsEnum = Value
-  val TAXCREDITS, UNIVERSALCREDIT, NONE = Value
+  val  UNIVERSALCREDIT, NONE = Value
 
   val enumReads: Reads[CreditsEnum] = EnumUtils.enumReads(CreditsEnum)
 
@@ -89,7 +89,6 @@ object PeriodEnum extends Enumeration {
 object SchemeEnum extends Enumeration {
   type SchemeEnum = Value
   val TFCELIGIBILITY = Value("tfcEligibility")
-  val TCELIGIBILITY = Value("tcEligibility")
   val ESCELIGIBILITY = Value("escEligibility")
 
   val enumReads: Reads[SchemeEnum] = EnumUtils.enumReads(SchemeEnum)
