@@ -117,7 +117,6 @@ case class Claimant(
                      benefits: Option[Benefits] = None,
                      lastYearlyIncome: Option[Income]  =   None,
                      currentYearlyIncome: Option[Income]  = None,
-                     hours: Option[BigDecimal] =   None,
                      minimumEarnings: Option[MinimumEarnings]= None,
                      escVouchers: Option[YesNoUnsureEnum] =   None,
                      maximumEarnings: Option[Boolean] = None
