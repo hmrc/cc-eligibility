@@ -54,11 +54,11 @@ class HHToESCEligibilityInputSpec extends AnyWordSpec
           ESCTaxYear(LocalDate.now(),
             HelperManager.determineApril6DateFromNow(LocalDate.now()),
             List(ESCClaimant(false, true,
-              Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List()),
+               Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List()),
           ESCTaxYear(HelperManager.determineApril6DateFromNow(LocalDate.now()),
             LocalDate.now().plusYears(1),
             List(ESCClaimant(false, true,
-              Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List())))
+               Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List())))
 
         when(SUT.cCConfig.startDate).thenReturn(LocalDate.now())
 
@@ -93,7 +93,7 @@ class HHToESCEligibilityInputSpec extends AnyWordSpec
             List(
               ESCClaimant(false, false, None),
               ESCClaimant(true, true,
-                Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))),
+                Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))),
             List(
               ESCChild(
                 1,
@@ -108,7 +108,7 @@ class HHToESCEligibilityInputSpec extends AnyWordSpec
             List(
               ESCClaimant(false, false, None),
               ESCClaimant(true, true,
-                Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List(
+                Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List(
               ESCChild(
                 1,
                 dob,
@@ -137,15 +137,15 @@ class HHToESCEligibilityInputSpec extends AnyWordSpec
           ESCTaxYear(LocalDate.now(),
             HelperManager.determineApril6DateFromNow(LocalDate.now()),
             List(ESCClaimant(false, false,
-              Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0)))),
+              Some(ESCIncome(Some(30000.0), Some(200.0)))),
               ESCClaimant(true, false,
-                Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0))))), List()),
+                Some(ESCIncome(Some(30000.0), Some(200.0))))), List()),
           ESCTaxYear(HelperManager.determineApril6DateFromNow(LocalDate.now()),
             LocalDate.now().plusYears(1),
             List(ESCClaimant(false, false,
-              Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0)))),
+             Some(ESCIncome(Some(30000.0), Some(200.0)))),
               ESCClaimant(true, false,
-                Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0))))), List())))
+               Some(ESCIncome(Some(30000.0), Some(200.0))))), List())))
 
         when(SUT.cCConfig.startDate).thenReturn(LocalDate.now())
 
@@ -277,11 +277,11 @@ class HHToESCEligibilityInputSpec extends AnyWordSpec
           ESCTaxYear(LocalDate.now(),
             HelperManager.determineApril6DateFromNow(LocalDate.now()),
             List(ESCClaimant(false, false,
-              None, Some(ESCIncome(Some(30000.0), Some(200.0), Some("1200L"))))), List()),
+            Some(ESCIncome(Some(30000.0), Some(200.0), Some("1200L"))))), List()),
           ESCTaxYear(HelperManager.determineApril6DateFromNow(LocalDate.now()),
             LocalDate.now().plusYears(1),
             List(ESCClaimant(false, false,
-              None, Some(ESCIncome(Some(30000.0), Some(200.0), Some("1200L"))))), List())))
+             Some(ESCIncome(Some(30000.0), Some(200.0), Some("1200L"))))), List())))
 
         when(SUT.cCConfig.startDate).thenReturn(LocalDate.now())
 

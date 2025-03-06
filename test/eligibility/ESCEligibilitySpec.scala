@@ -1955,7 +1955,6 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true,
-        previousIncome = Some(ESCIncome(Some(20000.0),Some(200.0), Some("1100L"))),
         currentIncome = Some(ESCIncome(Some(20000.0),Some(200.0), Some("1150L"))))
 
       val result = service.determineClaimantsEligibilityForPeriod(List(), List(claimant1), ty1periodStart, ty1periodEnd)
@@ -1964,7 +1963,6 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
           qualifying = true,
           isPartner = false,
           eligibleMonthsInPeriod = 0,
-          previousIncome = Some(models.output.esc.ESCIncome(Some(20000.0),Some(200.0), Some("1100L"))),
           currentIncome = Some(models.output.esc.ESCIncome(Some(20000.0),Some(200.0), Some("1150L"))),
           vouchers = false
         )

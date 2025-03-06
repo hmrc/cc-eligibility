@@ -73,7 +73,6 @@ object ESCIncome {
 case class ESCClaimant(
                      isPartner: Boolean = false,
                      employerProvidesESC : Boolean = false,
-                     previousIncome: Option[ESCIncome] = None,
                      currentIncome: Option[ESCIncome] = None
                    ) {
   def isClaimantQualifyingForESC : Boolean = {
@@ -85,7 +84,6 @@ object ESCClaimant {
   implicit val claimantReads: Reads[ESCClaimant] = (
     (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
       (JsPath \ "employerProvidesESC").read[Boolean].orElse(Reads.pure(false)) and
-        (JsPath \ "previousIncome").readNullable[ESCIncome] and
           (JsPath \ "currentIncome").readNullable[ESCIncome]
     )(ESCClaimant.apply _)
 }

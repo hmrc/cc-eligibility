@@ -61,7 +61,6 @@ class HHToESCEligibilityInput @Inject()(val cCConfig: CCConfig) extends PeriodEn
     parent.lastYearlyIncome.map(x => ESCIncome(x.employmentIncome, x.pension, x.taxCode))
     val newParent = ESCClaimant(
       employerProvidesESC = escVouchersAvailable(parent),
-      previousIncome = parent.lastYearlyIncome.map(x => ESCIncome(x.employmentIncome, x.pension, x.taxCode)),
       currentIncome = parent.currentYearlyIncome.map(x => ESCIncome(x.employmentIncome, x.pension, x.taxCode))
     )
 
@@ -69,7 +68,6 @@ class HHToESCEligibilityInput @Inject()(val cCConfig: CCConfig) extends PeriodEn
       p =>
         List(newParent, ESCClaimant(isPartner = true,
           employerProvidesESC = escVouchersAvailable(partner.get),
-          previousIncome = p.lastYearlyIncome.map(x => ESCIncome(x.employmentIncome, x.pension, x.taxCode)),
           currentIncome = p.currentYearlyIncome.map(x => ESCIncome(x.employmentIncome, x.pension, x.taxCode))))
     }
 
