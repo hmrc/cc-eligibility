@@ -46,7 +46,7 @@ class HHToESCEligibilityInputSpec extends AnyWordSpec
 
         val household = Household(children = Nil,
           parent = Claimant(lastYearlyIncome = Some(Income(Some(20000.00), Some(200.00), Some(500.00))),
-            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00), None, None, Some("1100L"))),
+            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00), None, Some("1100L"))),
             escVouchers = Some(YesNoUnsureEnum.YES)),
           partner = None)
 
@@ -84,7 +84,7 @@ class HHToESCEligibilityInputSpec extends AnyWordSpec
             currentYearlyIncome = None,
             escVouchers = Some(YesNoUnsureEnum.NO)),
           partner = Some(Claimant(lastYearlyIncome = Some(Income(Some(20000.00), Some(200.00), Some(500.00))),
-            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00), None, None, Some("1100L"))),
+            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00), None, Some("1100L"))),
             escVouchers = Some(YesNoUnsureEnum.YES))))
 
         val res = ESCEligibilityInput(List(
@@ -269,7 +269,7 @@ class HHToESCEligibilityInputSpec extends AnyWordSpec
 
         val household = Household(children = Nil,
           parent = Claimant(lastYearlyIncome = None,
-            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00), None, None, Some("1200L"))),
+            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00), None,  Some("1200L"))),
             escVouchers = Some(YesNoUnsureEnum.NOTSURE)),
           partner = None)
 

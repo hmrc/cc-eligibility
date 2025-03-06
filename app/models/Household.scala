@@ -28,21 +28,14 @@ import java.time.LocalDate
 
 //Note :- The order of these classes need to preserved to ensure json formatters are prepared in the correct order
 //Should also match childcarecalculatorfrontend.models.Household
-case class StatutoryIncome(
-                            statutoryWeeks: Double = 0.00,
-                            statutoryAmount: BigDecimal = 0.00
-                          )
 
-object StatutoryIncome {
-  implicit val formatStatutoryIncome: OFormat[StatutoryIncome] = Json.format[StatutoryIncome]
-}
+
 
 case class Income(
                    employmentIncome: Option[BigDecimal] = None,
                    pension: Option[BigDecimal] = None,
                    otherIncome: Option[BigDecimal] = None,
                    benefits: Option[BigDecimal] = None,
-                   statutoryIncome: Option[StatutoryIncome] = None,
                    taxCode: Option[String] = None
                  )
 

@@ -59,7 +59,6 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
             pension = Some(1200),
             otherIncome = Some(6000),
             benefits = None,
-            statutoryIncome = None
           )),
           minimumEarnings = Some(MinimumEarnings(BigDecimal(3900), Some(EmploymentStatusEnum.SELFEMPLOYED), Some(true))),
           escVouchers = Some(YesNoUnsureEnum.YES),
@@ -112,7 +111,6 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
             pension = Some(47674),
             otherIncome = Some(647864),
             benefits = Some(546),
-            statutoryIncome = None
           )),
           minimumEarnings = Some(MinimumEarnings(BigDecimal(0), Some(EmploymentStatusEnum.SELFEMPLOYED), Some(true))),
           escVouchers = Some(YesNoUnsureEnum.YES)
@@ -125,7 +123,6 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
             pension = Some(47674),
             otherIncome = Some(647864),
             benefits = Some(546),
-            statutoryIncome = None
           )),
           minimumEarnings = None,
           escVouchers = Some(YesNoUnsureEnum.NOTSURE)
