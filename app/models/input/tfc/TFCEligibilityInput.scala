@@ -116,9 +116,11 @@ case class TFCClaimant(
 
     val (emp, other, pension) = determineIncomeElems(currentIncome)
 
-    (if(emp.isDefined) emp else None,
-    if(other.isDefined) other else None,
-    if(pension.isDefined) pension else None)
+    (emp,
+    other,
+    pension
+    )
+
   }
 
   private def getTotalTFCIncome(employmentIncome: BigDecimal,
