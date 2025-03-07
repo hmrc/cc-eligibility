@@ -68,7 +68,7 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
                     selfEmployedSelection: Option[Boolean] = None,
                     maximumEarnings: Option[Boolean] = None
                   ): TFCClaimant ={
-    new TFCClaimant(previousIncome, currentIncome, hoursPerWeek, isPartner, disability,
+    new TFCClaimant(previousIncome, currentIncome,isPartner, disability,
       carersAllowance, minimumEarnings, age, employmentStatus, selfEmployedSelection, maximumEarnings){
     }
   }

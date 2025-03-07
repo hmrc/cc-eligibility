@@ -55,7 +55,6 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
 
           //Claimant model
           x.claimants.head.totalIncome shouldBe a[BigDecimal]
-          x.claimants.head.hoursPerWeek.isInstanceOf[Double] shouldBe true
           x.claimants.head.isPartner.isInstanceOf[Boolean] shouldBe true
           x.claimants.head.disability shouldBe a[TFCDisability]
 
@@ -118,10 +117,10 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
 
     "validMaxEarnings" must {
 
-      val claimant = TFCClaimant(hoursPerWeek = 16.50, disability = TFCDisability(), minimumEarnings =
+      val claimant = TFCClaimant( disability = TFCDisability(), minimumEarnings =
         TFCMinimumEarnings(), age = None)
 
-      val partner = TFCClaimant(hoursPerWeek = 17.50, isPartner = true, disability = TFCDisability(), minimumEarnings =
+      val partner = TFCClaimant(isPartner = true, disability = TFCDisability(), minimumEarnings =
         TFCMinimumEarnings(), age = None)
 
       "return true when its single parent journey when parent max earnings does not exist" in {
