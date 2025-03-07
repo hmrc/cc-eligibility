@@ -48,6 +48,7 @@ class HHToTFCEligibilityInput @Inject()(tFCConfig: TFCConfig, ccConfig: CCConfig
     TFCClaimant(
       previousIncome = hhIncomeToTFCIncome(claimant.lastYearlyIncome),
       currentIncome = hhIncomeToTFCIncome(claimant.currentYearlyIncome),
+      hoursPerWeek = claimant.hours.getOrElse(BigDecimal(0.0)).doubleValue,
       isPartner = isPartner,
       disability = TFCDisability(claimant.benefits.exists(_.disabilityBenefits), claimant.benefits.exists(_.highRateDisabilityBenefits)),
       carersAllowance = claimant.benefits.exists(_.carersAllowance),
