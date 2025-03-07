@@ -27,6 +27,41 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
 
   "JSONFactory" must {
 
+    "Return a valid output JSON when error sequence and status are passed" in {
+      val status = 400
+      val JSONPath = JsPath \ "tfc"
+      val validationError1 = JsonValidationError("Very Bad Thing Happened", 42)
+      val validationError2 = JsonValidationError("Not So Bad Thing Happened", "Error")
+      val errorTuple: (JsPath, Seq[JsonValidationError]) = (JSONPath, Seq(validationError1, validationError2))
+
+      val outputJSON = Json.parse(
+        """
+          |{
+          |"status": 400,
+          |"errors":
+          |[
+          |   {
+          |     "path" : "/tfc",
+          |     "validationErrors" :
+          |     [
+          |       {
+          |        "message": "Very Bad Thing Happened",
+          |        "args": [42]
+          |       },
+          |       {
+          |        "message": "Not So Bad Thing Happened",
+          |        "args": ["Error"]
+          |       }
+          |     ]
+          |   }
+          | ]
+          | }
+        """.stripMargin)
+
+      val result = utils.JSONFactory.generateErrorJSON(status, Left(Seq(errorTuple)))
+      result shouldBe outputJSON
+    }
+
 
     "Return a valid output JSON if error sequence is missing" in {
       val status = 500
