@@ -56,7 +56,6 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
   lazy val audits: AuditEvents = mock[AuditEvents]
 
   def testClaimant(
-                    previousIncome: Option[TFCIncome] = None,
                     currentIncome: Option[TFCIncome] = None,
                     isPartner: Boolean = false,
                     disability: TFCDisability,
@@ -67,7 +66,7 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
                     selfEmployedSelection: Option[Boolean] = None,
                     maximumEarnings: Option[Boolean] = None
                   ): TFCClaimant ={
-    new TFCClaimant(previousIncome, currentIncome, hoursPerWeek, isPartner, disability,
+    new TFCClaimant(currentIncome, isPartner, disability,
       carersAllowance, minimumEarnings, age, employmentStatus, selfEmployedSelection, maximumEarnings){
     }
   }

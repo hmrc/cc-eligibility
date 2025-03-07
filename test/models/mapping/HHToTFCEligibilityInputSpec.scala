@@ -61,7 +61,7 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
             benefits = None,
             statutoryIncome = None
           )),
-          hours = Some(32),
+
           minimumEarnings = Some(MinimumEarnings(BigDecimal(3900), Some(EmploymentStatusEnum.SELFEMPLOYED), Some(true))),
           escVouchers = Some(YesNoUnsureEnum.YES),
           maximumEarnings = Some(false)
@@ -70,7 +70,8 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
         val hhModel = Household(None, Some(LocationEnum.ENGLAND), List(hhChild1, hhChild2), parent, None)
 
         val expectedOutput = TFCEligibilityInput(currentDate, 4, "england",
-          List(TFCClaimant(None, Some(TFCIncome(Some(25000), Some(1200), Some(6000))), 32.0, false, TFCDisability(false, false), false,
+          List(TFCClaimant(
+            Some(TFCIncome(Some(25000), Some(1200), Some(6000))),false, TFCDisability(false, false), false,
             TFCMinimumEarnings(true, 3900), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), Some(Some(EmploymentStatusEnum.SELFEMPLOYED).toString), Some(true),
             maximumEarnings = Some(false))),
           List(TFCChild(0, 350, Periods.Monthly, dob, TFCDisability(true)),
@@ -135,9 +136,9 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
         val hhModel = Household(None, Some(LocationEnum.ENGLAND), List(hhChild1, hhChild2), parent, Some(partner))
 
         val expectedOutput = TFCEligibilityInput(currentDate, 4, "england",
-          List(TFCClaimant(None, Some(TFCIncome(Some(12212), Some(47674), Some(647864))), 34.0, false, TFCDisability(false, false), false,
+          List(TFCClaimant(Some(TFCIncome(Some(12212), Some(47674), Some(647864))), false, TFCDisability(false, false), false,
             TFCMinimumEarnings(false, 0.0), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), Some(Some(EmploymentStatusEnum.SELFEMPLOYED).toString), Some(true)),
-            TFCClaimant(None, Some(TFCIncome(Some(12212), Some(47674), Some(647864))), 21.0, true, TFCDisability(false, false), false,
+            TFCClaimant(Some(TFCIncome(Some(12212), Some(47674), Some(647864))), true, TFCDisability(false, false), false,
               TFCMinimumEarnings(true, 0.0), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), None, None)),
           List(TFCChild(0, 0, Periods.Monthly, dob, TFCDisability(true, false)),
             TFCChild(1, 1000, Periods.Monthly, dob, TFCDisability(true, false))))
