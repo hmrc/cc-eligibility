@@ -158,11 +158,11 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
       claimants = List(tfcOutputparent, tfcOutputpartner),
       children = List(tfcOutputCChild))))
 
-  val calcOutputValueAll: CalculatorOutput = CalculatorOutput(Some(BigDecimal(1000)),
+  val calcOutputValueAll: CalculatorOutput = CalculatorOutput(
     Some(BigDecimal(1000)), Some(BigDecimal(1000)))
 
-  val calcOutputValueOnlyESC: CalculatorOutput = CalculatorOutput(None, None, Some(BigDecimal(1000)))
-  val calcOutputValueOnlyTFC: CalculatorOutput = CalculatorOutput(None, Some(BigDecimal(1000)), None)
-  val calcOutputValueNone: CalculatorOutput = CalculatorOutput(None, None, None)
+  val calcOutputValueOnlyESC: CalculatorOutput = CalculatorOutput( None, Some(BigDecimal(1000)))
+  val calcOutputValueOnlyTFC: CalculatorOutput = CalculatorOutput( Some(BigDecimal(1000)), None)
+  val calcOutputValueNone: CalculatorOutput = CalculatorOutput( None, None)
 
 }
