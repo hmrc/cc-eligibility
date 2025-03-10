@@ -40,7 +40,6 @@ class CalculatorConnectorSpec extends AnyWordSpec with MockitoSugar with FakeCCE
       val testCalculatorConnector = new CalculatorConnector(app.injector.instanceOf[ApplicationConfig], mockHttp)
 
       val testOutput = CalculatorOutput(
-        tcAmount = Some(100),
         tfcAmount = Some(200),
         escAmount = Some(300)
       )

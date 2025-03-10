@@ -57,8 +57,6 @@ class HHToESCEligibilityInput @Inject()(val cCConfig: CCConfig) extends PeriodEn
 
   private def createClaimants(parent: Claimant,
                               partner: Option[Claimant]): List[ESCClaimant] = {
-
-    parent.lastYearlyIncome.map(x => ESCIncome(x.employmentIncome, x.pension, x.taxCode))
     val newParent = ESCClaimant(
       employerProvidesESC = escVouchersAvailable(parent),
       currentIncome = parent.currentYearlyIncome.map(x => ESCIncome(x.employmentIncome, x.pension, x.taxCode))

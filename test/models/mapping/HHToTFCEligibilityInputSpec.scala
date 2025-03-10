@@ -54,12 +54,10 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
         val parent = Claimant(
           ageRange = Some(AgeRangeEnum.EIGHTEENTOTWENTY),
           benefits = Some(Benefits()),
-          lastYearlyIncome = None,
           currentYearlyIncome = Some(Income(employmentIncome = Some(25000),
             pension = Some(1200),
             otherIncome = Some(6000),
             benefits = None,
-            statutoryIncome = None
           )),
 
           minimumEarnings = Some(MinimumEarnings(BigDecimal(3900), Some(EmploymentStatusEnum.SELFEMPLOYED), Some(true))),
@@ -109,12 +107,10 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
         val parent = Claimant(
           ageRange = Some(AgeRangeEnum.EIGHTEENTOTWENTY),
           benefits = Some(Benefits()),
-          lastYearlyIncome = None,
           currentYearlyIncome = Some(Income(employmentIncome = Some(12212),
             pension = Some(47674),
             otherIncome = Some(647864),
             benefits = Some(546),
-            statutoryIncome = None
           )),
           minimumEarnings = Some(MinimumEarnings(BigDecimal(0), Some(EmploymentStatusEnum.SELFEMPLOYED), Some(true))),
           escVouchers = Some(YesNoUnsureEnum.YES)
@@ -122,12 +118,10 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
         val partner = Claimant(
           ageRange = Some(AgeRangeEnum.EIGHTEENTOTWENTY),
           benefits = Some(Benefits()),
-          lastYearlyIncome = None,
           currentYearlyIncome = Some(Income(employmentIncome = Some(12212),
             pension = Some(47674),
             otherIncome = Some(647864),
             benefits = Some(546),
-            statutoryIncome = None
           )),
           minimumEarnings = None,
           escVouchers = Some(YesNoUnsureEnum.NOTSURE)
