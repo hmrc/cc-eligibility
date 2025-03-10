@@ -28,21 +28,12 @@ import java.time.LocalDate
 
 //Note :- The order of these classes need to preserved to ensure json formatters are prepared in the correct order
 //Should also match childcarecalculatorfrontend.models.Household
-case class StatutoryIncome(
-                            statutoryWeeks: Double = 0.00,
-                            statutoryAmount: BigDecimal = 0.00
-                          )
-
-object StatutoryIncome {
-  implicit val formatStatutoryIncome: OFormat[StatutoryIncome] = Json.format[StatutoryIncome]
-}
 
 case class Income(
                    employmentIncome: Option[BigDecimal] = None,
                    pension: Option[BigDecimal] = None,
                    otherIncome: Option[BigDecimal] = None,
                    benefits: Option[BigDecimal] = None,
-                   statutoryIncome: Option[StatutoryIncome] = None,
                    taxCode: Option[String] = None
                  )
 
@@ -90,22 +81,12 @@ object ChildCareCost {
   implicit val formatChildCareCost: OFormat[ChildCareCost] = Json.format[ChildCareCost]
 }
 
-case class Education(
-                      inEducation: Boolean = false,
-                      startDate: Option[LocalDate] = None
-                    )
-
-object Education {
-  implicit val formatEducation: OFormat[Education] = Json.format[Education]
-}
-
 case class Child(
                   id: Short,
                   name: String,
                   dob: Option[LocalDate] = None,
                   disability: Option[Disability] = None,
                   childcareCost: Option[ChildCareCost] = None,
-                  education: Option[Education] = None
                 )
 
 object Child {
@@ -115,9 +96,7 @@ object Child {
 case class Claimant(
                      ageRange: Option[AgeRangeEnum] = None,
                      benefits: Option[Benefits] = None,
-                     lastYearlyIncome: Option[Income]  =   None,
                      currentYearlyIncome: Option[Income]  = None,
-                     hours: Option[BigDecimal] =   None,
                      minimumEarnings: Option[MinimumEarnings]= None,
                      escVouchers: Option[YesNoUnsureEnum] =   None,
                      maximumEarnings: Option[Boolean] = None
