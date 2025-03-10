@@ -90,9 +90,7 @@ object TFCIncome {
 }
 
 case class TFCClaimant(
-                        previousIncome: Option[TFCIncome] = None,
                         currentIncome: Option[TFCIncome] = None,
-                        hoursPerWeek: Double = 0.00,
                         isPartner: Boolean = false,
                         disability: TFCDisability,
                         carersAllowance: Boolean = false,
@@ -103,7 +101,7 @@ case class TFCClaimant(
                         maximumEarnings: Option[Boolean] = None
                      ) {
   def totalIncome: BigDecimal = {
-    val (currentEmployment, currentvOther, currentPension) = getIncomeElements(previousIncome, currentIncome)
+    val (currentEmployment, currentvOther, currentPension) = getIncomeElements( currentIncome)
     getTotalTFCIncome(currentEmployment.getOrElse(ConfigConstants.defaultAmount),
       currentvOther.getOrElse(ConfigConstants.defaultAmount),
       currentPension.getOrElse(ConfigConstants.defaultAmount))
@@ -114,14 +112,15 @@ case class TFCClaimant(
     case _ => (None, None, None)
   }
 
-  private def getIncomeElements(previousIncome: Option[TFCIncome], currentIncome: Option[TFCIncome] ) = {
+  private def getIncomeElements(currentIncome: Option[TFCIncome] ) = {
 
-    val (empPrevious, otherPrevious, pensionPrevious) = determineIncomeElems(previousIncome)
     val (emp, other, pension) = determineIncomeElems(currentIncome)
 
-    (if(emp.isDefined) emp else empPrevious,
-    if(other.isDefined) other else otherPrevious,
-    if(pension.isDefined) pension else pensionPrevious)
+    (emp,
+    other,
+    pension
+    )
+
   }
 
   private def getTotalTFCIncome(employmentIncome: BigDecimal,
@@ -134,9 +133,7 @@ case class TFCClaimant(
 object TFCClaimant {
 
   implicit val claimantReads: Reads[TFCClaimant] = (
-    (JsPath \ "previousIncome").readNullable[TFCIncome] and
       (JsPath \ "currentIncome").readNullable[TFCIncome] and
-        (JsPath \ "hoursPerWeek").read[Double].orElse(Reads.pure(0.00)) and
           (JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)) and
             (JsPath \ "disability").read[TFCDisability] and
               (JsPath \ "carersAllowance").read[Boolean].orElse(Reads.pure(false)) and

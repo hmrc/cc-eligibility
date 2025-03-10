@@ -58,7 +58,6 @@ case class ESCClaimant(
                            qualifying: Boolean = false,
                            isPartner: Boolean = false,
                            eligibleMonthsInPeriod: Int = 0,
-                           previousIncome: Option[ESCIncome] = None,
                            currentIncome: Option[ESCIncome] = None,
                            vouchers: Boolean = false,
                            escStartDate: LocalDate = LocalDate.now

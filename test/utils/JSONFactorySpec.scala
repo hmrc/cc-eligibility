@@ -18,7 +18,6 @@ package utils
 
 import controllers.FakeCCEligibilityApplication
 import models.output.esc.{ESCEligibilityOutput, ESCPeriod}
-import models.output.tc._
 import models.output.tfc._
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -30,7 +29,7 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
 
     "Return a valid output JSON when error sequence and status are passed" in {
       val status = 400
-      val JSONPath = JsPath \ "tc"
+      val JSONPath = JsPath \ "tfc"
       val validationError1 = JsonValidationError("Very Bad Thing Happened", 42)
       val validationError2 = JsonValidationError("Not So Bad Thing Happened", "Error")
       val errorTuple: (JsPath, Seq[JsonValidationError]) = (JSONPath, Seq(validationError1, validationError2))
@@ -42,7 +41,7 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
           |"errors":
           |[
           |   {
-          |     "path" : "/tc",
+          |     "path" : "/tfc",
           |     "validationErrors" :
           |     [
           |       {
@@ -62,6 +61,7 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
       val result = utils.JSONFactory.generateErrorJSON(status, Left(Seq(errorTuple)))
       result shouldBe outputJSON
     }
+
 
     "Return a valid output JSON if error sequence is missing" in {
       val status = 500
@@ -93,79 +93,6 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
       result shouldBe outputJSON
     }
 
-    "Return a valid response with eligibility result" in {
-      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-      val periodStartDate = LocalDate.parse("2014-09-01", formatter)
-      val periodEndDate = LocalDate.parse("2015-04-05", formatter)
-
-      val outputClaimant = models.output.tc.TCOutputClaimant(qualifying = true, isPartner = false, claimantDisability = TCDisability(disability = false, severeDisability = false))
-      val outputChild = models.output.tc.TCOutputChild(childcareCost = BigDecimal(200.00), childcareCostPeriod = Periods.Monthly, qualifying = true, childElements = TCChildElements(child = true, youngAdult = false, disability = false, severeDisability = false, childcare = true))
-      val outputHhElements = models.output.tc.TCHouseHoldElements(basic = true, hours30 = false, childcare = true, loneParent = true, secondParent = false, family = true, wtc = true, ctc = true)
-      val outputPeriod = models.output.tc.TCPeriod(from = periodStartDate, until = periodEndDate, householdElements = outputHhElements, claimants = List(outputClaimant), children = List(outputChild))
-      val outputTaxYear = models.output.tc.TCTaxYear(from = periodStartDate, until = periodEndDate, periods = List(outputPeriod))
-      val tcEligibilityModel = TCEligibilityOutput(eligible = true, taxYears = List(outputTaxYear))
-
-      val outputJson = Json.parse(
-        s"""
-          {
-                "eligible": true,
-                "taxYears": [
-                  {
-                    "from": "${periodStartDate.toString}",
-                    "until": "${periodEndDate.toString}",
-                    "currentHouseholdIncome": {},
-                    "previousHouseholdIncome": {},
-                    "periods": [
-                      {
-                        "from": "${periodStartDate.toString}",
-                        "until": "${periodEndDate.toString}",
-                        "householdElements": {
-                          "basic": true,
-                          "hours30": false,
-                          "childcare": true,
-                          "loneParent": true,
-                          "secondParent": false,
-                          "family": true,
-                          "wtc": true,
-                          "ctc": true
-                        },
-                        "claimants": [
-                          {
-                            "qualifying": true,
-                            "isPartner": false,
-                            "claimantDisability": {
-                              "disability": false,
-                              "severeDisability": false
-                            },
-                            "doesNotTaper": false
-                          }
-                        ],
-                        "children": [
-                          {
-                            "childcareCost": 200.0,
-                            "childcareCostPeriod": "Month",
-                            "qualifying": true,
-                            "childElements": {
-                              "child": true,
-                              "youngAdult": false,
-                              "disability": false,
-                              "severeDisability": false,
-                              "childcare": true
-                            }
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ],
-                "wtc": false,
-                "ctc": false
-              }
-        """.stripMargin)
-
-      val result = Json.toJson(tcEligibilityModel)
-      result shouldBe outputJson
-    }
 
     "Return a valid TFC response with eligibility result" in {
       val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
