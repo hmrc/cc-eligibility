@@ -16,6 +16,7 @@
 
 package models.mappings
 
+import models.ParentsBenefits._
 import models._
 import models.input.tfc._
 import utils.{CCConfig, TFCConfig}
@@ -24,14 +25,14 @@ import javax.inject.Inject
 
 class HHToTFCEligibilityInput @Inject()(tFCConfig: TFCConfig, ccConfig: CCConfig) extends PeriodEnumToPeriod {
 
-  def convert(hh: Household): TFCEligibilityInput = {
+  def convert(hh: Household): TFCEligibilityInput =
     TFCEligibilityInput(
       from = tFCConfig.config.startDate,
       numberOfPeriods = tFCConfig.tfcNoOfPeriods,
       location = hh.location.getOrElse(LocationEnum.ENGLAND.toString).toString,
       claimants = hhClaimantToTFCEligibilityInputClaimant(hh.parent, hh.partner),
-      children = hhChildToTFCEligibilityInputChild(hh.children))
-  }
+      children = hhChildToTFCEligibilityInputChild(hh.children)
+    )
 
   private def hhClaimantToTFCEligibilityInputClaimant(hhParent: Claimant, hhPartner: Option[Claimant]): List[TFCClaimant] = {
 
@@ -44,22 +45,31 @@ class HHToTFCEligibilityInput @Inject()(tFCConfig: TFCConfig, ccConfig: CCConfig
     }
   }
 
-  private def createClaimant(claimant: Claimant, isPartner: Boolean): TFCClaimant = {
+  private def createClaimant(claimant: Claimant, isPartner: Boolean): TFCClaimant =
     TFCClaimant(
       currentIncome = hhIncomeToTFCIncome(claimant.currentYearlyIncome),
       isPartner = isPartner,
-      disability = TFCDisability(claimant.benefits.exists(_.disabilityBenefits), claimant.benefits.exists(_.highRateDisabilityBenefits)),
-      carersAllowance = claimant.benefits.exists(_.carersAllowance),
+      disability = TFCDisability(),
+      carersAllowance = convertBenefitsToCarersAllowance(claimant.benefits),
       minimumEarnings = hhMinimumEarningsToTFCMinimumEarnings(claimant.minimumEarnings),
       age = claimant.ageRange.map(_.toString),
-      employmentStatus = claimant.minimumEarnings.map(_.employmentStatus.toString),
+      employmentStatus = claimant.minimumEarnings.flatMap(_.employmentStatus.map(_.toString)),
       selfEmployedSelection = claimant.minimumEarnings.flatMap(_.selfEmployedIn12Months),
       maximumEarnings = claimant.maximumEarnings
     )
+
+  private def convertBenefitsToCarersAllowance(benefits: Option[Set[ParentsBenefits]]): Boolean = {
+    val TfcOrFreeChildcareQualifyingBenefits: Set[ParentsBenefits] = Set(
+      CarersAllowance,
+      IncapacityBenefit,
+      SevereDisablementAllowance,
+      ContributionBasedEmploymentAndSupportAllowance
+    )
+
+    benefits.exists(_.intersect(TfcOrFreeChildcareQualifyingBenefits).nonEmpty)
   }
 
-  private def hhMinimumEarningsToTFCMinimumEarnings(hhMinimumEarnings: Option[MinimumEarnings]): TFCMinimumEarnings = {
-
+  private def hhMinimumEarningsToTFCMinimumEarnings(hhMinimumEarnings: Option[MinimumEarnings]): TFCMinimumEarnings =
     hhMinimumEarnings match {
       case Some(earnings) =>
         if (earnings.amount <= BigDecimal(0.00)) {
@@ -67,19 +77,17 @@ class HHToTFCEligibilityInput @Inject()(tFCConfig: TFCConfig, ccConfig: CCConfig
         } else {
           TFCMinimumEarnings(amount = earnings.amount)
         }
-      case None => TFCMinimumEarnings() //default values will be used
+      case None => TFCMinimumEarnings()
     }
-  }
 
-  private def hhIncomeToTFCIncome(hhIncome: Option[Income]): Option[TFCIncome] = {
+  private def hhIncomeToTFCIncome(hhIncome: Option[Income]): Option[TFCIncome] =
     hhIncome.map(x => TFCIncome(
       employmentIncome = x.employmentIncome,
       pension = x.pension,
       otherIncome = x.otherIncome)
     )
-  }
 
-  private def hhChildToTFCEligibilityInputChild(hhChildren: List[Child]): List[TFCChild] = {
+  private def hhChildToTFCEligibilityInputChild(hhChildren: List[Child]): List[TFCChild] =
     hhChildren map (child => {
       TFCChild(
         child.id,
@@ -92,5 +100,5 @@ class HHToTFCEligibilityInput @Inject()(tFCConfig: TFCConfig, ccConfig: CCConfig
         ), ccConfig, Some(true)
       )
     })
-  }
+
 }

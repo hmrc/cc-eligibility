@@ -41,17 +41,6 @@ object Income {
   implicit val formatIncome: OFormat[Income] = Json.format[Income]
 }
 
-case class Benefits(
-                    disabilityBenefits: Boolean = false,
-                    highRateDisabilityBenefits: Boolean = false,
-                    incomeBenefits: Boolean = false,
-                    carersAllowance: Boolean = false
-                   )
-
-object Benefits {
-  implicit val formatBenefits: OFormat[Benefits] = Json.format[Benefits]
-}
-
 case class MinimumEarnings(
                            amount: BigDecimal =   0.00,
                            employmentStatus: Option[EmploymentStatusEnum] =   None,
@@ -73,8 +62,8 @@ object Disability {
 }
 
 case class ChildCareCost(
-                         amount: Option[BigDecimal] =   None,
-                         period: Option[PeriodEnum] =   None
+                         amount: Option[BigDecimal] = None,
+                         period: Option[PeriodEnum] = None
                         )
 
 object ChildCareCost {
@@ -95,7 +84,7 @@ object Child {
 
 case class Claimant(
                      ageRange: Option[AgeRangeEnum] = None,
-                     benefits: Option[Benefits] = None,
+                     benefits: Option[Set[ParentsBenefits]] = None,
                      currentYearlyIncome: Option[Income]  = None,
                      minimumEarnings: Option[MinimumEarnings]= None,
                      escVouchers: Option[YesNoUnsureEnum] =   None,
