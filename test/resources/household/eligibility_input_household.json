@@ -1,12 +1,10 @@
 {
   "parent": {
     "ageRange": "TWENTYONEOROVER",
-    "benefits": {
-      "disabilityBenefits": true,
-      "highRateDisabilityBenefits": false,
-      "incomeBenefits": true,
-      "carersAllowance": false
-    },
+    "benefits": [
+      "SevereDisablementAllowance",
+      "NICreditsForIncapacityOrLimitedCapabilityForWork"
+    ],
     "currentYearlyIncome": {
       "employmentIncome": 40000.00,
       "otherIncome": 10000.00,
