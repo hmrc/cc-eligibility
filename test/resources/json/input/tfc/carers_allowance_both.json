@@ -5,7 +5,6 @@
       "location": "england",
       "claimants": [
         {
-          "hoursPerWeek": 0.00,
           "isPartner": false,
           "location": "england",
           "totalIncome": 0.00,
@@ -20,7 +19,6 @@
           }
         },
         {
-          "hoursPerWeek": 0.00,
           "isPartner": true,
           "totalIncome": 10000.00,
           "disability": {

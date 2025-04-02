@@ -45,8 +45,8 @@ class HHToESCEligibilityInputSpec extends AnyWordSpec
       "given a household with parent and no partner no children" in {
 
         val household = Household(children = Nil,
-          parent = Claimant(lastYearlyIncome = Some(Income(Some(20000.00), Some(200.00), Some(500.00))),
-            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00), None, None, Some("1100L"))),
+          parent = Claimant(
+            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00), None,Some("1100L"))),
             escVouchers = Some(YesNoUnsureEnum.YES)),
           partner = None)
 
@@ -54,11 +54,11 @@ class HHToESCEligibilityInputSpec extends AnyWordSpec
           ESCTaxYear(LocalDate.now(),
             HelperManager.determineApril6DateFromNow(LocalDate.now()),
             List(ESCClaimant(false, true,
-              Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List()),
+             Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List()),
           ESCTaxYear(HelperManager.determineApril6DateFromNow(LocalDate.now()),
             LocalDate.now().plusYears(1),
             List(ESCClaimant(false, true,
-              Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List())))
+             Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List())))
 
         when(SUT.cCConfig.startDate).thenReturn(LocalDate.now())
 
@@ -80,11 +80,11 @@ class HHToESCEligibilityInputSpec extends AnyWordSpec
         )
 
         val household = Household(children = children,
-          parent = Claimant(lastYearlyIncome = None,
+          parent = Claimant(
             currentYearlyIncome = None,
             escVouchers = Some(YesNoUnsureEnum.NO)),
-          partner = Some(Claimant(lastYearlyIncome = Some(Income(Some(20000.00), Some(200.00), Some(500.00))),
-            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00), None, None, Some("1100L"))),
+          partner = Some(Claimant(
+            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00), None,Some("1100L"))),
             escVouchers = Some(YesNoUnsureEnum.YES))))
 
         val res = ESCEligibilityInput(List(
@@ -93,7 +93,7 @@ class HHToESCEligibilityInputSpec extends AnyWordSpec
             List(
               ESCClaimant(false, false, None),
               ESCClaimant(true, true,
-                Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))),
+                Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))),
             List(
               ESCChild(
                 1,
@@ -108,7 +108,7 @@ class HHToESCEligibilityInputSpec extends AnyWordSpec
             List(
               ESCClaimant(false, false, None),
               ESCClaimant(true, true,
-                Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List(
+                Some(ESCIncome(Some(30000.0), Some(200.0), Some("1100L"))))), List(
               ESCChild(
                 1,
                 dob,
@@ -126,10 +126,10 @@ class HHToESCEligibilityInputSpec extends AnyWordSpec
       "given a household with parent and a partner with no children" in {
 
         val household = Household(children = Nil,
-          parent = Claimant(lastYearlyIncome = Some(Income(Some(20000.00), Some(200.00), Some(500.00))),
+          parent = Claimant(
             currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00))),
             escVouchers = Some(YesNoUnsureEnum.NOTSURE)),
-          partner = Some(Claimant(lastYearlyIncome = Some(Income(Some(20000.00), Some(200.00), Some(500.00))),
+          partner = Some(Claimant(
             currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00))),
             escVouchers = Some(YesNoUnsureEnum.NO))))
 
@@ -137,15 +137,15 @@ class HHToESCEligibilityInputSpec extends AnyWordSpec
           ESCTaxYear(LocalDate.now(),
             HelperManager.determineApril6DateFromNow(LocalDate.now()),
             List(ESCClaimant(false, false,
-              Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0)))),
+            Some(ESCIncome(Some(30000.0), Some(200.0)))),
               ESCClaimant(true, false,
-                Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0))))), List()),
+                Some(ESCIncome(Some(30000.0), Some(200.0))))), List()),
           ESCTaxYear(HelperManager.determineApril6DateFromNow(LocalDate.now()),
             LocalDate.now().plusYears(1),
             List(ESCClaimant(false, false,
-              Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0)))),
+              Some(ESCIncome(Some(30000.0), Some(200.0)))),
               ESCClaimant(true, false,
-                Some(ESCIncome(Some(20000.0), Some(200.0))), Some(ESCIncome(Some(30000.0), Some(200.0))))), List())))
+             Some(ESCIncome(Some(30000.0), Some(200.0))))), List())))
 
         when(SUT.cCConfig.startDate).thenReturn(LocalDate.now())
 
@@ -268,8 +268,8 @@ class HHToESCEligibilityInputSpec extends AnyWordSpec
       "given a household with only parent and no children with a tax code" in {
 
         val household = Household(children = Nil,
-          parent = Claimant(lastYearlyIncome = None,
-            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00), None, None, Some("1200L"))),
+          parent = Claimant(
+            currentYearlyIncome = Some(Income(Some(30000.00), Some(200.00), Some(1500.00), None,Some("1200L"))),
             escVouchers = Some(YesNoUnsureEnum.NOTSURE)),
           partner = None)
 
@@ -277,11 +277,11 @@ class HHToESCEligibilityInputSpec extends AnyWordSpec
           ESCTaxYear(LocalDate.now(),
             HelperManager.determineApril6DateFromNow(LocalDate.now()),
             List(ESCClaimant(false, false,
-              None, Some(ESCIncome(Some(30000.0), Some(200.0), Some("1200L"))))), List()),
+              Some(ESCIncome(Some(30000.0), Some(200.0), Some("1200L"))))), List()),
           ESCTaxYear(HelperManager.determineApril6DateFromNow(LocalDate.now()),
             LocalDate.now().plusYears(1),
             List(ESCClaimant(false, false,
-              None, Some(ESCIncome(Some(30000.0), Some(200.0), Some("1200L"))))), List())))
+              Some(ESCIncome(Some(30000.0), Some(200.0), Some("1200L"))))), List())))
 
         when(SUT.cCConfig.startDate).thenReturn(LocalDate.now())
 

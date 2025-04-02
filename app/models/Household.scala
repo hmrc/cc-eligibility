@@ -28,37 +28,17 @@ import java.time.LocalDate
 
 //Note :- The order of these classes need to preserved to ensure json formatters are prepared in the correct order
 //Should also match childcarecalculatorfrontend.models.Household
-case class StatutoryIncome(
-                            statutoryWeeks: Double = 0.00,
-                            statutoryAmount: BigDecimal = 0.00
-                          )
-
-object StatutoryIncome {
-  implicit val formatStatutoryIncome: OFormat[StatutoryIncome] = Json.format[StatutoryIncome]
-}
 
 case class Income(
                    employmentIncome: Option[BigDecimal] = None,
                    pension: Option[BigDecimal] = None,
                    otherIncome: Option[BigDecimal] = None,
                    benefits: Option[BigDecimal] = None,
-                   statutoryIncome: Option[StatutoryIncome] = None,
                    taxCode: Option[String] = None
                  )
 
 object Income {
   implicit val formatIncome: OFormat[Income] = Json.format[Income]
-}
-
-case class Benefits(
-                    disabilityBenefits: Boolean = false,
-                    highRateDisabilityBenefits: Boolean = false,
-                    incomeBenefits: Boolean = false,
-                    carersAllowance: Boolean = false
-                   )
-
-object Benefits {
-  implicit val formatBenefits: OFormat[Benefits] = Json.format[Benefits]
 }
 
 case class MinimumEarnings(
@@ -82,21 +62,12 @@ object Disability {
 }
 
 case class ChildCareCost(
-                         amount: Option[BigDecimal] =   None,
-                         period: Option[PeriodEnum] =   None
+                         amount: Option[BigDecimal] = None,
+                         period: Option[PeriodEnum] = None
                         )
 
 object ChildCareCost {
   implicit val formatChildCareCost: OFormat[ChildCareCost] = Json.format[ChildCareCost]
-}
-
-case class Education(
-                      inEducation: Boolean = false,
-                      startDate: Option[LocalDate] = None
-                    )
-
-object Education {
-  implicit val formatEducation: OFormat[Education] = Json.format[Education]
 }
 
 case class Child(
@@ -105,7 +76,6 @@ case class Child(
                   dob: Option[LocalDate] = None,
                   disability: Option[Disability] = None,
                   childcareCost: Option[ChildCareCost] = None,
-                  education: Option[Education] = None
                 )
 
 object Child {
@@ -114,10 +84,8 @@ object Child {
 
 case class Claimant(
                      ageRange: Option[AgeRangeEnum] = None,
-                     benefits: Option[Benefits] = None,
-                     lastYearlyIncome: Option[Income]  =   None,
+                     benefits: Option[Set[ParentsBenefits]] = None,
                      currentYearlyIncome: Option[Income]  = None,
-                     hours: Option[BigDecimal] =   None,
                      minimumEarnings: Option[MinimumEarnings]= None,
                      escVouchers: Option[YesNoUnsureEnum] =   None,
                      maximumEarnings: Option[Boolean] = None

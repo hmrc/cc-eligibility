@@ -18,7 +18,7 @@ package models.input
 
 import play.api.libs.json.{Json, Reads}
 
-case class CalculatorOutput(tcAmount: Option[BigDecimal] = None,
+case class CalculatorOutput(
                             tfcAmount: Option[BigDecimal] = None,
                             escAmount: Option[BigDecimal] = None)
 

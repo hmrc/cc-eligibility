@@ -45,7 +45,7 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
   val mockCC: ControllerComponents = mock[ControllerComponents]
   val mockParser: PlayBodyParsers = mock[PlayBodyParsers]
 
-  implicit lazy val tcConfig: TCConfig = app.injector.instanceOf[TCConfig]
+
 
   when(mockCC.actionBuilder)
     .thenReturn(new DefaultMessagesActionBuilderImpl(stubBodyParser[AnyContent](), stubMessagesApi()))
@@ -56,9 +56,7 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
   lazy val audits: AuditEvents = mock[AuditEvents]
 
   def testClaimant(
-                    previousIncome: Option[TFCIncome] = None,
                     currentIncome: Option[TFCIncome] = None,
-                    hoursPerWeek: Double = 0.00,
                     isPartner: Boolean = false,
                     disability: TFCDisability,
                     carersAllowance: Boolean = false,
@@ -68,7 +66,7 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
                     selfEmployedSelection: Option[Boolean] = None,
                     maximumEarnings: Option[Boolean] = None
                   ): TFCClaimant ={
-    new TFCClaimant(previousIncome, currentIncome, hoursPerWeek, isPartner, disability,
+    new TFCClaimant(currentIncome, isPartner, disability,
       carersAllowance, minimumEarnings, age, employmentStatus, selfEmployedSelection, maximumEarnings){
     }
   }

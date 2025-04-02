@@ -76,7 +76,6 @@ class ESCEligibility @Inject()(config: CCConfig)(implicit ec: ExecutionContext) 
         isPartner = claimant.isPartner,
         eligibleMonthsInPeriod = months,
         vouchers = vouchers,
-        previousIncome = claimant.previousIncome.map(x => models.output.esc.ESCIncome(x.employmentIncome, x.pension, x.taxCode)),
         currentIncome = claimant.currentIncome.map(x => models.output.esc.ESCIncome(x.employmentIncome, x.pension, x.taxCode))
       )
     }

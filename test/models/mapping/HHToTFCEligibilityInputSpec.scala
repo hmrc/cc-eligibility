@@ -17,9 +17,11 @@
 package models.mapping
 
 import controllers.FakeCCEligibilityApplication
+import models.ParentsBenefits.IncapacityBenefit
 import models._
 import models.input.tfc._
 import models.mappings._
+
 import java.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -42,39 +44,75 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
           name = "child1",
           dob = Some(dob),
           disability = Some(Disability(disabled = true, severelyDisabled = false, blind = false)),
-          childcareCost = Some(ChildCareCost(amount = Some(350), Some(PeriodEnum.MONTHLY)))
+          childcareCost = Some(ChildCareCost(amount = Some(350), period = Some(PeriodEnum.MONTHLY)))
         )
         val hhChild2 = Child(
           id = 1,
           name = "child2",
           dob = Some(dob),
           disability = Some(Disability(disabled = false, severelyDisabled = true, blind = false)),
-          childcareCost = Some(ChildCareCost(amount = Some(100), Some(PeriodEnum.MONTHLY)))
+          childcareCost = Some(ChildCareCost(amount = Some(100), period = Some(PeriodEnum.MONTHLY)))
         )
         val parent = Claimant(
           ageRange = Some(AgeRangeEnum.EIGHTEENTOTWENTY),
-          benefits = Some(Benefits()),
-          lastYearlyIncome = None,
-          currentYearlyIncome = Some(Income(employmentIncome = Some(25000),
-            pension = Some(1200),
-            otherIncome = Some(6000),
-            benefits = None,
-            statutoryIncome = None
-          )),
-          hours = Some(32),
-          minimumEarnings = Some(MinimumEarnings(BigDecimal(3900), Some(EmploymentStatusEnum.SELFEMPLOYED), Some(true))),
+          benefits = None,
+          currentYearlyIncome = Some(
+            Income(
+              employmentIncome = Some(25000),
+              pension = Some(1200),
+              otherIncome = Some(6000),
+              benefits = None,
+            )
+          ),
+          minimumEarnings = Some(
+            MinimumEarnings(
+              amount = BigDecimal(3900),
+              employmentStatus = Some(EmploymentStatusEnum.SELFEMPLOYED),
+              selfEmployedIn12Months = Some(true)
+            )
+          ),
           escVouchers = Some(YesNoUnsureEnum.YES),
           maximumEarnings = Some(false)
         )
 
         val hhModel = Household(None, Some(LocationEnum.ENGLAND), List(hhChild1, hhChild2), parent, None)
 
-        val expectedOutput = TFCEligibilityInput(currentDate, 4, "england",
-          List(TFCClaimant(None, Some(TFCIncome(Some(25000), Some(1200), Some(6000))), 32.0, false, TFCDisability(false, false), false,
-            TFCMinimumEarnings(true, 3900), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), Some(Some(EmploymentStatusEnum.SELFEMPLOYED).toString), Some(true),
-            maximumEarnings = Some(false))),
-          List(TFCChild(0, 350, Periods.Monthly, dob, TFCDisability(true)),
-            TFCChild(1, 100, Periods.Monthly, dob, TFCDisability(false, true))))
+        val expectedOutput = TFCEligibilityInput(
+          from = currentDate,
+          numberOfPeriods = 4,
+          location = "england",
+          claimants = List(
+            TFCClaimant(
+              currentIncome = Some(
+                TFCIncome(employmentIncome = Some(25000), pension = Some(1200), otherIncome = Some(6000))
+              ),
+              isPartner = false,
+              disability = TFCDisability(),
+              carersAllowance = false,
+              minimumEarnings = TFCMinimumEarnings(amount = 3900),
+              age = Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString),
+              employmentStatus = Some(EmploymentStatusEnum.SELFEMPLOYED.toString),
+              selfEmployedSelection = Some(true),
+              maximumEarnings = Some(false)
+            )
+          ),
+          children = List(
+            TFCChild(
+              id = 0,
+              childcareCost = 350,
+              childcareCostPeriod = Periods.Monthly,
+              dob = dob,
+              disability = TFCDisability(disabled = true)
+            ),
+            TFCChild(
+              id = 1,
+              childcareCost = 100,
+              childcareCostPeriod = Periods.Monthly,
+              dob = dob,
+              disability = TFCDisability(severelyDisabled = true)
+            )
+          )
+        )
 
         val mockCC = mock[CCConfig]
 
@@ -96,53 +134,89 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
           name = "child1",
           dob = Some(dob),
           disability = Some(Disability(disabled = true, severelyDisabled = false, blind = true)),
-          childcareCost = Some(ChildCareCost(amount = None, None))
+          childcareCost = Some(ChildCareCost(amount = None, period = None))
         )
         val hhChild2 = Child(
           id = 1,
           name = "child2",
           dob = Some(dob),
           disability = Some(Disability(disabled = false, severelyDisabled = false, blind = true)),
-          childcareCost = Some(ChildCareCost(amount = Some(1000), Some(PeriodEnum.MONTHLY)))
+          childcareCost = Some(ChildCareCost(amount = Some(1000), period = Some(PeriodEnum.MONTHLY)))
         )
         val parent = Claimant(
           ageRange = Some(AgeRangeEnum.EIGHTEENTOTWENTY),
-          benefits = Some(Benefits()),
-          lastYearlyIncome = None,
-          currentYearlyIncome = Some(Income(employmentIncome = Some(12212),
-            pension = Some(47674),
-            otherIncome = Some(647864),
-            benefits = Some(546),
-            statutoryIncome = None
-          )),
-          hours = Some(34),
+          benefits = Some(Set(IncapacityBenefit)),
+          currentYearlyIncome = Some(
+            Income(
+              employmentIncome = Some(12212),
+              pension = Some(47674),
+              otherIncome = Some(647864),
+              benefits = Some(546),
+            )
+          ),
           minimumEarnings = Some(MinimumEarnings(BigDecimal(0), Some(EmploymentStatusEnum.SELFEMPLOYED), Some(true))),
           escVouchers = Some(YesNoUnsureEnum.YES)
         )
         val partner = Claimant(
           ageRange = Some(AgeRangeEnum.EIGHTEENTOTWENTY),
-          benefits = Some(Benefits()),
-          lastYearlyIncome = None,
-          currentYearlyIncome = Some(Income(employmentIncome = Some(12212),
-            pension = Some(47674),
-            otherIncome = Some(647864),
-            benefits = Some(546),
-            statutoryIncome = None
-          )),
-          hours = Some(21),
+          benefits = None,
+          currentYearlyIncome = Some(
+            Income(
+              employmentIncome = Some(12212),
+              pension = Some(47674),
+              otherIncome = Some(647864),
+              benefits = Some(546),
+            )
+          ),
           minimumEarnings = None,
           escVouchers = Some(YesNoUnsureEnum.NOTSURE)
         )
 
         val hhModel = Household(None, Some(LocationEnum.ENGLAND), List(hhChild1, hhChild2), parent, Some(partner))
 
-        val expectedOutput = TFCEligibilityInput(currentDate, 4, "england",
-          List(TFCClaimant(None, Some(TFCIncome(Some(12212), Some(47674), Some(647864))), 34.0, false, TFCDisability(false, false), false,
-            TFCMinimumEarnings(false, 0.0), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), Some(Some(EmploymentStatusEnum.SELFEMPLOYED).toString), Some(true)),
-            TFCClaimant(None, Some(TFCIncome(Some(12212), Some(47674), Some(647864))), 21.0, true, TFCDisability(false, false), false,
-              TFCMinimumEarnings(true, 0.0), Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString), None, None)),
-          List(TFCChild(0, 0, Periods.Monthly, dob, TFCDisability(true, false)),
-            TFCChild(1, 1000, Periods.Monthly, dob, TFCDisability(true, false))))
+        val expectedOutput = TFCEligibilityInput(
+          from = currentDate,
+          numberOfPeriods = 4,
+          location = "england",
+          claimants = List(
+            TFCClaimant(
+              currentIncome = Some(TFCIncome(Some(12212), Some(47674), Some(647864))),
+              isPartner = false,
+              disability = TFCDisability(),
+              carersAllowance = true,
+              minimumEarnings = TFCMinimumEarnings(selection = false, amount = 0.0),
+              age = Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString),
+              employmentStatus = Some(EmploymentStatusEnum.SELFEMPLOYED.toString),
+              selfEmployedSelection = Some(true)
+            ),
+            TFCClaimant(
+              currentIncome = Some(TFCIncome(Some(12212), Some(47674), Some(647864))),
+              isPartner = true,
+              disability = TFCDisability(),
+              carersAllowance = false,
+              minimumEarnings = TFCMinimumEarnings(selection = true, amount = 0.0),
+              age = Some(AgeRangeEnum.EIGHTEENTOTWENTY.toString),
+              employmentStatus = None,
+              selfEmployedSelection = None
+            )
+          ),
+          children = List(
+            TFCChild(
+              id = 0,
+              childcareCost = 0,
+              childcareCostPeriod = Periods.Monthly,
+              dob = dob,
+              disability = TFCDisability(disabled = true)
+            ),
+            TFCChild(
+              id = 1,
+              childcareCost = 1000,
+              childcareCostPeriod = Periods.Monthly,
+              dob = dob,
+              disability = TFCDisability(disabled = true)
+            )
+          )
+        )
 
         when(mockTFC.tfcNoOfPeriods).thenReturn(4.toShort)
         when(mockTFC.config.startDate).thenReturn(currentDate)
