@@ -43,21 +43,21 @@ import java.time.format.DateTimeFormatter
 trait CCConfigSpec extends AnyWordSpec with Matchers {
 
   val config: Map[String, _] = Map(
-    "csrf.sign.tokens" -> false,
+    "csrf.sign.tokens"                              -> false,
     "govuk-tax.Test.services.contact-frontend.host" -> "localhost",
     "govuk-tax.Test.services.contact-frontend.port" -> "9250",
-    "microservice.services.cc-calculator.host" -> "localhost",
-    "microservice.services.cc-calculator.port" -> "9372",
-    "microservice.services.cc-calculator.url" -> "/cc-calculator/calculate",
-    "tfc-rollout.0.rule-date" -> "default",
-    "tfc-rollout.0.all-disabled" -> true,
-    "tfc-rollout.0.born-on-after" -> "01-09-2013",
-    "free-hours.0.rule-date" -> "default",
-    "free-hours.0.fifteen.england" -> "2,3,4",
-    "free-hours.0.fifteen.scotland" -> "2,3,4",
-    "free-hours.0.fifteen.northern-ireland" -> "3",
-    "free-hours.0.fifteen.wales" -> "2,3",
-    "free-hours.0.thirty.england" -> "3,4"
+    "microservice.services.cc-calculator.host"      -> "localhost",
+    "microservice.services.cc-calculator.port"      -> "9372",
+    "microservice.services.cc-calculator.url"       -> "/cc-calculator/calculate",
+    "tfc-rollout.0.rule-date"                       -> "default",
+    "tfc-rollout.0.all-disabled"                    -> true,
+    "tfc-rollout.0.born-on-after"                   -> "01-09-2013",
+    "free-hours.0.rule-date"                        -> "default",
+    "free-hours.0.fifteen.england"                  -> "2,3,4",
+    "free-hours.0.fifteen.scotland"                 -> "2,3,4",
+    "free-hours.0.fifteen.northern-ireland"         -> "3",
+    "free-hours.0.fifteen.wales"                    -> "2,3",
+    "free-hours.0.thirty.england"                   -> "3,4"
   )
 
   lazy val app: Application =

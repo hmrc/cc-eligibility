@@ -22,66 +22,66 @@ import play.api.libs.json.{Json, Writes}
 import utils.Periods
 
 case class ESCEligibilityOutput(
-                                 taxYears: List[ESCTaxYear],
-                                 eligibility: Boolean = false,
-                                 parentEligibility: Boolean = false,
-                                 partnerEligibility: Boolean = false,
-                                 location: Option[LocationEnum] = None
-                              )
+    taxYears: List[ESCTaxYear],
+    eligibility: Boolean = false,
+    parentEligibility: Boolean = false,
+    partnerEligibility: Boolean = false,
+    location: Option[LocationEnum] = None
+)
 
 object ESCEligibilityOutput {
   implicit val escEligible: Writes[ESCEligibilityOutput] = Json.writes[ESCEligibilityOutput]
 }
 
 case class ESCTaxYear(
-                    from: LocalDate,
-                    until: LocalDate,
-                    periods: List[ESCPeriod]
-                  )
+    from: LocalDate,
+    until: LocalDate,
+    periods: List[ESCPeriod]
+)
 
 object ESCTaxYear {
   implicit val taxYearWrites: Writes[ESCTaxYear] = Json.writes[ESCTaxYear]
 }
 
 case class ESCPeriod(
-                      from: LocalDate,
-                      until: LocalDate,
-                      claimants: List[ESCClaimant],
-                      children: List[ESCChild]
-                    )
+    from: LocalDate,
+    until: LocalDate,
+    claimants: List[ESCClaimant],
+    children: List[ESCChild]
+)
 
 object ESCPeriod {
   implicit val periodWrites: Writes[ESCPeriod] = Json.writes[ESCPeriod]
 }
 
 case class ESCClaimant(
-                           qualifying: Boolean = false,
-                           isPartner: Boolean = false,
-                           eligibleMonthsInPeriod: Int = 0,
-                           currentIncome: Option[ESCIncome] = None,
-                           vouchers: Boolean = false,
-                           escStartDate: LocalDate = LocalDate.now
-                         )
+    qualifying: Boolean = false,
+    isPartner: Boolean = false,
+    eligibleMonthsInPeriod: Int = 0,
+    currentIncome: Option[ESCIncome] = None,
+    vouchers: Boolean = false,
+    escStartDate: LocalDate = LocalDate.now
+)
 
 object ESCClaimant {
   implicit val claimantWrites: Writes[ESCClaimant] = Json.writes[ESCClaimant]
 }
 
 case class ESCIncome(
-                      employmentIncome : Option[BigDecimal] = None,
-                      pension : Option[BigDecimal] = None,
-                      taxCode: Option[String] = None
-                      )
+    employmentIncome: Option[BigDecimal] = None,
+    pension: Option[BigDecimal] = None,
+    taxCode: Option[String] = None
+)
 
 object ESCIncome {
   implicit val incomeWrite: Writes[ESCIncome] = Json.writes[ESCIncome]
 }
 
 case class ESCChild(
-                        qualifying: Boolean = false,
-                        childCareCost: BigDecimal,
-                        childCareCostPeriod: Periods.Period = Periods.Monthly
-                   )
+    qualifying: Boolean = false,
+    childCareCost: BigDecimal,
+    childCareCostPeriod: Periods.Period = Periods.Monthly
+)
 
 object ESCChild {
   implicit val childWrites: Writes[ESCChild] = Json.writes[ESCChild]

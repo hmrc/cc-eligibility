@@ -16,8 +16,6 @@
 
 package eligibility
 
-
-
 import models.input.tfc.{TFCChild, TFCClaimant, TFCEligibilityInput}
 import models.output.tfc._
 import service.AuditEvents
@@ -29,20 +27,21 @@ import java.util.{Calendar, Date}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class TFCEligibility @Inject()(auditEvent: AuditEvents,
-                               tFCConfig: TFCConfig)
-                              (implicit ec: ExecutionContext) {
+class TFCEligibility @Inject() (auditEvent: AuditEvents, tFCConfig: TFCConfig)(implicit ec: ExecutionContext) {
 
   private def getWeekEnd(calendar: Calendar): Date = {
-    while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY || calendar.get(Calendar.DAY_OF_MONTH) == 1) {
+    while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY || calendar.get(Calendar.DAY_OF_MONTH) == 1)
       calendar.add(Calendar.DATE, 1)
-    }
     calendar.getTime
   }
 
-  private def firstOfSeptember(septemberCalendar: Calendar, childBirthday: Date, childBirthdayCalendar: Calendar): Date = {
+  private def firstOfSeptember(
+      septemberCalendar: Calendar,
+      childBirthday: Date,
+      childBirthdayCalendar: Calendar
+  ): Date = {
     septemberCalendar.setFirstDayOfWeek(Calendar.SUNDAY)
-    septemberCalendar.setTime(childBirthday) // today
+    septemberCalendar.setTime(childBirthday)                  // today
     septemberCalendar.set(Calendar.MONTH, Calendar.SEPTEMBER) // september in calendar year
     septemberCalendar.set(Calendar.DAY_OF_MONTH, 1)
     septemberCalendar.set(Calendar.YEAR, childBirthdayCalendar.get(Calendar.YEAR))
@@ -51,10 +50,10 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
   }
 
   def endWeek1stOfSeptemberDate(periodStart: LocalDate, location: String, child: TFCChild): Date = {
-    val childBirthday = getChildBirthday(periodStart, location, child)  //child's 11th or 16th Birthday
-    val childBirthdayCalendar: Calendar = Calendar.getInstance()  // todays date
+    val childBirthday = getChildBirthday(periodStart, location, child) // child's 11th or 16th Birthday
+    val childBirthdayCalendar: Calendar = Calendar.getInstance() // todays date
     childBirthdayCalendar.setTime(childBirthday) // childs date of birth
-    val septemberCalendar = Calendar.getInstance()
+    val septemberCalendar               = Calendar.getInstance()
     septemberCalendar.clear()
     val endWeekOf1stSeptember = firstOfSeptember(septemberCalendar, childBirthday, childBirthdayCalendar) // end date of first week of 1st september
 
@@ -65,46 +64,61 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
     getWeekEnd(septemberCalendar)
   }
 
-  def getChildBirthday(periodStart: LocalDate, location: String, child: TFCChild): Date ={
+  def getChildBirthday(periodStart: LocalDate, location: String, child: TFCChild): Date = {
     val taxYearConfig = tFCConfig.getConfig(periodStart, location)
-    val ageIncrease = if(child.isDisabled) taxYearConfig.childAgeLimitDisabled else taxYearConfig.childAgeLimit
+    val ageIncrease   = if (child.isDisabled) taxYearConfig.childAgeLimitDisabled else taxYearConfig.childAgeLimit
     child.childsBirthdayDateForAge(ageIncrease)
   }
 
-  def determineChildStartDateInTFCPeriod(child: TFCChild, periodFrom: LocalDate, periodUntil: LocalDate, location: String):Option[LocalDate]={
-    val childDob: Date = tFCConfig.config.toDate(child.dob)
+  def determineChildStartDateInTFCPeriod(
+      child: TFCChild,
+      periodFrom: LocalDate,
+      periodUntil: LocalDate,
+      location: String
+  ): Option[LocalDate] = {
+    val childDob: Date              = tFCConfig.config.toDate(child.dob)
     val childBirthdaySeptDate: Date = endWeek1stOfSeptemberDate(periodFrom, location, child)
 
     childDob match {
       case dob if dob.before(tFCConfig.config.toDate(periodFrom)) =>
         childBirthdaySeptDate match {
           case septDate if septDate.after(tFCConfig.config.toDate(periodFrom)) => Some(periodFrom)
-          case _ => None
+          case _                                                               => None
         }
       case dob if dob.before(tFCConfig.config.toDate(periodUntil)) => Some(child.dob)
-      case _ => None
+      case _                                                       => None
     }
   }
 
-  def determineChildEndDateInTFCPeriod(child: TFCChild, periodFrom: LocalDate, periodUntil: LocalDate, location: String): Option[LocalDate]={
-    val childDob: Date = tFCConfig.config.toDate(child.dob)
+  def determineChildEndDateInTFCPeriod(
+      child: TFCChild,
+      periodFrom: LocalDate,
+      periodUntil: LocalDate,
+      location: String
+  ): Option[LocalDate] = {
+    val childDob: Date              = tFCConfig.config.toDate(child.dob)
     val childBirthdaySeptDate: Date = endWeek1stOfSeptemberDate(periodFrom, location, child)
 
     childDob match {
-      case dob if dob.after(tFCConfig.config.toDate(periodUntil)) || dob.equals(tFCConfig.config.toDate(periodUntil)) => None
+      case dob if dob.after(tFCConfig.config.toDate(periodUntil)) || dob.equals(tFCConfig.config.toDate(periodUntil)) =>
+        None
       case _ =>
         childBirthdaySeptDate match {
           case septDate if septDate.after(tFCConfig.config.toDate(periodUntil)) => Some(periodUntil)
-          case septDate if septDate.after(tFCConfig.config.toDate(periodFrom)) => Some(tFCConfig.config.toLocalDate(septDate))
+          case septDate if septDate.after(tFCConfig.config.toDate(periodFrom)) =>
+            Some(tFCConfig.config.toLocalDate(septDate))
           case _ => None
         }
     }
   }
 
-  def determinePeriodEligibility(outputClaimants: List[TFCOutputClaimant], outputChildren: List[TFCOutputChild]): Boolean = {
+  def determinePeriodEligibility(
+      outputClaimants: List[TFCOutputClaimant],
+      outputChildren: List[TFCOutputChild]
+  ): Boolean = {
     val childEligibility = outputChildren.exists(child => child.qualifying)
 
-    val periodEligibility =  outputClaimants match {
+    val periodEligibility = outputClaimants match {
       case claimantList if claimantList.length == 1 =>
         claimantList.head.qualifying && childEligibility
       case claimantList if claimantList.length == 2 =>
@@ -120,13 +134,14 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
     currentCalendar.clear()
     currentCalendar.setTime(tFCConfig.config.toDate(tfcEligibilityInput.from))
 
-    val periods = for(i <- 1 to tfcEligibilityInput.numberOfPeriods) yield {
+    val periods = for (i <- 1 to tfcEligibilityInput.numberOfPeriods) yield {
       val startDate = tFCConfig.config.toLocalDate(currentCalendar.getTime)
       currentCalendar.add(Calendar.MONTH, 3)
       val untilDate = tFCConfig.config.toLocalDate(currentCalendar.getTime)
-      val outputClaimants = determineClaimantsEligibility(tfcEligibilityInput.claimants, startDate, tfcEligibilityInput.location)
-      val location = if(tfcEligibilityInput.claimants.isEmpty) "default" else tfcEligibilityInput.location
-      val outputChildren = determineChildrenEligibility(tfcEligibilityInput.children, startDate, untilDate, location)
+      val outputClaimants =
+        determineClaimantsEligibility(tfcEligibilityInput.claimants, startDate, tfcEligibilityInput.location)
+      val location          = if (tfcEligibilityInput.claimants.isEmpty) "default" else tfcEligibilityInput.location
+      val outputChildren    = determineChildrenEligibility(tfcEligibilityInput.children, startDate, untilDate, location)
       val periodEligibility = determinePeriodEligibility(outputClaimants, outputChildren)
 
       TFCPeriod(
@@ -140,11 +155,16 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
     periods.toList
   }
 
-  def determineChildrenEligibility(children: List[TFCChild], periodFrom: LocalDate, periodUntil: LocalDate, location: String): List[TFCOutputChild] = {
+  def determineChildrenEligibility(
+      children: List[TFCChild],
+      periodFrom: LocalDate,
+      periodUntil: LocalDate,
+      location: String
+  ): List[TFCOutputChild] =
 
-    for(child <- children) yield {
+    for (child <- children) yield {
       val qualifyStartDate = determineChildStartDateInTFCPeriod(child, periodFrom, periodUntil, location)
-      val qualifyEndDate = determineChildEndDateInTFCPeriod(child, periodFrom, periodUntil, location)
+      val qualifyEndDate   = determineChildEndDateInTFCPeriod(child, periodFrom, periodUntil, location)
       val childEligibility = qualifyStartDate.isDefined && qualifyEndDate.isDefined
       TFCOutputChild(
         id = child.id,
@@ -153,23 +173,26 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
         until = qualifyEndDate,
         childcareCost = child.childcareCost,
         childcareCostPeriod = child.childcareCostPeriod,
-        disability = models.output.tfc.TFCDisability(child.disability.disabled,child.disability.severelyDisabled)
+        disability = models.output.tfc.TFCDisability(child.disability.disabled, child.disability.severelyDisabled)
       )
     }
-  }
 
-  def determineClaimantsEligibility(claimants: List[TFCClaimant], periodStart: LocalDate, location: String): List[TFCOutputClaimant] = {
-    for(claimant <- claimants) yield {
-      TFCOutputClaimant(
+  def determineClaimantsEligibility(
+      claimants: List[TFCClaimant],
+      periodStart: LocalDate,
+      location: String
+  ): List[TFCOutputClaimant] =
+    for (claimant <- claimants)
+      yield TFCOutputClaimant(
         qualifying = isTotalIncomeLessThan100000(periodStart, location, claimant),
         isPartner = claimant.isPartner
       )
-    }
-  }
 
   def eligibility(request: TFCEligibilityInput)(implicit hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
     val outputPeriods = determineTFCPeriods(request)
-    val householdEligibility = outputPeriods.exists(period => period.periodEligibility) && validHouseholdMinimumEarnings(request) && request.validMaxEarnings()
+    val householdEligibility = outputPeriods.exists(period =>
+      period.periodEligibility
+    ) && validHouseholdMinimumEarnings(request) && request.validMaxEarnings()
     Future {
       TFCEligibilityOutput(
         from = request.from,
@@ -180,27 +203,29 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
     }
   }
 
-  private def validHouseholdMinimumEarnings(tfcEligibilityInput: TFCEligibilityInput)(implicit hc: HeaderCarrier): Boolean = {
-    val parent = tfcEligibilityInput.claimants.head
+  private def validHouseholdMinimumEarnings(
+      tfcEligibilityInput: TFCEligibilityInput
+  )(implicit hc: HeaderCarrier): Boolean = {
+    val parent            = tfcEligibilityInput.claimants.head
     val minEarningsParent = parent.minimumEarnings.selection
-    if(tfcEligibilityInput.claimants.length > 1) {
-      val partner = tfcEligibilityInput.claimants.last
+    if (tfcEligibilityInput.claimants.length > 1) {
+      val partner            = tfcEligibilityInput.claimants.last
       val minEarningsPartner = partner.minimumEarnings.selection
-      val auditMinEarns = minEarningsParent && minEarningsPartner
+      val auditMinEarns      = minEarningsParent && minEarningsPartner
 
-      if(!auditMinEarns) {
+      if (!auditMinEarns) {
         auditEvent.auditMinEarnings(auditMinEarns)
       }
 
       (minEarningsParent, minEarningsPartner) match {
-        case (true, true) => true
+        case (true, true)  => true
         case (true, false) => partner.carersAllowance
         case (false, true) => parent.carersAllowance
-        case _ => false
+        case _             => false
       }
     } else {
 
-      if(!minEarningsParent) {
+      if (!minEarningsParent) {
         auditEvent.auditMinEarnings(minEarningsParent)
       }
       minEarningsParent
@@ -208,8 +233,9 @@ class TFCEligibility @Inject()(auditEvent: AuditEvents,
   }
 
   private def isTotalIncomeLessThan100000(periodStart: LocalDate, location: String, claimant: TFCClaimant): Boolean = {
-    val taxYearConfig = tFCConfig.getConfig(periodStart, location)
+    val taxYearConfig              = tFCConfig.getConfig(periodStart, location)
     val maximumTotalIncome: Double = taxYearConfig.maxIncomePerClaimant
     claimant.totalIncome <= maximumTotalIncome
   }
+
 }

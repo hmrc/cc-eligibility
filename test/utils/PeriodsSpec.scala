@@ -19,9 +19,8 @@ package utils
 import controllers.FakeCCEligibilityApplication
 import play.api.libs.json.{JsError, JsString, Json}
 
-/**
- * Created by adamconder on 09/06/15.
- */
+/** Created by adamconder on 09/06/15.
+  */
 class PeriodsSpec extends FakeCCEligibilityApplication {
 
   "Periods" must {

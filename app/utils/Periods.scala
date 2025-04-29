@@ -21,12 +21,12 @@ import play.api.libs.json._
 object Periods extends Enumeration {
   type Period = Value
 
-  val Weekly = Value(0, "Week")
+  val Weekly      = Value(0, "Week")
   val Fortnightly = Value(1, "Fortnight")
-  val Monthly = Value(2, "Month")
-  val Quarterly = Value(3, "3 month")
-  val Yearly = Value(4, "Year")
-  val INVALID = Value(5, "INVALID")
+  val Monthly     = Value(2, "Month")
+  val Quarterly   = Value(3, "3 month")
+  val Yearly      = Value(4, "Year")
+  val INVALID     = Value(5, "INVALID")
 
   implicit val enumReads: Reads[Period] = EnumUtils.enumReads(Periods)
 

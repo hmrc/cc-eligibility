@@ -21,7 +21,7 @@ import utils.EnumUtils
 
 object CreditsEnum extends Enumeration {
   type CreditsEnum = Value
-  val  UNIVERSALCREDIT, NONE = Value
+  val UNIVERSALCREDIT, NONE = Value
 
   val enumReads: Reads[CreditsEnum] = EnumUtils.enumReads(CreditsEnum)
 
@@ -32,9 +32,9 @@ object CreditsEnum extends Enumeration {
 
 object LocationEnum extends Enumeration {
   type LocationEnum = Value
-  val ENGLAND = Value("england")
-  val SCOTLAND = Value("scotland")
-  val WALES = Value("wales")
+  val ENGLAND         = Value("england")
+  val SCOTLAND        = Value("scotland")
+  val WALES           = Value("wales")
   val NORTHERNIRELAND = Value("northern-ireland")
 
   val enumReads: Reads[LocationEnum] = EnumUtils.enumReads(LocationEnum)
@@ -68,18 +68,18 @@ object EmploymentStatusEnum extends Enumeration {
 
 object YesNoUnsureEnum extends Enumeration {
   type YesNoUnsureEnum = Value
-  val YES, NO, NOTSURE = Value
+  val YES, NO, NOTSURE                  = Value
   val enumReads: Reads[YesNoUnsureEnum] = EnumUtils.enumReads(YesNoUnsureEnum)
 
   val enumWrites: Writes[YesNoUnsureEnum] = EnumUtils.enumWrites
 
   implicit def enumFormats: Format[YesNoUnsureEnum] = EnumUtils.enumFormat(YesNoUnsureEnum)
-  }
+}
 
 object PeriodEnum extends Enumeration {
   type PeriodEnum = Value
   val WEEKLY, FORTNIGHTLY, MONTHLY, QUARTERLY, YEARLY, INVALID = Value
-  val enumReads: Reads[PeriodEnum] = EnumUtils.enumReads(PeriodEnum)
+  val enumReads: Reads[PeriodEnum]                             = EnumUtils.enumReads(PeriodEnum)
 
   val enumWrites: Writes[PeriodEnum] = EnumUtils.enumWrites
 

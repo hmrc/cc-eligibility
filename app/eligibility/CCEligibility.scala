@@ -21,12 +21,19 @@ import java.time.LocalDate
 
 trait CCEligibilityHelpers {
 
-  def fromAndUntilDateForPeriod[T <: BaseTaxYear](date : LocalDate, i : Int, datesOfChanges : List[LocalDate], ty : T) : (LocalDate, LocalDate) = {
-    val from = if (i == 0) { date } else {
+  def fromAndUntilDateForPeriod[T <: BaseTaxYear](
+      date: LocalDate,
+      i: Int,
+      datesOfChanges: List[LocalDate],
+      ty: T
+  ): (LocalDate, LocalDate) = {
+    val from = if (i == 0) { date }
+    else {
       val previousDate = datesOfChanges(i)
       previousDate
     }
-    val until = if (i == datesOfChanges.length - 1) { ty.until } else { datesOfChanges(i + 1) }
+    val until = if (i == datesOfChanges.length - 1) { ty.until }
+    else { datesOfChanges(i + 1) }
     (from, until)
   }
 

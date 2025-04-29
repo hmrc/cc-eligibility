@@ -39,25 +39,28 @@ import scala.concurrent.{Await, Future}
 
 class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplication with MockitoSugar {
 
-  val mockCalc     = mock[CalculatorConnector]
-  val mockESC      = mock[ESCEligibility]
-  val mockTFC      = mock[TFCEligibility]
-  val mockHHToTFC  = mock[HHToTFCEligibilityInput]
-  val mockHHToESC  = mock[HHToESCEligibilityInput]
+  val mockCalc      = mock[CalculatorConnector]
+  val mockESC       = mock[ESCEligibility]
+  val mockTFC       = mock[TFCEligibility]
+  val mockHHToTFC   = mock[HHToTFCEligibilityInput]
+  val mockHHToESC   = mock[HHToESCEligibilityInput]
   val mockESCConfig = mock[ESCConfig]
-  val mockCCConfig = mock[CCConfig]
+  val mockCCConfig  = mock[CCConfig]
 
+  class ServiceTest
+      extends EligibilityService(
+        mockCalc,
+        mockESC,
+        mockTFC,
+        mockHHToTFC,
+        mockHHToESC,
+        mockESCConfig,
+        mockCCConfig
+      ) {
 
-  class ServiceTest extends EligibilityService(
-    mockCalc,
-    mockESC,
-    mockTFC,
-    mockHHToTFC,
-    mockHHToESC,
-    mockESCConfig,
-    mockCCConfig
-  ){
-    override def eligibility(request: Household)(implicit hc: HeaderCarrier): Future[SchemeResults] = super.eligibility(request)
+    override def eligibility(request: Household)(implicit hc: HeaderCarrier): Future[SchemeResults] =
+      super.eligibility(request)
+
   }
 
   val SUT = new ServiceTest
@@ -69,11 +72,11 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
         val request = Household(children = Nil, parent = Claimant(), partner = None)
 
         val tfcSchemeOutput = Scheme(SchemeEnum.TFCELIGIBILITY, 1000, None)
-        val escSchemeOutput = Scheme(SchemeEnum.ESCELIGIBILITY, 1000, Some(EscClaimantEligibility(true,true)))
+        val escSchemeOutput = Scheme(SchemeEnum.ESCELIGIBILITY, 1000, Some(EscClaimantEligibility(true, true)))
 
         val expectedResult = SchemeResults(List(tfcSchemeOutput, escSchemeOutput))
 
-        when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(escEligibilityOutputAllTrue))
+        when(mockESC.eligibility(any(), any(), any())).thenReturn(Future(escEligibilityOutputAllTrue))
         when(mockTFC.eligibility(any())(any())).thenReturn(Future(tfcEligibilityOutputRolloutTrue))
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueAll))
 
@@ -82,29 +85,28 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
 
       "household request is received and only ESC Eligibility is true" in {
 
-        val request = Household(children = Nil, parent = Claimant(), partner = None)
+        val request         = Household(children = Nil, parent = Claimant(), partner = None)
         val tfcSchemeOutput = Scheme(SchemeEnum.TFCELIGIBILITY, 0, None)
-        val escSchemeOutput = Scheme(SchemeEnum.ESCELIGIBILITY, 1000, Some(EscClaimantEligibility(true,true)))
+        val escSchemeOutput = Scheme(SchemeEnum.ESCELIGIBILITY, 1000, Some(EscClaimantEligibility(true, true)))
 
         val expectedResult = SchemeResults(List(tfcSchemeOutput, escSchemeOutput))
 
-        when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(escEligibilityOutputAllTrue))
+        when(mockESC.eligibility(any(), any(), any())).thenReturn(Future(escEligibilityOutputAllTrue))
         when(mockTFC.eligibility(any())(any())).thenReturn(Future(mock[TFCEligibilityOutput]))
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueOnlyESC))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
       }
 
-
       "household request is received and only TFC Eligibility is true" in {
 
-        val request = Household(children = Nil, parent = Claimant(), partner = None)
+        val request         = Household(children = Nil, parent = Claimant(), partner = None)
         val tfcSchemeOutput = Scheme(SchemeEnum.TFCELIGIBILITY, 1000, None)
-        val escSchemeOutput = Scheme(SchemeEnum.ESCELIGIBILITY, 0, Some(EscClaimantEligibility(false,false)))
+        val escSchemeOutput = Scheme(SchemeEnum.ESCELIGIBILITY, 0, Some(EscClaimantEligibility(false, false)))
 
         val expectedResult = SchemeResults(List(tfcSchemeOutput, escSchemeOutput))
 
-        when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(mock[ESCEligibilityOutput]))
+        when(mockESC.eligibility(any(), any(), any())).thenReturn(Future(mock[ESCEligibilityOutput]))
         when(mockTFC.eligibility(any())(any())).thenReturn(Future(tfcEligibilityOutputTrue))
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueOnlyTFC))
 
@@ -113,13 +115,13 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
 
       "household request is received and TFC Eligibility, ESC Eligibility, TC Eligibility are false" in {
 
-        val request = Household(children = Nil, parent = Claimant(), partner = None)
+        val request         = Household(children = Nil, parent = Claimant(), partner = None)
         val tfcSchemeOutput = Scheme(SchemeEnum.TFCELIGIBILITY, 0, None)
-        val escSchemeOutput = Scheme(SchemeEnum.ESCELIGIBILITY, 0, Some(EscClaimantEligibility(false,false)))
+        val escSchemeOutput = Scheme(SchemeEnum.ESCELIGIBILITY, 0, Some(EscClaimantEligibility(false, false)))
 
-        val expectedResult = SchemeResults(List(tfcSchemeOutput,  escSchemeOutput))
+        val expectedResult = SchemeResults(List(tfcSchemeOutput, escSchemeOutput))
 
-        when(mockESC.eligibility(any(),any(),any())).thenReturn(Future(mock[ESCEligibilityOutput]))
+        when(mockESC.eligibility(any(), any(), any())).thenReturn(Future(mock[ESCEligibilityOutput]))
         when(mockTFC.eligibility(any())(any())).thenReturn(mock[TFCEligibilityOutput])
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueNone))
 
@@ -128,41 +130,61 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
     }
   }
 
-  //Values from eligibility
-  val escEligibilityOutputAllTrue = ESCEligibilityOutput(taxYears = List[ESCTaxYear](), eligibility  = true, parentEligibility  = true, partnerEligibility  = true, location = Some(LocationEnum.ENGLAND))
+  // Values from eligibility
+  val escEligibilityOutputAllTrue = ESCEligibilityOutput(
+    taxYears = List[ESCTaxYear](),
+    eligibility = true,
+    parentEligibility = true,
+    partnerEligibility = true,
+    location = Some(LocationEnum.ENGLAND)
+  )
 
-  val tfcOutputparent = TFCOutputClaimant(qualifying = true, isPartner = false)
+  val tfcOutputparent  = TFCOutputClaimant(qualifying = true, isPartner = false)
   val tfcOutputpartner = TFCOutputClaimant(qualifying = true, isPartner = true)
-  lazy val tfcOutputCChild = TFCOutputChild( id = 0,
+
+  lazy val tfcOutputCChild = TFCOutputChild(
+    id = 0,
     qualifying = true,
     from = None,
     until = None,
     childcareCost = BigDecimal(0),
-    disability = TFCDisability())
+    disability = TFCDisability()
+  )
 
-  lazy val tfcEligibilityOutputTrue = TFCEligibilityOutput(from = LocalDate.now(),
-    until  = LocalDate.now(),
-    householdEligibility  = true,
-    periods = List(TFCPeriod(from = LocalDate.now(),
-      until  = LocalDate.now(),
-      periodEligibility = true,
-      claimants = List(tfcOutputparent, tfcOutputpartner),
-      children = List(tfcOutputCChild))))
+  lazy val tfcEligibilityOutputTrue = TFCEligibilityOutput(
+    from = LocalDate.now(),
+    until = LocalDate.now(),
+    householdEligibility = true,
+    periods = List(
+      TFCPeriod(
+        from = LocalDate.now(),
+        until = LocalDate.now(),
+        periodEligibility = true,
+        claimants = List(tfcOutputparent, tfcOutputpartner),
+        children = List(tfcOutputCChild)
+      )
+    )
+  )
 
-  lazy val tfcEligibilityOutputRolloutTrue = TFCEligibilityOutput(from = LocalDate.now(),
-    until  = LocalDate.now(),
-    householdEligibility  = true,
-    periods = List(TFCPeriod(from = LocalDate.now(),
-      until  = LocalDate.now(),
-      periodEligibility = true,
-      claimants = List(tfcOutputparent, tfcOutputpartner),
-      children = List(tfcOutputCChild))))
+  lazy val tfcEligibilityOutputRolloutTrue = TFCEligibilityOutput(
+    from = LocalDate.now(),
+    until = LocalDate.now(),
+    householdEligibility = true,
+    periods = List(
+      TFCPeriod(
+        from = LocalDate.now(),
+        until = LocalDate.now(),
+        periodEligibility = true,
+        claimants = List(tfcOutputparent, tfcOutputpartner),
+        children = List(tfcOutputCChild)
+      )
+    )
+  )
 
-  val calcOutputValueAll: CalculatorOutput = CalculatorOutput(
-    Some(BigDecimal(1000)), Some(BigDecimal(1000)))
+  val calcOutputValueAll: CalculatorOutput = CalculatorOutput(Some(BigDecimal(1000)), Some(BigDecimal(1000)))
 
-  val calcOutputValueOnlyESC: CalculatorOutput = CalculatorOutput( None, Some(BigDecimal(1000)))
-  val calcOutputValueOnlyTFC: CalculatorOutput = CalculatorOutput( Some(BigDecimal(1000)), None)
-  val calcOutputValueNone: CalculatorOutput = CalculatorOutput( None, None)
+  val calcOutputValueOnlyESC: CalculatorOutput = CalculatorOutput(None, Some(BigDecimal(1000)))
+  val calcOutputValueOnlyTFC: CalculatorOutput = CalculatorOutput(Some(BigDecimal(1000)), None)
+  val calcOutputValueNone: CalculatorOutput    = CalculatorOutput(None, None)
 
 }

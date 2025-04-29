@@ -21,8 +21,7 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 class ApplicationConfig @Inject() (conf: ServicesConfig) {
 
-  lazy val calculatorUrl: String = {
+  lazy val calculatorUrl: String =
     conf.baseUrl("cc-calculator") + conf.getString("microservice.services.cc-calculator.url")
-  }
 
 }

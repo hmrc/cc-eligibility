@@ -32,8 +32,8 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
 
     "return 1st september date for current tax year date (as ESC TAX YEAR)" in {
       val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-      val from = LocalDate.parse("2016-01-20", formatter)
-      val until = LocalDate.parse("2016-04-05", formatter)
+      val from      = LocalDate.parse("2016-01-20", formatter)
+      val until     = LocalDate.parse("2016-04-05", formatter)
 
       val ty = models.input.esc.ESCTaxYear(
         from = from,
@@ -46,8 +46,8 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
 
     "return prior 1st september date for current tax year date (as ESC TAX YEAR)" in {
       val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-      val from = LocalDate.parse("2015-10-20", formatter)
-      val until = LocalDate.parse("2016-04-05", formatter)
+      val from      = LocalDate.parse("2015-10-20", formatter)
+      val until     = LocalDate.parse("2016-04-05", formatter)
 
       val ty = models.input.esc.ESCTaxYear(
         from = from,
@@ -59,7 +59,8 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
     }
 
     "get default Tax Year Config" in {
-      val configs : Seq[play.api.Configuration] = app.configuration.underlying.getConfigList("esc.rule-change").asScala.map(Configuration(_)).toSeq
+      val configs: Seq[play.api.Configuration] =
+        app.configuration.underlying.getConfigList("esc.rule-change").asScala.map(Configuration(_)).toSeq
       val defaultConfig = escConfig.getESCConfigDefault(configs)
 
       val resultTaxYearConfig = ESCTaxYearConfig(
@@ -72,9 +73,9 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
     }
 
     "return default tax year rule" in {
-      val pattern = "dd-MM-yyyy"
+      val pattern   = "dd-MM-yyyy"
       val formatter = DateTimeFormatter.ofPattern(pattern)
-      val current = LocalDate.parse("01-01-2014", formatter)
+      val current   = LocalDate.parse("01-01-2014", formatter)
 
       val result = escConfig.getConfig(current)
 
@@ -84,9 +85,9 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
     }
 
     "return 2018 tax year rule" in {
-      val pattern = "dd-MM-yyyy"
+      val pattern   = "dd-MM-yyyy"
       val formatter = DateTimeFormatter.ofPattern(pattern)
-      val current = LocalDate.parse("06-04-2018", formatter)
+      val current   = LocalDate.parse("06-04-2018", formatter)
 
       val result = escConfig.getConfig(current)
 
@@ -95,9 +96,9 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
     }
 
     "return 2018 tax year rule as 2017" in {
-      val pattern = "dd-MM-yyyy"
+      val pattern   = "dd-MM-yyyy"
       val formatter = DateTimeFormatter.ofPattern(pattern)
-      val current = LocalDate.parse("01-01-2018", formatter)
+      val current   = LocalDate.parse("01-01-2018", formatter)
 
       val result = escConfig.getConfig(current)
 
@@ -106,9 +107,9 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
     }
 
     "return 2017 tax year rule" in {
-      val pattern = "dd-MM-yyyy"
+      val pattern   = "dd-MM-yyyy"
       val formatter = DateTimeFormatter.ofPattern(pattern)
-      val current = LocalDate.parse("01-08-2017", formatter)
+      val current   = LocalDate.parse("01-08-2017", formatter)
 
       val result = escConfig.getConfig(current)
 
@@ -117,9 +118,9 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
     }
 
     "return 2017 tax year rule on the date of change" in {
-      val pattern = "dd-MM-yyyy"
+      val pattern   = "dd-MM-yyyy"
       val formatter = DateTimeFormatter.ofPattern(pattern)
-      val current = LocalDate.parse("06-04-2017", formatter)
+      val current   = LocalDate.parse("06-04-2017", formatter)
 
       val result = escConfig.getConfig(current)
 
@@ -128,9 +129,9 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
     }
 
     "return 2016 tax year rule" in {
-      val pattern = "dd-MM-yyyy"
+      val pattern   = "dd-MM-yyyy"
       val formatter = DateTimeFormatter.ofPattern(pattern)
-      val current = LocalDate.parse("01-08-2016", formatter)
+      val current   = LocalDate.parse("01-08-2016", formatter)
 
       val result = escConfig.getConfig(current)
 
@@ -139,9 +140,9 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
     }
 
     "return 2016 tax year rule on the date of change" in {
-      val pattern = "dd-MM-yyyy"
+      val pattern   = "dd-MM-yyyy"
       val formatter = DateTimeFormatter.ofPattern(pattern)
-      val current = LocalDate.parse("06-04-2016", formatter)
+      val current   = LocalDate.parse("06-04-2016", formatter)
 
       val result = escConfig.getConfig(current)
 
@@ -150,9 +151,9 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
     }
 
     "return 2015 tax year rule" in {
-      val pattern = "dd-MM-yyyy"
+      val pattern   = "dd-MM-yyyy"
       val formatter = DateTimeFormatter.ofPattern(pattern)
-      val current = LocalDate.parse("01-08-2015", formatter)
+      val current   = LocalDate.parse("01-08-2015", formatter)
 
       val result = escConfig.getConfig(current)
 
@@ -161,9 +162,9 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
     }
 
     "return 2015 tax year rule on the date of change" in {
-      val pattern = "dd-MM-yyyy"
+      val pattern   = "dd-MM-yyyy"
       val formatter = DateTimeFormatter.ofPattern(pattern)
-      val current = LocalDate.parse("06-04-2015", formatter)
+      val current   = LocalDate.parse("06-04-2015", formatter)
 
       val result = escConfig.getConfig(current)
 
@@ -171,4 +172,5 @@ class ESCSchemeConfigSpec extends FakeCCEligibilityApplication {
       result.childAgeLimitDisabled shouldBe 16
     }
   }
+
 }

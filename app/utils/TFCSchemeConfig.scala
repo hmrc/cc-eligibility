@@ -23,35 +23,35 @@ import play.api.Configuration
 
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
-
 case class TFCTaxYearConfig(
-                             childAgeLimit: Int,
-                             childAgeLimitDisabled: Int,
-                             minimumHoursWorked: Double,
-                             maxIncomePerClaimant: Double,
-                             personalAllowancePerClaimant: Double
-                             )
+    childAgeLimit: Int,
+    childAgeLimitDisabled: Int,
+    minimumHoursWorked: Double,
+    maxIncomePerClaimant: Double,
+    personalAllowancePerClaimant: Double
+)
 
 @Singleton
-class TFCConfig @Inject()(val config: CCConfig) {
+class TFCConfig @Inject() (val config: CCConfig) {
 
-  def getTFCConfigDefault(configs: Seq[Configuration]): Configuration = {
+  def getTFCConfigDefault(configs: Seq[Configuration]): Configuration =
     configs.filter(_.get[String]("rule-date").contains("default")).head
-  }
 
-  private def getTFCConfigExcludingDefault(configs: Seq[Configuration]): Seq[Configuration] = {
+  private def getTFCConfigExcludingDefault(configs: Seq[Configuration]): Seq[Configuration] =
     configs.filter(!_.get[String]("rule-date").contains("default"))
-  }
-  private def getSortedTFCConfigExcludingDefault(configsExcludingDefault: Seq[Configuration]): Seq[Configuration]= {
-    configsExcludingDefault.sortBy(c => {
-      new SimpleDateFormat("dd-MM-yyyy").parse(c.get[String]("rule-date"))
-    }).reverse
-  }
 
-  def getConfigHelper (currentDate: LocalDate, taxYearConfigs: List[Configuration], acc: Option[Configuration], i: Int): Option[Configuration] = {
+  private def getSortedTFCConfigExcludingDefault(configsExcludingDefault: Seq[Configuration]): Seq[Configuration] =
+    configsExcludingDefault.sortBy(c => new SimpleDateFormat("dd-MM-yyyy").parse(c.get[String]("rule-date"))).reverse
+
+  def getConfigHelper(
+      currentDate: LocalDate,
+      taxYearConfigs: List[Configuration],
+      acc: Option[Configuration],
+      i: Int
+  ): Option[Configuration] =
     taxYearConfigs match {
       case Nil => acc
-      case head:: tail =>
+      case head :: tail =>
         val configDate = new SimpleDateFormat("dd-MM-yyyy").parse(head.get[String]("rule-date"))
 
         // exit tail recursive
@@ -61,25 +61,25 @@ class TFCConfig @Inject()(val config: CCConfig) {
           getConfigHelper(currentDate, tail, acc, i)
         }
     }
-  }
 
-  private def getTFCTaxYearConfig(configuration: Configuration, location: String): TFCTaxYearConfig = {
+  private def getTFCTaxYearConfig(configuration: Configuration, location: String): TFCTaxYearConfig =
     TFCTaxYearConfig(
       childAgeLimit = configuration.get[Int]("child-age-limit"),
       childAgeLimitDisabled = configuration.get[Int]("child-age-limit-disabled"),
       minimumHoursWorked = configuration.get[Double]("minimum-hours-worked-per-week"),
       maxIncomePerClaimant = configuration.get[Double]("maximum-income-per-claimant"),
-      personalAllowancePerClaimant = configuration.getOptional[Double]({location} + ".personal-allowance").
-        getOrElse(configuration.get[Double]("default.personal-allowance"))
+      personalAllowancePerClaimant = configuration
+        .getOptional[Double](location + ".personal-allowance")
+        .getOrElse(configuration.get[Double]("default.personal-allowance"))
     )
-  }
 
   def tfcNoOfPeriods: Short = config.oldConf.getOptional[Int]("tax.quarters.multiplier").getOrElse(4).toShort
 
   def getConfig(currentDate: LocalDate, location: String): TFCTaxYearConfig = {
-    val configs: Seq[Configuration] = config.oldConf.underlying.getConfigList("tfc.rule-change").asScala.map(Configuration(_)).toSeq
+    val configs: Seq[Configuration] =
+      config.oldConf.underlying.getConfigList("tfc.rule-change").asScala.map(Configuration(_)).toSeq
     val configsExcludingDefault = getTFCConfigExcludingDefault(configs)
-    val defaultConfig = getTFCConfigDefault(configs)
+    val defaultConfig           = getTFCConfigDefault(configs)
     // ensure the latest date is in the head position
     val sorted = getSortedTFCConfigExcludingDefault(configsExcludingDefault)
 
@@ -87,4 +87,5 @@ class TFCConfig @Inject()(val config: CCConfig) {
 
     getTFCTaxYearConfig(result.getOrElse(defaultConfig), location)
   }
+
 }

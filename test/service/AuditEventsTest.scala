@@ -26,9 +26,8 @@ import uk.gov.hmrc.play.audit.model.DataEvent
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
-/**
- * Created by user on 25/04/16.
- */
+/** Created by user on 25/04/16.
+  */
 class AuditEventsTest extends FakeCCEligibilityApplication with Matchers {
 
   def createObservableAuditConnector = new ObservableAuditConnector {
@@ -54,14 +53,16 @@ class AuditEventsTest extends FakeCCEligibilityApplication with Matchers {
 
     override def auditingConfig: AuditingConfig = ???
 
-    override def sendEvent(event: DataEvent)(implicit hc: HeaderCarrier = HeaderCarrier(), ec: ExecutionContext): Future[AuditResult] = {
+    override def sendEvent(
+        event: DataEvent
+    )(implicit hc: HeaderCarrier = HeaderCarrier(), ec: ExecutionContext): Future[AuditResult] = {
       addEvent(event.asInstanceOf[DataEvent])
       Future.successful(AuditResult.Success)
     }
 
-    def addEvent(auditEvent: DataEvent): Unit = {
+    def addEvent(auditEvent: DataEvent): Unit =
       events = events += auditEvent
-    }
+
   }
 
   "Audit Events" must {
@@ -70,7 +71,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with Matchers {
     "audit request received for household eligibility - success " in {
 
       val observableAuditConnector = createObservableAuditConnector
-      val auditor = createAuditor(observableAuditConnector)
+      val auditor                  = createAuditor(observableAuditConnector)
 
       auditor.auditHouseholdRequest("Data")
 
@@ -84,7 +85,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with Matchers {
     "audit response processed for Household eligibility - success " in {
 
       val observableAuditConnector = createObservableAuditConnector
-      val auditor = createAuditor(observableAuditConnector)
+      val auditor                  = createAuditor(observableAuditConnector)
 
       auditor.auditHouseholdResponse("Data")
 
@@ -95,6 +96,5 @@ class AuditEventsTest extends FakeCCEligibilityApplication with Matchers {
 
     }
   }
-
 
 }

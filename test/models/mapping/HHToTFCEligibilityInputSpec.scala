@@ -30,14 +30,14 @@ import utils.{CCConfig, Periods, TFCConfig}
 class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with MockitoSugar {
 
   val mockTFC = mock[TFCConfig]
-  val SUT = new HHToTFCEligibilityInput(mockTFC, mock[CCConfig])
+  val SUT     = new HHToTFCEligibilityInput(mockTFC, mock[CCConfig])
 
   "HHToTFCEligibilityInput" must {
 
     "convert Household to TFC Eligibility Input" when {
       "a household with parent, no partner and 2 children" in {
         val currentDate = LocalDate.now
-        val dob = LocalDate.now().minusYears(2)
+        val dob         = LocalDate.now().minusYears(2)
 
         val hhChild1 = Child(
           id = 0,
@@ -61,7 +61,7 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
               employmentIncome = Some(25000),
               pension = Some(1200),
               otherIncome = Some(6000),
-              benefits = None,
+              benefits = None
             )
           ),
           minimumEarnings = Some(
@@ -127,7 +127,7 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
 
       "a household with parent, partner and 2 children" in {
         val currentDate = LocalDate.now
-        val dob = LocalDate.now().minusYears(2)
+        val dob         = LocalDate.now().minusYears(2)
 
         val hhChild1 = Child(
           id = 0,
@@ -151,7 +151,7 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
               employmentIncome = Some(12212),
               pension = Some(47674),
               otherIncome = Some(647864),
-              benefits = Some(546),
+              benefits = Some(546)
             )
           ),
           minimumEarnings = Some(MinimumEarnings(BigDecimal(0), Some(EmploymentStatusEnum.SELFEMPLOYED), Some(true))),
@@ -165,7 +165,7 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
               employmentIncome = Some(12212),
               pension = Some(47674),
               otherIncome = Some(647864),
-              benefits = Some(546),
+              benefits = Some(546)
             )
           ),
           minimumEarnings = None,
@@ -227,4 +227,5 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
       }
     }
   }
+
 }

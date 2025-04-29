@@ -28,25 +28,20 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import scala.jdk.CollectionConverters.ListHasAsScala
 
-
-class CCConfig @Inject()(val conf: ServicesConfig,
-                         val oldConf: Configuration) {
+class CCConfig @Inject() (val conf: ServicesConfig, val oldConf: Configuration) {
 
   val dateFormat = new SimpleDateFormat("dd-MM-yyyy")
 
   def startDate: LocalDate = LocalDate.now()
 
-  def toDate(localDate: LocalDate): Date = {
+  def toDate(localDate: LocalDate): Date =
     Date.from(localDate.atStartOfDay(systemDefault).toInstant)
-  }
 
-  def toLocalDate(date: Date): LocalDate = {
+  def toLocalDate(date: Date): LocalDate =
     date.toInstant.atZone(systemDefault).toLocalDate
-  }
-
 
   private def calendar(year: Int, month: Int, day: Int): Calendar = {
-    val calendar  = Calendar.getInstance()
+    val calendar = Calendar.getInstance()
 
     calendar.clear()
     calendar.set(Calendar.MONTH, month)
@@ -57,28 +52,28 @@ class CCConfig @Inject()(val conf: ServicesConfig,
   }
 
   private def birthDayCalendar(date: LocalDate): Calendar = {
-    val calendar  = Calendar.getInstance()
+    val calendar = Calendar.getInstance()
     calendar.clear()
     calendar.setTime(toDate(date))
 
     calendar
   }
 
-  def september1stForDate(date: LocalDate) : LocalDate = {
+  def september1stForDate(date: LocalDate): LocalDate = {
     val currentYear = determineTaxYearFromNow(date)
 
-     val september1 = calendar(currentYear, Calendar.SEPTEMBER, 1).getTime
-      toLocalDate(september1)
-  }
-
-  def previousSeptember1stForDate(date: LocalDate) : LocalDate = {
-    val currentYear = determineTaxYearFromNow(date)
-
-    val september1 = calendar(currentYear-1, Calendar.SEPTEMBER, 1).getTime
+    val september1 = calendar(currentYear, Calendar.SEPTEMBER, 1).getTime
     toLocalDate(september1)
   }
 
-  def september1stFollowingChildBirthday(childBirthday: LocalDate) : LocalDate = {
+  def previousSeptember1stForDate(date: LocalDate): LocalDate = {
+    val currentYear = determineTaxYearFromNow(date)
+
+    val september1 = calendar(currentYear - 1, Calendar.SEPTEMBER, 1).getTime
+    toLocalDate(september1)
+  }
+
+  def september1stFollowingChildBirthday(childBirthday: LocalDate): LocalDate = {
     // plot the child's birthday (e.g. 16th birthday) on the calendar
     val childBirthdayCalendar = birthDayCalendar(childBirthday)
 
@@ -89,7 +84,9 @@ class CCConfig @Inject()(val conf: ServicesConfig,
     septemberCalendar.set(Calendar.DAY_OF_MONTH, 1)
 
     // if 16th birthday is after the determined 1st september then we need to add a year to the following september
-    if (childBirthdayCalendar.compareTo(septemberCalendar) > 0 || childBirthdayCalendar.compareTo(septemberCalendar) == 0) {
+    if (
+      childBirthdayCalendar.compareTo(septemberCalendar) > 0 || childBirthdayCalendar.compareTo(septemberCalendar) == 0
+    ) {
       septemberCalendar.add(Calendar.YEAR, 1)
     }
 
@@ -97,42 +94,48 @@ class CCConfig @Inject()(val conf: ServicesConfig,
     toLocalDate(september1)
   }
 
-  def determineTaxYearFromNow(from: LocalDate) : Int = {
+  def determineTaxYearFromNow(from: LocalDate): Int = {
 
     val currentCalendar = birthDayCalendar(from)
 
-    val periodYear = currentCalendar.get(Calendar.YEAR)
+    val periodYear  = currentCalendar.get(Calendar.YEAR)
     val periodStart = toDate(from)
 
     val january1st = calendar(periodYear, Calendar.JANUARY, 1).getTime
 
     val april5th = calendar(periodYear, Calendar.APRIL, 5).getTime
 
-    val taxYear = if ((periodStart.compareTo(january1st) == 0 || periodStart.after(january1st))
-      && (periodStart.before(april5th) || periodStart.compareTo(april5th) == 0)) {
-      periodYear-1
-    } else {
-      periodYear
-    }
+    val taxYear =
+      if (
+        (periodStart.compareTo(january1st) == 0 || periodStart.after(january1st))
+        && (periodStart.before(april5th) || periodStart.compareTo(april5th) == 0)
+      ) {
+        periodYear - 1
+      } else {
+        periodYear
+      }
     taxYear
   }
 
   def loadConfigByType(configType: String, currentDate: LocalDate = LocalDate.now): Configuration = {
     val configs: Seq[Configuration] = oldConf.underlying.getConfigList(configType).asScala.map(Configuration(_)).toSeq
     val configExcludingDefault: Seq[Configuration] = getConfigExcludingDefault(configs)
-    configExcludingDefault.find(conf => {
-      val ruleDate = dateFormat.parse(conf.get[String]("rule-date"))
-      toDate(currentDate).compareTo(ruleDate) >= 0
-    }).getOrElse(getConfigDefault(configs))
+    configExcludingDefault
+      .find { conf =>
+        val ruleDate = dateFormat.parse(conf.get[String]("rule-date"))
+        toDate(currentDate).compareTo(ruleDate) >= 0
+      }
+      .getOrElse(getConfigDefault(configs))
   }
 
-  private def getConfigDefault(configs: Seq[Configuration]): Configuration = {
+  private def getConfigDefault(configs: Seq[Configuration]): Configuration =
     configs.filter(_.get[String]("rule-date").contains("default")).head
-  }
 
-  private def getConfigExcludingDefault(configs: Seq[Configuration]): Seq[Configuration] = {
-    configs.filterNot(_.get[String]("rule-date").contains("default")).sortWith(
-      (conf1, conf2) => dateFormat.parse(conf1.get[String]("rule-date")).after(dateFormat.parse(conf2.get[String]("rule-date")))
-    )
-  }
+  private def getConfigExcludingDefault(configs: Seq[Configuration]): Seq[Configuration] =
+    configs
+      .filterNot(_.get[String]("rule-date").contains("default"))
+      .sortWith((conf1, conf2) =>
+        dateFormat.parse(conf1.get[String]("rule-date")).after(dateFormat.parse(conf2.get[String]("rule-date")))
+      )
+
 }

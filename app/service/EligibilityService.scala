@@ -28,15 +28,17 @@ import utils.{CCConfig, ESCConfig}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class EligibilityService @Inject()(calcConnector: CalculatorConnector,
-                                   esc: ESCEligibility,
-                                   tfc: TFCEligibility,
-                                   TFCEligibilityInput: HHToTFCEligibilityInput,
-                                   ESCEligibilityInput: HHToESCEligibilityInput,
-                                   eSCConfig: ESCConfig, cCConfig: CCConfig)
-                                  (implicit ec: ExecutionContext){
+class EligibilityService @Inject() (
+    calcConnector: CalculatorConnector,
+    esc: ESCEligibility,
+    tfc: TFCEligibility,
+    TFCEligibilityInput: HHToTFCEligibilityInput,
+    ESCEligibilityInput: HHToESCEligibilityInput,
+    eSCConfig: ESCConfig,
+    cCConfig: CCConfig
+)(implicit ec: ExecutionContext) {
 
-  def eligibility(request: Household)(implicit hc: HeaderCarrier): Future[SchemeResults] = {
+  def eligibility(request: Household)(implicit hc: HeaderCarrier): Future[SchemeResults] =
     for {
       tfcEligibility <- tfc.eligibility(TFCEligibilityInput.convert(request))
       escEligibility <- esc.eligibility(ESCEligibilityInput.convert(request), eSCConfig, cCConfig)
@@ -46,9 +48,8 @@ class EligibilityService @Inject()(calcConnector: CalculatorConnector,
         if (escEligibility.eligibility) Some(escEligibility) else None
       )
 
-
       calcOutput <- {
-        if (calcInput.esc.isDefined ||  calcInput.tfc.isDefined) {
+        if (calcInput.esc.isDefined || calcInput.tfc.isDefined) {
           calcConnector.getCalculatorResult(calcInput)
         } else {
           Future(CalculatorOutput())
@@ -57,11 +58,10 @@ class EligibilityService @Inject()(calcConnector: CalculatorConnector,
 
     } yield {
 
-      val escResult: SchemeResults = SchemeResultsBuilder.buildESCResults(escEligibility, Some(calcOutput), SchemeResults(List()))
+      val escResult: SchemeResults =
+        SchemeResultsBuilder.buildESCResults(escEligibility, Some(calcOutput), SchemeResults(List()))
       val tfcResult: SchemeResults = SchemeResultsBuilder.buildTFCResults(Some(calcOutput), escResult)
       tfcResult
     }
-
-  }
 
 }

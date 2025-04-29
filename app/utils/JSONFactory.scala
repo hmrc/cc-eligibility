@@ -16,14 +16,16 @@
 
 package utils
 
-
 import play.api.libs.json._
 
 object JSONFactory extends JSONFactory
 
 trait JSONFactory {
 
-  def generateErrorJSON(status: Int, errors: Either[collection.Seq[(JsPath, collection.Seq[JsonValidationError])], Exception]): JsObject = {
+  def generateErrorJSON(
+      status: Int,
+      errors: Either[collection.Seq[(JsPath, collection.Seq[JsonValidationError])], Exception]
+  ): JsObject =
     errors match {
       case Left(e) =>
         val errorsSequence = errorBuilder(e.toSeq)
@@ -31,27 +33,27 @@ trait JSONFactory {
       case Right(e) =>
         Json.obj("status" -> status, "error" -> s"${e.getMessage}")
     }
-  }
 
-  private def errorBuilder(errors: Seq[(JsPath, collection.Seq[JsonValidationError])]): JsArray = {
-    if(errors.nonEmpty) {
-        JsArray(
-          errors.map {
-            case (path, validationErrors) => Json.obj(
-              "path" -> Json.toJson(path.toString()),
-              "validationErrors" -> JsArray(validationErrors.map(
-                validationError => Json.obj(
+  private def errorBuilder(errors: Seq[(JsPath, collection.Seq[JsonValidationError])]): JsArray =
+    if (errors.nonEmpty) {
+      JsArray(
+        errors.map { case (path, validationErrors) =>
+          Json.obj(
+            "path" -> Json.toJson(path.toString()),
+            "validationErrors" -> JsArray(
+              validationErrors.map(validationError =>
+                Json.obj(
                   "message" -> JsString(validationError.message),
                   "args" -> JsArray(validationError.args.map {
-                      case x: Int => JsNumber(x)
-                      case x => JsString(x.toString)
-                    }
-                  )
-                ))
+                    case x: Int => JsNumber(x)
+                    case x      => JsString(x.toString)
+                  })
+                )
               )
             )
-          }
-        )
-      } else { JsArray(Seq(JsString("Error while generating JSON response"))) }
-  }
+          )
+        }
+      )
+    } else { JsArray(Seq(JsString("Error while generating JSON response"))) }
+
 }
