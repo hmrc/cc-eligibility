@@ -26,30 +26,39 @@ import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class EligibilityController @Inject ()(val eligibilityService: EligibilityService,
-                                       val auditEvent: AuditEvents,
-                                       cc: ControllerComponents)
-                                      (implicit ec: ExecutionContext) extends BackendController(cc) with Logging {
+class EligibilityController @Inject() (
+    val eligibilityService: EligibilityService,
+    val auditEvent: AuditEvents,
+    cc: ControllerComponents
+)(implicit ec: ExecutionContext)
+    extends BackendController(cc)
+    with Logging {
 
-  def eligible : Action[JsValue] = Action.async(cc.parsers.json) {
-    implicit request =>
-      request.body.validate[Household].fold(
+  def eligible: Action[JsValue] = Action.async(cc.parsers.json) { implicit request =>
+    request.body
+      .validate[Household]
+      .fold(
         error => {
           logger.warn(s"EligibilityController Household Validation JsError *****$error")
-          Future.successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
+          Future
+            .successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
           auditEvent.auditHouseholdRequest(result.toString)
-          eligibilityService.eligibility(result).map {
-            response =>
+          eligibilityService
+            .eligibility(result)
+            .map { response =>
               auditEvent.auditHouseholdResponse(Json.toJson(response).toString())
               Ok(Json.toJson(response))
-          } recover {
-            case e: Exception =>
+            }
+            .recover { case e: Exception =>
               logger.warn(s"EligibilityController Household Eligibility Exception: ${e.getMessage}")
-              InternalServerError(utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e)))
-          }
+              InternalServerError(
+                utils.JSONFactory.generateErrorJSON(play.api.http.Status.INTERNAL_SERVER_ERROR, Right(e))
+              )
+            }
         }
       )
   }
+
 }

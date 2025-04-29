@@ -26,13 +26,13 @@ import javax.inject.Inject
 import scala.annotation.tailrec
 import scala.concurrent.{ExecutionContext, Future}
 
-class ESCEligibility @Inject()(config: CCConfig)(implicit ec: ExecutionContext) extends CCEligibilityHelpers {
+class ESCEligibility @Inject() (config: CCConfig)(implicit ec: ExecutionContext) extends CCEligibilityHelpers {
 
   def generateSplitDates(taxYear: ESCTaxYear): List[LocalDate] = {
     val dates: List[Option[LocalDate]] = for (child <- taxYear.children) yield {
       val isBeingBorn = child.isBeingBornInTaxYear(taxYear)
-      val turns15 = child.isTurning15Before1September(taxYear.from, taxYear.until)
-      val turns16 = child.isTurning16Before1September(taxYear.from, taxYear.until)
+      val turns15     = child.isTurning15Before1September(taxYear.from, taxYear.until)
+      val turns16     = child.isTurning16Before1September(taxYear.from, taxYear.until)
 
       if (isBeingBorn._1) {
         Some(isBeingBorn._2)
@@ -49,25 +49,28 @@ class ESCEligibility @Inject()(config: CCConfig)(implicit ec: ExecutionContext) 
 
   def determineStartDatesOfPeriodsInTaxYear(taxYear: ESCTaxYear): List[LocalDate] = {
     val filtered: List[LocalDate] = generateSplitDates(taxYear)
-    val taxYearStart: LocalDate = taxYear.from
+    val taxYearStart: LocalDate   = taxYear.from
     val inserted: List[LocalDate] = filtered.::(taxYearStart)
     inserted.distinct
   }
 
-  def numberOfQualifyingMonthsForPeriod(qualifying: Boolean, periodStart: LocalDate, periodEnd: LocalDate): Int = {
+  def numberOfQualifyingMonthsForPeriod(qualifying: Boolean, periodStart: LocalDate, periodEnd: LocalDate): Int =
     if (qualifying) {
       (periodEnd.getYear - periodStart.getYear) * 12 + (periodEnd.getMonthValue - periodStart.getMonthValue)
     } else {
       0
     }
-  }
 
-  def determineClaimantsEligibilityForPeriod(children: List[output.esc.ESCChild], claimants: List[ESCClaimant], periodStart: LocalDate,
-                                             periodEnd: LocalDate): List[models.output.esc.ESCClaimant] = {
+  def determineClaimantsEligibilityForPeriod(
+      children: List[output.esc.ESCChild],
+      claimants: List[ESCClaimant],
+      periodStart: LocalDate,
+      periodEnd: LocalDate
+  ): List[models.output.esc.ESCClaimant] =
     for (claimant <- claimants) yield {
-      val claimantQualifying = claimant.isClaimantQualifyingForESC
+      val claimantQualifying    = claimant.isClaimantQualifyingForESC
       val hasQualifyingChildren = children.exists(_.qualifying)
-      val vouchers = claimantQualifying && hasQualifyingChildren
+      val vouchers              = claimantQualifying && hasQualifyingChildren
 
       val months = numberOfQualifyingMonthsForPeriod(vouchers, periodStart, periodEnd)
 
@@ -76,20 +79,21 @@ class ESCEligibility @Inject()(config: CCConfig)(implicit ec: ExecutionContext) 
         isPartner = claimant.isPartner,
         eligibleMonthsInPeriod = months,
         vouchers = vouchers,
-        currentIncome = claimant.currentIncome.map(x => models.output.esc.ESCIncome(x.employmentIncome, x.pension, x.taxCode))
+        currentIncome =
+          claimant.currentIncome.map(x => models.output.esc.ESCIncome(x.employmentIncome, x.pension, x.taxCode))
       )
     }
-  }
 
-  def determineChildrensEligibilityForPeriod(children: List[ESCChild], periodStart: LocalDate): List[models.output.esc.ESCChild] = {
-    for (child <- children) yield {
-      output.esc.ESCChild(
+  def determineChildrensEligibilityForPeriod(
+      children: List[ESCChild],
+      periodStart: LocalDate
+  ): List[models.output.esc.ESCChild] =
+    for (child <- children)
+      yield output.esc.ESCChild(
         qualifying = child.qualifiesForESC(periodStart),
         childCareCost = child.childCareCost,
         childCareCostPeriod = child.childCareCostPeriod
       )
-    }
-  }
 
   def determinePeriodsForTaxYear(ty: ESCTaxYear): List[models.output.esc.ESCPeriod] = {
     val datesOfChanges = determineStartDatesOfPeriodsInTaxYear(ty)
@@ -98,7 +102,7 @@ class ESCEligibility @Inject()(config: CCConfig)(implicit ec: ExecutionContext) 
       val fromAndUntil = fromAndUntilDateForPeriod(date, i, datesOfChanges, ty)
 
       // determine child's qualification and claimants qualification
-      val children = determineChildrensEligibilityForPeriod(ty.children, fromAndUntil._1)
+      val children  = determineChildrensEligibilityForPeriod(ty.children, fromAndUntil._1)
       val claimants = determineClaimantsEligibilityForPeriod(children, ty.claimants, fromAndUntil._1, fromAndUntil._2)
 
       models.output.esc.ESCPeriod(
@@ -112,8 +116,10 @@ class ESCEligibility @Inject()(config: CCConfig)(implicit ec: ExecutionContext) 
 
   def constructTaxYearsWithPeriods(taxYears: List[models.input.esc.ESCTaxYear]): List[models.output.esc.ESCTaxYear] = {
     @tailrec
-    def generateTaxYearsHelper(taxYears: List[models.input.esc.ESCTaxYear],
-                               acc: List[models.output.esc.ESCTaxYear]): List[models.output.esc.ESCTaxYear] = {
+    def generateTaxYearsHelper(
+        taxYears: List[models.input.esc.ESCTaxYear],
+        acc: List[models.output.esc.ESCTaxYear]
+    ): List[models.output.esc.ESCTaxYear] =
       taxYears match {
         case Nil => acc.reverse
         case head :: tail =>
@@ -125,7 +131,6 @@ class ESCEligibility @Inject()(config: CCConfig)(implicit ec: ExecutionContext) 
           )
           generateTaxYearsHelper(tail, acc.::(ty))
       }
-    }
 
     generateTaxYearsHelper(taxYears, List())
   }
@@ -134,13 +139,11 @@ class ESCEligibility @Inject()(config: CCConfig)(implicit ec: ExecutionContext) 
 
     def getClaimantEligibility(isPartner: Boolean) = taxYears.exists(
       _.periods.exists(
-        _.claimants.exists(
-          claimant => claimant.isPartner == isPartner && claimant.qualifying
-        )
+        _.claimants.exists(claimant => claimant.isPartner == isPartner && claimant.qualifying)
       )
     )
 
-    val parentEligibility = getClaimantEligibility(isPartner = false)
+    val parentEligibility  = getClaimantEligibility(isPartner = false)
     val partnerEligibility = getClaimantEligibility(isPartner = true)
 
     val escChildrenEligibilityResult: Boolean = taxYears.exists(
@@ -155,19 +158,23 @@ class ESCEligibility @Inject()(config: CCConfig)(implicit ec: ExecutionContext) 
     (eligibility, parentEligibility, partnerEligibility)
   }
 
-  def eligibility(request: ESCEligibilityInput, eSCConfig: ESCConfig, ccConfig: CCConfig): Future[ESCEligibilityOutput] = {
-    if(request.escTaxYears.nonEmpty) {
+  def eligibility(
+      request: ESCEligibilityInput,
+      eSCConfig: ESCConfig,
+      ccConfig: CCConfig
+  ): Future[ESCEligibilityOutput] =
+    if (request.escTaxYears.nonEmpty) {
       val childrenWithConfig = request.escTaxYears.head.children.map(x => x.createWithConfig(x, eSCConfig, ccConfig))
-      val escTaxYearWithConfig = request.escTaxYears.map(x => new ESCTaxYear(x.from, x.until, x.claimants, childrenWithConfig))
+      val escTaxYearWithConfig =
+        request.escTaxYears.map(x => new ESCTaxYear(x.from, x.until, x.claimants, childrenWithConfig))
       val escEligibilityInputWithConfig = ESCEligibilityInput(escTaxYearWithConfig, request.location)
       processEligibility(escEligibilityInputWithConfig)
-    }else {
+    } else {
       processEligibility(request)
     }
-  }
 
   private def processEligibility(request: ESCEligibilityInput) = {
-    val constructTaxYears = constructTaxYearsWithPeriods(request.escTaxYears)
+    val constructTaxYears                                    = constructTaxYearsWithPeriods(request.escTaxYears)
     val (eligibility, parentEligibility, partnerEligibility) = determineESCEligibility(constructTaxYears)
     Future {
       ESCEligibilityOutput(
@@ -179,4 +186,5 @@ class ESCEligibility @Inject()(config: CCConfig)(implicit ec: ExecutionContext) 
       )
     }
   }
+
 }

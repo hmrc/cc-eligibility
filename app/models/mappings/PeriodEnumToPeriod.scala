@@ -24,15 +24,15 @@ object PeriodEnumToPeriod extends PeriodEnumToPeriod
 
 trait PeriodEnumToPeriod {
 
-  def convert(inputPeriod: PeriodEnum): Periods.Period = {
+  def convert(inputPeriod: PeriodEnum): Periods.Period =
     inputPeriod match {
       case PeriodEnum.FORTNIGHTLY => Periods.Fortnightly
-      case PeriodEnum.INVALID => Periods.INVALID
-      case PeriodEnum.MONTHLY => Periods.Monthly
-      case PeriodEnum.QUARTERLY => Periods.Quarterly
-      case PeriodEnum.WEEKLY => Periods.Weekly
-      case PeriodEnum.YEARLY => Periods.Yearly
-      case _ => Periods.INVALID
+      case PeriodEnum.INVALID     => Periods.INVALID
+      case PeriodEnum.MONTHLY     => Periods.Monthly
+      case PeriodEnum.QUARTERLY   => Periods.Quarterly
+      case PeriodEnum.WEEKLY      => Periods.Weekly
+      case PeriodEnum.YEARLY      => Periods.Yearly
+      case _                      => Periods.INVALID
     }
-  }
+
 }

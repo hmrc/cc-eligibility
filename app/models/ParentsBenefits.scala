@@ -21,13 +21,13 @@ import play.api.libs.json.{Format, JsString, Reads, Writes}
 sealed trait ParentsBenefits
 
 object ParentsBenefits {
-  case object CarersAllowance extends ParentsBenefits
-  case object IncapacityBenefit extends ParentsBenefits
-  case object SevereDisablementAllowance extends ParentsBenefits
-  case object ContributionBasedEmploymentAndSupportAllowance extends ParentsBenefits
+  case object CarersAllowance                                  extends ParentsBenefits
+  case object IncapacityBenefit                                extends ParentsBenefits
+  case object SevereDisablementAllowance                       extends ParentsBenefits
+  case object ContributionBasedEmploymentAndSupportAllowance   extends ParentsBenefits
   case object NICreditsForIncapacityOrLimitedCapabilityForWork extends ParentsBenefits
-  case object CarersCredit extends ParentsBenefits
-  case object NoneOfThese extends ParentsBenefits
+  case object CarersCredit                                     extends ParentsBenefits
+  case object NoneOfThese                                      extends ParentsBenefits
 
   private val allParentsBenefits = List(
     CarersAllowance,
@@ -40,19 +40,13 @@ object ParentsBenefits {
   )
 
   private val mapping: Map[String, ParentsBenefits] =
-    allParentsBenefits.map { benefit =>
-      benefit.toString -> benefit
-    }.toMap
+    allParentsBenefits.map(benefit => benefit.toString -> benefit).toMap
 
   private val inverseMapping: Map[ParentsBenefits, String] = mapping.map(_.swap)
 
-  private val reads: Reads[ParentsBenefits] = Reads { json =>
-    json.validate[String].map(mapping)
-  }
+  private val reads: Reads[ParentsBenefits] = Reads(json => json.validate[String].map(mapping))
 
-  private val writes: Writes[ParentsBenefits] = Writes { benefits =>
-    JsString(inverseMapping(benefits))
-  }
+  private val writes: Writes[ParentsBenefits] = Writes(benefits => JsString(inverseMapping(benefits)))
 
   implicit val format: Format[ParentsBenefits] = Format(reads, writes)
 }

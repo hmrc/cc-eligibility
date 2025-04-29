@@ -30,78 +30,78 @@ import java.time.LocalDate
 //Should also match childcarecalculatorfrontend.models.Household
 
 case class Income(
-                   employmentIncome: Option[BigDecimal] = None,
-                   pension: Option[BigDecimal] = None,
-                   otherIncome: Option[BigDecimal] = None,
-                   benefits: Option[BigDecimal] = None,
-                   taxCode: Option[String] = None
-                 )
+    employmentIncome: Option[BigDecimal] = None,
+    pension: Option[BigDecimal] = None,
+    otherIncome: Option[BigDecimal] = None,
+    benefits: Option[BigDecimal] = None,
+    taxCode: Option[String] = None
+)
 
 object Income {
   implicit val formatIncome: OFormat[Income] = Json.format[Income]
 }
 
 case class MinimumEarnings(
-                           amount: BigDecimal =   0.00,
-                           employmentStatus: Option[EmploymentStatusEnum] =   None,
-                           selfEmployedIn12Months: Option[Boolean] =   None
-                          )
+    amount: BigDecimal = 0.00,
+    employmentStatus: Option[EmploymentStatusEnum] = None,
+    selfEmployedIn12Months: Option[Boolean] = None
+)
 
 object MinimumEarnings {
   implicit val formatMinimumEarnings: OFormat[MinimumEarnings] = Json.format[MinimumEarnings]
 }
 
 case class Disability(
-                      disabled: Boolean,
-                      severelyDisabled: Boolean,
-                      blind: Boolean
-                     )
+    disabled: Boolean,
+    severelyDisabled: Boolean,
+    blind: Boolean
+)
 
 object Disability {
   implicit val formatDisability: OFormat[Disability] = Json.format[Disability]
 }
 
 case class ChildCareCost(
-                         amount: Option[BigDecimal] = None,
-                         period: Option[PeriodEnum] = None
-                        )
+    amount: Option[BigDecimal] = None,
+    period: Option[PeriodEnum] = None
+)
 
 object ChildCareCost {
   implicit val formatChildCareCost: OFormat[ChildCareCost] = Json.format[ChildCareCost]
 }
 
 case class Child(
-                  id: Short,
-                  name: String,
-                  dob: Option[LocalDate] = None,
-                  disability: Option[Disability] = None,
-                  childcareCost: Option[ChildCareCost] = None,
-                )
+    id: Short,
+    name: String,
+    dob: Option[LocalDate] = None,
+    disability: Option[Disability] = None,
+    childcareCost: Option[ChildCareCost] = None
+)
 
 object Child {
   implicit val formatChild: OFormat[Child] = Json.format[Child]
 }
 
 case class Claimant(
-                     ageRange: Option[AgeRangeEnum] = None,
-                     benefits: Option[Set[ParentsBenefits]] = None,
-                     currentYearlyIncome: Option[Income]  = None,
-                     minimumEarnings: Option[MinimumEarnings]= None,
-                     escVouchers: Option[YesNoUnsureEnum] =   None,
-                     maximumEarnings: Option[Boolean] = None
-                   )
+    ageRange: Option[AgeRangeEnum] = None,
+    benefits: Option[Set[ParentsBenefits]] = None,
+    currentYearlyIncome: Option[Income] = None,
+    minimumEarnings: Option[MinimumEarnings] = None,
+    escVouchers: Option[YesNoUnsureEnum] = None,
+    maximumEarnings: Option[Boolean] = None
+)
 
 object Claimant {
   implicit val formatClaimant: OFormat[Claimant] = Json.format[Claimant]
 }
 
 case class Household(
-                      credits: Option[CreditsEnum] =   None,
-                      location: Option[LocationEnum] = None,
-                      children: List[Child],
-                      parent: Claimant,
-                      partner: Option[Claimant] = None
-                    )
+    credits: Option[CreditsEnum] = None,
+    location: Option[LocationEnum] = None,
+    children: List[Child],
+    parent: Claimant,
+    partner: Option[Claimant] = None
+)
 
 object Household {
   implicit val formatHousehold: OFormat[Household] = Json.format[Household]

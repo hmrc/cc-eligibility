@@ -21,21 +21,19 @@ import scala.math.Ordered.orderingToOrdered
 
 class ChildHelper(ccConfig: CCConfig) {
 
-  def age(dob: LocalDate, currentDate: LocalDate = ccConfig.startDate): Int = {
+  def age(dob: LocalDate, currentDate: LocalDate = ccConfig.startDate): Int =
     if (dob.isAfter(currentDate)) {
       -1
     } else {
       val age: Int = currentDate.getYear - dob.getYear
       if (
         (currentDate.getMonth < dob.getMonth)
-          || (currentDate.getMonth == dob.getMonth && currentDate.getDayOfMonth < dob.getDayOfMonth)
+        || (currentDate.getMonth == dob.getMonth && currentDate.getDayOfMonth < dob.getDayOfMonth)
       ) {
         age - 1
-      }
-      else {
+      } else {
         age
       }
     }
-  }
 
 }

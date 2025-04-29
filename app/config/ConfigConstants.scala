@@ -19,7 +19,7 @@ package config
 import java.time.format.DateTimeFormatter
 
 object ConfigConstants {
-  lazy val defaultAmount = BigDecimal(0)
+  lazy val defaultAmount   = BigDecimal(0)
   lazy val noOfMonths: Int = 12
-  lazy val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+  lazy val formatter       = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 }

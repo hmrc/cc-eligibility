@@ -21,23 +21,21 @@ import models._
 import models.input.esc._
 import utils.{CCConfig, HelperManager}
 
-class HHToESCEligibilityInput @Inject()(val cCConfig: CCConfig) extends PeriodEnumToPeriod with HelperManager {
+class HHToESCEligibilityInput @Inject() (val cCConfig: CCConfig) extends PeriodEnumToPeriod with HelperManager {
 
-  def convert(household: Household): ESCEligibilityInput = {
-    ESCEligibilityInput(createTaxYears(household.parent, household.partner, household.children),
-      household.location)
-  }
+  def convert(household: Household): ESCEligibilityInput =
+    ESCEligibilityInput(createTaxYears(household.parent, household.partner, household.children), household.location)
 
   private def createTaxYears(
-                              parent: Claimant,
-                              partner: Option[Claimant],
-                              children: List[Child]
-                            ): List[ESCTaxYear] = {
+      parent: Claimant,
+      partner: Option[Claimant],
+      children: List[Child]
+  ): List[ESCTaxYear] = {
 
-    val now = cCConfig.startDate
+    val now                 = cCConfig.startDate
     val april6thCurrentYear = determineApril6DateFromNow(now)
-    val claimantList = createClaimants(parent, partner)
-    val childList = createChildren(children)
+    val claimantList        = createClaimants(parent, partner)
+    val childList           = createChildren(children)
 
     List(
       ESCTaxYear(
@@ -55,32 +53,34 @@ class HHToESCEligibilityInput @Inject()(val cCConfig: CCConfig) extends PeriodEn
     )
   }
 
-  private def createClaimants(parent: Claimant,
-                              partner: Option[Claimant]): List[ESCClaimant] = {
+  private def createClaimants(parent: Claimant, partner: Option[Claimant]): List[ESCClaimant] = {
     val newParent = ESCClaimant(
       employerProvidesESC = escVouchersAvailable(parent),
       currentIncome = parent.currentYearlyIncome.map(x => ESCIncome(x.employmentIncome, x.pension, x.taxCode))
     )
 
-    partner.fold(List(newParent)) {
-      p =>
-        List(newParent, ESCClaimant(isPartner = true,
+    partner.fold(List(newParent)) { p =>
+      List(
+        newParent,
+        ESCClaimant(
+          isPartner = true,
           employerProvidesESC = escVouchersAvailable(partner.get),
-          currentIncome = p.currentYearlyIncome.map(x => ESCIncome(x.employmentIncome, x.pension, x.taxCode))))
+          currentIncome = p.currentYearlyIncome.map(x => ESCIncome(x.employmentIncome, x.pension, x.taxCode))
+        )
+      )
     }
 
   }
 
-  private def escVouchersAvailable(claimant: Claimant): Boolean = {
+  private def escVouchersAvailable(claimant: Claimant): Boolean =
     claimant.escVouchers match {
       case Some(YesNoUnsureEnum.YES) => true
-      case _ => false
+      case _                         => false
     }
-  }
 
-  private def createChildren(children: List[Child]): List[ESCChild] = {
-    for (child <- children) yield {
-      ESCChild(
+  private def createChildren(children: List[Child]): List[ESCChild] =
+    for (child <- children)
+      yield ESCChild(
         id = child.id,
         dob = child.dob.get,
         childCareCost = child.childcareCost.flatMap(_.amount).getOrElse(BigDecimal(0)),
@@ -88,9 +88,8 @@ class HHToESCEligibilityInput @Inject()(val cCConfig: CCConfig) extends PeriodEn
         disability = ESCDisability(
           disabled = child.disability.exists(d => d.blind || d.disabled),
           severelyDisabled = child.disability.exists(_.severelyDisabled)
-        ), Some(true)
+        ),
+        Some(true)
       )
-    }
-  }
 
 }

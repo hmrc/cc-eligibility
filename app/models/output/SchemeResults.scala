@@ -21,30 +21,26 @@ import models.SchemeEnum.SchemeEnum
 import play.api.libs.json.{Json, OFormat}
 
 case class EscClaimantEligibility(
-                                   parent: Boolean = false,
-                                   partner: Boolean = false
-                                 )
+    parent: Boolean = false,
+    partner: Boolean = false
+)
 
 object EscClaimantEligibility {
   implicit val escClaimantEligibilityFormat: OFormat[EscClaimantEligibility] = Json.format[EscClaimantEligibility]
 }
 
-
-case class Scheme(name: SchemeEnum,
-                  amount: BigDecimal ,
-                  escClaimantEligibility: Option[EscClaimantEligibility] = None,
-                 ) {
+case class Scheme(name: SchemeEnum, amount: BigDecimal, escClaimantEligibility: Option[EscClaimantEligibility] = None) {
   private val missingEscClaimantEligibility = name == SchemeEnum.ESCELIGIBILITY && escClaimantEligibility.isEmpty
-  require(!missingEscClaimantEligibility,"Missing values for escClaimantEligibility")
+  require(!missingEscClaimantEligibility, "Missing values for escClaimantEligibility")
 }
 
 object Scheme {
   implicit val schemeFormat: OFormat[Scheme] = Json.format[Scheme]
 }
 
-case class SchemeResults (
-                           schemes: List[Scheme]
-                         )
+case class SchemeResults(
+    schemes: List[Scheme]
+)
 
 object SchemeResults {
   implicit val schemeResultsformats: OFormat[SchemeResults] = Json.format[SchemeResults]

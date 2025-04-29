@@ -27,13 +27,15 @@ import utils.{CCConfig, ESCConfig}
 
 import scala.concurrent.Future
 
-class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
-  with org.scalatest.PrivateMethodTester with MockitoSugar
-  with ESCChildren {
-
+class ESCEligibilitySpec
+    extends FakeCCEligibilityApplication
+    with Matchers
+    with org.scalatest.PrivateMethodTester
+    with MockitoSugar
+    with ESCChildren {
 
   override def eSCConfig: Option[ESCConfig] = Some(app.injector.instanceOf[ESCConfig])
-  override def ccConfig: Option[CCConfig] = Some(app.injector.instanceOf[CCConfig])
+  override def ccConfig: Option[CCConfig]   = Some(app.injector.instanceOf[CCConfig])
 
   val service = app.injector.instanceOf[ESCEligibility]
 
@@ -46,77 +48,81 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(no change) determine start dates of periods in the tax year" in {
       val dateOfBirth = LocalDate.parse("2011-08-27", formatter)
-      val child = buildChild(dob = dateOfBirth)
-      val today = LocalDate.parse("2016-07-26", formatter)
-      val endTaxYear = LocalDate.parse("2017-04-06", formatter)
-      val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
+      val child       = buildChild(dob = dateOfBirth)
+      val today       = LocalDate.parse("2016-07-26", formatter)
+      val endTaxYear  = LocalDate.parse("2017-04-06", formatter)
+      val taxYear     = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
-      val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear =
+        PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
+      val result = service.invokePrivate(decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear))
 
       result.length shouldBe 1
     }
 
     "(1 child, 1 child turning 15) determine start dates of periods in the tax year" in {
       val dateOfBirth = LocalDate.parse("2001-08-27", formatter)
-      val child = buildChild(dob = dateOfBirth)
-      val today = LocalDate.parse("2016-07-26", formatter)
-      val endTaxYear = LocalDate.parse("2017-04-06", formatter)
-      val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
+      val child       = buildChild(dob = dateOfBirth)
+      val today       = LocalDate.parse("2016-07-26", formatter)
+      val endTaxYear  = LocalDate.parse("2017-04-06", formatter)
+      val taxYear     = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
-      val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear =
+        PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
+      val result = service.invokePrivate(decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear))
 
       result.length shouldBe 2
     }
 
     "(1 children, 1 child turning 16) determine start dates of periods in the tax year" in {
       val dateOfBirth = LocalDate.parse("2000-08-27", formatter)
-      val child = buildChild(dob = dateOfBirth)
-      val today = LocalDate.parse("2016-07-26", formatter)
-      val endTaxYear = LocalDate.parse("2017-04-06", formatter)
-      val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
+      val child       = buildChild(dob = dateOfBirth)
+      val today       = LocalDate.parse("2016-07-26", formatter)
+      val endTaxYear  = LocalDate.parse("2017-04-06", formatter)
+      val taxYear     = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
-      val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear =
+        PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
+      val result = service.invokePrivate(decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear))
 
       result.length shouldBe 1
     }
 
     "(1 children, 1 child turning 0) determine start dates of periods in the tax year" in {
       val dateOfBirth = LocalDate.parse("2016-08-27", formatter)
-      val child = buildChild(dob = dateOfBirth)
-      val today = LocalDate.parse("2016-07-26", formatter)
-      val endTaxYear = LocalDate.parse("2017-04-06", formatter)
-      val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
+      val child       = buildChild(dob = dateOfBirth)
+      val today       = LocalDate.parse("2016-07-26", formatter)
+      val endTaxYear  = LocalDate.parse("2017-04-06", formatter)
+      val taxYear     = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
-      val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear =
+        PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
+      val result = service.invokePrivate(decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear))
 
       result.length shouldBe 2
     }
 
     "(2 children, 1 child turning 0, 1 child not causing a split) determine start dates of periods in the tax year" in {
       val dateOfBirth = LocalDate.parse("2016-08-27", formatter)
-      val child = buildChild(dob = dateOfBirth)
-      val today = LocalDate.parse("2016-07-26", formatter)
-      val endTaxYear = LocalDate.parse("2017-04-06", formatter)
-      val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
+      val child       = buildChild(dob = dateOfBirth)
+      val today       = LocalDate.parse("2016-07-26", formatter)
+      val endTaxYear  = LocalDate.parse("2017-04-06", formatter)
+      val taxYear     = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child))
 
-      val decoratedDetermineStartDatesOfPeriodsInTaxYear = PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
-      val result = service invokePrivate decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear)
+      val decoratedDetermineStartDatesOfPeriodsInTaxYear =
+        PrivateMethod[List[LocalDate]](Symbol("determineStartDatesOfPeriodsInTaxYear"))
+      val result = service.invokePrivate(decoratedDetermineStartDatesOfPeriodsInTaxYear(taxYear))
 
       result.length shouldBe 2
     }
 
-
     "Determine split dates for tax year, when two children are born before September" in {
-      val dateOfBirth = LocalDate.parse("2016-08-27", formatter)
+      val dateOfBirth  = LocalDate.parse("2016-08-27", formatter)
       val dateOfBirth2 = LocalDate.parse("2016-08-28", formatter)
-      val child = buildChild(dob = dateOfBirth)
-      val child2 = buildChild(id = 1, dob = dateOfBirth2)
-      val today = LocalDate.parse("2016-07-26", formatter)
-      val endTaxYear = LocalDate.parse("2017-04-06", formatter)
+      val child        = buildChild(dob = dateOfBirth)
+      val child2       = buildChild(id = 1, dob = dateOfBirth2)
+      val today        = LocalDate.parse("2016-07-26", formatter)
+      val endTaxYear   = LocalDate.parse("2017-04-06", formatter)
       val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child, child2))
 
       val result = service.generateSplitDates(taxYear)
@@ -124,12 +130,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
     }
 
     "Determine split dates for tax year, when two children are born 1 on 1st September and other on 2nd September" in {
-      val dateOfBirth = LocalDate.parse("2016-09-01", formatter)
+      val dateOfBirth  = LocalDate.parse("2016-09-01", formatter)
       val dateOfBirth2 = LocalDate.parse("2016-09-02", formatter)
-      val child = buildChild(dob = dateOfBirth)
-      val child2 = buildChild(id = 1, dob = dateOfBirth2)
-      val today = LocalDate.parse("2016-07-26", formatter)
-      val endTaxYear = LocalDate.parse("2017-04-06", formatter)
+      val child        = buildChild(dob = dateOfBirth)
+      val child2       = buildChild(id = 1, dob = dateOfBirth2)
+      val today        = LocalDate.parse("2016-07-26", formatter)
+      val endTaxYear   = LocalDate.parse("2017-04-06", formatter)
       val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child, child2))
 
       val result = service.generateSplitDates(taxYear)
@@ -137,29 +143,30 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
     }
 
     "Determine split dates for tax year, one turns 15 and other child being born on 2nd September (return 1st Sept and child's dob)" in {
-      val dateOfBirth = LocalDate.parse("2001-08-01", formatter)
+      val dateOfBirth  = LocalDate.parse("2001-08-01", formatter)
       val dateOfBirth2 = LocalDate.parse("2016-09-02", formatter)
-      val september = LocalDate.parse("2016-09-01", formatter)
-      val child = buildChild(dob = dateOfBirth)
-      val child2 = buildChild(id = 1, dob = dateOfBirth2)
-      val today = LocalDate.parse("2016-07-26", formatter)
-      val endTaxYear = LocalDate.parse("2017-04-06", formatter)
+      val september    = LocalDate.parse("2016-09-01", formatter)
+      val child        = buildChild(dob = dateOfBirth)
+      val child2       = buildChild(id = 1, dob = dateOfBirth2)
+      val today        = LocalDate.parse("2016-07-26", formatter)
+      val endTaxYear   = LocalDate.parse("2017-04-06", formatter)
       val taxYear = ESCTaxYear(from = today, until = endTaxYear, claimants = List(), children = List(child, child2))
 
       val result = service.determineStartDatesOfPeriodsInTaxYear(taxYear)
-      result shouldBe List(today,september,dateOfBirth2)
+      result shouldBe List(today, september, dateOfBirth2)
     }
 
     "(no split) determine the periods for a tax year" in {
       val dateOfBirth1 = LocalDate.parse("2016-05-27", formatter)
       val dateOfBirth2 = LocalDate.parse("2003-06-27", formatter)
-      val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val periodStart  = LocalDate.parse("2016-06-20", formatter)
+      val periodEnd    = LocalDate.parse("2017-04-06", formatter)
 
-      val child1 = buildChild(dob = dateOfBirth1)
-      val child2 = buildChild(id = 1, dob = dateOfBirth2)
+      val child1    = buildChild(dob = dateOfBirth1)
+      val child2    = buildChild(id = 1, dob = dateOfBirth2)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
+      val taxYear =
+        ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
       val result = service.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = buildOutputChild(
@@ -194,13 +201,14 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
     "(no split, all children too old) determine the periods for a tax year" in {
       val dateOfBirth1 = LocalDate.parse("1992-05-27", formatter)
       val dateOfBirth2 = LocalDate.parse("1992-06-27", formatter)
-      val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val periodStart  = LocalDate.parse("2016-06-20", formatter)
+      val periodEnd    = LocalDate.parse("2017-04-06", formatter)
 
-      val child1 = buildChild(dob = dateOfBirth1)
-      val child2 = buildChild(id = 1, dob = dateOfBirth2)
+      val child1    = buildChild(dob = dateOfBirth1)
+      val child2    = buildChild(id = 1, dob = dateOfBirth2)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
+      val taxYear =
+        ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
       val result = service.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = buildOutputChild(
@@ -235,13 +243,14 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
     "(split)(1 child eligible, 1 child being born before 1st September) determine the periods for a tax year" in {
       val dateOfBirth1 = LocalDate.parse("2016-06-27", formatter)
       val dateOfBirth2 = LocalDate.parse("2003-06-27", formatter)
-      val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val periodStart  = LocalDate.parse("2016-06-20", formatter)
+      val periodEnd    = LocalDate.parse("2017-04-06", formatter)
 
-      val child1 = buildChild(dob = dateOfBirth1)
-      val child2 = buildChild(dob = dateOfBirth2)
+      val child1    = buildChild(dob = dateOfBirth1)
+      val child2    = buildChild(dob = dateOfBirth2)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
+      val taxYear =
+        ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
       val result = service.determinePeriodsForTaxYear(taxYear)
 
       result shouldBe List(
@@ -283,13 +292,14 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
     "(split)(child being born on 1st day of month) determine the periods for a tax year" in {
       val dateOfBirth1 = LocalDate.parse("2016-07-01", formatter)
       val dateOfBirth2 = LocalDate.parse("2003-06-27", formatter)
-      val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val periodStart  = LocalDate.parse("2016-06-20", formatter)
+      val periodEnd    = LocalDate.parse("2017-04-06", formatter)
 
-      val child1 = buildChild(dob = dateOfBirth1)
-      val child2 = buildChild(dob = dateOfBirth2)
+      val child1    = buildChild(dob = dateOfBirth1)
+      val child2    = buildChild(dob = dateOfBirth2)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
+      val taxYear =
+        ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
       val result = service.determinePeriodsForTaxYear(taxYear)
 
       result shouldBe List(
@@ -331,14 +341,15 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
     "(2 split)(1 child becoming old - 15, 1 child being born after september) determine the periods for a tax year" in {
       val dateOfBirth1 = LocalDate.parse("2001-06-27", formatter)
       val dateOfBirth2 = LocalDate.parse("2016-11-27", formatter)
-      val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
-      val september = LocalDate.parse("2016-09-01", formatter)
+      val periodStart  = LocalDate.parse("2016-06-20", formatter)
+      val periodEnd    = LocalDate.parse("2017-04-06", formatter)
+      val september    = LocalDate.parse("2016-09-01", formatter)
 
-      val child1 = buildChild(dob = dateOfBirth1)
-      val child2 = buildChild(dob = dateOfBirth2)
+      val child1    = buildChild(dob = dateOfBirth1)
+      val child2    = buildChild(dob = dateOfBirth2)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
+      val taxYear =
+        ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
       val result = service.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = buildOutputChild(
@@ -417,20 +428,20 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
             outputChild6
           )
         )
-
       )
     }
 
     "(2 splits)(2 children being born on different dates) determine the periods for a tax year" in {
       val dateOfBirth1 = LocalDate.parse("2016-09-27", formatter)
       val dateOfBirth2 = LocalDate.parse("2016-09-28", formatter)
-      val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val periodStart  = LocalDate.parse("2016-06-20", formatter)
+      val periodEnd    = LocalDate.parse("2017-04-06", formatter)
 
-      val child1 = buildChild(dob = dateOfBirth1)
-      val child2 = buildChild(dob = dateOfBirth2)
+      val child1    = buildChild(dob = dateOfBirth1)
+      val child2    = buildChild(dob = dateOfBirth2)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
+      val taxYear =
+        ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
       val result = service.determinePeriodsForTaxYear(taxYear)
 
       result shouldBe List(
@@ -485,16 +496,16 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       )
     }
 
-
     "(1 split)(1 child - child being born on 1st Sept) determine the periods for a tax year" in {
       val dateOfBirth1 = LocalDate.parse("2016-09-01", formatter)
-      val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
-      val september = LocalDate.parse("2016-09-01", formatter)
+      val periodStart  = LocalDate.parse("2016-06-20", formatter)
+      val periodEnd    = LocalDate.parse("2017-04-06", formatter)
+      val september    = LocalDate.parse("2016-09-01", formatter)
 
-      val child1 = buildChild(dob = dateOfBirth1)
+      val child1    = buildChild(dob = dateOfBirth1)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1), claimants = List(claimant1))
+      val taxYear =
+        ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1), claimants = List(claimant1))
       val result = service.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = buildOutputChild(
@@ -546,14 +557,15 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
     "(split)(1child turning 16, 1 child eligible ) determine the periods for a tax year" in {
       val dateOfBirth1 = LocalDate.parse("2000-06-27", formatter)
       val dateOfBirth2 = LocalDate.parse("2003-06-27", formatter)
-      val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
-      val september = LocalDate.parse("2016-09-01", formatter)
+      val periodStart  = LocalDate.parse("2016-06-20", formatter)
+      val periodEnd    = LocalDate.parse("2017-04-06", formatter)
+      val september    = LocalDate.parse("2016-09-01", formatter)
 
-      val child1 = buildChild(dob = dateOfBirth1, disabled = true)
-      val child2 = buildChild(dob = dateOfBirth2)
+      val child1    = buildChild(dob = dateOfBirth1, disabled = true)
+      val child2    = buildChild(dob = dateOfBirth2)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
+      val taxYear =
+        ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
       val result = service.determinePeriodsForTaxYear(taxYear)
 
       result shouldBe List(
@@ -595,13 +607,14 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
     "(1 split)(child turning 15 and child being born  on 1 Sept) determine the periods for a tax year" in {
       val dateOfBirth1 = LocalDate.parse("2001-06-27", formatter)
       val dateOfBirth2 = LocalDate.parse("2016-09-01", formatter)
-      val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val periodStart  = LocalDate.parse("2016-06-20", formatter)
+      val periodEnd    = LocalDate.parse("2017-04-06", formatter)
 
-      val child1 = buildChild(dob = dateOfBirth1)
-      val child2 = buildChild(dob = dateOfBirth2)
+      val child1    = buildChild(dob = dateOfBirth1)
+      val child2    = buildChild(dob = dateOfBirth2)
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
+      val taxYear =
+        ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2), claimants = List(claimant1))
       val result = service.determinePeriodsForTaxYear(taxYear)
 
       val outputChild1 = buildOutputChild(
@@ -664,14 +677,19 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val dateOfBirth3 = LocalDate.parse("2016-08-19", formatter)
 
       val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildChild(dob = dateOfBirth1, disabled = true)
       val child2 = buildChild(dob = dateOfBirth2)
       val child3 = buildChild(dob = dateOfBirth3)
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
+      val taxYear = ESCTaxYear(
+        from = periodStart,
+        until = periodEnd,
+        children = List(child1, child2, child3),
+        claimants = List(claimant1)
+      )
       val result = service.determinePeriodsForTaxYear(taxYear)
 
       result shouldBe List(
@@ -735,7 +753,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val dateOfBirth3 = LocalDate.parse("2006-08-19", formatter)
 
       val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildChild(dob = dateOfBirth1, disabled = true)
       val child2 = buildChild(dob = dateOfBirth2)
@@ -743,7 +761,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
+      val taxYear = ESCTaxYear(
+        from = periodStart,
+        until = periodEnd,
+        children = List(child1, child2, child3),
+        claimants = List(claimant1)
+      )
       val result = service.constructTaxYearsWithPeriods(List(taxYear))
 
       val outputChild1 = buildOutputChild(
@@ -792,14 +815,19 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val dateOfBirth3 = LocalDate.parse("2017-08-19", formatter)
 
       val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildChild(dob = dateOfBirth1, disabled = true)
       val child2 = buildChild(dob = dateOfBirth2)
       val child3 = buildChild(dob = dateOfBirth3)
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
+      val taxYear = ESCTaxYear(
+        from = periodStart,
+        until = periodEnd,
+        children = List(child1, child2, child3),
+        claimants = List(claimant1)
+      )
       val result = service.constructTaxYearsWithPeriods(List(taxYear))
 
       val outputChild1 = buildOutputChild(
@@ -848,7 +876,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val dateOfBirth3 = LocalDate.parse("1992-08-19", formatter)
 
       val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildChild(dob = dateOfBirth1, disabled = true)
       val child2 = buildChild(dob = dateOfBirth2)
@@ -856,7 +884,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
+      val taxYear = ESCTaxYear(
+        from = periodStart,
+        until = periodEnd,
+        children = List(child1, child2, child3),
+        claimants = List(claimant1)
+      )
       val result = service.constructTaxYearsWithPeriods(List(taxYear))
 
       val outputChild1 = buildOutputChild(
@@ -905,7 +938,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val dateOfBirth3 = LocalDate.parse("2006-08-19", formatter)
 
       val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildChild(dob = dateOfBirth1, disabled = true)
       val child2 = buildChild(dob = dateOfBirth2)
@@ -913,7 +946,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
+      val taxYear = ESCTaxYear(
+        from = periodStart,
+        until = periodEnd,
+        children = List(child1, child2, child3),
+        claimants = List(claimant1)
+      )
       val result = service.constructTaxYearsWithPeriods(List(taxYear))
 
       result shouldBe List(
@@ -968,7 +1006,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val september = LocalDate.parse("2016-09-01", formatter)
 
       val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildChild(dob = dateOfBirth1)
       val child2 = buildChild(dob = dateOfBirth2)
@@ -976,7 +1014,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
+      val taxYear = ESCTaxYear(
+        from = periodStart,
+        until = periodEnd,
+        children = List(child1, child2, child3),
+        claimants = List(claimant1)
+      )
       val result = service.constructTaxYearsWithPeriods(List(taxYear))
 
       result shouldBe List(
@@ -1031,7 +1074,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val september = LocalDate.parse("2016-09-01", formatter)
 
       val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildChild(dob = dateOfBirth1, disabled = true)
       val child2 = buildChild(dob = dateOfBirth2)
@@ -1039,7 +1082,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
+      val taxYear = ESCTaxYear(
+        from = periodStart,
+        until = periodEnd,
+        children = List(child1, child2, child3),
+        claimants = List(claimant1)
+      )
       val result = service.constructTaxYearsWithPeriods(List(taxYear))
 
       result shouldBe List(
@@ -1094,7 +1142,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val september = LocalDate.parse("2016-09-01", formatter)
 
       val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildChild(dob = dateOfBirth1, disabled = true)
       val child2 = buildChild(dob = dateOfBirth2)
@@ -1102,7 +1150,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
+      val taxYear = ESCTaxYear(
+        from = periodStart,
+        until = periodEnd,
+        children = List(child1, child2, child3),
+        claimants = List(claimant1)
+      )
       val result = service.constructTaxYearsWithPeriods(List(taxYear))
 
       result shouldBe List(
@@ -1157,7 +1210,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val september = LocalDate.parse("2016-09-01", formatter)
 
       val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildChild(dob = dateOfBirth1, disabled = true)
       val child2 = buildChild(dob = dateOfBirth2)
@@ -1165,10 +1218,13 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
+      val taxYear = ESCTaxYear(
+        from = periodStart,
+        until = periodEnd,
+        children = List(child1, child2, child3),
+        claimants = List(claimant1)
+      )
       val result = service.constructTaxYearsWithPeriods(List(taxYear))
-
-
 
       result shouldBe List(
         models.output.esc.ESCTaxYear(
@@ -1235,13 +1291,14 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val dateOfBirth1 = LocalDate.parse("2016-09-01", formatter)
 
       val periodStart = LocalDate.parse("2016-06-20", formatter)
-      val periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildChild(dob = dateOfBirth1, disabled = true)
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
-      val taxYear = ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1), claimants = List(claimant1))
+      val taxYear =
+        ESCTaxYear(from = periodStart, until = periodEnd, children = List(child1), claimants = List(claimant1))
       val result = service.constructTaxYearsWithPeriods(List(taxYear))
 
       val outputChild1 = buildOutputChild(
@@ -1252,7 +1309,6 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
         qualifying = true,
         isPartner = false,
         eligibleMonthsInPeriod = 0,
-
         vouchers = false
       )
       val outputChild2 = buildOutputChild(
@@ -1302,9 +1358,9 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val dateOfBirth3 = LocalDate.parse("2017-11-19", formatter)
 
       val ty1periodStart = LocalDate.parse("2016-06-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
       val ty2periodStart = LocalDate.parse("2017-04-06", formatter)
-      val ty2periodEnd = LocalDate.parse("2018-04-06", formatter)
+      val ty2periodEnd   = LocalDate.parse("2018-04-06", formatter)
 
       val september1 = LocalDate.parse("2016-09-01", formatter)
 
@@ -1314,8 +1370,18 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
-      val taxYear1 = ESCTaxYear(from = ty1periodStart, until = ty1periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val taxYear2 = ESCTaxYear(from = ty2periodStart, until = ty2periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
+      val taxYear1 = ESCTaxYear(
+        from = ty1periodStart,
+        until = ty1periodEnd,
+        children = List(child1, child2, child3),
+        claimants = List(claimant1)
+      )
+      val taxYear2 = ESCTaxYear(
+        from = ty2periodStart,
+        until = ty2periodEnd,
+        children = List(child1, child2, child3),
+        claimants = List(claimant1)
+      )
       val result = service.constructTaxYearsWithPeriods(List(taxYear1, taxYear2))
 
       result shouldBe List(
@@ -1427,9 +1493,9 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val september = LocalDate.parse("2017-09-01", formatter)
 
       val ty1periodStart = LocalDate.parse("2016-06-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
       val ty2periodStart = LocalDate.parse("2017-04-06", formatter)
-      val ty2periodEnd = LocalDate.parse("2018-04-06", formatter)
+      val ty2periodEnd   = LocalDate.parse("2018-04-06", formatter)
 
       val child1 = buildChild(dob = dateOfBirth1, disabled = true)
       val child2 = buildChild(dob = dateOfBirth2)
@@ -1437,8 +1503,18 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
-      val taxYear1 = ESCTaxYear(from = ty1periodStart, until = ty1periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val taxYear2 = ESCTaxYear(from = ty2periodStart, until = ty2periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
+      val taxYear1 = ESCTaxYear(
+        from = ty1periodStart,
+        until = ty1periodEnd,
+        children = List(child1, child2, child3),
+        claimants = List(claimant1)
+      )
+      val taxYear2 = ESCTaxYear(
+        from = ty2periodStart,
+        until = ty2periodEnd,
+        children = List(child1, child2, child3),
+        claimants = List(claimant1)
+      )
       val result = service.constructTaxYearsWithPeriods(List(taxYear1, taxYear2))
 
       result shouldBe List(
@@ -1531,9 +1607,9 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val dateOfBirth3 = LocalDate.parse("2017-08-19", formatter)
 
       val ty1periodStart = LocalDate.parse("2016-06-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
       val ty2periodStart = LocalDate.parse("2017-04-06", formatter)
-      val ty2periodEnd = LocalDate.parse("2018-04-06", formatter)
+      val ty2periodEnd   = LocalDate.parse("2018-04-06", formatter)
 
       val child1 = buildChild(dob = dateOfBirth1, disabled = true)
       val child2 = buildChild(dob = dateOfBirth2)
@@ -1541,8 +1617,18 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
-      val taxYear1 = ESCTaxYear(from = ty1periodStart, until = ty1periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
-      val taxYear2 = ESCTaxYear(from = ty2periodStart, until = ty2periodEnd, children = List(child1, child2, child3), claimants = List(claimant1))
+      val taxYear1 = ESCTaxYear(
+        from = ty1periodStart,
+        until = ty1periodEnd,
+        children = List(child1, child2, child3),
+        claimants = List(claimant1)
+      )
+      val taxYear2 = ESCTaxYear(
+        from = ty2periodStart,
+        until = ty2periodEnd,
+        children = List(child1, child2, child3),
+        claimants = List(claimant1)
+      )
 
       val result = service.constructTaxYearsWithPeriods(List(taxYear1, taxYear2))
       result shouldBe List(
@@ -1617,9 +1703,9 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val dateOfBirth2 = LocalDate.parse("2017-09-01", formatter)
 
       val ty1periodStart = LocalDate.parse("2016-06-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
       val ty2periodStart = LocalDate.parse("2017-04-06", formatter)
-      val ty2periodEnd = LocalDate.parse("2018-04-06", formatter)
+      val ty2periodEnd   = LocalDate.parse("2018-04-06", formatter)
 
       val september = LocalDate.parse("2017-09-01", formatter)
 
@@ -1628,8 +1714,18 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
-      val taxYear1 = ESCTaxYear(from = ty1periodStart, until = ty1periodEnd, children = List(child1, child2), claimants = List(claimant1))
-      val taxYear2 = ESCTaxYear(from = ty2periodStart, until = ty2periodEnd, children = List(child1, child2), claimants = List(claimant1))
+      val taxYear1 = ESCTaxYear(
+        from = ty1periodStart,
+        until = ty1periodEnd,
+        children = List(child1, child2),
+        claimants = List(claimant1)
+      )
+      val taxYear2 = ESCTaxYear(
+        from = ty2periodStart,
+        until = ty2periodEnd,
+        children = List(child1, child2),
+        claimants = List(claimant1)
+      )
 
       val outputChild1 = buildOutputChild(
         qualifying = true
@@ -1659,7 +1755,6 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
         eligibleMonthsInPeriod = 5,
         vouchers = true
       )
-
 
       val outputChild5 = buildOutputChild(
         qualifying = false
@@ -1731,9 +1826,9 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val dateOfBirth3 = LocalDate.parse("2016-08-19", formatter)
 
       val ty1Start = LocalDate.parse("2016-06-20", formatter)
-      val ty1End = LocalDate.parse("2017-04-06", formatter)
+      val ty1End   = LocalDate.parse("2017-04-06", formatter)
       val ty2Start = LocalDate.parse("2017-04-06", formatter)
-      val ty2End = LocalDate.parse("2018-04-06", formatter)
+      val ty2End   = LocalDate.parse("2018-04-06", formatter)
 
       val child1 = buildChild(dob = dateOfBirth1, disabled = true)
       val child2 = buildChild(dob = dateOfBirth2)
@@ -1741,8 +1836,18 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
-      val taxYear1 = ESCTaxYear(from = ty1Start, until = ty1End, children = List(child1, child2, child3), claimants = List(claimant1))
-      val taxYear2 = ESCTaxYear(from = ty2Start, until = ty2End, children = List(child1, child2, child3), claimants = List(claimant1))
+      val taxYear1 = ESCTaxYear(
+        from = ty1Start,
+        until = ty1End,
+        children = List(child1, child2, child3),
+        claimants = List(claimant1)
+      )
+      val taxYear2 = ESCTaxYear(
+        from = ty2Start,
+        until = ty2End,
+        children = List(child1, child2, child3),
+        claimants = List(claimant1)
+      )
 
       val result = service.constructTaxYearsWithPeriods(List(taxYear1, taxYear2))
       result shouldBe List(
@@ -1840,7 +1945,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val child2 = buildChild(dob = dateOfBirth2)
       val child3 = buildChild(dob = dateOfBirth3)
 
-      val result = service.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
+      val result = service.determineChildrensEligibilityForPeriod(List(child1, child2, child3), ty1periodStart)
       result shouldBe List(
         buildOutputChild(qualifying = true),
         buildOutputChild(qualifying = false),
@@ -1849,23 +1954,22 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
     }
 
     "determine children's eligibility for a period 2" in {
-      val dateOfBirth1 = LocalDate.parse("2000-06-18", formatter)
-      val dateOfBirth2 = LocalDate.parse("2017-06-27", formatter)
-      val dateOfBirth3 = LocalDate.parse("2016-08-19", formatter)
+      val dateOfBirth1   = LocalDate.parse("2000-06-18", formatter)
+      val dateOfBirth2   = LocalDate.parse("2017-06-27", formatter)
+      val dateOfBirth3   = LocalDate.parse("2016-08-19", formatter)
       val ty1periodStart = LocalDate.parse("2016-09-20", formatter)
 
       val child1 = buildChild(dob = dateOfBirth1, disabled = true)
       val child2 = buildChild(dob = dateOfBirth2)
       val child3 = buildChild(dob = dateOfBirth3)
 
-      val result = service.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
+      val result = service.determineChildrensEligibilityForPeriod(List(child1, child2, child3), ty1periodStart)
       result shouldBe List(
         buildOutputChild(qualifying = false),
         buildOutputChild(qualifying = false),
         buildOutputChild(qualifying = true)
       )
     }
-
 
     "determine children's eligibility for a period 3" in {
       val dateOfBirth1 = LocalDate.parse("1998-06-18", formatter)
@@ -1878,14 +1982,13 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val child2 = buildChild(dob = dateOfBirth2)
       val child3 = buildChild(dob = dateOfBirth3)
 
-      val result = service.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
+      val result = service.determineChildrensEligibilityForPeriod(List(child1, child2, child3), ty1periodStart)
       result shouldBe List(
         buildOutputChild(qualifying = false),
         buildOutputChild(qualifying = false),
         buildOutputChild(qualifying = true)
       )
     }
-
 
     "determine children's eligibility for a period 4" in {
       val dateOfBirth1 = LocalDate.parse("1998-06-18", formatter)
@@ -1898,7 +2001,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val child2 = buildChild(dob = dateOfBirth2)
       val child3 = buildChild(dob = dateOfBirth3)
 
-      val result = service.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
+      val result = service.determineChildrensEligibilityForPeriod(List(child1, child2, child3), ty1periodStart)
       result shouldBe List(
         buildOutputChild(qualifying = false),
         buildOutputChild(qualifying = true),
@@ -1917,7 +2020,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val child2 = buildChild(dob = dateOfBirth2)
       val child3 = buildChild(dob = dateOfBirth3)
 
-      val result = service.determineChildrensEligibilityForPeriod(List(child1,child2,child3),ty1periodStart)
+      val result = service.determineChildrensEligibilityForPeriod(List(child1, child2, child3), ty1periodStart)
       result shouldBe List(
         buildOutputChild(qualifying = false),
         buildOutputChild(qualifying = false),
@@ -1940,7 +2043,8 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val child4 = buildChild(dob = dateOfBirth4)
       val child5 = buildChild(dob = dateOfBirth5)
 
-      val result = service.determineChildrensEligibilityForPeriod(List(child1,child2,child3,child4, child5),ty1periodStart)
+      val result =
+        service.determineChildrensEligibilityForPeriod(List(child1, child2, child3, child4, child5), ty1periodStart)
       result shouldBe List(
         buildOutputChild(qualifying = false),
         buildOutputChild(qualifying = true),
@@ -1952,10 +2056,13 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(single claimant)(no children)(employer providing vouchers) determine a claimants eligibility for a period" in {
       val ty1periodStart = LocalDate.parse("2016-11-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
-      val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true,
-        currentIncome = Some(ESCIncome(Some(20000.0),Some(200.0), Some("1150L"))))
+      val claimant1 = ESCClaimant(
+        isPartner = false,
+        employerProvidesESC = true,
+        currentIncome = Some(ESCIncome(Some(20000.0), Some(200.0), Some("1150L")))
+      )
 
       val result = service.determineClaimantsEligibilityForPeriod(List(), List(claimant1), ty1periodStart, ty1periodEnd)
       result shouldBe List(
@@ -1963,7 +2070,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
           qualifying = true,
           isPartner = false,
           eligibleMonthsInPeriod = 0,
-          currentIncome = Some(models.output.esc.ESCIncome(Some(20000.0),Some(200.0), Some("1150L"))),
+          currentIncome = Some(models.output.esc.ESCIncome(Some(20000.0), Some(200.0), Some("1150L"))),
           vouchers = false
         )
       )
@@ -1971,51 +2078,57 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(multiple claimants)(no children)(employer providing vouchers) determine a claimants eligibility for a period" in {
       val ty1periodStart = LocalDate.parse("2016-11-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = true)
 
-      val result = service.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result =
+        service.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = true,
           isPartner = false,
-          eligibleMonthsInPeriod = 0,vouchers = false
+          eligibleMonthsInPeriod = 0,
+          vouchers = false
         ),
         models.output.esc.ESCClaimant(
           qualifying = true,
           isPartner = true,
-          eligibleMonthsInPeriod = 0,vouchers = false
+          eligibleMonthsInPeriod = 0,
+          vouchers = false
         )
       )
     }
 
     "(multiple claimants)(no children)(employer providing vouchers for 1 claimant) determine a claimants eligibility for a period" in {
       val ty1periodStart = LocalDate.parse("2016-11-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = true)
 
-      val result = service.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result =
+        service.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
           isPartner = false,
-          eligibleMonthsInPeriod = 0,vouchers = false
+          eligibleMonthsInPeriod = 0,
+          vouchers = false
         ),
         models.output.esc.ESCClaimant(
           qualifying = true,
           isPartner = true,
-          eligibleMonthsInPeriod = 0,vouchers = false
+          eligibleMonthsInPeriod = 0,
+          vouchers = false
         )
       )
     }
 
     "(single claimant)(no children)(employer not providing vouchers) determine a claimants eligibility for a period" in {
       val ty1periodStart = LocalDate.parse("2016-11-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
 
@@ -2032,29 +2145,32 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(multiple claimants)(no children)(employer not providing vouchers) determine a claimants eligibility for a period" in {
       val ty1periodStart = LocalDate.parse("2016-11-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = false)
 
-      val result = service.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result =
+        service.determineClaimantsEligibilityForPeriod(List(), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
           isPartner = false,
-          eligibleMonthsInPeriod = 0,vouchers = false
+          eligibleMonthsInPeriod = 0,
+          vouchers = false
         ),
         models.output.esc.ESCClaimant(
           qualifying = false,
           isPartner = true,
-          eligibleMonthsInPeriod = 0,vouchers = false
+          eligibleMonthsInPeriod = 0,
+          vouchers = false
         )
       )
     }
 
     "(single claimant)(qualifying child)(employer providing vouchers) determine a claimants eligibility for a period" in {
       val ty1periodStart = LocalDate.parse("2016-11-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildOutputChild(qualifying = false)
       val child2 = buildOutputChild(qualifying = true)
@@ -2064,7 +2180,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
-      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(
+        List(child1, child2, child3, child4, child5),
+        List(claimant1),
+        ty1periodStart,
+        ty1periodEnd
+      )
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = true,
@@ -2077,7 +2198,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(multiple claimants, one qualifying claimant)(qualifying child)(employer providing vouchers) determine a claimants eligibility for a period" in {
       val ty1periodStart = LocalDate.parse("2016-11-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildOutputChild(qualifying = false)
       val child2 = buildOutputChild(qualifying = true)
@@ -2088,7 +2209,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = true)
 
-      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(
+        List(child1, child2, child3, child4, child5),
+        List(claimant1, claimant2),
+        ty1periodStart,
+        ty1periodEnd
+      )
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
@@ -2107,7 +2233,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(multiple claimants)(qualifying child)(employer providing vouchers for 1 claimant) determine a claimants eligibility for a period" in {
       val ty1periodStart = LocalDate.parse("2016-11-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildOutputChild(qualifying = false)
       val child2 = buildOutputChild(qualifying = true)
@@ -2118,7 +2244,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = false)
 
-      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(
+        List(child1, child2, child3, child4, child5),
+        List(claimant1, claimant2),
+        ty1periodStart,
+        ty1periodEnd
+      )
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = true,
@@ -2137,7 +2268,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(single claimant)(qualifying child)(employer not providing vouchers) determine a claimants eligibility for a period" in {
       val ty1periodStart = LocalDate.parse("2016-11-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildOutputChild(qualifying = false)
       val child2 = buildOutputChild(qualifying = true)
@@ -2147,7 +2278,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
 
-      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(
+        List(child1, child2, child3, child4, child5),
+        List(claimant1),
+        ty1periodStart,
+        ty1periodEnd
+      )
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
@@ -2160,7 +2296,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(multiple claimants)(qualifying child)(employer not providing vouchers) determine a claimants eligibility for a period" in {
       val ty1periodStart = LocalDate.parse("2016-11-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildOutputChild(qualifying = false)
       val child2 = buildOutputChild(qualifying = true)
@@ -2171,7 +2307,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = false)
 
-      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(
+        List(child1, child2, child3, child4, child5),
+        List(claimant1, claimant2),
+        ty1periodStart,
+        ty1periodEnd
+      )
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
@@ -2190,7 +2331,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(single claimant)(no qualifying children)(employer providing vouchers) determine a claimants eligibility for a period" in {
       val ty1periodStart = LocalDate.parse("2016-11-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildOutputChild(qualifying = false)
       val child2 = buildOutputChild(qualifying = false)
@@ -2200,7 +2341,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
 
-      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(
+        List(child1, child2, child3, child4, child5),
+        List(claimant1),
+        ty1periodStart,
+        ty1periodEnd
+      )
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = true,
@@ -2213,7 +2359,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(multiple claimants)(no qualifying children)(employer providing vouchers) determine a claimants eligibility for a period" in {
       val ty1periodStart = LocalDate.parse("2016-11-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildOutputChild(qualifying = false)
       val child2 = buildOutputChild(qualifying = false)
@@ -2224,7 +2370,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = true)
 
-      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(
+        List(child1, child2, child3, child4, child5),
+        List(claimant1, claimant2),
+        ty1periodStart,
+        ty1periodEnd
+      )
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = true,
@@ -2243,7 +2394,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(multiple claimants)(no qualifying children)(employer providing vouchers for 1 claimant) determine a claimants eligibility for a period" in {
       val ty1periodStart = LocalDate.parse("2016-11-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildOutputChild(qualifying = false)
       val child2 = buildOutputChild(qualifying = false)
@@ -2254,7 +2405,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = true)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = false)
 
-      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(
+        List(child1, child2, child3, child4, child5),
+        List(claimant1, claimant2),
+        ty1periodStart,
+        ty1periodEnd
+      )
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = true,
@@ -2273,7 +2429,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(single claimant)(no qualifying children)(employer not providing vouchers) determine a claimants eligibility for a period" in {
       val ty1periodStart = LocalDate.parse("2016-11-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildOutputChild(qualifying = false)
       val child2 = buildOutputChild(qualifying = false)
@@ -2283,7 +2439,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
 
-      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(
+        List(child1, child2, child3, child4, child5),
+        List(claimant1),
+        ty1periodStart,
+        ty1periodEnd
+      )
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
@@ -2296,7 +2457,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(multiple claimants)(no qualifying children)(employer not providing vouchers) determine a claimants eligibility for a period" in {
       val ty1periodStart = LocalDate.parse("2016-11-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildOutputChild(qualifying = false)
       val child2 = buildOutputChild(qualifying = false)
@@ -2307,7 +2468,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
       val claimant2 = ESCClaimant(isPartner = true, employerProvidesESC = false)
 
-      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1, claimant2), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(
+        List(child1, child2, child3, child4, child5),
+        List(claimant1, claimant2),
+        ty1periodStart,
+        ty1periodEnd
+      )
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
@@ -2326,7 +2492,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(single claimant)(1 qualifying child)(employer providing vouchers, claimant not receiving vouchers) determine a claimants eligibility for a period" in {
       val ty1periodStart = LocalDate.parse("2016-11-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildOutputChild(qualifying = false)
       val child2 = buildOutputChild(qualifying = true)
@@ -2336,7 +2502,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false, employerProvidesESC = false)
 
-      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(
+        List(child1, child2, child3, child4, child5),
+        List(claimant1),
+        ty1periodStart,
+        ty1periodEnd
+      )
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
@@ -2349,7 +2520,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(single claimant)(1 qualifying child)(claimant does not work in UK) determine a claimants eligibility for a period" in {
       val ty1periodStart = LocalDate.parse("2016-11-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val child1 = buildOutputChild(qualifying = false)
       val child2 = buildOutputChild(qualifying = true)
@@ -2359,7 +2530,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
       val claimant1 = ESCClaimant(isPartner = false)
 
-      val result = service.determineClaimantsEligibilityForPeriod(List(child1,child2,child3,child4,child5), List(claimant1), ty1periodStart, ty1periodEnd)
+      val result = service.determineClaimantsEligibilityForPeriod(
+        List(child1, child2, child3, child4, child5),
+        List(claimant1),
+        ty1periodStart,
+        ty1periodEnd
+      )
       result shouldBe List(
         models.output.esc.ESCClaimant(
           qualifying = false,
@@ -2372,7 +2548,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(Single tax year)(multiple claimants, no qualifying children) determine the number of qualifying months in a period" in {
       val ty1periodStart = LocalDate.parse("2016-06-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val result = service.numberOfQualifyingMonthsForPeriod(qualifying = false, ty1periodStart, ty1periodEnd)
       result shouldBe 0
@@ -2380,7 +2556,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(Single tax year)(multiple claimants, qualifying children) determine the number of qualifying months in a period" in {
       val ty1periodStart = LocalDate.parse("2016-06-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val result = service.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 10
@@ -2388,7 +2564,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(Multiple tax year)(multiple claimants, qualifying children) determine the number of qualifying months in a period" in {
       val ty1periodStart = LocalDate.parse("2015-06-20", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val result = service.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 22
@@ -2396,7 +2572,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "(Single tax year) calculate qualifying months period start 1st of the month" in {
       val ty1periodStart = LocalDate.parse("2016-04-01", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val result = service.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 12
@@ -2404,7 +2580,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "calculate qualifying months period start in middle of the month" in {
       val ty1periodStart = LocalDate.parse("2016-04-15", formatter)
-      val ty1periodEnd = LocalDate.parse("2016-09-01", formatter)
+      val ty1periodEnd   = LocalDate.parse("2016-09-01", formatter)
 
       val result = service.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 5
@@ -2412,7 +2588,7 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "calculate qualifying months period start in middle of the month, period end is 6th april" in {
       val ty1periodStart = LocalDate.parse("2016-06-15", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-04-06", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-04-06", formatter)
 
       val result = service.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 10
@@ -2420,11 +2596,12 @@ class ESCEligibilitySpec extends FakeCCEligibilityApplication with Matchers
 
     "calculate qualifying months period start in middle of the month period end end of the month" in {
       val ty1periodStart = LocalDate.parse("2017-04-06", formatter)
-      val ty1periodEnd = LocalDate.parse("2017-06-15", formatter)
+      val ty1periodEnd   = LocalDate.parse("2017-06-15", formatter)
 
       val result = service.numberOfQualifyingMonthsForPeriod(qualifying = true, ty1periodStart, ty1periodEnd)
       result shouldBe 2
     }
 
   }
+
 }

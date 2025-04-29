@@ -54,47 +54,48 @@ class EligibilityControllerSpec extends FakeCCEligibilityApplication with Matche
 
     "Accept a valid json for household " in {
       val inputJson = Json.parse(JsonLoader.fromResource("/household/eligibility_input_household.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+      val request   = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibilityService.eligibility(any[Household]())(any())).thenReturn(Future.successful(SchemeResults(List())))
+      when(controller.eligibilityService.eligibility(any[Household]())(any()))
+        .thenReturn(Future.successful(SchemeResults(List())))
       val result = Await.result(controller.eligible(request), Duration(2, "seconds"))
       status(result) shouldBe Status.OK
     }
 
     "return a Bad request when incorrect date format in json" in {
       val inputJson = Json.parse(JsonLoader.fromResource("/household/incorrect_date_format.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+      val request   = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibilityService.eligibility(any[Household]())(any())).thenReturn(Future.successful(mock[SchemeResults]))
+      when(controller.eligibilityService.eligibility(any[Household]())(any()))
+        .thenReturn(Future.successful(mock[SchemeResults]))
       val result = Await.result(controller.eligible(request), Duration(2, "seconds"))
       status(result) shouldBe Status.BAD_REQUEST
     }
 
     "return a Bad request when no claimant present" in {
       val inputJson = Json.parse(JsonLoader.fromResource("/household/no_claimants.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+      val request   = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibilityService.eligibility(any[Household]())(any())).thenReturn(Future.successful(mock[SchemeResults]))
+      when(controller.eligibilityService.eligibility(any[Household]())(any()))
+        .thenReturn(Future.successful(mock[SchemeResults]))
       val result = Await.result(controller.eligible(request), Duration(2, "seconds"))
       status(result) shouldBe 400
     }
 
-
     "Return Internal Server Error with error message if an exception is thrown during eligibility" in {
-      val inputJson = Json.parse(JsonLoader.fromResource("/household/eligibility_input_household.json").toString)
-      val request = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
+      val inputJson  = Json.parse(JsonLoader.fromResource("/household/eligibility_input_household.json").toString)
+      val request    = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Household]
 
-      when(controller.eligibilityService.eligibility(mockEq(JsonResult.get))(any())).
-        thenReturn(Future.failed(new Exception("Something bad happened in Eligibility")))
+      when(controller.eligibilityService.eligibility(mockEq(JsonResult.get))(any()))
+        .thenReturn(Future.failed(new Exception("Something bad happened in Eligibility")))
 
       val result = Await.result(controller.eligible(request), Duration(2, "seconds"))
-      val outputJSON = Json.parse(
-        """
-          |{
-          |    "status": 500,
-          |    "error": "Something bad happened in Eligibility"
-          |}
+      val outputJSON = Json.parse("""
+                                    |{
+                                    |    "status": 500,
+                                    |    "error": "Something bad happened in Eligibility"
+                                    |}
         """.stripMargin)
 
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR

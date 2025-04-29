@@ -26,24 +26,26 @@ object EnumUtils extends Logging {
   def enumReads[E <: Enumeration](enum: E): Reads[E#Value] =
     new Reads[E#Value] {
       def reads(json: JsValue): JsResult[E#Value] = json match {
-        case JsString(s) => {
-          try {
+        case JsString(s) =>
+          try
             JsSuccess(enum.withName(s))
-          } catch {
+          catch {
             case _: NoSuchElementException =>
-              logger.warn(s"EnumUtils.enumReads - Enumeration expected of type: '${enum.getClass}', but it does not appear to contain the value: '$s'")
-              JsError(s"Enumeration expected of type: '${enum.getClass}', but it does not appear to contain the value: '$s'")
+              logger.warn(
+                s"EnumUtils.enumReads - Enumeration expected of type: '${enum.getClass}', but it does not appear to contain the value: '$s'"
+              )
+              JsError(
+                s"Enumeration expected of type: '${enum.getClass}', but it does not appear to contain the value: '$s'"
+              )
           }
-        }
         case _ =>
           logger.warn("EnumUtils.enumReads - String value expected")
           JsError("String value expected")
       }
     }
 
-  implicit def enumFormat[E <: Enumeration](enum: E): Format[E#Value] = {
+  implicit def enumFormat[E <: Enumeration](enum: E): Format[E#Value] =
     Format(enumReads(enum), enumWrites)
-  }
 
   implicit def enumWrites[E <: Enumeration]: Writes[E#Value] =
     new Writes[E#Value] {

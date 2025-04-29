@@ -22,7 +22,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import utils.Periods
 
-class PeriodEnumToPeriodSpec extends AnyWordSpec with Matchers{
+class PeriodEnumToPeriodSpec extends AnyWordSpec with Matchers {
 
   val SUT = PeriodEnumToPeriod
 
@@ -50,4 +50,5 @@ class PeriodEnumToPeriodSpec extends AnyWordSpec with Matchers{
       }
     }
   }
+
 }

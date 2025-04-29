@@ -22,18 +22,18 @@ import java.time.LocalDate
 import org.scalatest.matchers.should.Matchers
 import utils.{CCConfig, ESCConfig, Periods}
 
-trait ESCChildren extends Matchers{
+trait ESCChildren extends Matchers {
 
   def eSCConfig: Option[ESCConfig]
   def ccConfig: Option[CCConfig]
 
   def buildChild(
-                   id: Short = 0,
-                   dob: LocalDate = LocalDate.now,
-                   childCareCost: BigDecimal = 0,
-                   disabled: Boolean = false,
-                   severelyDisabled: Boolean = false
-                     ) = new ESCChild (
+      id: Short = 0,
+      dob: LocalDate = LocalDate.now,
+      childCareCost: BigDecimal = 0,
+      disabled: Boolean = false,
+      severelyDisabled: Boolean = false
+  ) = new ESCChild(
     id = id,
     dob = dob,
     childCareCost = childCareCost,
@@ -45,13 +45,13 @@ trait ESCChildren extends Matchers{
   )(eSCConfig, ccConfig)
 
   def buildOutputChild(
-                        qualifying: Boolean = false,
-                        childCareCost: BigDecimal = 0,
-                        childCareCostPeriod: Periods.Period = Periods.Monthly
-                        ) = output.esc.ESCChild(
+      qualifying: Boolean = false,
+      childCareCost: BigDecimal = 0,
+      childCareCostPeriod: Periods.Period = Periods.Monthly
+  ) = output.esc.ESCChild(
     qualifying = qualifying,
     childCareCost = childCareCost,
     childCareCostPeriod = childCareCostPeriod
   )
-  
+
 }

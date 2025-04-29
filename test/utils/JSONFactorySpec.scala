@@ -28,49 +28,46 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
   "JSONFactory" must {
 
     "Return a valid output JSON when error sequence and status are passed" in {
-      val status = 400
-      val JSONPath = JsPath \ "tfc"
-      val validationError1 = JsonValidationError("Very Bad Thing Happened", 42)
-      val validationError2 = JsonValidationError("Not So Bad Thing Happened", "Error")
+      val status                                         = 400
+      val JSONPath                                       = JsPath \ "tfc"
+      val validationError1                               = JsonValidationError("Very Bad Thing Happened", 42)
+      val validationError2                               = JsonValidationError("Not So Bad Thing Happened", "Error")
       val errorTuple: (JsPath, Seq[JsonValidationError]) = (JSONPath, Seq(validationError1, validationError2))
 
-      val outputJSON = Json.parse(
-        """
-          |{
-          |"status": 400,
-          |"errors":
-          |[
-          |   {
-          |     "path" : "/tfc",
-          |     "validationErrors" :
-          |     [
-          |       {
-          |        "message": "Very Bad Thing Happened",
-          |        "args": [42]
-          |       },
-          |       {
-          |        "message": "Not So Bad Thing Happened",
-          |        "args": ["Error"]
-          |       }
-          |     ]
-          |   }
-          | ]
-          | }
+      val outputJSON = Json.parse("""
+                                    |{
+                                    |"status": 400,
+                                    |"errors":
+                                    |[
+                                    |   {
+                                    |     "path" : "/tfc",
+                                    |     "validationErrors" :
+                                    |     [
+                                    |       {
+                                    |        "message": "Very Bad Thing Happened",
+                                    |        "args": [42]
+                                    |       },
+                                    |       {
+                                    |        "message": "Not So Bad Thing Happened",
+                                    |        "args": ["Error"]
+                                    |       }
+                                    |     ]
+                                    |   }
+                                    | ]
+                                    | }
         """.stripMargin)
 
       val result = utils.JSONFactory.generateErrorJSON(status, Left(Seq(errorTuple)))
       result shouldBe outputJSON
     }
 
-
     "Return a valid output JSON if error sequence is missing" in {
       val status = 500
-      val outputJSON = Json.parse(
-        """
-          |{
-          |"status": 500,
-          |"errors": ["Error while generating JSON response"]
-          | }
+      val outputJSON = Json.parse("""
+                                    |{
+                                    |"status": 500,
+                                    |"errors": ["Error while generating JSON response"]
+                                    | }
         """.stripMargin)
 
       val result = utils.JSONFactory.generateErrorJSON(status, Left(Nil))
@@ -78,50 +75,67 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
     }
 
     "Return a valid output JSON when exception and status are passed" in {
-      val status = 500
+      val status    = 500
       val exception = new Exception("Very Bad Thing Happened")
 
-      val outputJSON = Json.parse(
-        """
-          |{
-          |"status": 500,
-          |"error": "Very Bad Thing Happened"
-          | }
+      val outputJSON = Json.parse("""
+                                    |{
+                                    |"status": 500,
+                                    |"error": "Very Bad Thing Happened"
+                                    | }
         """.stripMargin)
 
-      val result  = utils.JSONFactory.generateErrorJSON(status, Right(exception))
+      val result = utils.JSONFactory.generateErrorJSON(status, Right(exception))
       result shouldBe outputJSON
     }
 
-
     "Return a valid TFC response with eligibility result" in {
       val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-      val from = LocalDate.parse("2015-06-30", formatter)
+      val from      = LocalDate.parse("2015-06-30", formatter)
 
-      val outputClaimant = models.output.tfc.TFCOutputClaimant(qualifying = true, isPartner = false)
+      val outputClaimant     = models.output.tfc.TFCOutputClaimant(qualifying = true, isPartner = false)
       val outputStartPeriod1 = LocalDate.parse("2015-06-30", formatter)
       val outputUntilPeriod1 = LocalDate.parse("2015-09-30", formatter)
       val outputStartPeriod2 = LocalDate.parse("2015-09-30", formatter)
       val outputUntilPeriod2 = LocalDate.parse("2015-12-30", formatter)
-      val outputPeriodChild1 = models.output.tfc.TFCOutputChild(id = 0, qualifying = true, from = Some(outputStartPeriod1), until = Some(outputUntilPeriod1))
-      val outputPeriodChild2 = models.output.tfc.TFCOutputChild(id = 0, childcareCostPeriod=Periods.Weekly, qualifying = true, from = Some(outputStartPeriod2), until = Some(outputUntilPeriod2))
+      val outputPeriodChild1 = models.output.tfc.TFCOutputChild(
+        id = 0,
+        qualifying = true,
+        from = Some(outputStartPeriod1),
+        until = Some(outputUntilPeriod1)
+      )
+      val outputPeriodChild2 = models.output.tfc.TFCOutputChild(
+        id = 0,
+        childcareCostPeriod = Periods.Weekly,
+        qualifying = true,
+        from = Some(outputStartPeriod2),
+        until = Some(outputUntilPeriod2)
+      )
 
       val tfcPeriods = List(
-        TFCPeriod(from = outputStartPeriod1,
+        TFCPeriod(
+          from = outputStartPeriod1,
           until = outputUntilPeriod1,
           periodEligibility = true,
           claimants = List(outputClaimant),
-          children = List(outputPeriodChild1)),
-        TFCPeriod(from = outputStartPeriod2,
+          children = List(outputPeriodChild1)
+        ),
+        TFCPeriod(
+          from = outputStartPeriod2,
           until = outputUntilPeriod2,
           periodEligibility = true,
           claimants = List(outputClaimant),
-          children = List(outputPeriodChild2))
+          children = List(outputPeriodChild2)
+        )
       )
-      val tfcEligibilityModel = TFCEligibilityOutput(from = from, until = tfcPeriods.last.until, householdEligibility = true, periods = tfcPeriods)
+      val tfcEligibilityModel = TFCEligibilityOutput(
+        from = from,
+        until = tfcPeriods.last.until,
+        householdEligibility = true,
+        periods = tfcPeriods
+      )
 
-      val outputJson = Json.parse(
-        s"""
+      val outputJson = Json.parse(s"""
         {
           "from": "2015-06-30",
           "until": "2015-12-30",
@@ -186,9 +200,9 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
     }
 
     "Return a valid ESC response with eligibility result" in {
-      val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+      val formatter   = DateTimeFormatter.ofPattern("yyyy-MM-dd")
       val periodStart = LocalDate.parse("2015-06-20", formatter)
-      val periodEnd = LocalDate.parse("2016-04-06", formatter)
+      val periodEnd   = LocalDate.parse("2016-04-06", formatter)
 
       val outputClaimant1 = models.output.esc.ESCClaimant(
         qualifying = true,
@@ -196,7 +210,7 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
         vouchers = true
       )
 
-      val escPeriods =  List(
+      val escPeriods = List(
         ESCPeriod(
           from = periodStart,
           until = periodEnd,
@@ -213,10 +227,9 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
       )
 
       val outputTaxYear = models.output.esc.ESCTaxYear(from = periodStart, until = periodEnd, periods = escPeriods)
-      val escEligibilityModel =   ESCEligibilityOutput(taxYears = List(outputTaxYear))
+      val escEligibilityModel = ESCEligibilityOutput(taxYears = List(outputTaxYear))
 
-      val outputJson = Json.parse(
-        s"""
+      val outputJson = Json.parse(s"""
         {
             "taxYears":[
             {
@@ -256,4 +269,5 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
       result shouldBe outputJson
     }
   }
+
 }

@@ -35,60 +35,63 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.language.{implicitConversions, postfixOps}
 
-
 trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
   this: Suite =>
 
   implicit lazy val mat: Materializer = app.materializer
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit val hc: HeaderCarrier      = HeaderCarrier()
 
   val mockCC: ControllerComponents = mock[ControllerComponents]
-  val mockParser: PlayBodyParsers = mock[PlayBodyParsers]
-
-
+  val mockParser: PlayBodyParsers  = mock[PlayBodyParsers]
 
   when(mockCC.actionBuilder)
     .thenReturn(new DefaultMessagesActionBuilderImpl(stubBodyParser[AnyContent](), stubMessagesApi()))
+
   when(mockCC.parsers)
     .thenReturn(mockParser)
 
   lazy val tfcConfig: TFCConfig = app.injector.instanceOf[TFCConfig]
-  lazy val audits: AuditEvents = mock[AuditEvents]
+  lazy val audits: AuditEvents  = mock[AuditEvents]
 
   def testClaimant(
-                    currentIncome: Option[TFCIncome] = None,
-                    isPartner: Boolean = false,
-                    disability: TFCDisability,
-                    carersAllowance: Boolean = false,
-                    minimumEarnings: TFCMinimumEarnings,
-                    age: Option[String],
-                    employmentStatus: Option[String] = None,
-                    selfEmployedSelection: Option[Boolean] = None,
-                    maximumEarnings: Option[Boolean] = None
-                  ): TFCClaimant ={
-    new TFCClaimant(currentIncome, isPartner, disability,
-      carersAllowance, minimumEarnings, age, employmentStatus, selfEmployedSelection, maximumEarnings){
-    }
-  }
+      currentIncome: Option[TFCIncome] = None,
+      isPartner: Boolean = false,
+      disability: TFCDisability,
+      carersAllowance: Boolean = false,
+      minimumEarnings: TFCMinimumEarnings,
+      age: Option[String],
+      employmentStatus: Option[String] = None,
+      selfEmployedSelection: Option[Boolean] = None,
+      maximumEarnings: Option[Boolean] = None
+  ): TFCClaimant =
+    new TFCClaimant(
+      currentIncome,
+      isPartner,
+      disability,
+      carersAllowance,
+      minimumEarnings,
+      age,
+      employmentStatus,
+      selfEmployedSelection,
+      maximumEarnings
+    ) {}
 
   def testChild(
-                 id: Short,
-                 childCareCost: BigDecimal,
-                 childcareCostPeriod: Periods.Period = Periods.Monthly,
-                 dob: LocalDate,
-                 disability: TFCDisability,
-                 ccConfig: Option[CCConfig] = None
-               ): TFCChild = {
+      id: Short,
+      childCareCost: BigDecimal,
+      childcareCostPeriod: Periods.Period = Periods.Monthly,
+      dob: LocalDate,
+      disability: TFCDisability,
+      ccConfig: Option[CCConfig] = None
+  ): TFCChild =
     new TFCChild(id, childCareCost, childcareCostPeriod, dob, disability)(ccConfig)
-  }
 
-  def jsonBodyOf(result: Result)(implicit mat: Materializer): JsValue = {
+  def jsonBodyOf(result: Result)(implicit mat: Materializer): JsValue =
     Json.parse(bodyOf(result))
-  }
 
-  def jsonBodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[JsValue] = {
+  def jsonBodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[JsValue] =
     resultF.map(jsonBodyOf)
-  }
+
   def bodyOf(result: Result)(implicit mat: Materializer): String = {
     val bodyBytes: ByteString = await(result.body.consumeData)
     // We use the default charset to preserve the behaviour of a previous
@@ -99,14 +102,13 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
     bodyBytes.decodeString(Charset.defaultCharset().name)
   }
 
-  def bodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[String] = {
+  def bodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[String] =
     resultF.map(bodyOf)
-  }
 
   import scala.concurrent.duration._
   import scala.concurrent.{Await, Future}
 
-  implicit val defaultTimeout: FiniteDuration = 5 seconds
+  implicit val defaultTimeout: FiniteDuration = 5.seconds
 
   implicit def extractAwait[A](future: Future[A]): A = await[A](future)
 

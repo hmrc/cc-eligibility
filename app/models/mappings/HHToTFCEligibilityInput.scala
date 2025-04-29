@@ -23,7 +23,7 @@ import utils.{CCConfig, TFCConfig}
 
 import javax.inject.Inject
 
-class HHToTFCEligibilityInput @Inject()(tFCConfig: TFCConfig, ccConfig: CCConfig) extends PeriodEnumToPeriod {
+class HHToTFCEligibilityInput @Inject() (tFCConfig: TFCConfig, ccConfig: CCConfig) extends PeriodEnumToPeriod {
 
   def convert(hh: Household): TFCEligibilityInput =
     TFCEligibilityInput(
@@ -34,7 +34,10 @@ class HHToTFCEligibilityInput @Inject()(tFCConfig: TFCConfig, ccConfig: CCConfig
       children = hhChildToTFCEligibilityInputChild(hh.children)
     )
 
-  private def hhClaimantToTFCEligibilityInputClaimant(hhParent: Claimant, hhPartner: Option[Claimant]): List[TFCClaimant] = {
+  private def hhClaimantToTFCEligibilityInputClaimant(
+      hhParent: Claimant,
+      hhPartner: Option[Claimant]
+  ): List[TFCClaimant] = {
 
     val parent: TFCClaimant = createClaimant(hhParent, isPartner = false)
 
@@ -81,14 +84,12 @@ class HHToTFCEligibilityInput @Inject()(tFCConfig: TFCConfig, ccConfig: CCConfig
     }
 
   private def hhIncomeToTFCIncome(hhIncome: Option[Income]): Option[TFCIncome] =
-    hhIncome.map(x => TFCIncome(
-      employmentIncome = x.employmentIncome,
-      pension = x.pension,
-      otherIncome = x.otherIncome)
+    hhIncome.map(x =>
+      TFCIncome(employmentIncome = x.employmentIncome, pension = x.pension, otherIncome = x.otherIncome)
     )
 
   private def hhChildToTFCEligibilityInputChild(hhChildren: List[Child]): List[TFCChild] =
-    hhChildren map (child => {
+    hhChildren.map(child =>
       TFCChild(
         child.id,
         child.childcareCost.flatMap(_.amount).getOrElse(BigDecimal(0)),
@@ -97,8 +98,10 @@ class HHToTFCEligibilityInput @Inject()(tFCConfig: TFCConfig, ccConfig: CCConfig
         TFCDisability(
           disabled = child.disability.exists(d => d.blind || d.disabled),
           severelyDisabled = child.disability.exists(_.severelyDisabled)
-        ), ccConfig, Some(true)
+        ),
+        ccConfig,
+        Some(true)
       )
-    })
+    )
 
 }

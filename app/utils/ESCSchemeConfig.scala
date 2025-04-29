@@ -23,29 +23,30 @@ import play.api.Configuration
 
 import scala.jdk.CollectionConverters.ListHasAsScala
 
-
 case class ESCTaxYearConfig(
-                             childAgeLimit: Int,
-                             childAgeLimitDisabled: Int
-                             )
+    childAgeLimit: Int,
+    childAgeLimitDisabled: Int
+)
 
-class ESCConfig @Inject()(val config: CCConfig) {
+class ESCConfig @Inject() (val config: CCConfig) {
 
-  def getESCConfigDefault(configs :Seq[play.api.Configuration]) : play.api.Configuration = {
+  def getESCConfigDefault(configs: Seq[play.api.Configuration]): play.api.Configuration =
     configs.filter(_.get[String]("rule-date").contains("default")).head
-  }
 
-  def getESCConfigExcludingDefault(configs :Seq[play.api.Configuration]) : Seq[play.api.Configuration] = {
+  def getESCConfigExcludingDefault(configs: Seq[play.api.Configuration]): Seq[play.api.Configuration] =
     configs.filter(!_.get[String]("rule-date").contains("default"))
-  }
 
-  def getSortedESCConfigExcludingDefault(configsExcludingDefault : Seq[play.api.Configuration]) : Seq[play.api.Configuration] = {
-    configsExcludingDefault.sortBy(c => {
-      new SimpleDateFormat("dd-MM-yyyy").parse(c.get[String]("rule-date"))
-    }).reverse
-  }
+  def getSortedESCConfigExcludingDefault(
+      configsExcludingDefault: Seq[play.api.Configuration]
+  ): Seq[play.api.Configuration] =
+    configsExcludingDefault.sortBy(c => new SimpleDateFormat("dd-MM-yyyy").parse(c.get[String]("rule-date"))).reverse
 
-  def getConfigHelper (currentDate : LocalDate, taxYearConfigs : List[Configuration], acc : Option[Configuration], i : Int) : Option[Configuration] = {
+  def getConfigHelper(
+      currentDate: LocalDate,
+      taxYearConfigs: List[Configuration],
+      acc: Option[Configuration],
+      i: Int
+  ): Option[Configuration] =
     taxYearConfigs match {
       case Nil => acc
       case head :: tail =>
@@ -58,20 +59,18 @@ class ESCConfig @Inject()(val config: CCConfig) {
           getConfigHelper(currentDate, tail, acc, i)
         }
     }
-  }
 
-  private def getESCTaxYearConfig(configuration : play.api.Configuration) : ESCTaxYearConfig = {
+  private def getESCTaxYearConfig(configuration: play.api.Configuration): ESCTaxYearConfig =
     ESCTaxYearConfig(
       childAgeLimit = configuration.get[Int]("child-age-limit"),
       childAgeLimitDisabled = configuration.get[Int]("child-age-limit-disabled")
     )
-  }
 
   def getConfig(currentDate: LocalDate): ESCTaxYearConfig = {
-    val configs : Seq[play.api.Configuration] = config.oldConf.underlying.
-      getConfigList("esc.rule-change").asScala.map(Configuration(_)).toSeq
+    val configs: Seq[play.api.Configuration] =
+      config.oldConf.underlying.getConfigList("esc.rule-change").asScala.map(Configuration(_)).toSeq
     val configsExcludingDefault = getESCConfigExcludingDefault(configs)
-    val defaultConfig = getESCConfigDefault(configs)
+    val defaultConfig           = getESCConfigDefault(configs)
     // ensure the latest date is in the head position
     val sorted = getSortedESCConfigExcludingDefault(configsExcludingDefault)
 
@@ -84,4 +83,5 @@ class ESCConfig @Inject()(val config: CCConfig) {
         getESCTaxYearConfig(defaultConfig)
     }
   }
+
 }
