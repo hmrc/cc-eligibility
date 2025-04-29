@@ -44,6 +44,7 @@ class EligibilityController @Inject() (
             .successful(BadRequest(utils.JSONFactory.generateErrorJSON(play.api.http.Status.BAD_REQUEST, Left(error))))
         },
         result => {
+          println("**************************************** results" + result.toString)
           auditEvent.auditHouseholdRequest(result.toString)
           eligibilityService
             .eligibility(result)
