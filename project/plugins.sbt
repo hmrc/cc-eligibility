@@ -12,4 +12,4 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0" exclude("org.
 
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "2.3.1")
 
-addSbtPlugin("uk.gov.hmrc" % "sbt-distributables" % "2.5.0")
+addSbtPlugin("uk.gov.hmrc" % "sbt-distributables" % "2.6.0")
