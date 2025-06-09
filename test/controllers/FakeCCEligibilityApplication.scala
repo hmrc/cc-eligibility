@@ -33,7 +33,7 @@ import java.nio.charset.Charset
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.language.{implicitConversions, postfixOps}
+import scala.language.implicitConversions
 
 trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
   this: Suite =>
