@@ -23,7 +23,6 @@ object AppDependencies {
       override lazy val test = Seq(
         "uk.gov.hmrc"       %% "bootstrap-test-play-30" % bootstrapVersion    % scope,
         "org.scalatestplus" %% "scalatestplus-mockito"  % "1.0.0-M2"          % scope,
-        "org.pegdown"        % "pegdown"                % "1.6.0"             % scope,
         "org.playframework" %% "play-test"              % PlayVersion.current % scope
       )
     }.test
