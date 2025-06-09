@@ -30,8 +30,7 @@ lazy val microservice = Project(appName, file("."))
   )
   .settings(
     libraryDependencies ++= AppDependencies(),
-    retrieveManaged                 := true,
-    update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
+    retrieveManaged := true
   )
   .settings(
     isPublicArtefact := true
