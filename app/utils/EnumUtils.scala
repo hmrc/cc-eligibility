@@ -23,7 +23,7 @@ import scala.language.implicitConversions
 
 object EnumUtils extends Logging {
 
-  def enumReads[E <: Enumeration](enum: E): Reads[E#Value] =
+  def enumReads[E <: Enumeration](`enum`: E): Reads[E#Value] =
     new Reads[E#Value] {
       def reads(json: JsValue): JsResult[E#Value] = json match {
         case JsString(s) =>
@@ -44,7 +44,7 @@ object EnumUtils extends Logging {
       }
     }
 
-  implicit def enumFormat[E <: Enumeration](enum: E): Format[E#Value] =
+  implicit def enumFormat[E <: Enumeration](`enum`: E): Format[E#Value] =
     Format(enumReads(enum), enumWrites)
 
   implicit def enumWrites[E <: Enumeration]: Writes[E#Value] =
