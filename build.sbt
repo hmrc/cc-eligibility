@@ -8,7 +8,7 @@ lazy val plugins: Seq[Plugins] = Seq(
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 
 ThisBuild / majorVersion := 1
-ThisBuild / scalaVersion := "2.13.16"
+ThisBuild / scalaVersion := "2.13.18"
 
 lazy val scoverageSettings = {
   import scoverage._
