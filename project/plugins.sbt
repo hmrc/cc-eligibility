@@ -16,4 +16,4 @@ addSbtPlugin("org.scoverage" % "sbt-scoverage" % "2.4.4")
 
 addSbtPlugin("uk.gov.hmrc" % "sbt-distributables" % "2.6.0")
 
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.4")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.6")
