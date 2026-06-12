@@ -16,15 +16,13 @@
 
 package models.input
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import models.input.tfc._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import utils.{CCConfigSpec, Periods}
+import utils.{CCConfigSpec, Periods, TestFileReader}
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -39,9 +37,9 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
     val fromDate  = LocalDate.parse("2000-08-27", formatter)
 
     "Read a valid JSON input and convert to a specific type" in {
-      val resource: JsonNode = JsonLoader.fromResource("/json/input/tfc/eligibility_input_test.json")
-      val json: JsValue      = Json.parse(resource.toString)
-      val result             = json.validate[TFCEligibilityInput]
+      val resource      = TestFileReader.readFrom("test/resources/json/input/tfc/eligibility_input_test.json")
+      val json: JsValue = Json.parse(resource)
+      val result        = json.validate[TFCEligibilityInput]
       result match {
         case JsSuccess(x, _) =>
           x shouldBe a[TFCEligibilityInput]

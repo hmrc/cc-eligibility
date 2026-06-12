@@ -16,7 +16,6 @@
 
 package controllers
 
-import com.github.fge.jackson.JsonLoader
 import models.Household
 import models.output.SchemeResults
 import org.mockito.ArgumentMatchers.{eq => mockEq, _}
@@ -27,6 +26,7 @@ import play.api.libs.json.Json
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import service.{AuditEvents, EligibilityService}
+import utils.TestFileReader
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
@@ -53,7 +53,7 @@ class EligibilityControllerSpec extends FakeCCEligibilityApplication with Matche
     }
 
     "Accept a valid json for household " in {
-      val inputJson = Json.parse(JsonLoader.fromResource("/household/eligibility_input_household.json").toString)
+      val inputJson = Json.parse(TestFileReader.readFrom("test/resources/household/eligibility_input_household.json"))
       val request   = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.eligibilityService.eligibility(any[Household]())(any()))
@@ -63,7 +63,7 @@ class EligibilityControllerSpec extends FakeCCEligibilityApplication with Matche
     }
 
     "return a Bad request when incorrect date format in json" in {
-      val inputJson = Json.parse(JsonLoader.fromResource("/household/incorrect_date_format.json").toString)
+      val inputJson = Json.parse(TestFileReader.readFrom("test/resources/household/incorrect_date_format.json"))
       val request   = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.eligibilityService.eligibility(any[Household]())(any()))
@@ -73,7 +73,7 @@ class EligibilityControllerSpec extends FakeCCEligibilityApplication with Matche
     }
 
     "return a Bad request when no claimant present" in {
-      val inputJson = Json.parse(JsonLoader.fromResource("/household/no_claimants.json").toString)
+      val inputJson = Json.parse(TestFileReader.readFrom("test/resources/household/no_claimants.json"))
       val request   = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
       when(controller.eligibilityService.eligibility(any[Household]())(any()))
@@ -83,7 +83,7 @@ class EligibilityControllerSpec extends FakeCCEligibilityApplication with Matche
     }
 
     "Return Internal Server Error with error message if an exception is thrown during eligibility" in {
-      val inputJson  = Json.parse(JsonLoader.fromResource("/household/eligibility_input_household.json").toString)
+      val inputJson  = Json.parse(TestFileReader.readFrom("test/resources/household/eligibility_input_household.json"))
       val request    = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Household]
 
