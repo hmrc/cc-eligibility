@@ -8,8 +8,7 @@ object AppDependencies {
 
   val compile: Seq[ModuleID] = Seq(
     ws,
-    "uk.gov.hmrc"               %% "bootstrap-backend-play-30" % bootstrapVersion,
-    "com.github.java-json-tools" % "json-schema-validator"     % "2.2.14"
+    "uk.gov.hmrc"               %% "bootstrap-backend-play-30" % bootstrapVersion
   )
 
   trait TestDependencies {

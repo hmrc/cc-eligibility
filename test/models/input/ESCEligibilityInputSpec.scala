@@ -16,14 +16,13 @@
 
 package models.input
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.github.fge.jackson.JsonLoader
 import controllers.FakeCCEligibilityApplication
 import fixtures.ESCChildren
 import models.input.esc._
-import java.time.LocalDate
 import play.api.libs.json.{JsValue, Json}
-import utils.{CCConfig, ESCConfig}
+import utils.{CCConfig, ESCConfig, TestFileReader}
+
+import java.time.LocalDate
 
 class ESCEligibilityInputSpec extends FakeCCEligibilityApplication with ESCChildren {
 
@@ -33,10 +32,10 @@ class ESCEligibilityInputSpec extends FakeCCEligibilityApplication with ESCChild
   "ESCInputEligibility" must {
 
     "read a valid JSON input and convert to a specific type" in {
-      val resource: JsonNode = JsonLoader.fromResource("/json/input/esc/eligibility_input_test.json")
-      val json: JsValue      = Json.parse(resource.toString)
-      val result             = json.validate[ESCEligibilityInput]
-      val taxYeaar           = result.get.escTaxYears.head
+      val resource      = TestFileReader.readFrom("test/resources/json/input/esc/eligibility_input_test.json")
+      val json: JsValue = Json.parse(resource)
+      val result        = json.validate[ESCEligibilityInput]
+      val taxYeaar      = result.get.escTaxYears.head
 
       taxYeaar.from shouldBe a[LocalDate]
       taxYeaar.until shouldBe a[LocalDate]
