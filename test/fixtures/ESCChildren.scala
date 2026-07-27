@@ -47,7 +47,7 @@ trait ESCChildren extends Matchers {
   def buildOutputChild(
       qualifying: Boolean = false,
       childCareCost: BigDecimal = 0,
-      childCareCostPeriod: Periods.Period = Periods.Monthly
+      childCareCostPeriod: Periods = Periods.Monthly
   ) = output.esc.ESCChild(
     qualifying = qualifying,
     childCareCost = childCareCost,

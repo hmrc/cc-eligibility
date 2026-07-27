@@ -17,14 +17,13 @@
 package models.mappings
 
 import models.PeriodEnum
-import models.PeriodEnum.PeriodEnum
 import utils.Periods
 
 object PeriodEnumToPeriod extends PeriodEnumToPeriod
 
 trait PeriodEnumToPeriod {
 
-  def convert(inputPeriod: PeriodEnum): Periods.Period =
+  def convert(inputPeriod: PeriodEnum): Periods =
     inputPeriod match {
       case PeriodEnum.FORTNIGHTLY => Periods.Fortnightly
       case PeriodEnum.INVALID     => Periods.INVALID

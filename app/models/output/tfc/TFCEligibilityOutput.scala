@@ -58,7 +58,7 @@ case class TFCOutputChild(
     from: Option[LocalDate],
     until: Option[LocalDate],
     childcareCost: BigDecimal = BigDecimal(0),
-    childcareCostPeriod: Periods.Period = Periods.Monthly,
+    childcareCostPeriod: Periods = Periods.Monthly,
     disability: TFCDisability = TFCDisability()
 )
 

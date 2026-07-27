@@ -23,7 +23,7 @@ import java.time.LocalDate
 import play.api.i18n.Lang
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
-import utils.Periods.Period
+import utils.Periods
 import utils._
 
 /*
@@ -188,7 +188,7 @@ object TFCDisability {
 case class TFCChild @Inject() (
     id: Short,
     childcareCost: BigDecimal = BigDecimal(0.00),
-    childcareCostPeriod: Periods.Period = Periods.Monthly,
+    childcareCostPeriod: Periods = Periods.Monthly,
     dob: LocalDate,
     disability: TFCDisability
 )(ccConfig: Option[CCConfig])
@@ -212,7 +212,7 @@ object TFCChild {
   def apply(
       id: Short,
       childcareCost: BigDecimal,
-      childcareCostPeriod: Period,
+      childcareCostPeriod: Periods,
       dob: LocalDate,
       disability: TFCDisability
   ): TFCChild =
@@ -221,7 +221,7 @@ object TFCChild {
   def apply(
       id: Short,
       childcareCost: BigDecimal,
-      childcareCostPeriod: Period,
+      childcareCostPeriod: Periods,
       dob: LocalDate,
       disability: TFCDisability,
       ccConfig: CCConfig,
@@ -240,7 +240,7 @@ object TFCChild {
             childSpendValidation(x)
           )
       )
-      .and((JsPath \ "childcareCostPeriod").read[Periods.Period])
+      .and((JsPath \ "childcareCostPeriod").read[Periods])
       .and((JsPath \ "dob").read[LocalDate])
       .and((JsPath \ "disability").read[TFCDisability])(TFCChild.apply(_, _, _, _, _))
 

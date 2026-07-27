@@ -18,19 +18,26 @@ package models.mapping
 
 import controllers.FakeCCEligibilityApplication
 import models.ParentsBenefits.IncapacityBenefit
-import models._
-import models.input.tfc._
-import models.mappings._
+import models.*
+import models.input.tfc.*
+import models.mappings.*
 
 import java.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.Configuration
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import utils.{CCConfig, Periods, TFCConfig}
 
 class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with MockitoSugar {
 
   val mockTFC = mock[TFCConfig]
   val SUT     = new HHToTFCEligibilityInput(mockTFC, mock[CCConfig])
+  
+  val mockServiceConf: ServicesConfig = mock[ServicesConfig]
+  val mockConfiguration: Configuration = mock[Configuration]
+
+  val testConfig = new CCConfig(mockServiceConf, mockConfiguration)
 
   "HHToTFCEligibilityInput" must {
 
@@ -102,14 +109,18 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
               childcareCost = 350,
               childcareCostPeriod = Periods.Monthly,
               dob = dob,
-              disability = TFCDisability(disabled = true)
+              disability = TFCDisability(disabled = true),
+              ccConfig = testConfig,
+              dummyValue = None
             ),
             TFCChild(
               id = 1,
               childcareCost = 100,
               childcareCostPeriod = Periods.Monthly,
               dob = dob,
-              disability = TFCDisability(severelyDisabled = true)
+              disability = TFCDisability(severelyDisabled = true),
+              ccConfig = testConfig,
+              dummyValue = None
             )
           )
         )
@@ -206,14 +217,18 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
               childcareCost = 0,
               childcareCostPeriod = Periods.Monthly,
               dob = dob,
-              disability = TFCDisability(disabled = true)
+              disability = TFCDisability(disabled = true),
+              ccConfig = testConfig,
+              dummyValue = None
             ),
             TFCChild(
               id = 1,
               childcareCost = 1000,
               childcareCostPeriod = Periods.Monthly,
               dob = dob,
-              disability = TFCDisability(disabled = true)
+              disability = TFCDisability(disabled = true),
+              ccConfig = testConfig,
+              dummyValue = None
             )
           )
         )

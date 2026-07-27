@@ -66,7 +66,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
           // Child model
           x.children.head.id.isInstanceOf[Short] shouldBe true
           x.children.head.childcareCost shouldBe a[BigDecimal]
-          x.children.head.childcareCostPeriod shouldBe a[Periods.Period]
+          x.children.head.childcareCostPeriod shouldBe a[Periods]
           x.children.head.dob shouldBe a[LocalDate]
           x.children.head.disability shouldBe a[TFCDisability]
 

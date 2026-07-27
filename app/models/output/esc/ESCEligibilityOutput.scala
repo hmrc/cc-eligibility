@@ -16,7 +16,7 @@
 
 package models.output.esc
 
-import models.LocationEnum.LocationEnum
+import models.LocationEnum
 import java.time.LocalDate
 import play.api.libs.json.{Json, Writes}
 import utils.Periods
@@ -80,7 +80,7 @@ object ESCIncome {
 case class ESCChild(
     qualifying: Boolean = false,
     childCareCost: BigDecimal,
-    childCareCostPeriod: Periods.Period = Periods.Monthly
+    childCareCostPeriod: Periods = Periods.Monthly
 )
 
 object ESCChild {

@@ -17,7 +17,6 @@
 package models.output
 
 import models.SchemeEnum
-import models.SchemeEnum.SchemeEnum
 import play.api.libs.json.{Json, OFormat}
 
 case class EscClaimantEligibility(

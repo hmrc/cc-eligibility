@@ -16,12 +16,12 @@
 
 package models
 
-import models.AgeRangeEnum.AgeRangeEnum
-import models.CreditsEnum.CreditsEnum
-import models.EmploymentStatusEnum.EmploymentStatusEnum
-import models.LocationEnum.LocationEnum
-import models.PeriodEnum.PeriodEnum
-import models.YesNoUnsureEnum.YesNoUnsureEnum
+import models.AgeRangeEnum
+import models.CreditsEnum
+import models.EmploymentStatusEnum
+import models.LocationEnum
+import models.PeriodEnum
+import models.YesNoUnsureEnum
 import play.api.libs.json.{Json, OFormat}
 
 import java.time.LocalDate
