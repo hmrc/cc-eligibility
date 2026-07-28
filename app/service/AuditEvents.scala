@@ -21,16 +21,16 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 class AuditEvents @Inject() (auditService: AuditService) {
 
-  def auditMinEarnings(data: Boolean)(implicit hc: HeaderCarrier): Unit =
+  def auditMinEarnings(data: Boolean)(using hc: HeaderCarrier): Unit =
     auditEvent("HouseholdMinimumEarnings", Map("failedHouseholdMinimumEarnings" -> data.toString))
 
-  def auditHouseholdRequest(data: String)(implicit hc: HeaderCarrier): Unit =
+  def auditHouseholdRequest(data: String)(using hc: HeaderCarrier): Unit =
     auditEvent("HouseholdRequest", Map("HouseholdRequest" -> data))
 
-  def auditHouseholdResponse(data: String)(implicit hc: HeaderCarrier): Unit =
+  def auditHouseholdResponse(data: String)(using hc: HeaderCarrier): Unit =
     auditEvent("HouseholdResponse", Map("HouseholdResponse" -> data))
 
-  private def auditEvent(auditEventType: String, data: Map[String, String])(implicit hc: HeaderCarrier): Unit =
+  private def auditEvent(auditEventType: String, data: Map[String, String])(using hc: HeaderCarrier): Unit =
     auditService.sendEvent(auditEventType, data)
 
 }

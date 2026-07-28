@@ -32,7 +32,7 @@ import scala.concurrent.Future
 
 class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodTester with Matchers {
 
-  implicit val req: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+  given req: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
   lazy val tfcEligibility: TFCEligibility = app.injector.instanceOf[TFCEligibility]
   lazy val ccConfig: CCConfig             = app.injector.instanceOf[CCConfig]

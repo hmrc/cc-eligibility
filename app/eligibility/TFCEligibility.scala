@@ -27,7 +27,7 @@ import java.util.{Calendar, Date}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class TFCEligibility @Inject() (auditEvent: AuditEvents, tFCConfig: TFCConfig)(implicit ec: ExecutionContext) {
+class TFCEligibility @Inject() (auditEvent: AuditEvents, tFCConfig: TFCConfig)(using ec: ExecutionContext) {
 
   private def getWeekEnd(calendar: Calendar): Date = {
     while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY || calendar.get(Calendar.DAY_OF_MONTH) == 1)
@@ -188,7 +188,7 @@ class TFCEligibility @Inject() (auditEvent: AuditEvents, tFCConfig: TFCConfig)(i
         isPartner = claimant.isPartner
       )
 
-  def eligibility(request: TFCEligibilityInput)(implicit hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
+  def eligibility(request: TFCEligibilityInput)(using hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
     val outputPeriods = determineTFCPeriods(request)
     val householdEligibility = outputPeriods.exists(period =>
       period.periodEligibility
@@ -205,7 +205,7 @@ class TFCEligibility @Inject() (auditEvent: AuditEvents, tFCConfig: TFCConfig)(i
 
   private def validHouseholdMinimumEarnings(
       tfcEligibilityInput: TFCEligibilityInput
-  )(implicit hc: HeaderCarrier): Boolean = {
+  )(using hc: HeaderCarrier): Boolean = {
     val parent            = tfcEligibilityInput.claimants.head
     val minEarningsParent = parent.minimumEarnings.selection
     if (tfcEligibilityInput.claimants.length > 1) {

@@ -62,7 +62,7 @@ case class TFCEligibilityInput(
 
 object TFCEligibilityInput {
 
-  implicit val lang: Lang = Lang("en")
+  given lang: Lang = Lang("en")
 
   def maxChildValidation(noOfChild: List[TFCChild]): Boolean =
     noOfChild.length <= 25
@@ -70,7 +70,7 @@ object TFCEligibilityInput {
   def claimantValidation(noOfClaimant: List[TFCClaimant]): Boolean =
     noOfClaimant.nonEmpty && noOfClaimant.length < 3
 
-  implicit val tfcReads: Reads[TFCEligibilityInput] =
+  given tfcReads: Reads[TFCEligibilityInput] =
     (JsPath \ "from")
       .read[LocalDate]
       .and((JsPath \ "numberOfPeriods").read[Short].orElse(Reads.pure(1)))
@@ -97,7 +97,7 @@ case class TFCIncome(
 )
 
 object TFCIncome {
-  implicit val formats: OFormat[TFCIncome] = Json.format[TFCIncome]
+  given formats: OFormat[TFCIncome] = Json.format[TFCIncome]
 }
 
 case class TFCClaimant(
@@ -141,7 +141,7 @@ case class TFCClaimant(
 
 object TFCClaimant {
 
-  implicit val claimantReads: Reads[TFCClaimant] =
+  given claimantReads: Reads[TFCClaimant] =
     (JsPath \ "currentIncome")
       .readNullable[TFCIncome]
       .and((JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)))
@@ -162,7 +162,7 @@ case class TFCMinimumEarnings(
 
 object TFCMinimumEarnings {
 
-  implicit val minEarningsRead: Reads[TFCMinimumEarnings] =
+  given minEarningsRead: Reads[TFCMinimumEarnings] =
     (JsPath \ "selection")
       .read[Boolean]
       .orElse(Reads.pure(true))
@@ -177,7 +177,7 @@ case class TFCDisability(
 
 object TFCDisability {
 
-  implicit val disabilityReads: Reads[TFCDisability] =
+  given disabilityReads: Reads[TFCDisability] =
     (JsPath \ "disabled")
       .read[Boolean]
       .orElse(Reads.pure(false))
@@ -201,7 +201,7 @@ case class TFCChild @Inject() (
 
 object TFCChild {
 
-  implicit val lang: Lang = Lang("en")
+  given lang: Lang = Lang("en")
 
   def validID(id: Short): Boolean =
     id >= 0
@@ -229,7 +229,7 @@ object TFCChild {
   ): TFCChild =
     new TFCChild(id, childcareCost, childcareCostPeriod, dob, disability)(Some(ccConfig))
 
-  implicit val childReads: Reads[TFCChild] =
+  given childReads: Reads[TFCChild] =
     (JsPath \ "id")
       .read[Short]
       .filter(JsonValidationError("Child ID should not be less than 0"))(x => validID(x))

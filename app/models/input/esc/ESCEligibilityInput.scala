@@ -28,7 +28,7 @@ import utils.{CCConfig, ESCConfig, Periods}
 case class ESCEligibilityInput(escTaxYears: List[ESCTaxYear], location: Option[LocationEnum] = None)
 
 object ESCEligibilityInput {
-  implicit val requestFormat: Reads[ESCEligibilityInput] = Json.reads[ESCEligibilityInput]
+  given requestFormat: Reads[ESCEligibilityInput] = Json.reads[ESCEligibilityInput]
 }
 
 case class ESCTaxYear(
@@ -40,7 +40,7 @@ case class ESCTaxYear(
 
 object ESCTaxYear {
 
-  implicit val lang: Lang = Lang("en")
+  given lang: Lang = Lang("en")
 
   def maxChildValidation(noOfChild: List[ESCChild]): Boolean =
     noOfChild.length <= 25
@@ -48,7 +48,7 @@ object ESCTaxYear {
   def claimantValidation(noOfClaimant: List[ESCClaimant]): Boolean =
     noOfClaimant.nonEmpty && noOfClaimant.length < 3
 
-  implicit val taxYearReads: Reads[ESCTaxYear] =
+  given taxYearReads: Reads[ESCTaxYear] =
     (JsPath \ "from")
       .read[LocalDate]
       .and((JsPath \ "until").read[LocalDate])
@@ -74,7 +74,7 @@ case class ESCIncome(
 )
 
 object ESCIncome {
-  implicit val incomeFormat: OFormat[ESCIncome] = Json.format[ESCIncome]
+  given incomeFormat: OFormat[ESCIncome] = Json.format[ESCIncome]
 }
 
 case class ESCClaimant(
@@ -90,7 +90,7 @@ case class ESCClaimant(
 
 object ESCClaimant {
 
-  implicit val claimantReads: Reads[ESCClaimant] =
+  given claimantReads: Reads[ESCClaimant] =
     (JsPath \ "isPartner")
       .read[Boolean]
       .orElse(Reads.pure(false))
@@ -177,7 +177,7 @@ object ESCChild {
   ): ESCChild =
     new ESCChild(id, dob, childCareCost, childCareCostPeriod, disability)(None, None)
 
-  implicit val childReads: Reads[ESCChild] =
+  given childReads: Reads[ESCChild] =
     (JsPath \ "id")
       .read[Short]
       .filter(JsonValidationError("Child ID should not be less than 0"))(x => validID(x))
@@ -195,7 +195,7 @@ case class ESCDisability(
 
 object ESCDisability {
 
-  implicit val disabilityReads: Reads[ESCDisability] =
+  given disabilityReads: Reads[ESCDisability] =
     (JsPath \ "disabled")
       .read[Boolean]
       .orElse(Reads.pure(false))

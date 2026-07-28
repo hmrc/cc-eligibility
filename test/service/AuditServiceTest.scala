@@ -31,13 +31,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AuditServiceTest extends CCConfigSpec with MockitoSugar {
 
-  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
+  given ec: ExecutionContext = ExecutionContext.Implicits.global
 
   val mockAuditConnector = mock[AuditConnector]
   val testAuditService   = new AuditService(mockAuditConnector)
 
   "AuditService" must {
-    implicit val hc: HeaderCarrier = HeaderCarrier(
+    given hc: HeaderCarrier = HeaderCarrier(
       forwarded = Some(ForwardedFor("test-IP")),
       sessionId = Some(SessionId("sessionid-random"))
     )

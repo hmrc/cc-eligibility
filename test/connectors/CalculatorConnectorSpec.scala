@@ -34,7 +34,7 @@ class CalculatorConnectorSpec
     with FakeCCEligibilityApplication
     with BeforeAndAfterEach {
 
-  implicit val ec: ExecutionContext  = ExecutionContext.Implicits.global
+  given ec: ExecutionContext  = ExecutionContext.Implicits.global
   val requestBuilder: RequestBuilder = mock[RequestBuilder]
 
   "CalculatorConnector" must {

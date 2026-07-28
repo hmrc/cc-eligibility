@@ -23,15 +23,15 @@ import uk.gov.hmrc.play.audit.model.DataEvent
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AuditService @Inject() (val auditConnector: AuditConnector)(implicit ec: ExecutionContext) {
+class AuditService @Inject() (val auditConnector: AuditConnector)(using ec: ExecutionContext) {
 
   def sendEvent(auditType: String, details: Map[String, String], sessionId: Option[String] = None)(
-      implicit hc: HeaderCarrier
+      using hc: HeaderCarrier
   ): Future[AuditResult] =
     auditConnector.sendEvent(buildEvent(auditType, details, sessionId))
 
   def buildEvent(auditType: String, details: Map[String, String], sessionId: Option[String] = None)(
-      implicit hc: HeaderCarrier
+      using hc: HeaderCarrier
   ): DataEvent =
     DataEvent(
       auditSource = "cc-eligibility",

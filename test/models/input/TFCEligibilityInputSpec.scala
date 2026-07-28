@@ -29,7 +29,7 @@ import java.time.format.DateTimeFormatter
 
 class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
 
-  implicit val req: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+  given req: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
   "TFCEInputEligibility" must {
 

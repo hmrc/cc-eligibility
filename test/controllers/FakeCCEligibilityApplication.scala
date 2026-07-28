@@ -38,8 +38,9 @@ import scala.language.implicitConversions
 trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
   this: Suite =>
 
-  implicit lazy val mat: Materializer = app.materializer
-  implicit val hc: HeaderCarrier      = HeaderCarrier()
+  given mat: Materializer = app.materializer
+  
+  given hc: HeaderCarrier      = HeaderCarrier()
 
   val mockCC: ControllerComponents = mock[ControllerComponents]
   val mockParser: PlayBodyParsers  = mock[PlayBodyParsers]
@@ -86,13 +87,13 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
   ): TFCChild =
     new TFCChild(id, childCareCost, childcareCostPeriod, dob, disability)(ccConfig)
 
-  def jsonBodyOf(result: Result)(implicit mat: Materializer): JsValue =
+  def jsonBodyOf(result: Result)(using mat: Materializer): JsValue =
     Json.parse(bodyOf(result))
 
-  def jsonBodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[JsValue] =
+  def jsonBodyOf(resultF: Future[Result])(using mat: Materializer): Future[JsValue] =
     resultF.map(jsonBodyOf)
 
-  def bodyOf(result: Result)(implicit mat: Materializer): String = {
+  def bodyOf(result: Result)(using mat: Materializer): String = {
     val bodyBytes: ByteString = await(result.body.consumeData)
     // We use the default charset to preserve the behaviour of a previous
     // version of this code, which used new String(Array[Byte]).
@@ -102,23 +103,23 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
     bodyBytes.decodeString(Charset.defaultCharset().name)
   }
 
-  def bodyOf(resultF: Future[Result])(implicit mat: Materializer): Future[String] =
+  def bodyOf(resultF: Future[Result])(using mat: Materializer): Future[String] =
     resultF.map(bodyOf)
 
   import scala.concurrent.duration._
   import scala.concurrent.{Await, Future}
 
-  implicit val defaultTimeout: FiniteDuration = 5.seconds
+  given defaultTimeout: FiniteDuration = 5.seconds
 
-  implicit def extractAwait[A](future: Future[A]): A = await[A](future)
+  given extractAwait[A]: Conversion[Future[A], A] = future => await[A](future)
 
-  def await[A](future: Future[A])(implicit timeout: Duration): A = Await.result(future, timeout)
+  def await[A](future: Future[A])(using timeout: Duration): A = Await.result(future, timeout)
 
   // Convenience to avoid having to wrap andThen() parameters in Future.successful
-  implicit def liftFuture[A](v: A): Future[A] = Future.successful(v)
+  given liftFuture[A]: Conversion[A, Future[A]] = v => Future.successful(v)
 
   def status(of: Result): Int = of.header.status
 
-  def status(of: Future[Result])(implicit timeout: Duration): Int = status(Await.result(of, timeout))
+  def status(of: Future[Result])(using timeout: Duration): Int = status(Await.result(of, timeout))
 
 }

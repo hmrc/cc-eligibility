@@ -37,7 +37,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with Matchers {
   }
 
   def createAuditor(observableAuditConnector: ObservableAuditConnector): AuditEvents = {
-    implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
+    given ec: ExecutionContext = ExecutionContext.Implicits.global
 
     val testAuditService = new AuditService(observableAuditConnector)
 
@@ -55,7 +55,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with Matchers {
 
     override def sendEvent(
         event: DataEvent
-    )(implicit hc: HeaderCarrier = HeaderCarrier(), ec: ExecutionContext): Future[AuditResult] = {
+    )(using hc: HeaderCarrier = HeaderCarrier(), ec: ExecutionContext): Future[AuditResult] = {
       addEvent(event.asInstanceOf[DataEvent])
       Future.successful(AuditResult.Success)
     }
@@ -66,7 +66,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with Matchers {
   }
 
   "Audit Events" must {
-    implicit val hc = new HeaderCarrier()
+    given hc: HeaderCarrier = new HeaderCarrier()
 
     "audit request received for household eligibility - success " in {
 

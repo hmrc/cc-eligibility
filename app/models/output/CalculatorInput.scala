@@ -24,5 +24,5 @@ case class CalculatorInput(tfc: Option[TFCEligibilityOutput], esc: Option[ESCEli
 
 object CalculatorInput {
 
-  implicit val calculatorInput: Writes[CalculatorInput] = Json.writes[CalculatorInput]
+  given calculatorInput: Writes[CalculatorInput] = Json.writes[CalculatorInput]
 }
