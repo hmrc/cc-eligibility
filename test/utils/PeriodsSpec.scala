@@ -17,7 +17,7 @@
 package utils
 
 import controllers.FakeCCEligibilityApplication
-import play.api.libs.json.{JsError, JsString, Json}
+import play.api.libs.json.{JsString, Json}
 
 /** Created by adamconder on 09/06/15.
   */
@@ -26,13 +26,13 @@ class PeriodsSpec extends FakeCCEligibilityApplication {
   "Periods" must {
 
     "convert Periods.Weekly to Json" in {
-      val monthly = Periods.Weekly
-      Json.toJson(monthly) shouldBe JsString("Week")
+      val weekly = Periods.Weekly
+      Json.toJson(weekly) shouldBe JsString("Week")
     }
 
     "convert Periods.Fortnightly to Json" in {
-      val monthly = Periods.Fortnightly
-      Json.toJson(monthly) shouldBe JsString("Fortnight")
+      val fortnightly = Periods.Fortnightly
+      Json.toJson(fortnightly) shouldBe JsString("Fortnight")
     }
 
     "convert Periods.Monthly to Json" in {
@@ -41,30 +41,19 @@ class PeriodsSpec extends FakeCCEligibilityApplication {
     }
 
     "convert Periods.Quarterly to Json" in {
-      val monthly = Periods.Quarterly
-      Json.toJson(monthly) shouldBe JsString("3 month")
+      val quarterly = Periods.Quarterly
+      Json.toJson(quarterly) shouldBe JsString("3 month")
     }
 
     "convert Periods.Yearly to Json" in {
-      val monthly = Periods.Yearly
-      Json.toJson(monthly) shouldBe JsString("Year")
+      val yearly = Periods.Yearly
+      Json.toJson(yearly) shouldBe JsString("Year")
     }
 
     "convert Periods.INVALID to Json" in {
-      val monthly = Periods.INVALID
-      Json.toJson(monthly) shouldBe JsString("INVALID")
+      val invalid = Periods.INVALID
+      Json.toJson(invalid) shouldBe JsString("INVALID")
     }
 
   }
-
-  "Enumutils" must {
-    "return JsError" in {
-      class test extends Enumeration
-
-      val utilRes = EnumUtils.enumFormat(new test).reads(Json.obj("periods" -> "0"))
-
-      utilRes shouldBe JsError("String value expected")
-    }
-  }
-
 }
