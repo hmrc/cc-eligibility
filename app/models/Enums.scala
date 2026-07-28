@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.{Format, Json, Reads, Writes}
+import play.api.libs.json.Json
 import models.Enumerable
 
 enum CreditsEnum {
@@ -33,11 +33,13 @@ object CreditsEnum extends Enumerable.Implicits {
   }
 }
 
-enum LocationEnum(location: String) {
+enum LocationEnum(val location: String) {
   case ENGLAND extends LocationEnum("england")
   case SCOTLAND extends LocationEnum("scotland")
   case WALES extends LocationEnum("wales")
-  case NORTHERNIRELAND extends LocationEnum("northern ireland")
+  case NORTHERNIRELAND extends LocationEnum("northern-ireland")
+
+  override def toString: String = location
 }
 
 object LocationEnum extends Enumerable.Implicits {
@@ -85,7 +87,6 @@ enum YesNoUnsureEnum {
   case YES, NO, NOTSURE
 }
 
-
 object YesNoUnsureEnum extends Enumerable.Implicits {
 
   val yesNoUnsureValues: Seq[YesNoUnsureEnum] = Seq(YES, NO, NOTSURE)
@@ -100,7 +101,6 @@ object YesNoUnsureEnum extends Enumerable.Implicits {
 enum PeriodEnum {
   case WEEKLY, FORTNIGHTLY, MONTHLY, QUARTERLY, YEARLY, INVALID
 }
-
 
 object PeriodEnum extends Enumerable.Implicits {
 

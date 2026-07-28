@@ -38,7 +38,7 @@ object Enumerable {
     }
 
     given writes[A]: Writes[A] = Writes(value => JsString(value.toString))
-    
+
     given formats[A](using enumerable: Enumerable[A]): Format[A] = Format(reads, writes)
 
   }

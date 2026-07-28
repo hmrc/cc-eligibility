@@ -116,7 +116,8 @@ class HHToESCEligibilityInputSpec
                   dob,
                   0,
                   Periods.Monthly,
-                  ESCDisability(true, false)
+                  ESCDisability(true, false),
+                  None
                 )
               )
             ),
@@ -133,7 +134,8 @@ class HHToESCEligibilityInputSpec
                   dob,
                   0,
                   Periods.Monthly,
-                  ESCDisability(true, false)
+                  ESCDisability(true, false),
+                  None
                 )
               )
             )
@@ -230,7 +232,8 @@ class HHToESCEligibilityInputSpec
                   dob,
                   0,
                   Periods.Monthly,
-                  ESCDisability(true, false)
+                  ESCDisability(true, false),
+                  None
                 )
               )
             ),
@@ -247,7 +250,8 @@ class HHToESCEligibilityInputSpec
                   dob,
                   0,
                   Periods.Monthly,
-                  ESCDisability(true, false)
+                  ESCDisability(true, false),
+                  None
                 )
               )
             )
@@ -287,13 +291,13 @@ class HHToESCEligibilityInputSpec
               currentDate,
               LocalDate.parse("2017-04-06"),
               List(ESCClaimant(false, true), ESCClaimant(true, false)),
-              List(ESCChild(1, dob, 0, Periods.Monthly, ESCDisability(true, false)))
+              List(ESCChild(1, dob, 0, Periods.Monthly, ESCDisability(true, false), None))
             ),
             ESCTaxYear(
               LocalDate.parse("2017-04-06"),
               currentDate.plusYears(1),
               List(ESCClaimant(false, true), ESCClaimant(true, false)),
-              List(ESCChild(1, dob, 0, Periods.Monthly, ESCDisability(true, false)))
+              List(ESCChild(1, dob, 0, Periods.Monthly, ESCDisability(true, false), None))
             )
           )
         )

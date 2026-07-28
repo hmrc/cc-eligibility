@@ -122,7 +122,7 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
         val expectedResult = SchemeResults(List(tfcSchemeOutput, escSchemeOutput))
 
         when(mockESC.eligibility(any(), any(), any())).thenReturn(Future(mock[ESCEligibilityOutput]))
-        when(mockTFC.eligibility(any())(any())).thenReturn(mock[TFCEligibilityOutput])
+        when(mockTFC.eligibility(any())(any())).thenReturn(Future(mock[TFCEligibilityOutput]))
         when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueNone))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
