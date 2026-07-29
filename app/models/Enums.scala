@@ -16,7 +16,6 @@
 
 package models
 
-import play.api.libs.json.Json
 import models.Enumerable
 
 enum CreditsEnum {
@@ -27,10 +26,6 @@ object CreditsEnum extends Enumerable.Implicits {
   val creditsValues: Seq[CreditsEnum] = Seq(UNIVERSALCREDIT, NONE)
 
   given Enumerable[CreditsEnum] = Enumerable(creditsValues.map(value => value.toString -> value)*)
-
-  def credits(): Unit = {
-    val b = Json.parse("{}").validate[CreditsEnum]
-  }
 
 }
 
@@ -49,10 +44,6 @@ object LocationEnum extends Enumerable.Implicits {
 
   given Enumerable[LocationEnum] = Enumerable(locationValues.map(value => value.toString -> value)*)
 
-  def location(): Unit = {
-    val b = Json.parse("{}").validate[LocationEnum]
-  }
-
 }
 
 enum AgeRangeEnum {
@@ -64,10 +55,6 @@ object AgeRangeEnum extends Enumerable.Implicits {
   val ageValues: Seq[AgeRangeEnum] = Seq(UNDER18, EIGHTEENTOTWENTY, TWENTYONEOROVER)
 
   given Enumerable[AgeRangeEnum] = Enumerable(ageValues.map(value => value.toString -> value)*)
-
-  def ageRange(): Unit = {
-    val b = Json.parse("{}").validate[AgeRangeEnum]
-  }
 
 }
 
@@ -81,10 +68,6 @@ object EmploymentStatusEnum extends Enumerable.Implicits {
 
   given Enumerable[EmploymentStatusEnum] = Enumerable(employmentValues.map(value => value.toString -> value)*)
 
-  def employmentStatus(): Unit = {
-    val b = Json.parse("{}").validate[EmploymentStatusEnum]
-  }
-
 }
 
 enum YesNoUnsureEnum {
@@ -96,10 +79,6 @@ object YesNoUnsureEnum extends Enumerable.Implicits {
   val yesNoUnsureValues: Seq[YesNoUnsureEnum] = Seq(YES, NO, NOTSURE)
 
   given Enumerable[YesNoUnsureEnum] = Enumerable(yesNoUnsureValues.map(value => value.toString -> value)*)
-
-  def yesNoUnsure(): Unit = {
-    val b = Json.parse("{}").validate[YesNoUnsureEnum]
-  }
 
 }
 
@@ -113,15 +92,10 @@ object PeriodEnum extends Enumerable.Implicits {
 
   given Enumerable[PeriodEnum] = Enumerable(periodValues.map(value => value.toString -> value)*)
 
-  def period(): Unit = {
-    val b = Json.parse("{}").validate[PeriodEnum]
-  }
-
 }
 
-enum SchemeEnum(scheme: String) {
-  case TFCELIGIBILITY extends SchemeEnum("tfcEligibility")
-  case ESCELIGIBILITY extends SchemeEnum("escEligibility")
+enum SchemeEnum {
+  case TFCELIGIBILITY, ESCELIGIBILITY
 }
 
 object SchemeEnum extends Enumerable.Implicits {
@@ -129,9 +103,5 @@ object SchemeEnum extends Enumerable.Implicits {
   val schemeValues: Seq[SchemeEnum] = Seq(TFCELIGIBILITY, ESCELIGIBILITY)
 
   given Enumerable[SchemeEnum] = Enumerable(schemeValues.map(value => value.toString -> value)*)
-
-  def scheme(): Unit = {
-    val b = Json.parse("{}").validate[SchemeEnum]
-  }
 
 }

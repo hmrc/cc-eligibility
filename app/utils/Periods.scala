@@ -16,7 +16,6 @@
 
 package utils
 
-import play.api.libs.json.*
 import models.Enumerable
 
 enum Periods(val id: Int, val period: String):
@@ -33,7 +32,3 @@ object Periods extends Enumerable.Implicits:
   val periodValues: Seq[Periods] = Seq[Periods](Weekly, Fortnightly, Monthly, Quarterly, Yearly, INVALID)
 
   given Enumerable[Periods] = Enumerable(periodValues.map(value => value.toString -> value)*)
-
-  def periods(): Unit = {
-    val b = Json.parse("{}").validate[Periods]
-  }

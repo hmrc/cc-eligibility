@@ -55,8 +55,4 @@ object Test extends Enumerable.Implicits {
 
   given Enumerable[Test] = Enumerable(testValues.map(value => value.toString -> value)*)
 
-  def test(): Unit = {
-    val b = Json.parse("{}").validate[Test]
-  }
-
 }

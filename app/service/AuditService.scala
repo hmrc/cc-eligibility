@@ -25,12 +25,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AuditService @Inject() (val auditConnector: AuditConnector)(implicit ec: ExecutionContext) {
 
-  def sendEvent(auditType: String, details: Map[String, String], sessionId: Option[String] = None)(
+  def sendEvent(auditType: String, details: Map[String, String])(
       implicit hc: HeaderCarrier
   ): Future[AuditResult] =
-    auditConnector.sendEvent(buildEvent(auditType, details, sessionId))
+    auditConnector.sendEvent(buildEvent(auditType, details))
 
-  def buildEvent(auditType: String, details: Map[String, String], sessionId: Option[String] = None)(
+  def buildEvent(auditType: String, details: Map[String, String])(
       implicit hc: HeaderCarrier
   ): DataEvent =
     DataEvent(

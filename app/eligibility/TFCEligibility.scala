@@ -134,7 +134,7 @@ class TFCEligibility @Inject() (auditEvent: AuditEvents, tFCConfig: TFCConfig)(i
     currentCalendar.clear()
     currentCalendar.setTime(tFCConfig.config.toDate(tfcEligibilityInput.from))
 
-    val periods = for (i <- 1 to tfcEligibilityInput.numberOfPeriods) yield {
+    val periods = for (_ <- 1 to tfcEligibilityInput.numberOfPeriods) yield {
       val startDate = tFCConfig.config.toLocalDate(currentCalendar.getTime)
       currentCalendar.add(Calendar.MONTH, 3)
       val untilDate = tFCConfig.config.toLocalDate(currentCalendar.getTime)
