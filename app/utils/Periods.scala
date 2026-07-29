@@ -20,20 +20,19 @@ import play.api.libs.json.*
 import models.Enumerable
 
 enum Periods(val id: Int, val period: String):
-  case Weekly extends Periods(0, "Week")
+  case Weekly      extends Periods(0, "Week")
   case Fortnightly extends Periods(1, "Fortnight")
-  case Monthly extends Periods(2, "Month")
-  case Quarterly extends Periods(3, "3 month")
-  case Yearly extends Periods(4, "Year")
-  case INVALID extends Periods(5, "INVALID")
+  case Monthly     extends Periods(2, "Month")
+  case Quarterly   extends Periods(3, "3 month")
+  case Yearly      extends Periods(4, "Year")
+  case INVALID     extends Periods(5, "INVALID")
 
   override def toString: String = period
-
 
 object Periods extends Enumerable.Implicits:
   val periodValues: Seq[Periods] = Seq[Periods](Weekly, Fortnightly, Monthly, Quarterly, Yearly, INVALID)
 
-  given Enumerable[Periods] = Enumerable(periodValues.map(value => value.toString -> value) *)
+  given Enumerable[Periods] = Enumerable(periodValues.map(value => value.toString -> value)*)
 
   def periods(): Unit = {
     val b = Json.parse("{}").validate[Periods]

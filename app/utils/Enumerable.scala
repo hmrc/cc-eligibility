@@ -51,12 +51,12 @@ enum Test {
 
 object Test extends Enumerable.Implicits {
 
-  val testValues : Seq[Test] = Seq(A, B)
+  val testValues: Seq[Test] = Seq(A, B)
 
   given Enumerable[Test] = Enumerable(testValues.map(value => value.toString -> value)*)
 
   def test(): Unit = {
-    val b =     Json.parse("{}").validate[Test]
+    val b = Json.parse("{}").validate[Test]
   }
 
 }

@@ -26,17 +26,18 @@ enum CreditsEnum {
 object CreditsEnum extends Enumerable.Implicits {
   val creditsValues: Seq[CreditsEnum] = Seq(UNIVERSALCREDIT, NONE)
 
-  given Enumerable[CreditsEnum] = Enumerable(creditsValues.map(value => value.toString -> value) *)
+  given Enumerable[CreditsEnum] = Enumerable(creditsValues.map(value => value.toString -> value)*)
 
   def credits(): Unit = {
     val b = Json.parse("{}").validate[CreditsEnum]
   }
+
 }
 
 enum LocationEnum(val location: String) {
-  case ENGLAND extends LocationEnum("england")
-  case SCOTLAND extends LocationEnum("scotland")
-  case WALES extends LocationEnum("wales")
+  case ENGLAND         extends LocationEnum("england")
+  case SCOTLAND        extends LocationEnum("scotland")
+  case WALES           extends LocationEnum("wales")
   case NORTHERNIRELAND extends LocationEnum("northern-ireland")
 
   override def toString: String = location
@@ -46,11 +47,12 @@ object LocationEnum extends Enumerable.Implicits {
 
   val locationValues: Seq[LocationEnum] = Seq(ENGLAND, SCOTLAND, WALES, NORTHERNIRELAND)
 
-  given Enumerable[LocationEnum] = Enumerable(locationValues.map(value => value.toString -> value) *)
+  given Enumerable[LocationEnum] = Enumerable(locationValues.map(value => value.toString -> value)*)
 
   def location(): Unit = {
     val b = Json.parse("{}").validate[LocationEnum]
   }
+
 }
 
 enum AgeRangeEnum {
@@ -61,11 +63,12 @@ object AgeRangeEnum extends Enumerable.Implicits {
 
   val ageValues: Seq[AgeRangeEnum] = Seq(UNDER18, EIGHTEENTOTWENTY, TWENTYONEOROVER)
 
-  given Enumerable[AgeRangeEnum] = Enumerable(ageValues.map(value => value.toString -> value) *)
+  given Enumerable[AgeRangeEnum] = Enumerable(ageValues.map(value => value.toString -> value)*)
 
   def ageRange(): Unit = {
     val b = Json.parse("{}").validate[AgeRangeEnum]
   }
+
 }
 
 enum EmploymentStatusEnum {
@@ -76,11 +79,12 @@ object EmploymentStatusEnum extends Enumerable.Implicits {
 
   val employmentValues: Seq[EmploymentStatusEnum] = Seq(SELFEMPLOYED, APPRENTICE, NEITHER)
 
-  given Enumerable[EmploymentStatusEnum] = Enumerable(employmentValues.map(value => value.toString -> value) *)
+  given Enumerable[EmploymentStatusEnum] = Enumerable(employmentValues.map(value => value.toString -> value)*)
 
   def employmentStatus(): Unit = {
     val b = Json.parse("{}").validate[EmploymentStatusEnum]
   }
+
 }
 
 enum YesNoUnsureEnum {
@@ -91,11 +95,12 @@ object YesNoUnsureEnum extends Enumerable.Implicits {
 
   val yesNoUnsureValues: Seq[YesNoUnsureEnum] = Seq(YES, NO, NOTSURE)
 
-  given Enumerable[YesNoUnsureEnum] = Enumerable(yesNoUnsureValues.map(value => value.toString -> value) *)
+  given Enumerable[YesNoUnsureEnum] = Enumerable(yesNoUnsureValues.map(value => value.toString -> value)*)
 
   def yesNoUnsure(): Unit = {
     val b = Json.parse("{}").validate[YesNoUnsureEnum]
   }
+
 }
 
 enum PeriodEnum {
@@ -106,11 +111,12 @@ object PeriodEnum extends Enumerable.Implicits {
 
   val periodValues: Seq[PeriodEnum] = Seq(WEEKLY, FORTNIGHTLY, MONTHLY, QUARTERLY, YEARLY, INVALID)
 
-  given Enumerable[PeriodEnum] = Enumerable(periodValues.map(value => value.toString -> value) *)
+  given Enumerable[PeriodEnum] = Enumerable(periodValues.map(value => value.toString -> value)*)
 
   def period(): Unit = {
     val b = Json.parse("{}").validate[PeriodEnum]
   }
+
 }
 
 enum SchemeEnum(scheme: String) {
@@ -122,9 +128,10 @@ object SchemeEnum extends Enumerable.Implicits {
 
   val schemeValues: Seq[SchemeEnum] = Seq(TFCELIGIBILITY, ESCELIGIBILITY)
 
-  given Enumerable[SchemeEnum] = Enumerable(schemeValues.map(value => value.toString -> value) *)
+  given Enumerable[SchemeEnum] = Enumerable(schemeValues.map(value => value.toString -> value)*)
 
   def scheme(): Unit = {
     val b = Json.parse("{}").validate[SchemeEnum]
   }
+
 }
