@@ -37,16 +37,24 @@ class PeriodEnumToPeriodSpec extends AnyWordSpec with Matchers {
         SUT.convert(PeriodEnum.FORTNIGHTLY) shouldBe Periods.Fortnightly
       }
 
-      "periodEnum is yearly" in {
-        SUT.convert(PeriodEnum.YEARLY) shouldBe Periods.Yearly
+      "periodEnum is monthly" in {
+        SUT.convert(PeriodEnum.MONTHLY) shouldBe Periods.Monthly
       }
 
       "periodEnum is quarterly" in {
         SUT.convert(PeriodEnum.QUARTERLY) shouldBe Periods.Quarterly
       }
 
+      "periodEnum is yearly" in {
+        SUT.convert(PeriodEnum.YEARLY) shouldBe Periods.Yearly
+      }
+
       "periodEnum is invalid" in {
         SUT.convert(PeriodEnum.INVALID) shouldBe Periods.INVALID
+      }
+
+      "periodEnum is null" in {
+        SUT.convert(null) shouldBe Periods.INVALID
       }
     }
   }
