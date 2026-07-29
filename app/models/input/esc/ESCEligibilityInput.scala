@@ -63,7 +63,7 @@ object ESCTaxYear {
         (JsPath \ "children")
           .read[List[ESCChild]]
           .filter(JsonValidationError("Max 25 children allowed"))(x => maxChildValidation(x))
-      )(ESCTaxYear.apply _)
+      )(ESCTaxYear.apply)
 
 }
 
@@ -95,7 +95,7 @@ object ESCClaimant {
       .read[Boolean]
       .orElse(Reads.pure(false))
       .and((JsPath \ "employerProvidesESC").read[Boolean].orElse(Reads.pure(false)))
-      .and((JsPath \ "currentIncome").readNullable[ESCIncome])(ESCClaimant.apply _)
+      .and((JsPath \ "currentIncome").readNullable[ESCIncome])(ESCClaimant.apply)
 
 }
 
@@ -199,6 +199,6 @@ object ESCDisability {
     (JsPath \ "disabled")
       .read[Boolean]
       .orElse(Reads.pure(false))
-      .and((JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false)))(ESCDisability.apply _)
+      .and((JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false)))(ESCDisability.apply)
 
 }

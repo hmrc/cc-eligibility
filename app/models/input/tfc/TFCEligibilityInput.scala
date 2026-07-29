@@ -86,7 +86,7 @@ object TFCEligibilityInput {
         (JsPath \ "children")
           .read[List[TFCChild]]
           .filter(JsonValidationError("Max 25 children allowed"))(x => maxChildValidation(x))
-      )(TFCEligibilityInput.apply _)
+      )(TFCEligibilityInput.apply)
 
 }
 
@@ -151,7 +151,7 @@ object TFCClaimant {
       .and((JsPath \ "age").readNullable[String])
       .and((JsPath \ "employmentStatus").readNullable[String])
       .and((JsPath \ "selfEmployedSelection").readNullable[Boolean])
-      .and((JsPath \ "maximumEarnings").readNullable[Boolean])(TFCClaimant.apply _)
+      .and((JsPath \ "maximumEarnings").readNullable[Boolean])(TFCClaimant.apply)
 
 }
 
@@ -166,7 +166,7 @@ object TFCMinimumEarnings {
     (JsPath \ "selection")
       .read[Boolean]
       .orElse(Reads.pure(true))
-      .and((JsPath \ "amount").read[BigDecimal].orElse(Reads.pure(0.00)))(TFCMinimumEarnings.apply _)
+      .and((JsPath \ "amount").read[BigDecimal].orElse(Reads.pure(0.00)))(TFCMinimumEarnings.apply)
 
 }
 
@@ -181,7 +181,7 @@ object TFCDisability {
     (JsPath \ "disabled")
       .read[Boolean]
       .orElse(Reads.pure(false))
-      .and((JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false)))(TFCDisability.apply _)
+      .and((JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false)))(TFCDisability.apply)
 
 }
 
