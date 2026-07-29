@@ -17,7 +17,7 @@
 package models.input
 
 import controllers.FakeCCEligibilityApplication
-import models.input.tfc._
+import models.input.tfc.*
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.mvc.AnyContentAsEmpty

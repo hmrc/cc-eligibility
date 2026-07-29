@@ -19,7 +19,7 @@ package controllers
 import models.Household
 import models.output.SchemeResults
 import org.mockito.ArgumentMatchers.{eq => mockEq, _}
-import org.mockito.Mockito._
+import org.mockito.Mockito.*
 import org.scalatest.matchers.should.Matchers
 import play.api.http.Status
 import play.api.libs.json.Json

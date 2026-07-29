@@ -17,9 +17,9 @@
 package models.mapping
 
 import controllers.FakeCCEligibilityApplication
-import models._
-import models.input.esc._
-import models.mappings._
+import models.*
+import models.input.esc.*
+import models.mappings.*
 import java.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatest.wordspec.AnyWordSpec

@@ -18,7 +18,7 @@ package eligibility
 
 import controllers.FakeCCEligibilityApplication
 import fixtures.ESCChildren
-import models.input.esc._
+import models.input.esc.*
 import models.output.esc.{ESCEligibilityOutput, ESCPeriod}
 import java.time.LocalDate
 import org.scalatest.matchers.should.Matchers

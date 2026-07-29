@@ -16,11 +16,11 @@
 
 package models.mapping
 
-import models._
+import models.*
 import models.input.CalculatorOutput
 import models.mappings.SchemeResultsBuilder
 import models.output.esc.{ESCEligibilityOutput, ESCTaxYear}
-import models.output.tfc._
+import models.output.tfc.*
 import models.output.{EscClaimantEligibility, Scheme, SchemeResults}
 import java.time.LocalDate
 import org.scalatestplus.mockito.MockitoSugar

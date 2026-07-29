@@ -21,7 +21,7 @@ import eligibility.{ESCEligibility, TFCEligibility}
 import javax.inject.Inject
 import models.Household
 import models.input.CalculatorOutput
-import models.mappings._
+import models.mappings.*
 import models.output.{CalculatorInput, SchemeResults}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{CCConfig, ESCConfig}

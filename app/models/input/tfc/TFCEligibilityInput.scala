@@ -21,10 +21,10 @@ import config.ConfigConstants
 import models.input.BaseChild
 import java.time.LocalDate
 import play.api.i18n.Lang
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 import utils.Periods
-import utils._
+import utils.*
 
 /*
 This is the Payload input class from cc-frontend to cc-eligibility

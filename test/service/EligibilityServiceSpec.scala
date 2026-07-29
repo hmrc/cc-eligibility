@@ -22,12 +22,12 @@ import eligibility.{ESCEligibility, TFCEligibility}
 import models.input.CalculatorOutput
 import models.mappings.{HHToESCEligibilityInput, HHToTFCEligibilityInput}
 import models.output.esc.{ESCEligibilityOutput, ESCTaxYear}
-import models.output.tfc._
+import models.output.tfc.*
 import models.output.{EscClaimantEligibility, Scheme, SchemeResults}
 import models.{Claimant, Household, LocationEnum, SchemeEnum}
 import java.time.LocalDate
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito._
+import org.mockito.Mockito.*
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.http.HeaderCarrier

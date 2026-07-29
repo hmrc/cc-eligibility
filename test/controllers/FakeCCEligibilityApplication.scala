@@ -16,18 +16,18 @@
 
 package controllers
 
-import models.input.tfc._
+import models.input.tfc.*
 import org.apache.pekko.stream.Materializer
 import org.apache.pekko.util.ByteString
 import org.mockito.Mockito.when
 import org.scalatest.Suite
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc._
+import play.api.mvc.*
 import play.api.test.Helpers.{stubBodyParser, stubMessagesApi}
 import service.AuditEvents
 import uk.gov.hmrc.http.HeaderCarrier
-import utils._
+import utils.*
 
 import java.nio.charset.Charset
 import java.time.LocalDate
@@ -106,7 +106,7 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
   def bodyOf(resultF: Future[Result])(using mat: Materializer): Future[String] =
     resultF.map(bodyOf)
 
-  import scala.concurrent.duration._
+  import scala.concurrent.duration.*
   import scala.concurrent.{Await, Future}
 
   given defaultTimeout: FiniteDuration = 5.seconds

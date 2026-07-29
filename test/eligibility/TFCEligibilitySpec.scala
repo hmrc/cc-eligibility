@@ -17,7 +17,7 @@
 package eligibility
 
 import controllers.FakeCCEligibilityApplication
-import models.input.tfc._
+import models.input.tfc.*
 import models.output.tfc.{TFCEligibilityOutput, TFCOutputChild, TFCOutputClaimant, TFCPeriod}
 import org.scalatest.PrivateMethodTester
 import org.scalatest.matchers.should.Matchers

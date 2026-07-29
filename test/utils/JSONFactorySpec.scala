@@ -18,10 +18,10 @@ package utils
 
 import controllers.FakeCCEligibilityApplication
 import models.output.esc.{ESCEligibilityOutput, ESCPeriod}
-import models.output.tfc._
+import models.output.tfc.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import play.api.libs.json._
+import play.api.libs.json.*
 
 class JSONFactorySpec extends FakeCCEligibilityApplication {
 

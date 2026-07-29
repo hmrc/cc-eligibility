@@ -17,7 +17,7 @@
 package eligibility
 
 import models.input.tfc.{TFCChild, TFCClaimant, TFCEligibilityInput}
-import models.output.tfc._
+import models.output.tfc.*
 import service.AuditEvents
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TFCConfig

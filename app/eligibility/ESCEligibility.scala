@@ -16,7 +16,7 @@
 
 package eligibility
 
-import models.input.esc._
+import models.input.esc.*
 import models.output
 import models.output.esc.ESCEligibilityOutput
 import java.time.LocalDate

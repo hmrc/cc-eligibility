@@ -17,8 +17,8 @@
 package models.mappings
 
 import javax.inject.Inject
-import models._
-import models.input.esc._
+import models.*
+import models.input.esc.*
 import utils.{CCConfig, HelperManager}
 
 class HHToESCEligibilityInput @Inject() (val cCConfig: CCConfig) extends PeriodEnumToPeriod with HelperManager {

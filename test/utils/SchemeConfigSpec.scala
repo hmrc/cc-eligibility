@@ -19,8 +19,8 @@ package utils
 import controllers.FakeCCEligibilityApplication
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import org.mockito.ArgumentMatchers._
-import org.mockito.Mockito._
+import org.mockito.ArgumentMatchers.*
+import org.mockito.Mockito.*
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
