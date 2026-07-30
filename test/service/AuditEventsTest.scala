@@ -95,7 +95,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with Matchers {
       event.detail("HouseholdResponse") should startWith("Data")
 
     }
-    
+
     "audit minimum earnings processed for Household eligibility - true " in {
 
       val observableAuditConnector = createObservableAuditConnector
