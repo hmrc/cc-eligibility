@@ -31,7 +31,7 @@ trait PeriodEnumToPeriod {
       case PeriodEnum.QUARTERLY   => Periods.Quarterly
       case PeriodEnum.WEEKLY      => Periods.Weekly
       case PeriodEnum.YEARLY      => Periods.Yearly
-      case _                      => Periods.INVALID
+      case null                   => Periods.INVALID
     }
 
 }

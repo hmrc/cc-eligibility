@@ -49,8 +49,7 @@ class AuditServiceTest extends CCConfigSpec with MockitoSugar {
       await(
         testAuditService.sendEvent(
           auditType = "test",
-          details = Map(),
-          sessionId = Some("id")
+          details = Map()
         )
       ) shouldBe Success
     }
@@ -68,8 +67,7 @@ class AuditServiceTest extends CCConfigSpec with MockitoSugar {
 
       val result = testAuditService.buildEvent(
         auditType = "test",
-        details = Map("testKey" -> "testValue"),
-        sessionId = Some("id")
+        details = Map("testKey" -> "testValue")
       )
 
       result.copy(

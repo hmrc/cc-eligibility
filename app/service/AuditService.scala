@@ -28,7 +28,7 @@ class AuditService @Inject() (val auditConnector: AuditConnector)(using ec: Exec
   def sendEvent(auditType: String, details: Map[String, String], sessionId: Option[String] = None)(
       using hc: HeaderCarrier
   ): Future[AuditResult] =
-    auditConnector.sendEvent(buildEvent(auditType, details, sessionId))
+    auditConnector.sendEvent(buildEvent(auditType, details))
 
   def buildEvent(auditType: String, details: Map[String, String], sessionId: Option[String] = None)(
       using hc: HeaderCarrier

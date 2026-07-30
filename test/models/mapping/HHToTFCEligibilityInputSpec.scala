@@ -33,8 +33,8 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
 
   val mockTFC = mock[TFCConfig]
   val SUT     = new HHToTFCEligibilityInput(mockTFC, mock[CCConfig])
-  
-  val mockServiceConf: ServicesConfig = mock[ServicesConfig]
+
+  val mockServiceConf: ServicesConfig  = mock[ServicesConfig]
   val mockConfiguration: Configuration = mock[Configuration]
 
   val testConfig = new CCConfig(mockServiceConf, mockConfiguration)

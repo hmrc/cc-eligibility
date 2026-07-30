@@ -44,19 +44,3 @@ object Enumerable {
   }
 
 }
-
-enum Test {
-  case A, B
-}
-
-object Test extends Enumerable.Implicits {
-
-  val testValues : Seq[Test] = Seq(A, B)
-
-  given Enumerable[Test] = Enumerable(testValues.map(value => value.toString -> value)*)
-
-  def test(): Unit = {
-    val b =     Json.parse("{}").validate[Test]
-  }
-
-}

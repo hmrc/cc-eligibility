@@ -56,4 +56,5 @@ class PeriodsSpec extends FakeCCEligibilityApplication {
     }
 
   }
+
 }
