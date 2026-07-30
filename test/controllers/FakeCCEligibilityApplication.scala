@@ -39,8 +39,8 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
   this: Suite =>
 
   given mat: Materializer = app.materializer
-  
-  given hc: HeaderCarrier      = HeaderCarrier()
+
+  given hc: HeaderCarrier = HeaderCarrier()
 
   val mockCC: ControllerComponents = mock[ControllerComponents]
   val mockParser: PlayBodyParsers  = mock[PlayBodyParsers]
