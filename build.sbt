@@ -11,7 +11,7 @@ ThisBuild / majorVersion := 1
 ThisBuild / scalaVersion := "3.3.7"
 
 lazy val scoverageSettings = {
-  import scoverage._
+  import scoverage.*
   Seq(
     ScoverageKeys.coverageExcludedPackages := "<empty>;Reverse.*;.*Routes.*;routes_routing.*;uk.gov.hmrc;config.*;",
     ScoverageKeys.coverageMinimumStmtTotal := 90,
