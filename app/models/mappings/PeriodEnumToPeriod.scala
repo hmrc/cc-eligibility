@@ -17,21 +17,21 @@
 package models.mappings
 
 import models.PeriodEnum
-import utils.Periods
+import utils.Period
 
 object PeriodEnumToPeriod extends PeriodEnumToPeriod
 
 trait PeriodEnumToPeriod {
 
-  def convert(inputPeriod: PeriodEnum): Periods =
+  def convert(inputPeriod: PeriodEnum): Period =
     inputPeriod match {
-      case PeriodEnum.FORTNIGHTLY => Periods.Fortnightly
-      case PeriodEnum.INVALID     => Periods.INVALID
-      case PeriodEnum.MONTHLY     => Periods.Monthly
-      case PeriodEnum.QUARTERLY   => Periods.Quarterly
-      case PeriodEnum.WEEKLY      => Periods.Weekly
-      case PeriodEnum.YEARLY      => Periods.Yearly
-      case null                   => Periods.INVALID
+      case PeriodEnum.FORTNIGHTLY => Period.Fortnightly
+      case PeriodEnum.INVALID     => Period.INVALID
+      case PeriodEnum.MONTHLY     => Period.Monthly
+      case PeriodEnum.QUARTERLY   => Period.Quarterly
+      case PeriodEnum.WEEKLY      => Period.Weekly
+      case PeriodEnum.YEARLY      => Period.Yearly
+      case null                   => Period.INVALID
     }
 
 }

@@ -80,7 +80,7 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
   def testChild(
       id: Short,
       childCareCost: BigDecimal,
-      childcareCostPeriod: Periods = Periods.Monthly,
+      childcareCostPeriod: Period = Period.Monthly,
       dob: LocalDate,
       disability: TFCDisability,
       ccConfig: Option[CCConfig] = None

@@ -20,7 +20,7 @@ import models.input.esc.{ESCChild, ESCDisability}
 import models.output
 import java.time.LocalDate
 import org.scalatest.matchers.should.Matchers
-import utils.{CCConfig, ESCConfig, Periods}
+import utils.{CCConfig, ESCConfig, Period}
 
 trait ESCChildren extends Matchers {
 
@@ -37,7 +37,7 @@ trait ESCChildren extends Matchers {
     id = id,
     dob = dob,
     childCareCost = childCareCost,
-    childCareCostPeriod = Periods.Monthly,
+    childCareCostPeriod = Period.Monthly,
     disability = ESCDisability(
       disabled = disabled,
       severelyDisabled = severelyDisabled
@@ -47,7 +47,7 @@ trait ESCChildren extends Matchers {
   def buildOutputChild(
       qualifying: Boolean = false,
       childCareCost: BigDecimal = 0,
-      childCareCostPeriod: Periods = Periods.Monthly
+      childCareCostPeriod: Period = Period.Monthly
   ) = output.esc.ESCChild(
     qualifying = qualifying,
     childCareCost = childCareCost,

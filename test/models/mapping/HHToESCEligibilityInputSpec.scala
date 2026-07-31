@@ -24,7 +24,7 @@ import java.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
-import utils.{CCConfig, CCConfigSpec, HelperManager, Periods}
+import utils.{CCConfig, CCConfigSpec, HelperManager, Period}
 
 class HHToESCEligibilityInputSpec
     extends AnyWordSpec
@@ -115,7 +115,7 @@ class HHToESCEligibilityInputSpec
                   1,
                   dob,
                   0,
-                  Periods.Monthly,
+                  Period.Monthly,
                   ESCDisability(true, false),
                   None
                 )
@@ -133,7 +133,7 @@ class HHToESCEligibilityInputSpec
                   1,
                   dob,
                   0,
-                  Periods.Monthly,
+                  Period.Monthly,
                   ESCDisability(true, false),
                   None
                 )
@@ -231,7 +231,7 @@ class HHToESCEligibilityInputSpec
                   1,
                   dob,
                   0,
-                  Periods.Monthly,
+                  Period.Monthly,
                   ESCDisability(true, false),
                   None
                 )
@@ -249,7 +249,7 @@ class HHToESCEligibilityInputSpec
                   1,
                   dob,
                   0,
-                  Periods.Monthly,
+                  Period.Monthly,
                   ESCDisability(true, false),
                   None
                 )
@@ -291,13 +291,13 @@ class HHToESCEligibilityInputSpec
               currentDate,
               LocalDate.parse("2017-04-06"),
               List(ESCClaimant(false, true), ESCClaimant(true, false)),
-              List(ESCChild(1, dob, 0, Periods.Monthly, ESCDisability(true, false), None))
+              List(ESCChild(1, dob, 0, Period.Monthly, ESCDisability(true, false), None))
             ),
             ESCTaxYear(
               LocalDate.parse("2017-04-06"),
               currentDate.plusYears(1),
               List(ESCClaimant(false, true), ESCClaimant(true, false)),
-              List(ESCChild(1, dob, 0, Periods.Monthly, ESCDisability(true, false), None))
+              List(ESCChild(1, dob, 0, Period.Monthly, ESCDisability(true, false), None))
             )
           )
         )

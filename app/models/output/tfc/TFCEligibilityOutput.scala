@@ -18,7 +18,7 @@ package models.output.tfc
 
 import java.time.LocalDate
 import play.api.libs.json.{Json, Writes}
-import utils.Periods
+import utils.Period
 
 case class TFCEligibilityOutput(
     from: LocalDate,
@@ -58,7 +58,7 @@ case class TFCOutputChild(
     from: Option[LocalDate],
     until: Option[LocalDate],
     childcareCost: BigDecimal = BigDecimal(0),
-    childcareCostPeriod: Periods = Periods.Monthly,
+    childcareCostPeriod: Period = Period.Monthly,
     disability: TFCDisability = TFCDisability()
 )
 

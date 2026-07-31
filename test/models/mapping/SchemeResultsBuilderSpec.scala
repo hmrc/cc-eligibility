@@ -24,7 +24,7 @@ import models.output.tfc.*
 import models.output.{EscClaimantEligibility, Scheme, SchemeResults}
 import java.time.LocalDate
 import org.scalatestplus.mockito.MockitoSugar
-import utils.{CCConfigSpec, Periods}
+import utils.{CCConfigSpec, Period}
 
 class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
 
@@ -114,7 +114,7 @@ class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
     from = None,
     until = None,
     childcareCost = BigDecimal(0),
-    childcareCostPeriod = Periods.Monthly,
+    childcareCostPeriod = Period.Monthly,
     disability = TFCDisability()
   )
 

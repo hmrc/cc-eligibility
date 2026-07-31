@@ -27,7 +27,7 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import utils.{CCConfig, Periods, TFCConfig}
+import utils.{CCConfig, Period, TFCConfig}
 
 class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with MockitoSugar {
 
@@ -107,7 +107,7 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
             TFCChild(
               id = 0,
               childcareCost = 350,
-              childcareCostPeriod = Periods.Monthly,
+              childcareCostPeriod = Period.Monthly,
               dob = dob,
               disability = TFCDisability(disabled = true),
               ccConfig = testConfig,
@@ -116,7 +116,7 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
             TFCChild(
               id = 1,
               childcareCost = 100,
-              childcareCostPeriod = Periods.Monthly,
+              childcareCostPeriod = Period.Monthly,
               dob = dob,
               disability = TFCDisability(severelyDisabled = true),
               ccConfig = testConfig,
@@ -215,7 +215,7 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
             TFCChild(
               id = 0,
               childcareCost = 0,
-              childcareCostPeriod = Periods.Monthly,
+              childcareCostPeriod = Period.Monthly,
               dob = dob,
               disability = TFCDisability(disabled = true),
               ccConfig = testConfig,
@@ -224,7 +224,7 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
             TFCChild(
               id = 1,
               childcareCost = 1000,
-              childcareCostPeriod = Periods.Monthly,
+              childcareCostPeriod = Period.Monthly,
               dob = dob,
               disability = TFCDisability(disabled = true),
               ccConfig = testConfig,

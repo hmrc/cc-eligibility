@@ -106,7 +106,7 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
       )
       val outputPeriodChild2 = models.output.tfc.TFCOutputChild(
         id = 0,
-        childcareCostPeriod = Periods.Weekly,
+        childcareCostPeriod = Period.Weekly,
         qualifying = true,
         from = Some(outputStartPeriod2),
         until = Some(outputUntilPeriod2)
@@ -220,7 +220,7 @@ class JSONFactorySpec extends FakeCCEligibilityApplication {
           children = List(
             models.output.esc.ESCChild(
               childCareCost = 100,
-              childCareCostPeriod = Periods.Monthly
+              childCareCostPeriod = Period.Monthly
             )
           )
         )

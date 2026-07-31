@@ -128,7 +128,7 @@ class TFCEligibility @Inject() (auditEvent: AuditEvents, tFCConfig: TFCConfig)(u
     periodEligibility
   }
 
-  def determineTFCPeriods(tfcEligibilityInput: TFCEligibilityInput): List[TFCPeriod] = {
+  def determineTFCPeriod(tfcEligibilityInput: TFCEligibilityInput): List[TFCPeriod] = {
 
     val currentCalendar = Calendar.getInstance()
     currentCalendar.clear()
@@ -189,16 +189,16 @@ class TFCEligibility @Inject() (auditEvent: AuditEvents, tFCConfig: TFCConfig)(u
       )
 
   def eligibility(request: TFCEligibilityInput)(using hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
-    val outputPeriods = determineTFCPeriods(request)
-    val householdEligibility = outputPeriods.exists(period =>
-      period.periodEligibility
-    ) && validHouseholdMinimumEarnings(request) && request.validMaxEarnings()
+    val outputPeriod = determineTFCPeriod(request)
+    val householdEligibility = outputPeriod.exists(period => period.periodEligibility) && validHouseholdMinimumEarnings(
+      request
+    ) && request.validMaxEarnings()
     Future {
       TFCEligibilityOutput(
         from = request.from,
-        until = outputPeriods.last.until,
+        until = outputPeriod.last.until,
         householdEligibility = householdEligibility,
-        periods = outputPeriods
+        periods = outputPeriod
       )
     }
   }

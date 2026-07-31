@@ -23,7 +23,7 @@ import java.time.LocalDate
 import play.api.i18n.Lang
 import play.api.libs.functional.syntax.*
 import play.api.libs.json.*
-import utils.Periods
+import utils.Period
 import utils.*
 
 /*
@@ -73,7 +73,7 @@ object TFCEligibilityInput {
   given tfcReads: Reads[TFCEligibilityInput] =
     (JsPath \ "from")
       .read[LocalDate]
-      .and((JsPath \ "numberOfPeriods").read[Short].orElse(Reads.pure(1)))
+      .and((JsPath \ "numberOfPeriod").read[Short].orElse(Reads.pure(1)))
       .and((JsPath \ "location").read[String])
       .and(
         (JsPath \ "claimants")
@@ -188,7 +188,7 @@ object TFCDisability {
 case class TFCChild @Inject() (
     id: Short,
     childcareCost: BigDecimal = BigDecimal(0.00),
-    childcareCostPeriod: Periods = Periods.Monthly,
+    childcareCostPeriod: Period = Period.Monthly,
     dob: LocalDate,
     disability: TFCDisability
 )(ccConfig: Option[CCConfig])
@@ -212,7 +212,7 @@ object TFCChild {
   def apply(
       id: Short,
       childcareCost: BigDecimal,
-      childcareCostPeriod: Periods,
+      childcareCostPeriod: Period,
       dob: LocalDate,
       disability: TFCDisability
   ): TFCChild =
@@ -221,7 +221,7 @@ object TFCChild {
   def apply(
       id: Short,
       childcareCost: BigDecimal,
-      childcareCostPeriod: Periods,
+      childcareCostPeriod: Period,
       dob: LocalDate,
       disability: TFCDisability,
       ccConfig: CCConfig,
@@ -240,7 +240,7 @@ object TFCChild {
             childSpendValidation(x)
           )
       )
-      .and((JsPath \ "childcareCostPeriod").read[Periods])
+      .and((JsPath \ "childcareCostPeriod").read[Period])
       .and((JsPath \ "dob").read[LocalDate])
       .and((JsPath \ "disability").read[TFCDisability])(TFCChild.apply(_, _, _, _, _))
 

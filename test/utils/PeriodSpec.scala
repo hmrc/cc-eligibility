@@ -21,37 +21,37 @@ import play.api.libs.json.{JsString, Json}
 
 /** Created by adamconder on 09/06/15.
   */
-class PeriodsSpec extends FakeCCEligibilityApplication {
+class PeriodSpec extends FakeCCEligibilityApplication {
 
-  "Periods" must {
+  "Period" must {
 
-    "convert Periods.Weekly to Json" in {
-      val weekly = Periods.Weekly
+    "convert Period.Weekly to Json" in {
+      val weekly = Period.Weekly
       Json.toJson(weekly) shouldBe JsString("Week")
     }
 
-    "convert Periods.Fortnightly to Json" in {
-      val fortnightly = Periods.Fortnightly
+    "convert Period.Fortnightly to Json" in {
+      val fortnightly = Period.Fortnightly
       Json.toJson(fortnightly) shouldBe JsString("Fortnight")
     }
 
-    "convert Periods.Monthly to Json" in {
-      val monthly = Periods.Monthly
+    "convert Period.Monthly to Json" in {
+      val monthly = Period.Monthly
       Json.toJson(monthly) shouldBe JsString("Month")
     }
 
-    "convert Periods.Quarterly to Json" in {
-      val quarterly = Periods.Quarterly
+    "convert Period.Quarterly to Json" in {
+      val quarterly = Period.Quarterly
       Json.toJson(quarterly) shouldBe JsString("3 month")
     }
 
-    "convert Periods.Yearly to Json" in {
-      val yearly = Periods.Yearly
+    "convert Period.Yearly to Json" in {
+      val yearly = Period.Yearly
       Json.toJson(yearly) shouldBe JsString("Year")
     }
 
-    "convert Periods.INVALID to Json" in {
-      val invalid = Periods.INVALID
+    "convert Period.INVALID to Json" in {
+      val invalid = Period.INVALID
       Json.toJson(invalid) shouldBe JsString("INVALID")
     }
 

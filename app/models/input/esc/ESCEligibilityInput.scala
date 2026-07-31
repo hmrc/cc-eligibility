@@ -23,7 +23,7 @@ import java.time.LocalDate
 import play.api.i18n.Lang
 import play.api.libs.functional.syntax.*
 import play.api.libs.json.*
-import utils.{CCConfig, ESCConfig, Periods}
+import utils.{CCConfig, ESCConfig, Period}
 
 case class ESCEligibilityInput(escTaxYears: List[ESCTaxYear], location: Option[LocationEnum] = None)
 
@@ -103,7 +103,7 @@ case class ESCChild @Inject() (
     id: Short,
     dob: LocalDate,
     childCareCost: BigDecimal,
-    childCareCostPeriod: Periods = Periods.Monthly,
+    childCareCostPeriod: Period = Period.Monthly,
     disability: ESCDisability
 )(eSCConfig: Option[ESCConfig], ccConfig: Option[CCConfig])
     extends models.input.BaseChild(ccConfig) {
@@ -162,7 +162,7 @@ object ESCChild {
       id: Short,
       dob: LocalDate,
       childCareCost: BigDecimal,
-      childCareCostPeriod: Periods,
+      childCareCostPeriod: Period,
       disability: ESCDisability
   ): ESCChild =
     new ESCChild(id, dob, childCareCost, childCareCostPeriod, disability)(None, None)
@@ -171,7 +171,7 @@ object ESCChild {
       id: Short,
       dob: LocalDate,
       childCareCost: BigDecimal,
-      childCareCostPeriod: Periods,
+      childCareCostPeriod: Period,
       disability: ESCDisability,
       dummyValue: Option[Boolean]
   ): ESCChild =
@@ -183,7 +183,7 @@ object ESCChild {
       .filter(JsonValidationError("Child ID should not be less than 0"))(x => validID(x))
       .and((JsPath \ "dob").read[LocalDate])
       .and((JsPath \ "childCareCost").read[BigDecimal])
-      .and((JsPath \ "childCareCostPeriod").read[Periods])
+      .and((JsPath \ "childCareCostPeriod").read[Period])
       .and((JsPath \ "disability").read[ESCDisability])(ESCChild.apply(_, _, _, _, _))
 
 }
