@@ -62,8 +62,6 @@ case class TFCEligibilityInput(
 
 object TFCEligibilityInput {
 
-  given lang: Lang = Lang("en")
-
   def maxChildValidation(noOfChild: List[TFCChild]): Boolean =
     noOfChild.length <= 25
 
@@ -200,8 +198,6 @@ case class TFCChild @Inject() (
 }
 
 object TFCChild {
-
-  given lang: Lang = Lang("en")
 
   def validID(id: Short): Boolean =
     id >= 0

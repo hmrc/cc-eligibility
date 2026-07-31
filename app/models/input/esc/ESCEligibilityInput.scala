@@ -40,8 +40,6 @@ case class ESCTaxYear(
 
 object ESCTaxYear {
 
-  given lang: Lang = Lang("en")
-
   def maxChildValidation(noOfChild: List[ESCChild]): Boolean =
     noOfChild.length <= 25
 
