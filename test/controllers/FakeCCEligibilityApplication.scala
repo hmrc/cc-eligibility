@@ -33,6 +33,8 @@ import java.nio.charset.Charset
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.concurrent.duration.*
+import scala.concurrent.Await
 import scala.language.implicitConversions
 
 trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
@@ -106,20 +108,10 @@ trait FakeCCEligibilityApplication extends CCConfigSpec with MockitoSugar {
   def bodyOf(resultF: Future[Result])(using mat: Materializer): Future[String] =
     resultF.map(bodyOf)
 
-  import scala.concurrent.duration.*
-  import scala.concurrent.{Await, Future}
-
   given defaultTimeout: FiniteDuration = 5.seconds
-
-  given extractAwait[A]: Conversion[Future[A], A] = future => await[A](future)
 
   def await[A](future: Future[A])(using timeout: Duration): A = Await.result(future, timeout)
 
-  // Convenience to avoid having to wrap andThen() parameters in Future.successful
-  given liftFuture[A]: Conversion[A, Future[A]] = v => Future.successful(v)
-
   def status(of: Result): Int = of.header.status
-
-  def status(of: Future[Result])(using timeout: Duration): Int = status(Await.result(of, timeout))
 
 }
