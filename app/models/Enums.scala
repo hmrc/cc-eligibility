@@ -23,7 +23,7 @@ enum CreditsEnum {
 }
 
 object CreditsEnum extends Enumerable.Implicits {
-  given Enumerable[CreditsEnum] = Enumerable(CreditsEnum.values.map(value => value.toString -> value)*)
+  given Enumerable[CreditsEnum] = Enumerable.apply(CreditsEnum.values)
 }
 
 enum LocationEnum(val location: String) {
@@ -36,7 +36,7 @@ enum LocationEnum(val location: String) {
 }
 
 object LocationEnum extends Enumerable.Implicits {
-given Enumerable[LocationEnum] = Enumerable(LocationEnum.values.map(value => value.toString -> value)*)
+  given Enumerable[LocationEnum] = Enumerable.apply(LocationEnum.values)
 }
 
 enum AgeRangeEnum {
@@ -44,7 +44,7 @@ enum AgeRangeEnum {
 }
 
 object AgeRangeEnum extends Enumerable.Implicits {
-  given Enumerable[AgeRangeEnum] = Enumerable(AgeRangeEnum.values.map(value => value.toString -> value)*)
+  given Enumerable[AgeRangeEnum] = Enumerable.apply(AgeRangeEnum.values)
 }
 
 enum EmploymentStatusEnum {
@@ -52,7 +52,7 @@ enum EmploymentStatusEnum {
 }
 
 object EmploymentStatusEnum extends Enumerable.Implicits {
-  given Enumerable[EmploymentStatusEnum] = Enumerable(EmploymentStatusEnum.values.map(value => value.toString -> value)*)
+  given Enumerable[EmploymentStatusEnum] = Enumerable.apply(EmploymentStatusEnum.values)
 }
 
 enum YesNoUnsureEnum {
@@ -60,7 +60,7 @@ enum YesNoUnsureEnum {
 }
 
 object YesNoUnsureEnum extends Enumerable.Implicits {
-  given Enumerable[YesNoUnsureEnum] = Enumerable(YesNoUnsureEnum.values.map(value => value.toString -> value)*)
+  given Enumerable[YesNoUnsureEnum] = Enumerable.apply(YesNoUnsureEnum.values)
 }
 
 enum PeriodEnum {
@@ -68,7 +68,7 @@ enum PeriodEnum {
 }
 
 object PeriodEnum extends Enumerable.Implicits {
-  given Enumerable[PeriodEnum] = Enumerable(PeriodEnum.values.map(value => value.toString -> value)*)
+  given Enumerable[PeriodEnum] = Enumerable.apply(PeriodEnum.values)
 }
 
 enum SchemeEnum {
@@ -76,5 +76,5 @@ enum SchemeEnum {
 }
 
 object SchemeEnum extends Enumerable.Implicits {
-  given Enumerable[SchemeEnum] = Enumerable(SchemeEnum.values.map(value => value.toString -> value)*)
+  given Enumerable[SchemeEnum] = Enumerable.apply(SchemeEnum.values)
 }

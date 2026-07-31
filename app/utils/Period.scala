@@ -30,5 +30,5 @@ enum Period(val id: Int, val period: String) {
 }
 
 object Period extends Enumerable.Implicits {
-  given Enumerable[Period] = Enumerable(Period.values.map(value => value.toString -> value)*)
+  given Enumerable[Period] = Enumerable.apply(Period.values)
 }

@@ -25,8 +25,8 @@ trait Enumerable[A] {
 
 object Enumerable {
 
-  def apply[A](entries: (String, A)*): Enumerable[A] =
-    (str: String) => entries.toMap.get(str)
+  def apply[A](entries: Iterable[A]): Enumerable[A] =
+    (str: String) => entries.find(_.toString == str)
 
   trait Implicits {
 
