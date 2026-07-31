@@ -106,7 +106,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with Matchers {
       val event = observableAuditConnector.events.head
 
       event.auditType should equal("HouseholdMinimumEarnings")
-      event.detail("failedHouseholdMinimumEarnings") should startWith("true")
+      event.detail("failedHouseholdMinimumEarnings") shouldBe "true"
 
     }
 
@@ -120,7 +120,7 @@ class AuditEventsTest extends FakeCCEligibilityApplication with Matchers {
       val event = observableAuditConnector.events.head
 
       event.auditType should equal("HouseholdMinimumEarnings")
-      event.detail("failedHouseholdMinimumEarnings") should startWith("false")
+      event.detail("failedHouseholdMinimumEarnings") shouldBe "false"
 
     }
   }
