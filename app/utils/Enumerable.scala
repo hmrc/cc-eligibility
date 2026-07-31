@@ -32,9 +32,9 @@ object Enumerable {
 
     given reads[A](using enumerable: Enumerable[A]): Reads[A] = Reads {
       case JsString(str) =>
-        enumerable.withName(str).map(s => JsSuccess(s)).getOrElse(JsError("error.invalid"))
+        enumerable.withName(str).map(s => JsSuccess(s)).getOrElse(JsError("Could not convert JSON value to enum type"))
       case _ =>
-        JsError("error.invalid")
+        JsError("String value expected")
     }
 
     given writes[A]: Writes[A] = Writes(value => JsString(value.toString))
