@@ -25,8 +25,6 @@ import models.mappings.*
 import java.time.LocalDate
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import utils.{CCConfig, Period, TFCConfig}
 
 class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with MockitoSugar {
@@ -34,10 +32,7 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
   val mockTFC = mock[TFCConfig]
   val SUT     = new HHToTFCEligibilityInput(mockTFC, mock[CCConfig])
 
-  val mockServiceConf: ServicesConfig  = mock[ServicesConfig]
-  val mockConfiguration: Configuration = mock[Configuration]
-
-  val testConfig = new CCConfig(mockServiceConf, mockConfiguration)
+  val mockConfig = mock[CCConfig]
 
   "HHToTFCEligibilityInput" must {
 
@@ -110,7 +105,7 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
               childcareCostPeriod = Period.Monthly,
               dob = dob,
               disability = TFCDisability(disabled = true),
-              ccConfig = testConfig,
+              ccConfig = mockConfig,
               dummyValue = None
             ),
             TFCChild(
@@ -119,7 +114,7 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
               childcareCostPeriod = Period.Monthly,
               dob = dob,
               disability = TFCDisability(severelyDisabled = true),
-              ccConfig = testConfig,
+              ccConfig = mockConfig,
               dummyValue = None
             )
           )
@@ -218,7 +213,7 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
               childcareCostPeriod = Period.Monthly,
               dob = dob,
               disability = TFCDisability(disabled = true),
-              ccConfig = testConfig,
+              ccConfig = mockConfig,
               dummyValue = None
             ),
             TFCChild(
@@ -227,7 +222,7 @@ class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with Mock
               childcareCostPeriod = Period.Monthly,
               dob = dob,
               disability = TFCDisability(disabled = true),
-              ccConfig = testConfig,
+              ccConfig = mockConfig,
               dummyValue = None
             )
           )
