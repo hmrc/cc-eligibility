@@ -20,7 +20,6 @@ import javax.inject.Inject
 import models.LocationEnum
 import models.input.BaseTaxYear
 import java.time.LocalDate
-import play.api.i18n.Lang
 import play.api.libs.functional.syntax.*
 import play.api.libs.json.*
 import utils.{CCConfig, ESCConfig, Period}
