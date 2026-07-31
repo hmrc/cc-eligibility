@@ -30,7 +30,5 @@ enum Period(val id: Int, val period: String) {
 }
 
 object Period extends Enumerable.Implicits {
-  val periodValues: Seq[Period] = Seq[Period](Weekly, Fortnightly, Monthly, Quarterly, Yearly, INVALID)
-
-  given Enumerable[Period] = Enumerable(periodValues.map(value => value.toString -> value)*)
+  given Enumerable[Period] = Enumerable(Period.values.map(value => value.toString -> value)*)
 }

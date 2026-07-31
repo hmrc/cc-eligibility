@@ -23,10 +23,7 @@ enum CreditsEnum {
 }
 
 object CreditsEnum extends Enumerable.Implicits {
-  val creditsValues: Seq[CreditsEnum] = Seq(UNIVERSALCREDIT, NONE)
-
-  given Enumerable[CreditsEnum] = Enumerable(creditsValues.map(value => value.toString -> value)*)
-
+  given Enumerable[CreditsEnum] = Enumerable(CreditsEnum.values.map(value => value.toString -> value)*)
 }
 
 enum LocationEnum(val location: String) {
@@ -39,11 +36,7 @@ enum LocationEnum(val location: String) {
 }
 
 object LocationEnum extends Enumerable.Implicits {
-
-  val locationValues: Seq[LocationEnum] = Seq(ENGLAND, SCOTLAND, WALES, NORTHERNIRELAND)
-
-  given Enumerable[LocationEnum] = Enumerable(locationValues.map(value => value.toString -> value)*)
-
+given Enumerable[LocationEnum] = Enumerable(LocationEnum.values.map(value => value.toString -> value)*)
 }
 
 enum AgeRangeEnum {
@@ -51,11 +44,7 @@ enum AgeRangeEnum {
 }
 
 object AgeRangeEnum extends Enumerable.Implicits {
-
-  val ageValues: Seq[AgeRangeEnum] = Seq(UNDER18, EIGHTEENTOTWENTY, TWENTYONEOROVER)
-
-  given Enumerable[AgeRangeEnum] = Enumerable(ageValues.map(value => value.toString -> value)*)
-
+  given Enumerable[AgeRangeEnum] = Enumerable(AgeRangeEnum.values.map(value => value.toString -> value)*)
 }
 
 enum EmploymentStatusEnum {
@@ -63,11 +52,7 @@ enum EmploymentStatusEnum {
 }
 
 object EmploymentStatusEnum extends Enumerable.Implicits {
-
-  val employmentValues: Seq[EmploymentStatusEnum] = Seq(SELFEMPLOYED, APPRENTICE, NEITHER)
-
-  given Enumerable[EmploymentStatusEnum] = Enumerable(employmentValues.map(value => value.toString -> value)*)
-
+  given Enumerable[EmploymentStatusEnum] = Enumerable(EmploymentStatusEnum.values.map(value => value.toString -> value)*)
 }
 
 enum YesNoUnsureEnum {
@@ -75,11 +60,7 @@ enum YesNoUnsureEnum {
 }
 
 object YesNoUnsureEnum extends Enumerable.Implicits {
-
-  val yesNoUnsureValues: Seq[YesNoUnsureEnum] = Seq(YES, NO, NOTSURE)
-
-  given Enumerable[YesNoUnsureEnum] = Enumerable(yesNoUnsureValues.map(value => value.toString -> value)*)
-
+  given Enumerable[YesNoUnsureEnum] = Enumerable(YesNoUnsureEnum.values.map(value => value.toString -> value)*)
 }
 
 enum PeriodEnum {
@@ -87,11 +68,7 @@ enum PeriodEnum {
 }
 
 object PeriodEnum extends Enumerable.Implicits {
-
-  val periodValues: Seq[PeriodEnum] = Seq(WEEKLY, FORTNIGHTLY, MONTHLY, QUARTERLY, YEARLY, INVALID)
-
-  given Enumerable[PeriodEnum] = Enumerable(periodValues.map(value => value.toString -> value)*)
-
+  given Enumerable[PeriodEnum] = Enumerable(PeriodEnum.values.map(value => value.toString -> value)*)
 }
 
 enum SchemeEnum {
@@ -99,9 +76,5 @@ enum SchemeEnum {
 }
 
 object SchemeEnum extends Enumerable.Implicits {
-
-  val schemeValues: Seq[SchemeEnum] = Seq(TFCELIGIBILITY, ESCELIGIBILITY)
-
-  given Enumerable[SchemeEnum] = Enumerable(schemeValues.map(value => value.toString -> value)*)
-
+  given Enumerable[SchemeEnum] = Enumerable(SchemeEnum.values.map(value => value.toString -> value)*)
 }
