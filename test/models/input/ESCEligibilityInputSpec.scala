@@ -18,7 +18,7 @@ package models.input
 
 import controllers.FakeCCEligibilityApplication
 import fixtures.ESCChildren
-import models.input.esc._
+import models.input.esc.*
 import play.api.libs.json.{JsValue, Json}
 import utils.{CCConfig, ESCConfig, TestFileReader}
 

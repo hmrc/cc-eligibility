@@ -18,7 +18,7 @@ package utils
 
 import java.time.LocalDate
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatest.prop.TableDrivenPropertyChecks._
+import org.scalatest.prop.TableDrivenPropertyChecks.*
 import org.scalatest.prop.Tables.Table
 
 class ChildHelperSpec extends CCConfigSpec with MockitoSugar {

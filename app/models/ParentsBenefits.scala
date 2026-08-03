@@ -48,5 +48,5 @@ object ParentsBenefits {
 
   private val writes: Writes[ParentsBenefits] = Writes(benefits => JsString(inverseMapping(benefits)))
 
-  implicit val format: Format[ParentsBenefits] = Format(reads, writes)
+  given format: Format[ParentsBenefits] = Format(reads, writes)
 }

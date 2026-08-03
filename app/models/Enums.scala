@@ -16,84 +16,65 @@
 
 package models
 
-import play.api.libs.json.{Format, Reads, Writes}
-import utils.EnumUtils
+import models.Enumerable
 
-object CreditsEnum extends Enumeration {
-  type CreditsEnum = Value
-  val UNIVERSALCREDIT, NONE = Value
-
-  val enumReads: Reads[CreditsEnum] = EnumUtils.enumReads(CreditsEnum)
-
-  val enumWrites: Writes[CreditsEnum] = EnumUtils.enumWrites
-
-  implicit def enumFormats: Format[CreditsEnum] = EnumUtils.enumFormat(CreditsEnum)
+enum CreditsEnum {
+  case UNIVERSALCREDIT, NONE
 }
 
-object LocationEnum extends Enumeration {
-  type LocationEnum = Value
-  val ENGLAND         = Value("england")
-  val SCOTLAND        = Value("scotland")
-  val WALES           = Value("wales")
-  val NORTHERNIRELAND = Value("northern-ireland")
-
-  val enumReads: Reads[LocationEnum] = EnumUtils.enumReads(LocationEnum)
-
-  val enumWrites: Writes[LocationEnum] = EnumUtils.enumWrites
-
-  implicit def enumFormats: Format[LocationEnum] = EnumUtils.enumFormat(LocationEnum)
+object CreditsEnum extends Enumerable.Implicits {
+  given Enumerable[CreditsEnum] = Enumerable.apply(CreditsEnum.values)
 }
 
-object AgeRangeEnum extends Enumeration {
-  type AgeRangeEnum = Value
-  val UNDER18, EIGHTEENTOTWENTY, TWENTYONEOROVER = Value
+enum LocationEnum(val location: String) {
+  case ENGLAND         extends LocationEnum("england")
+  case SCOTLAND        extends LocationEnum("scotland")
+  case WALES           extends LocationEnum("wales")
+  case NORTHERNIRELAND extends LocationEnum("northern-ireland")
 
-  val enumReads: Reads[AgeRangeEnum] = EnumUtils.enumReads(AgeRangeEnum)
-
-  val enumWrites: Writes[AgeRangeEnum] = EnumUtils.enumWrites
-
-  implicit def enumFormats: Format[AgeRangeEnum] = EnumUtils.enumFormat(AgeRangeEnum)
+  override def toString: String = location
 }
 
-object EmploymentStatusEnum extends Enumeration {
-  type EmploymentStatusEnum = Value
-  val SELFEMPLOYED, APPRENTICE, NEITHER = Value
-
-  val enumReads: Reads[EmploymentStatusEnum] = EnumUtils.enumReads(EmploymentStatusEnum)
-
-  val enumWrites: Writes[EmploymentStatusEnum] = EnumUtils.enumWrites
-
-  implicit def enumFormats: Format[EmploymentStatusEnum] = EnumUtils.enumFormat(EmploymentStatusEnum)
+object LocationEnum extends Enumerable.Implicits {
+  given Enumerable[LocationEnum] = Enumerable.apply(LocationEnum.values)
 }
 
-object YesNoUnsureEnum extends Enumeration {
-  type YesNoUnsureEnum = Value
-  val YES, NO, NOTSURE                  = Value
-  val enumReads: Reads[YesNoUnsureEnum] = EnumUtils.enumReads(YesNoUnsureEnum)
-
-  val enumWrites: Writes[YesNoUnsureEnum] = EnumUtils.enumWrites
-
-  implicit def enumFormats: Format[YesNoUnsureEnum] = EnumUtils.enumFormat(YesNoUnsureEnum)
+enum AgeRangeEnum {
+  case UNDER18, EIGHTEENTOTWENTY, TWENTYONEOROVER
 }
 
-object PeriodEnum extends Enumeration {
-  type PeriodEnum = Value
-  val WEEKLY, FORTNIGHTLY, MONTHLY, QUARTERLY, YEARLY, INVALID = Value
-  val enumReads: Reads[PeriodEnum]                             = EnumUtils.enumReads(PeriodEnum)
-
-  val enumWrites: Writes[PeriodEnum] = EnumUtils.enumWrites
-
-  implicit def enumFormats: Format[PeriodEnum] = EnumUtils.enumFormat(PeriodEnum)
+object AgeRangeEnum extends Enumerable.Implicits {
+  given Enumerable[AgeRangeEnum] = Enumerable.apply(AgeRangeEnum.values)
 }
 
-object SchemeEnum extends Enumeration {
-  type SchemeEnum = Value
-  val TFCELIGIBILITY = Value("tfcEligibility")
-  val ESCELIGIBILITY = Value("escEligibility")
+enum EmploymentStatusEnum {
+  case SELFEMPLOYED, APPRENTICE, NEITHER
+}
 
-  val enumReads: Reads[SchemeEnum] = EnumUtils.enumReads(SchemeEnum)
+object EmploymentStatusEnum extends Enumerable.Implicits {
+  given Enumerable[EmploymentStatusEnum] = Enumerable.apply(EmploymentStatusEnum.values)
+}
 
-  val enumWrites: Writes[SchemeEnum] = EnumUtils.enumWrites
+enum YesNoUnsureEnum {
+  case YES, NO, NOTSURE
+}
 
-  implicit def enumFormats: Format[SchemeEnum] = EnumUtils.enumFormat(SchemeEnum)
+object YesNoUnsureEnum extends Enumerable.Implicits {
+  given Enumerable[YesNoUnsureEnum] = Enumerable.apply(YesNoUnsureEnum.values)
+}
+
+enum PeriodEnum {
+  case WEEKLY, FORTNIGHTLY, MONTHLY, QUARTERLY, YEARLY, INVALID
+}
+
+object PeriodEnum extends Enumerable.Implicits {
+  given Enumerable[PeriodEnum] = Enumerable.apply(PeriodEnum.values)
+}
+
+enum SchemeEnum {
+  case TFCELIGIBILITY, ESCELIGIBILITY
+}
+
+object SchemeEnum extends Enumerable.Implicits {
+  given Enumerable[SchemeEnum] = Enumerable.apply(SchemeEnum.values)
 }

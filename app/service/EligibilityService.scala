@@ -21,7 +21,7 @@ import eligibility.{ESCEligibility, TFCEligibility}
 import javax.inject.Inject
 import models.Household
 import models.input.CalculatorOutput
-import models.mappings._
+import models.mappings.*
 import models.output.{CalculatorInput, SchemeResults}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{CCConfig, ESCConfig}
@@ -36,9 +36,9 @@ class EligibilityService @Inject() (
     ESCEligibilityInput: HHToESCEligibilityInput,
     eSCConfig: ESCConfig,
     cCConfig: CCConfig
-)(implicit ec: ExecutionContext) {
+)(using ec: ExecutionContext) {
 
-  def eligibility(request: Household)(implicit hc: HeaderCarrier): Future[SchemeResults] =
+  def eligibility(request: Household)(using hc: HeaderCarrier): Future[SchemeResults] =
     for {
       tfcEligibility <- tfc.eligibility(TFCEligibilityInput.convert(request))
       escEligibility <- esc.eligibility(ESCEligibilityInput.convert(request), eSCConfig, cCConfig)

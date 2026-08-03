@@ -1,0 +1,46 @@
+/*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package models
+
+import play.api.libs.json.*
+
+trait Enumerable[A] {
+
+  def withName(str: String): Option[A]
+}
+
+object Enumerable {
+
+  def apply[A](entries: Iterable[A]): Enumerable[A] =
+    (str: String) => entries.find(_.toString == str)
+
+  trait Implicits {
+
+    given reads[A](using enumerable: Enumerable[A]): Reads[A] = Reads {
+      case JsString(str) =>
+        enumerable.withName(str).map(s => JsSuccess(s)).getOrElse(JsError("Could not convert JSON value to enum type"))
+      case _ =>
+        JsError("String value expected")
+    }
+
+    given writes[A]: Writes[A] = Writes(value => JsString(value.toString))
+
+    given formats[A](using enumerable: Enumerable[A]): Format[A] = Format(reads, writes)
+
+  }
+
+}

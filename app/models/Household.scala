@@ -16,12 +16,12 @@
 
 package models
 
-import models.AgeRangeEnum.AgeRangeEnum
-import models.CreditsEnum.CreditsEnum
-import models.EmploymentStatusEnum.EmploymentStatusEnum
-import models.LocationEnum.LocationEnum
-import models.PeriodEnum.PeriodEnum
-import models.YesNoUnsureEnum.YesNoUnsureEnum
+import models.AgeRangeEnum
+import models.CreditsEnum
+import models.EmploymentStatusEnum
+import models.LocationEnum
+import models.PeriodEnum
+import models.YesNoUnsureEnum
 import play.api.libs.json.{Json, OFormat}
 
 import java.time.LocalDate
@@ -38,7 +38,7 @@ case class Income(
 )
 
 object Income {
-  implicit val formatIncome: OFormat[Income] = Json.format[Income]
+  given formatIncome: OFormat[Income] = Json.format[Income]
 }
 
 case class MinimumEarnings(
@@ -48,7 +48,7 @@ case class MinimumEarnings(
 )
 
 object MinimumEarnings {
-  implicit val formatMinimumEarnings: OFormat[MinimumEarnings] = Json.format[MinimumEarnings]
+  given formatMinimumEarnings: OFormat[MinimumEarnings] = Json.format[MinimumEarnings]
 }
 
 case class Disability(
@@ -58,7 +58,7 @@ case class Disability(
 )
 
 object Disability {
-  implicit val formatDisability: OFormat[Disability] = Json.format[Disability]
+  given formatDisability: OFormat[Disability] = Json.format[Disability]
 }
 
 case class ChildCareCost(
@@ -67,7 +67,7 @@ case class ChildCareCost(
 )
 
 object ChildCareCost {
-  implicit val formatChildCareCost: OFormat[ChildCareCost] = Json.format[ChildCareCost]
+  given formatChildCareCost: OFormat[ChildCareCost] = Json.format[ChildCareCost]
 }
 
 case class Child(
@@ -79,7 +79,7 @@ case class Child(
 )
 
 object Child {
-  implicit val formatChild: OFormat[Child] = Json.format[Child]
+  given formatChild: OFormat[Child] = Json.format[Child]
 }
 
 case class Claimant(
@@ -92,7 +92,7 @@ case class Claimant(
 )
 
 object Claimant {
-  implicit val formatClaimant: OFormat[Claimant] = Json.format[Claimant]
+  given formatClaimant: OFormat[Claimant] = Json.format[Claimant]
 }
 
 case class Household(
@@ -104,5 +104,5 @@ case class Household(
 )
 
 object Household {
-  implicit val formatHousehold: OFormat[Household] = Json.format[Household]
+  given formatHousehold: OFormat[Household] = Json.format[Household]
 }

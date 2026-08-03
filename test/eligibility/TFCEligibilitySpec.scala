@@ -17,14 +17,14 @@
 package eligibility
 
 import controllers.FakeCCEligibilityApplication
-import models.input.tfc._
+import models.input.tfc.*
 import models.output.tfc.{TFCEligibilityOutput, TFCOutputChild, TFCOutputClaimant, TFCPeriod}
 import org.scalatest.PrivateMethodTester
 import org.scalatest.matchers.should.Matchers
 import play.api.libs.json.Json
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import utils.{CCConfig, Periods}
+import utils.{CCConfig, Period}
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -32,7 +32,7 @@ import scala.concurrent.Future
 
 class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethodTester with Matchers {
 
-  implicit val req: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+  given req: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
   lazy val tfcEligibility: TFCEligibility = app.injector.instanceOf[TFCEligibility]
   lazy val ccConfig: CCConfig             = app.injector.instanceOf[CCConfig]
@@ -46,7 +46,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = new TFCChild(
         id = 0,
         childcareCost = BigDecimal(300.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability()
       )(Some(ccConfig))
@@ -61,7 +61,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = new TFCChild(
         id = 0,
         childcareCost = BigDecimal(300.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(disabled = true)
       )(Some(ccConfig))
@@ -76,7 +76,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = new TFCChild(
         id = 0,
         childcareCost = BigDecimal(300.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability()
       )(Some(ccConfig))
@@ -91,7 +91,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = new TFCChild(
         id = 0,
         childcareCost = BigDecimal(300.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability()
       )(Some(ccConfig))
@@ -106,7 +106,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = new TFCChild(
         id = 0,
         childcareCost = BigDecimal(300.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(disabled = true)
       )(Some(ccConfig))
@@ -121,7 +121,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = new TFCChild(
         id = 0,
         childcareCost = BigDecimal(300.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(disabled = true)
       )(Some(ccConfig))
@@ -240,14 +240,14 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(),
         Some(ccConfig)
       )
       val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 4, location = "england", List(claimant), List(child))
 
-      val result = tfcEligibility.determineTFCPeriods(tfc)
+      val result = tfcEligibility.determineTFCPeriod(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1   = LocalDate.parse("2016-10-15", formatter)
@@ -265,7 +265,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(untilPeriod1),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability()
       )
       val outputChild2 = TFCOutputChild(
@@ -274,7 +274,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod2),
         until = Some(untilPeriod2),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability()
       )
       val outputChild3 = TFCOutputChild(
@@ -283,7 +283,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod3),
         until = Some(untilPeriod3),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability()
       )
       val outputChild4 = TFCOutputChild(
@@ -292,7 +292,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod4),
         until = Some(untilPeriod4),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability()
       )
 
@@ -338,13 +338,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(),
         Some(ccConfig)
       )
       val tfc = TFCEligibilityInput(from = from, numberOfPeriods = 2, location = "england", List(claimant), List(child))
-      val result = tfcEligibility.determineTFCPeriods(tfc)
+      val result = tfcEligibility.determineTFCPeriod(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1   = LocalDate.parse("2016-08-31", formatter)
@@ -361,7 +361,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(childFrom),
         until = Some(childUntil),
         BigDecimal(200.0),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val outputChild2 = TFCOutputChild(
@@ -370,7 +370,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.0),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -402,7 +402,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(),
         Some(ccConfig)
@@ -414,7 +414,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         List(claimant, partner),
         List(child)
       )
-      val result = tfcEligibility.determineTFCPeriods(tfc)
+      val result = tfcEligibility.determineTFCPeriod(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val outputPartner  = TFCOutputClaimant(qualifying = true, isPartner = true)
@@ -427,7 +427,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.0),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false)
       )
 
@@ -450,7 +450,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(),
         Some(ccConfig)
@@ -469,7 +469,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(),
         Some(ccConfig)
@@ -488,7 +488,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(),
         Some(ccConfig)
@@ -507,7 +507,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(),
         Some(ccConfig)
@@ -526,7 +526,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(),
         Some(ccConfig)
@@ -545,7 +545,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(),
         Some(ccConfig)
@@ -564,7 +564,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(),
         Some(ccConfig)
@@ -583,7 +583,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(),
         Some(ccConfig)
@@ -602,7 +602,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(disabled = true),
         Some(ccConfig)
@@ -623,7 +623,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
@@ -642,7 +642,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
@@ -661,7 +661,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
@@ -680,7 +680,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
@@ -699,7 +699,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
@@ -718,7 +718,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
@@ -738,7 +738,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
@@ -763,13 +763,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
       )
       val tfc    = TFCEligibilityInput(from = from, 1, location = "england", List(claimant), List(child))
-      val result = tfcEligibility.determineTFCPeriods(tfc)
+      val result = tfcEligibility.determineTFCPeriod(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1   = LocalDate.parse("2016-08-27", formatter)
@@ -780,7 +780,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         None,
         None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -803,7 +803,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 2,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
@@ -817,7 +817,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
           from = None,
           until = None,
           BigDecimal(200.00),
-          childcareCostPeriod = Periods.Monthly,
+          childcareCostPeriod = Period.Monthly,
           models.output.tfc.TFCDisability(false, false)
         )
       )
@@ -838,7 +838,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child1 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild1,
         disability = TFCDisability(disabled = true, severelyDisabled = false),
         Some(ccConfig)
@@ -846,13 +846,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child2 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
       )
       val tfc    = TFCEligibilityInput(from = from, 1, location = "england", List(claimant), List(child1, child2))
-      val result = tfcEligibility.determineTFCPeriods(tfc)
+      val result = tfcEligibility.determineTFCPeriod(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1   = LocalDate.parse("2016-09-27", formatter)
@@ -864,7 +864,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(untilPeriod1),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val outputChild2 = TFCOutputChild(
@@ -873,7 +873,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -904,7 +904,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child1 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild1,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
@@ -912,7 +912,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child2 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
@@ -920,13 +920,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child3 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild3,
         disability = TFCDisability(disabled = true, severelyDisabled = false),
         Some(ccConfig)
       )
       val tfc = TFCEligibilityInput(from = from, 2, location = "england", List(claimant), List(child1, child2, child3))
-      val result = tfcEligibility.determineTFCPeriods(tfc)
+      val result = tfcEligibility.determineTFCPeriod(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1   = LocalDate.parse("2016-08-01", formatter)
@@ -940,7 +940,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period1OutputChild2 = TFCOutputChild(
@@ -949,7 +949,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period1OutputChild3 = TFCOutputChild(
@@ -958,7 +958,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(untilPeriod1),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -968,7 +968,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period2OutputChild2 = TFCOutputChild(
@@ -977,7 +977,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(dateOfBirthChild2),
         until = Some(untilPeriod2),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period2OutputChild3 = TFCOutputChild(
@@ -986,7 +986,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod2),
         until = Some(untilPeriod2),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -1024,7 +1024,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child1 = testChild(
         id = 1,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild1,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
@@ -1032,7 +1032,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child2 = testChild(
         id = 2,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = true, severelyDisabled = false),
         Some(ccConfig)
@@ -1040,13 +1040,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child3 = testChild(
         id = 3,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild3,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
       )
       val tfc = TFCEligibilityInput(from = from, 8, location = "england", List(claimant), List(child1, child2, child3))
-      val result = tfcEligibility.determineTFCPeriods(tfc)
+      val result = tfcEligibility.determineTFCPeriod(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1   = LocalDate.parse("2016-07-31", formatter)
@@ -1075,7 +1075,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(child1EndDate),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period1OutputChild2 = TFCOutputChild(
@@ -1084,7 +1084,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(untilPeriod1),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period1OutputChild3 = TFCOutputChild(
@@ -1093,7 +1093,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -1103,7 +1103,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period2OutputChild2 = TFCOutputChild(
@@ -1112,7 +1112,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod2),
         until = Some(untilPeriod2),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period2OutputChild3 = TFCOutputChild(
@@ -1121,7 +1121,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -1131,7 +1131,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period3OutputChild2 = TFCOutputChild(
@@ -1140,7 +1140,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod3),
         until = Some(untilPeriod3),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period3OutputChild3 = TFCOutputChild(
@@ -1149,7 +1149,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -1159,7 +1159,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period4OutputChild2 = TFCOutputChild(
@@ -1168,7 +1168,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod4),
         until = Some(untilPeriod4),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period4OutputChild3 = TFCOutputChild(
@@ -1177,7 +1177,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -1187,7 +1187,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period5OutputChild2 = TFCOutputChild(
@@ -1196,7 +1196,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod5),
         until = Some(child2EndDate),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period5OutputChild3 = TFCOutputChild(
@@ -1205,7 +1205,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -1215,7 +1215,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period6OutputChild2 = TFCOutputChild(
@@ -1224,7 +1224,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period6OutputChild3 = TFCOutputChild(
@@ -1233,7 +1233,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -1243,7 +1243,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period7OutputChild2 = TFCOutputChild(
@@ -1252,7 +1252,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period7OutputChild3 = TFCOutputChild(
@@ -1261,7 +1261,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(dateOfBirthChild3),
         until = Some(untilPeriod7),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -1271,7 +1271,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period8OutputChild2 = TFCOutputChild(
@@ -1280,7 +1280,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period8OutputChild3 = TFCOutputChild(
@@ -1289,7 +1289,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod8),
         until = Some(untilPeriod8),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -1369,7 +1369,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child1 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild1,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
@@ -1377,14 +1377,14 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child2 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = true, severelyDisabled = false),
         Some(ccConfig)
       )
 
       val tfc    = TFCEligibilityInput(from = from, 4, location = "england", List(claimant), List(child1, child2))
-      val result = tfcEligibility.determineTFCPeriods(tfc)
+      val result = tfcEligibility.determineTFCPeriod(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1   = LocalDate.parse("2016-05-30", formatter)
@@ -1404,7 +1404,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(untilPeriod1),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period1OutputChild2 = TFCOutputChild(
@@ -1413,7 +1413,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(untilPeriod1),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -1423,7 +1423,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod2),
         until = Some(child1EndDate),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period2OutputChild2 = TFCOutputChild(
@@ -1432,7 +1432,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod2),
         until = Some(untilPeriod2),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -1442,7 +1442,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period3OutputChild2 = TFCOutputChild(
@@ -1451,7 +1451,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod3),
         until = Some(untilPeriod3),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -1461,7 +1461,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period4OutputChild2 = TFCOutputChild(
@@ -1470,7 +1470,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod4),
         until = Some(untilPeriod4),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -1522,7 +1522,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child1 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild1,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
@@ -1530,7 +1530,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child2 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = true, severelyDisabled = false),
         Some(ccConfig)
@@ -1538,13 +1538,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child3 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild3,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
       )
       val tfc = TFCEligibilityInput(from = from, 6, location = "england", List(claimant), List(child1, child2, child3))
-      val result = tfcEligibility.determineTFCPeriods(tfc)
+      val result = tfcEligibility.determineTFCPeriod(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1   = LocalDate.parse("2016-10-31", formatter)
@@ -1566,7 +1566,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period1OutputChild2 = TFCOutputChild(
@@ -1575,7 +1575,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(untilPeriod1),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period1OutputChild3 = TFCOutputChild(
@@ -1584,7 +1584,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(untilPeriod1),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -1594,7 +1594,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period2OutputChild2 = TFCOutputChild(
@@ -1603,7 +1603,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod2),
         until = Some(untilPeriod2),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period2OutputChild3 = TFCOutputChild(
@@ -1612,7 +1612,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod2),
         until = Some(untilPeriod2),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -1622,7 +1622,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period3OutputChild2 = TFCOutputChild(
@@ -1631,7 +1631,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod3),
         until = Some(untilPeriod3),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period3OutputChild3 = TFCOutputChild(
@@ -1640,7 +1640,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod3),
         until = Some(untilPeriod3),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -1650,7 +1650,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period4OutputChild2 = TFCOutputChild(
@@ -1659,7 +1659,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod4),
         until = Some(untilPeriod4),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period4OutputChild3 = TFCOutputChild(
@@ -1668,7 +1668,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod4),
         until = Some(untilPeriod4),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -1678,7 +1678,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period5OutputChild2 = TFCOutputChild(
@@ -1687,7 +1687,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod5),
         until = Some(untilPeriod5),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period5OutputChild3 = TFCOutputChild(
@@ -1696,7 +1696,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod5),
         until = Some(untilPeriod5),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -1706,7 +1706,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period6OutputChild2 = TFCOutputChild(
@@ -1715,7 +1715,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod6),
         until = Some(untilPeriod6),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period6OutputChild3 = TFCOutputChild(
@@ -1724,7 +1724,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod6),
         until = Some(untilPeriod6),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -1798,7 +1798,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child1 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild1,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
@@ -1806,7 +1806,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child2 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = true, severelyDisabled = false),
         Some(ccConfig)
@@ -1814,7 +1814,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
 
       val tfc =
         TFCEligibilityInput(from = from, 3, location = "england", List(claimant, claimant1), List(child1, child2))
-      val result = tfcEligibility.determineTFCPeriods(tfc)
+      val result = tfcEligibility.determineTFCPeriod(tfc)
 
       val outputClaimant  = TFCOutputClaimant(qualifying = true, isPartner = false)
       val outputClaimant1 = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -1834,7 +1834,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(child1EndDate),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period1OutputChild2 = TFCOutputChild(
@@ -1843,7 +1843,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(untilPeriod1),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -1853,7 +1853,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period2OutputChild2 = TFCOutputChild(
@@ -1862,7 +1862,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod2),
         until = Some(untilPeriod2),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -1872,7 +1872,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period3OutputChild2 = TFCOutputChild(
@@ -1881,7 +1881,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod3),
         until = Some(untilPeriod3),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -1935,7 +1935,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child1 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild1,
         disability = TFCDisability(disabled = true, severelyDisabled = false),
         Some(ccConfig)
@@ -1943,7 +1943,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child2 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
@@ -1951,7 +1951,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child3 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild3,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
@@ -1963,7 +1963,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         List(claimant, claimant1),
         List(child1, child2, child3)
       )
-      val result = tfcEligibility.determineTFCPeriods(tfc)
+      val result = tfcEligibility.determineTFCPeriod(tfc)
 
       val outputClaimant  = TFCOutputClaimant(qualifying = true, isPartner = false)
       val outputClaimant1 = TFCOutputClaimant(qualifying = true, isPartner = false)
@@ -1986,7 +1986,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(untilPeriod1),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period1OutputChild2 = TFCOutputChild(
@@ -1995,7 +1995,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(untilPeriod1),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period1OutputChild3 = TFCOutputChild(
@@ -2004,7 +2004,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -2014,7 +2014,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod2),
         until = Some(untilPeriod2),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period2OutputChild2 = TFCOutputChild(
@@ -2023,7 +2023,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod2),
         until = Some(untilPeriod2),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period2OutputChild3 = TFCOutputChild(
@@ -2032,7 +2032,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -2042,7 +2042,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod3),
         until = Some(untilPeriod3),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period3OutputChild2 = TFCOutputChild(
@@ -2051,7 +2051,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod3),
         until = Some(untilPeriod3),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period3OutputChild3 = TFCOutputChild(
@@ -2060,7 +2060,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(dateOfBirthChild3),
         until = Some(untilPeriod3),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -2070,7 +2070,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod4),
         until = Some(untilPeriod4),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period4OutputChild2 = TFCOutputChild(
@@ -2079,7 +2079,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod4),
         until = Some(untilPeriod4),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period4OutputChild3 = TFCOutputChild(
@@ -2088,7 +2088,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod4),
         until = Some(untilPeriod4),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -2098,7 +2098,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod5),
         until = Some(untilPeriod5),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period5OutputChild2 = TFCOutputChild(
@@ -2107,7 +2107,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod5),
         until = Some(child2EndDate),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period5OutputChild3 = TFCOutputChild(
@@ -2116,7 +2116,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod5),
         until = Some(untilPeriod5),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -2174,7 +2174,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child1 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild1,
         disability = TFCDisability(disabled = true, severelyDisabled = false),
         Some(ccConfig)
@@ -2182,13 +2182,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child2 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
       )
       val tfc    = TFCEligibilityInput(from = from, 7, location = "england", List(claimant), List(child1, child2))
-      val result = tfcEligibility.determineTFCPeriods(tfc)
+      val result = tfcEligibility.determineTFCPeriod(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1   = LocalDate.parse("2016-01-15", formatter)
@@ -2212,7 +2212,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(untilPeriod1),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period1OutputChild2 = TFCOutputChild(
@@ -2221,7 +2221,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(untilPeriod1),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -2231,7 +2231,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod2),
         until = Some(untilPeriod2),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period2OutputChild2 = TFCOutputChild(
@@ -2240,7 +2240,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod2),
         until = Some(untilPeriod2),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -2250,7 +2250,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod3),
         until = Some(untilPeriod3),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period3OutputChild2 = TFCOutputChild(
@@ -2259,7 +2259,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod3),
         until = Some(untilPeriod3),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -2269,7 +2269,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod4),
         until = Some(untilPeriod4),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period4OutputChild2 = TFCOutputChild(
@@ -2278,7 +2278,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod4),
         until = Some(untilPeriod4),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -2288,7 +2288,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod5),
         until = Some(untilPeriod5),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period5OutputChild2 = TFCOutputChild(
@@ -2297,7 +2297,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod5),
         until = Some(untilPeriod5),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -2307,7 +2307,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod6),
         until = Some(untilPeriod6),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period6OutputChild2 = TFCOutputChild(
@@ -2316,7 +2316,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod6),
         until = Some(untilPeriod6),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -2326,7 +2326,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod7),
         until = Some(untilPeriod7),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period7OutputChild2 = TFCOutputChild(
@@ -2335,7 +2335,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod7),
         until = Some(untilPeriod7),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -2407,7 +2407,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child1 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild1,
         disability = TFCDisability(disabled = true, severelyDisabled = false),
         Some(ccConfig)
@@ -2415,13 +2415,13 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child2 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = true, severelyDisabled = false),
         Some(ccConfig)
       )
       val tfc    = TFCEligibilityInput(from = from, 8, location = "england", List(claimant), List(child1, child2))
-      val result = tfcEligibility.determineTFCPeriods(tfc)
+      val result = tfcEligibility.determineTFCPeriod(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1   = LocalDate.parse("2016-07-31", formatter)
@@ -2449,7 +2449,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(untilPeriod1),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period1OutputChild2 = TFCOutputChild(
@@ -2458,7 +2458,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(untilPeriod1),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -2468,7 +2468,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod2),
         until = Some(untilPeriod2),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period2OutputChild2 = TFCOutputChild(
@@ -2477,7 +2477,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod2),
         until = Some(untilPeriod2),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -2487,7 +2487,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod3),
         until = Some(untilPeriod3),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period3OutputChild2 = TFCOutputChild(
@@ -2496,7 +2496,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod3),
         until = Some(untilPeriod3),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -2506,7 +2506,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod4),
         until = Some(untilPeriod4),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period4OutputChild2 = TFCOutputChild(
@@ -2515,7 +2515,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod4),
         until = Some(untilPeriod4),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -2525,7 +2525,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod5),
         until = Some(untilPeriod5),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period5OutputChild2 = TFCOutputChild(
@@ -2534,7 +2534,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod5),
         until = Some(child2EndDate),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -2544,7 +2544,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod6),
         until = Some(untilPeriod6),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period6OutputChild2 = TFCOutputChild(
@@ -2553,7 +2553,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -2563,7 +2563,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod7),
         until = Some(untilPeriod7),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period7OutputChild2 = TFCOutputChild(
@@ -2572,7 +2572,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -2582,7 +2582,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod8),
         until = Some(untilPeriod8),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period8OutputChild2 = TFCOutputChild(
@@ -2591,7 +2591,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -2671,7 +2671,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child1 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild1,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
@@ -2679,14 +2679,14 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child2 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = false, severelyDisabled = false),
         Some(ccConfig)
       )
 
       val tfc    = TFCEligibilityInput(from = from, 4, location = "england", List(claimant), List(child1, child2))
-      val result = tfcEligibility.determineTFCPeriods(tfc)
+      val result = tfcEligibility.determineTFCPeriod(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1   = LocalDate.parse("2016-05-23", formatter)
@@ -2704,7 +2704,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period1OutputChild2 = TFCOutputChild(
@@ -2713,7 +2713,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -2723,7 +2723,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period2OutputChild2 = TFCOutputChild(
@@ -2732,7 +2732,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -2742,7 +2742,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period3OutputChild2 = TFCOutputChild(
@@ -2751,7 +2751,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -2761,7 +2761,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
       val Period4OutputChild2 = TFCOutputChild(
@@ -2770,7 +2770,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(false, false)
       )
 
@@ -2822,7 +2822,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child1 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild1,
         disability = TFCDisability(disabled = true, severelyDisabled = false),
         Some(ccConfig)
@@ -2830,14 +2830,14 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child2 = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirthChild2,
         disability = TFCDisability(disabled = true, severelyDisabled = false),
         Some(ccConfig)
       )
 
       val tfc    = TFCEligibilityInput(from = from, 4, location = "england", List(claimant), List(child1, child2))
-      val result = tfcEligibility.determineTFCPeriods(tfc)
+      val result = tfcEligibility.determineTFCPeriod(tfc)
 
       val outputClaimant = TFCOutputClaimant(qualifying = true, isPartner = false)
       val startPeriod1   = LocalDate.parse("2016-05-30", formatter)
@@ -2855,7 +2855,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period1OutputChild2 = TFCOutputChild(
@@ -2864,7 +2864,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -2874,7 +2874,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period2OutputChild2 = TFCOutputChild(
@@ -2883,7 +2883,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -2893,7 +2893,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period3OutputChild2 = TFCOutputChild(
@@ -2902,7 +2902,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -2912,7 +2912,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
       val Period4OutputChild2 = TFCOutputChild(
@@ -2921,7 +2921,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability(true, false)
       )
 
@@ -3087,7 +3087,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
 
       val outputChild1 = TFCOutputChild(
         id = 0,
-        childcareCostPeriod = Periods.Weekly,
+        childcareCostPeriod = Period.Weekly,
         qualifying = false,
         from = Some(startPeriod1),
         until = Some(untilPeriod1)
@@ -3271,7 +3271,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(),
         Some(ccConfig)
@@ -3288,10 +3288,10 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod),
         until = Some(untilPeriod),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability()
       )
-      val tfcPeriods = List(
+      val tfcPeriod = List(
         TFCPeriod(
           from = startPeriod,
           until = untilPeriod,
@@ -3302,9 +3302,9 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       )
       val tfcEligibilityModel = TFCEligibilityOutput(
         from = from,
-        until = tfcPeriods.last.until,
+        until = tfcPeriod.last.until,
         householdEligibility = false,
-        periods = tfcPeriods
+        periods = tfcPeriod
       )
       result shouldBe tfcEligibilityModel
     }
@@ -3317,7 +3317,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(),
         Some(ccConfig)
@@ -3338,7 +3338,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod),
         until = Some(septDate),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability()
       )
       val PeriodOutputChild1 = TFCOutputChild(
@@ -3347,11 +3347,11 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability()
       )
 
-      val tfcPeriods = List(
+      val tfcPeriod = List(
         TFCPeriod(
           from = startPeriod,
           until = untilPeriod,
@@ -3369,9 +3369,9 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       )
       val tfcEligibilityModel = TFCEligibilityOutput(
         from = from,
-        until = tfcPeriods.last.until,
+        until = tfcPeriod.last.until,
         householdEligibility = true,
-        periods = tfcPeriods
+        periods = tfcPeriod
       )
       result shouldBe tfcEligibilityModel
     }
@@ -3384,7 +3384,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(),
         Some(ccConfig)
@@ -3405,7 +3405,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod),
         until = Some(untilPeriod),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability()
       )
       val PeriodOutputChild1 = TFCOutputChild(
@@ -3414,11 +3414,11 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = Some(startPeriod1),
         until = Some(untilPeriod1),
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability()
       )
 
-      val tfcPeriods = List(
+      val tfcPeriod = List(
         TFCPeriod(
           from = startPeriod,
           until = untilPeriod,
@@ -3436,9 +3436,9 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       )
       val tfcEligibilityModel = TFCEligibilityOutput(
         from = from,
-        until = tfcPeriods.last.until,
+        until = tfcPeriod.last.until,
         householdEligibility = true,
-        periods = tfcPeriods
+        periods = tfcPeriod
       )
       result shouldBe tfcEligibilityModel
     }
@@ -3456,7 +3456,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       val child = testChild(
         id = 0,
         childCareCost = BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         dob = dateOfBirth,
         disability = TFCDisability(),
         Some(ccConfig)
@@ -3478,7 +3478,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability()
       )
       val PeriodOutputChild1 = TFCOutputChild(
@@ -3487,7 +3487,7 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability()
       )
       val PeriodOutputChild2 = TFCOutputChild(
@@ -3496,11 +3496,11 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
         from = None,
         until = None,
         BigDecimal(200.00),
-        childcareCostPeriod = Periods.Monthly,
+        childcareCostPeriod = Period.Monthly,
         models.output.tfc.TFCDisability()
       )
 
-      val tfcPeriods = List(
+      val tfcPeriod = List(
         TFCPeriod(
           from = startPeriod,
           until = untilPeriod,
@@ -3525,9 +3525,9 @@ class TFCEligibilitySpec extends FakeCCEligibilityApplication with PrivateMethod
       )
       val tfcEligibilityModel = TFCEligibilityOutput(
         from = from,
-        until = tfcPeriods.last.until,
+        until = tfcPeriod.last.until,
         householdEligibility = false,
-        periods = tfcPeriods
+        periods = tfcPeriod
       )
       result shouldBe tfcEligibilityModel
     }

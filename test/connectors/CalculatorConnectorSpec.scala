@@ -20,8 +20,8 @@ import config.ApplicationConfig
 import controllers.FakeCCEligibilityApplication
 import models.input.CalculatorOutput
 import models.output.CalculatorInput
-import org.mockito.ArgumentMatchers._
-import org.mockito.Mockito._
+import org.mockito.ArgumentMatchers.*
+import org.mockito.Mockito.*
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
@@ -34,7 +34,7 @@ class CalculatorConnectorSpec
     with FakeCCEligibilityApplication
     with BeforeAndAfterEach {
 
-  implicit val ec: ExecutionContext  = ExecutionContext.Implicits.global
+  given ec: ExecutionContext         = ExecutionContext.Implicits.global
   val requestBuilder: RequestBuilder = mock[RequestBuilder]
 
   "CalculatorConnector" must {

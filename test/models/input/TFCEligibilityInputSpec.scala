@@ -17,19 +17,19 @@
 package models.input
 
 import controllers.FakeCCEligibilityApplication
-import models.input.tfc._
+import models.input.tfc.*
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import utils.{CCConfigSpec, Periods, TestFileReader}
+import utils.{CCConfigSpec, Period, TestFileReader}
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplication with MockitoSugar {
 
-  implicit val req: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+  given req: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
   "TFCEInputEligibility" must {
 
@@ -66,7 +66,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
           // Child model
           x.children.head.id.isInstanceOf[Short] shouldBe true
           x.children.head.childcareCost shouldBe a[BigDecimal]
-          x.children.head.childcareCostPeriod shouldBe a[Periods.Period]
+          x.children.head.childcareCostPeriod shouldBe a[Period]
           x.children.head.dob shouldBe a[LocalDate]
           x.children.head.disability shouldBe a[TFCDisability]
 
@@ -86,7 +86,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
         val child = new TFCChild(
           id = 0,
           childcareCost = BigDecimal(200.00),
-          childcareCostPeriod = Periods.Monthly,
+          childcareCostPeriod = Period.Monthly,
           dob = dateOfBirth,
           disability = TFCDisability(disabled = true)
         )(None)
@@ -99,7 +99,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
         val child = new TFCChild(
           id = 0,
           childcareCost = BigDecimal(200.00),
-          childcareCostPeriod = Periods.Monthly,
+          childcareCostPeriod = Period.Monthly,
           dob = dateOfBirth,
           disability = TFCDisability(severelyDisabled = true)
         )(None)
@@ -112,7 +112,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
         val child = new TFCChild(
           id = 0,
           childcareCost = BigDecimal(200.00),
-          childcareCostPeriod = Periods.Monthly,
+          childcareCostPeriod = Period.Monthly,
           dob = dateOfBirth,
           disability = TFCDisability()
         )(None)
@@ -125,7 +125,7 @@ class TFCEligibilityInputSpec extends CCConfigSpec with FakeCCEligibilityApplica
         val child = new TFCChild(
           id = 0,
           childcareCost = BigDecimal(200.00),
-          childcareCostPeriod = Periods.Monthly,
+          childcareCostPeriod = Period.Monthly,
           dob = dateOfBirth,
           disability = TFCDisability(disabled = true, severelyDisabled = true)
         )(None)

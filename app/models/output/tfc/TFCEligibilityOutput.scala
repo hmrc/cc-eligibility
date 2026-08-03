@@ -18,7 +18,7 @@ package models.output.tfc
 
 import java.time.LocalDate
 import play.api.libs.json.{Json, Writes}
-import utils.Periods
+import utils.Period
 
 case class TFCEligibilityOutput(
     from: LocalDate,
@@ -28,7 +28,7 @@ case class TFCEligibilityOutput(
 )
 
 object TFCEligibilityOutput {
-  implicit val tfcEligible: Writes[TFCEligibilityOutput] = Json.writes[TFCEligibilityOutput]
+  given tfcEligible: Writes[TFCEligibilityOutput] = Json.writes[TFCEligibilityOutput]
 }
 
 case class TFCPeriod(
@@ -40,7 +40,7 @@ case class TFCPeriod(
 )
 
 object TFCPeriod {
-  implicit val periodWrites: Writes[TFCPeriod] = Json.writes[TFCPeriod]
+  given periodWrites: Writes[TFCPeriod] = Json.writes[TFCPeriod]
 }
 
 case class TFCOutputClaimant(
@@ -49,7 +49,7 @@ case class TFCOutputClaimant(
 )
 
 object TFCOutputClaimant {
-  implicit val claimantWrites: Writes[TFCOutputClaimant] = Json.writes[TFCOutputClaimant]
+  given claimantWrites: Writes[TFCOutputClaimant] = Json.writes[TFCOutputClaimant]
 }
 
 case class TFCOutputChild(
@@ -58,12 +58,12 @@ case class TFCOutputChild(
     from: Option[LocalDate],
     until: Option[LocalDate],
     childcareCost: BigDecimal = BigDecimal(0),
-    childcareCostPeriod: Periods.Period = Periods.Monthly,
+    childcareCostPeriod: Period = Period.Monthly,
     disability: TFCDisability = TFCDisability()
 )
 
 object TFCOutputChild {
-  implicit val childWrites: Writes[TFCOutputChild] = Json.writes[TFCOutputChild]
+  given childWrites: Writes[TFCOutputChild] = Json.writes[TFCOutputChild]
 }
 
 case class TFCDisability(
@@ -72,5 +72,5 @@ case class TFCDisability(
 )
 
 object TFCDisability {
-  implicit val disability: Writes[TFCDisability] = Json.writes[TFCDisability]
+  given disability: Writes[TFCDisability] = Json.writes[TFCDisability]
 }

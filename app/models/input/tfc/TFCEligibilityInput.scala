@@ -20,11 +20,10 @@ import com.google.inject.Inject
 import config.ConfigConstants
 import models.input.BaseChild
 import java.time.LocalDate
-import play.api.i18n.Lang
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
-import utils.Periods.Period
-import utils._
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
+import utils.Period
+import utils.*
 
 /*
 This is the Payload input class from cc-frontend to cc-eligibility
@@ -62,15 +61,13 @@ case class TFCEligibilityInput(
 
 object TFCEligibilityInput {
 
-  implicit val lang: Lang = Lang("en")
-
   def maxChildValidation(noOfChild: List[TFCChild]): Boolean =
     noOfChild.length <= 25
 
   def claimantValidation(noOfClaimant: List[TFCClaimant]): Boolean =
     noOfClaimant.nonEmpty && noOfClaimant.length < 3
 
-  implicit val tfcReads: Reads[TFCEligibilityInput] =
+  given tfcReads: Reads[TFCEligibilityInput] =
     (JsPath \ "from")
       .read[LocalDate]
       .and((JsPath \ "numberOfPeriods").read[Short].orElse(Reads.pure(1)))
@@ -86,7 +83,7 @@ object TFCEligibilityInput {
         (JsPath \ "children")
           .read[List[TFCChild]]
           .filter(JsonValidationError("Max 25 children allowed"))(x => maxChildValidation(x))
-      )(TFCEligibilityInput.apply _)
+      )(TFCEligibilityInput.apply)
 
 }
 
@@ -97,7 +94,7 @@ case class TFCIncome(
 )
 
 object TFCIncome {
-  implicit val formats: OFormat[TFCIncome] = Json.format[TFCIncome]
+  given formats: OFormat[TFCIncome] = Json.format[TFCIncome]
 }
 
 case class TFCClaimant(
@@ -141,7 +138,7 @@ case class TFCClaimant(
 
 object TFCClaimant {
 
-  implicit val claimantReads: Reads[TFCClaimant] =
+  given claimantReads: Reads[TFCClaimant] =
     (JsPath \ "currentIncome")
       .readNullable[TFCIncome]
       .and((JsPath \ "isPartner").read[Boolean].orElse(Reads.pure(false)))
@@ -151,7 +148,7 @@ object TFCClaimant {
       .and((JsPath \ "age").readNullable[String])
       .and((JsPath \ "employmentStatus").readNullable[String])
       .and((JsPath \ "selfEmployedSelection").readNullable[Boolean])
-      .and((JsPath \ "maximumEarnings").readNullable[Boolean])(TFCClaimant.apply _)
+      .and((JsPath \ "maximumEarnings").readNullable[Boolean])(TFCClaimant.apply)
 
 }
 
@@ -162,11 +159,11 @@ case class TFCMinimumEarnings(
 
 object TFCMinimumEarnings {
 
-  implicit val minEarningsRead: Reads[TFCMinimumEarnings] =
+  given minEarningsRead: Reads[TFCMinimumEarnings] =
     (JsPath \ "selection")
       .read[Boolean]
       .orElse(Reads.pure(true))
-      .and((JsPath \ "amount").read[BigDecimal].orElse(Reads.pure(0.00)))(TFCMinimumEarnings.apply _)
+      .and((JsPath \ "amount").read[BigDecimal].orElse(Reads.pure(0.00)))(TFCMinimumEarnings.apply)
 
 }
 
@@ -177,18 +174,18 @@ case class TFCDisability(
 
 object TFCDisability {
 
-  implicit val disabilityReads: Reads[TFCDisability] =
+  given disabilityReads: Reads[TFCDisability] =
     (JsPath \ "disabled")
       .read[Boolean]
       .orElse(Reads.pure(false))
-      .and((JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false)))(TFCDisability.apply _)
+      .and((JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false)))(TFCDisability.apply)
 
 }
 
 case class TFCChild @Inject() (
     id: Short,
     childcareCost: BigDecimal = BigDecimal(0.00),
-    childcareCostPeriod: Periods.Period = Periods.Monthly,
+    childcareCostPeriod: Period = Period.Monthly,
     dob: LocalDate,
     disability: TFCDisability
 )(ccConfig: Option[CCConfig])
@@ -200,8 +197,6 @@ case class TFCChild @Inject() (
 }
 
 object TFCChild {
-
-  implicit val lang: Lang = Lang("en")
 
   def validID(id: Short): Boolean =
     id >= 0
@@ -229,7 +224,7 @@ object TFCChild {
   ): TFCChild =
     new TFCChild(id, childcareCost, childcareCostPeriod, dob, disability)(Some(ccConfig))
 
-  implicit val childReads: Reads[TFCChild] =
+  given childReads: Reads[TFCChild] =
     (JsPath \ "id")
       .read[Short]
       .filter(JsonValidationError("Child ID should not be less than 0"))(x => validID(x))
@@ -240,7 +235,7 @@ object TFCChild {
             childSpendValidation(x)
           )
       )
-      .and((JsPath \ "childcareCostPeriod").read[Periods.Period])
+      .and((JsPath \ "childcareCostPeriod").read[Period])
       .and((JsPath \ "dob").read[LocalDate])
       .and((JsPath \ "disability").read[TFCDisability])(TFCChild.apply(_, _, _, _, _))
 

@@ -19,7 +19,7 @@ package controllers
 import models.Household
 import models.output.SchemeResults
 import org.mockito.ArgumentMatchers.{eq => mockEq, _}
-import org.mockito.Mockito._
+import org.mockito.Mockito.*
 import org.scalatest.matchers.should.Matchers
 import play.api.http.Status
 import play.api.libs.json.Json
@@ -33,9 +33,9 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 
 class EligibilityControllerSpec extends FakeCCEligibilityApplication with Matchers {
 
-  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
+  given ec: ExecutionContext = ExecutionContext.Implicits.global
 
-  implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+  given request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
   "EligibilityController" must {
     val controller = new EligibilityController(
@@ -56,7 +56,7 @@ class EligibilityControllerSpec extends FakeCCEligibilityApplication with Matche
       val inputJson = Json.parse(TestFileReader.readFrom("test/resources/household/eligibility_input_household.json"))
       val request   = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibilityService.eligibility(any[Household]())(any()))
+      when(controller.eligibilityService.eligibility(any[Household]())(using any()))
         .thenReturn(Future.successful(SchemeResults(List())))
       val result = Await.result(controller.eligible(request), Duration(2, "seconds"))
       status(result) shouldBe Status.OK
@@ -66,7 +66,7 @@ class EligibilityControllerSpec extends FakeCCEligibilityApplication with Matche
       val inputJson = Json.parse(TestFileReader.readFrom("test/resources/household/incorrect_date_format.json"))
       val request   = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibilityService.eligibility(any[Household]())(any()))
+      when(controller.eligibilityService.eligibility(any[Household]())(using any()))
         .thenReturn(Future.successful(mock[SchemeResults]))
       val result = Await.result(controller.eligible(request), Duration(2, "seconds"))
       status(result) shouldBe Status.BAD_REQUEST
@@ -76,7 +76,7 @@ class EligibilityControllerSpec extends FakeCCEligibilityApplication with Matche
       val inputJson = Json.parse(TestFileReader.readFrom("test/resources/household/no_claimants.json"))
       val request   = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
 
-      when(controller.eligibilityService.eligibility(any[Household]())(any()))
+      when(controller.eligibilityService.eligibility(any[Household]())(using any()))
         .thenReturn(Future.successful(mock[SchemeResults]))
       val result = Await.result(controller.eligible(request), Duration(2, "seconds"))
       status(result) shouldBe 400
@@ -87,7 +87,7 @@ class EligibilityControllerSpec extends FakeCCEligibilityApplication with Matche
       val request    = FakeRequest("POST", "").withHeaders("Content-Type" -> "application/json").withBody(inputJson)
       val JsonResult = inputJson.validate[Household]
 
-      when(controller.eligibilityService.eligibility(mockEq(JsonResult.get))(any()))
+      when(controller.eligibilityService.eligibility(mockEq(JsonResult.get))(using any()))
         .thenReturn(Future.failed(new Exception("Something bad happened in Eligibility")))
 
       val result = Await.result(controller.eligible(request), Duration(2, "seconds"))

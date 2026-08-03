@@ -16,10 +16,10 @@
 
 package models.output.esc
 
-import models.LocationEnum.LocationEnum
+import models.LocationEnum
 import java.time.LocalDate
 import play.api.libs.json.{Json, Writes}
-import utils.Periods
+import utils.Period
 
 case class ESCEligibilityOutput(
     taxYears: List[ESCTaxYear],
@@ -30,7 +30,7 @@ case class ESCEligibilityOutput(
 )
 
 object ESCEligibilityOutput {
-  implicit val escEligible: Writes[ESCEligibilityOutput] = Json.writes[ESCEligibilityOutput]
+  given escEligible: Writes[ESCEligibilityOutput] = Json.writes[ESCEligibilityOutput]
 }
 
 case class ESCTaxYear(
@@ -40,7 +40,7 @@ case class ESCTaxYear(
 )
 
 object ESCTaxYear {
-  implicit val taxYearWrites: Writes[ESCTaxYear] = Json.writes[ESCTaxYear]
+  given taxYearWrites: Writes[ESCTaxYear] = Json.writes[ESCTaxYear]
 }
 
 case class ESCPeriod(
@@ -51,7 +51,7 @@ case class ESCPeriod(
 )
 
 object ESCPeriod {
-  implicit val periodWrites: Writes[ESCPeriod] = Json.writes[ESCPeriod]
+  given periodWrites: Writes[ESCPeriod] = Json.writes[ESCPeriod]
 }
 
 case class ESCClaimant(
@@ -64,7 +64,7 @@ case class ESCClaimant(
 )
 
 object ESCClaimant {
-  implicit val claimantWrites: Writes[ESCClaimant] = Json.writes[ESCClaimant]
+  given claimantWrites: Writes[ESCClaimant] = Json.writes[ESCClaimant]
 }
 
 case class ESCIncome(
@@ -74,15 +74,15 @@ case class ESCIncome(
 )
 
 object ESCIncome {
-  implicit val incomeWrite: Writes[ESCIncome] = Json.writes[ESCIncome]
+  given incomeWrite: Writes[ESCIncome] = Json.writes[ESCIncome]
 }
 
 case class ESCChild(
     qualifying: Boolean = false,
     childCareCost: BigDecimal,
-    childCareCostPeriod: Periods.Period = Periods.Monthly
+    childCareCostPeriod: Period = Period.Monthly
 )
 
 object ESCChild {
-  implicit val childWrites: Writes[ESCChild] = Json.writes[ESCChild]
+  given childWrites: Writes[ESCChild] = Json.writes[ESCChild]
 }

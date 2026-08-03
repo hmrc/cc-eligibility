@@ -20,7 +20,7 @@ import models.PeriodEnum
 import models.mappings.PeriodEnumToPeriod
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import utils.Periods
+import utils.Period
 
 class PeriodEnumToPeriodSpec extends AnyWordSpec with Matchers {
 
@@ -28,25 +28,33 @@ class PeriodEnumToPeriodSpec extends AnyWordSpec with Matchers {
 
   "PeriodEnumToPeriod" must {
 
-    "convert periodEnum to Periods for ESCEligibilityInput" when {
+    "convert periodEnum to Period for ESCEligibilityInput" when {
       "periodEnum is weekly" in {
-        SUT.convert(PeriodEnum.WEEKLY) shouldBe Periods.Weekly
+        SUT.convert(PeriodEnum.WEEKLY) shouldBe Period.Weekly
       }
 
       "periodEnum is fortnightly" in {
-        SUT.convert(PeriodEnum.FORTNIGHTLY) shouldBe Periods.Fortnightly
+        SUT.convert(PeriodEnum.FORTNIGHTLY) shouldBe Period.Fortnightly
       }
 
-      "periodEnum is yearly" in {
-        SUT.convert(PeriodEnum.YEARLY) shouldBe Periods.Yearly
+      "periodEnum is monthly" in {
+        SUT.convert(PeriodEnum.MONTHLY) shouldBe Period.Monthly
       }
 
       "periodEnum is quarterly" in {
-        SUT.convert(PeriodEnum.QUARTERLY) shouldBe Periods.Quarterly
+        SUT.convert(PeriodEnum.QUARTERLY) shouldBe Period.Quarterly
+      }
+
+      "periodEnum is yearly" in {
+        SUT.convert(PeriodEnum.YEARLY) shouldBe Period.Yearly
       }
 
       "periodEnum is invalid" in {
-        SUT.convert(PeriodEnum.INVALID) shouldBe Periods.INVALID
+        SUT.convert(PeriodEnum.INVALID) shouldBe Period.INVALID
+      }
+
+      "periodEnum is null" in {
+        SUT.convert(null) shouldBe Period.INVALID
       }
     }
   }

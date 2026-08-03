@@ -24,15 +24,16 @@ import models.output.CalculatorInput
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.Implicits.*
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class CalculatorConnector @Inject() (applicationConfig: ApplicationConfig, http: HttpClientV2)(
-    implicit ec: ExecutionContext
+    using ec: ExecutionContext
 ) {
 
-  def getCalculatorResult(calculatorInput: CalculatorInput)(implicit hc: HeaderCarrier): Future[CalculatorOutput] = {
+  def getCalculatorResult(calculatorInput: CalculatorInput)(using hc: HeaderCarrier): Future[CalculatorOutput] = {
     val url = s"${applicationConfig.calculatorUrl}"
     http.post(url"$url").withBody(Json.toJson(calculatorInput)).execute[CalculatorOutput]
   }

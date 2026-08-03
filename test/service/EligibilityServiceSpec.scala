@@ -22,12 +22,12 @@ import eligibility.{ESCEligibility, TFCEligibility}
 import models.input.CalculatorOutput
 import models.mappings.{HHToESCEligibilityInput, HHToTFCEligibilityInput}
 import models.output.esc.{ESCEligibilityOutput, ESCTaxYear}
-import models.output.tfc._
+import models.output.tfc.*
 import models.output.{EscClaimantEligibility, Scheme, SchemeResults}
 import models.{Claimant, Household, LocationEnum, SchemeEnum}
 import java.time.LocalDate
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito._
+import org.mockito.Mockito.*
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.http.HeaderCarrier
@@ -58,7 +58,7 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
         mockCCConfig
       ) {
 
-    override def eligibility(request: Household)(implicit hc: HeaderCarrier): Future[SchemeResults] =
+    override def eligibility(request: Household)(using hc: HeaderCarrier): Future[SchemeResults] =
       super.eligibility(request)
 
   }
@@ -77,8 +77,8 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
         val expectedResult = SchemeResults(List(tfcSchemeOutput, escSchemeOutput))
 
         when(mockESC.eligibility(any(), any(), any())).thenReturn(Future(escEligibilityOutputAllTrue))
-        when(mockTFC.eligibility(any())(any())).thenReturn(Future(tfcEligibilityOutputRolloutTrue))
-        when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueAll))
+        when(mockTFC.eligibility(any())(using any())).thenReturn(Future(tfcEligibilityOutputRolloutTrue))
+        when(mockCalc.getCalculatorResult(any())(using any())).thenReturn(Future(calcOutputValueAll))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
       }
@@ -92,8 +92,8 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
         val expectedResult = SchemeResults(List(tfcSchemeOutput, escSchemeOutput))
 
         when(mockESC.eligibility(any(), any(), any())).thenReturn(Future(escEligibilityOutputAllTrue))
-        when(mockTFC.eligibility(any())(any())).thenReturn(Future(mock[TFCEligibilityOutput]))
-        when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueOnlyESC))
+        when(mockTFC.eligibility(any())(using any())).thenReturn(Future(mock[TFCEligibilityOutput]))
+        when(mockCalc.getCalculatorResult(any())(using any())).thenReturn(Future(calcOutputValueOnlyESC))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
       }
@@ -107,8 +107,8 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
         val expectedResult = SchemeResults(List(tfcSchemeOutput, escSchemeOutput))
 
         when(mockESC.eligibility(any(), any(), any())).thenReturn(Future(mock[ESCEligibilityOutput]))
-        when(mockTFC.eligibility(any())(any())).thenReturn(Future(tfcEligibilityOutputTrue))
-        when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueOnlyTFC))
+        when(mockTFC.eligibility(any())(using any())).thenReturn(Future(tfcEligibilityOutputTrue))
+        when(mockCalc.getCalculatorResult(any())(using any())).thenReturn(Future(calcOutputValueOnlyTFC))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
       }
@@ -122,8 +122,8 @@ class EligibilityServiceSpec extends AnyWordSpec with FakeCCEligibilityApplicati
         val expectedResult = SchemeResults(List(tfcSchemeOutput, escSchemeOutput))
 
         when(mockESC.eligibility(any(), any(), any())).thenReturn(Future(mock[ESCEligibilityOutput]))
-        when(mockTFC.eligibility(any())(any())).thenReturn(mock[TFCEligibilityOutput])
-        when(mockCalc.getCalculatorResult(any())(any())).thenReturn(Future(calcOutputValueNone))
+        when(mockTFC.eligibility(any())(using any())).thenReturn(Future(mock[TFCEligibilityOutput]))
+        when(mockCalc.getCalculatorResult(any())(using any())).thenReturn(Future(calcOutputValueNone))
 
         Await.result(SUT.eligibility(request), Duration(2, "seconds")) shouldBe expectedResult
       }

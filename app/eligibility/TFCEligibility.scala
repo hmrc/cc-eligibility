@@ -17,7 +17,7 @@
 package eligibility
 
 import models.input.tfc.{TFCChild, TFCClaimant, TFCEligibilityInput}
-import models.output.tfc._
+import models.output.tfc.*
 import service.AuditEvents
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TFCConfig
@@ -27,7 +27,7 @@ import java.util.{Calendar, Date}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class TFCEligibility @Inject() (auditEvent: AuditEvents, tFCConfig: TFCConfig)(implicit ec: ExecutionContext) {
+class TFCEligibility @Inject() (auditEvent: AuditEvents, tFCConfig: TFCConfig)(using ec: ExecutionContext) {
 
   private def getWeekEnd(calendar: Calendar): Date = {
     while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY || calendar.get(Calendar.DAY_OF_MONTH) == 1)
@@ -128,13 +128,13 @@ class TFCEligibility @Inject() (auditEvent: AuditEvents, tFCConfig: TFCConfig)(i
     periodEligibility
   }
 
-  def determineTFCPeriods(tfcEligibilityInput: TFCEligibilityInput): List[TFCPeriod] = {
+  def determineTFCPeriod(tfcEligibilityInput: TFCEligibilityInput): List[TFCPeriod] = {
 
     val currentCalendar = Calendar.getInstance()
     currentCalendar.clear()
     currentCalendar.setTime(tFCConfig.config.toDate(tfcEligibilityInput.from))
 
-    val periods = for (i <- 1 to tfcEligibilityInput.numberOfPeriods) yield {
+    val periods = for (_ <- 1 to tfcEligibilityInput.numberOfPeriods) yield {
       val startDate = tFCConfig.config.toLocalDate(currentCalendar.getTime)
       currentCalendar.add(Calendar.MONTH, 3)
       val untilDate = tFCConfig.config.toLocalDate(currentCalendar.getTime)
@@ -188,24 +188,24 @@ class TFCEligibility @Inject() (auditEvent: AuditEvents, tFCConfig: TFCConfig)(i
         isPartner = claimant.isPartner
       )
 
-  def eligibility(request: TFCEligibilityInput)(implicit hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
-    val outputPeriods = determineTFCPeriods(request)
-    val householdEligibility = outputPeriods.exists(period =>
-      period.periodEligibility
-    ) && validHouseholdMinimumEarnings(request) && request.validMaxEarnings()
+  def eligibility(request: TFCEligibilityInput)(using hc: HeaderCarrier): Future[TFCEligibilityOutput] = {
+    val outputPeriod = determineTFCPeriod(request)
+    val householdEligibility = outputPeriod.exists(period => period.periodEligibility) && validHouseholdMinimumEarnings(
+      request
+    ) && request.validMaxEarnings()
     Future {
       TFCEligibilityOutput(
         from = request.from,
-        until = outputPeriods.last.until,
+        until = outputPeriod.last.until,
         householdEligibility = householdEligibility,
-        periods = outputPeriods
+        periods = outputPeriod
       )
     }
   }
 
   private def validHouseholdMinimumEarnings(
       tfcEligibilityInput: TFCEligibilityInput
-  )(implicit hc: HeaderCarrier): Boolean = {
+  )(using hc: HeaderCarrier): Boolean = {
     val parent            = tfcEligibilityInput.claimants.head
     val minEarningsParent = parent.minimumEarnings.selection
     if (tfcEligibilityInput.claimants.length > 1) {

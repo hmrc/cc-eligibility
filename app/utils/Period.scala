@@ -16,19 +16,19 @@
 
 package utils
 
-import play.api.libs.json._
+import models.Enumerable
 
-object Periods extends Enumeration {
-  type Period = Value
+enum Period(val id: Int, val period: String) {
+  case Weekly      extends Period(0, "Week")
+  case Fortnightly extends Period(1, "Fortnight")
+  case Monthly     extends Period(2, "Month")
+  case Quarterly   extends Period(3, "3 month")
+  case Yearly      extends Period(4, "Year")
+  case INVALID     extends Period(5, "INVALID")
 
-  val Weekly      = Value(0, "Week")
-  val Fortnightly = Value(1, "Fortnight")
-  val Monthly     = Value(2, "Month")
-  val Quarterly   = Value(3, "3 month")
-  val Yearly      = Value(4, "Year")
-  val INVALID     = Value(5, "INVALID")
+  override def toString: String = period
+}
 
-  implicit val enumReads: Reads[Period] = EnumUtils.enumReads(Periods)
-
-  implicit def enumWrites: Writes[Period] = EnumUtils.enumWrites
+object Period extends Enumerable.Implicits {
+  given Enumerable[Period] = Enumerable.apply(Period.values)
 }

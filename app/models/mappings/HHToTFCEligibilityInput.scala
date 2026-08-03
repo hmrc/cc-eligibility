@@ -16,9 +16,9 @@
 
 package models.mappings
 
-import models.ParentsBenefits._
-import models._
-import models.input.tfc._
+import models.ParentsBenefits.*
+import models.*
+import models.input.tfc.*
 import utils.{CCConfig, TFCConfig}
 
 import javax.inject.Inject

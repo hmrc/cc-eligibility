@@ -16,15 +16,15 @@
 
 package models.mapping
 
-import models._
+import models.*
 import models.input.CalculatorOutput
 import models.mappings.SchemeResultsBuilder
 import models.output.esc.{ESCEligibilityOutput, ESCTaxYear}
-import models.output.tfc._
+import models.output.tfc.*
 import models.output.{EscClaimantEligibility, Scheme, SchemeResults}
 import java.time.LocalDate
 import org.scalatestplus.mockito.MockitoSugar
-import utils.{CCConfigSpec, Periods}
+import utils.{CCConfigSpec, Period}
 
 class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
 
@@ -114,7 +114,7 @@ class SchemeResultsBuilderSpec extends CCConfigSpec with MockitoSugar {
     from = None,
     until = None,
     childcareCost = BigDecimal(0),
-    childcareCostPeriod = Periods.Monthly,
+    childcareCostPeriod = Period.Monthly,
     disability = TFCDisability()
   )
 

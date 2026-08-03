@@ -17,19 +17,17 @@
 package models.input.esc
 
 import javax.inject.Inject
-import models.LocationEnum.LocationEnum
+import models.LocationEnum
 import models.input.BaseTaxYear
 import java.time.LocalDate
-import play.api.i18n.Lang
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
-import utils.Periods.Period
-import utils.{CCConfig, ESCConfig, Periods}
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
+import utils.{CCConfig, ESCConfig, Period}
 
 case class ESCEligibilityInput(escTaxYears: List[ESCTaxYear], location: Option[LocationEnum] = None)
 
 object ESCEligibilityInput {
-  implicit val requestFormat: Reads[ESCEligibilityInput] = Json.reads[ESCEligibilityInput]
+  given requestFormat: Reads[ESCEligibilityInput] = Json.reads[ESCEligibilityInput]
 }
 
 case class ESCTaxYear(
@@ -41,15 +39,13 @@ case class ESCTaxYear(
 
 object ESCTaxYear {
 
-  implicit val lang: Lang = Lang("en")
-
   def maxChildValidation(noOfChild: List[ESCChild]): Boolean =
     noOfChild.length <= 25
 
   def claimantValidation(noOfClaimant: List[ESCClaimant]): Boolean =
     noOfClaimant.nonEmpty && noOfClaimant.length < 3
 
-  implicit val taxYearReads: Reads[ESCTaxYear] =
+  given taxYearReads: Reads[ESCTaxYear] =
     (JsPath \ "from")
       .read[LocalDate]
       .and((JsPath \ "until").read[LocalDate])
@@ -64,7 +60,7 @@ object ESCTaxYear {
         (JsPath \ "children")
           .read[List[ESCChild]]
           .filter(JsonValidationError("Max 25 children allowed"))(x => maxChildValidation(x))
-      )(ESCTaxYear.apply _)
+      )(ESCTaxYear.apply)
 
 }
 
@@ -75,7 +71,7 @@ case class ESCIncome(
 )
 
 object ESCIncome {
-  implicit val incomeFormat: OFormat[ESCIncome] = Json.format[ESCIncome]
+  given incomeFormat: OFormat[ESCIncome] = Json.format[ESCIncome]
 }
 
 case class ESCClaimant(
@@ -91,12 +87,12 @@ case class ESCClaimant(
 
 object ESCClaimant {
 
-  implicit val claimantReads: Reads[ESCClaimant] =
+  given claimantReads: Reads[ESCClaimant] =
     (JsPath \ "isPartner")
       .read[Boolean]
       .orElse(Reads.pure(false))
       .and((JsPath \ "employerProvidesESC").read[Boolean].orElse(Reads.pure(false)))
-      .and((JsPath \ "currentIncome").readNullable[ESCIncome])(ESCClaimant.apply _)
+      .and((JsPath \ "currentIncome").readNullable[ESCIncome])(ESCClaimant.apply)
 
 }
 
@@ -104,7 +100,7 @@ case class ESCChild @Inject() (
     id: Short,
     dob: LocalDate,
     childCareCost: BigDecimal,
-    childCareCostPeriod: Periods.Period = Periods.Monthly,
+    childCareCostPeriod: Period = Period.Monthly,
     disability: ESCDisability
 )(eSCConfig: Option[ESCConfig], ccConfig: Option[CCConfig])
     extends models.input.BaseChild(ccConfig) {
@@ -178,13 +174,13 @@ object ESCChild {
   ): ESCChild =
     new ESCChild(id, dob, childCareCost, childCareCostPeriod, disability)(None, None)
 
-  implicit val childReads: Reads[ESCChild] =
+  given childReads: Reads[ESCChild] =
     (JsPath \ "id")
       .read[Short]
       .filter(JsonValidationError("Child ID should not be less than 0"))(x => validID(x))
       .and((JsPath \ "dob").read[LocalDate])
       .and((JsPath \ "childCareCost").read[BigDecimal])
-      .and((JsPath \ "childCareCostPeriod").read[Periods.Period])
+      .and((JsPath \ "childCareCostPeriod").read[Period])
       .and((JsPath \ "disability").read[ESCDisability])(ESCChild.apply(_, _, _, _, _))
 
 }
@@ -196,10 +192,10 @@ case class ESCDisability(
 
 object ESCDisability {
 
-  implicit val disabilityReads: Reads[ESCDisability] =
+  given disabilityReads: Reads[ESCDisability] =
     (JsPath \ "disabled")
       .read[Boolean]
       .orElse(Reads.pure(false))
-      .and((JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false)))(ESCDisability.apply _)
+      .and((JsPath \ "severelyDisabled").read[Boolean].orElse(Reads.pure(false)))(ESCDisability.apply)
 
 }

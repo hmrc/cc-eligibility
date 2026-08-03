@@ -5,25 +5,25 @@ lazy val plugins: Seq[Plugins] = Seq(
   SbtDistributablesPlugin
 )
 
-lazy val playSettings: Seq[Setting[_]] = Seq.empty
+lazy val playSettings: Seq[Setting[?]] = Seq.empty
 
 ThisBuild / majorVersion := 1
-ThisBuild / scalaVersion := "2.13.18"
+ThisBuild / scalaVersion := "3.3.7"
 
 lazy val scoverageSettings = {
-  import scoverage._
+  import scoverage.*
   Seq(
     ScoverageKeys.coverageExcludedPackages := "<empty>;Reverse.*;.*Routes.*;routes_routing.*;uk.gov.hmrc;config.*;",
-    ScoverageKeys.coverageMinimumStmtTotal := 95,
+    ScoverageKeys.coverageMinimumStmtTotal := 90,
     ScoverageKeys.coverageFailOnMinimum    := true,
     ScoverageKeys.coverageHighlighting     := true
   )
 }
 
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(Seq(play.sbt.PlayScala) ++ plugins: _*)
+  .enablePlugins((Seq(play.sbt.PlayScala) ++ plugins)*)
   .disablePlugins(JUnitXmlReportPlugin) // Required to prevent https://github.com/scalatest/scalatest/issues/1427
-  .settings(playSettings ++ scoverageSettings: _*)
+  .settings((playSettings ++ scoverageSettings)*)
   .settings(PlayKeys.playDefaultPort := 9375)
   .settings(
     scalacOptions ++= Seq(

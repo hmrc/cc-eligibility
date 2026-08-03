@@ -20,7 +20,7 @@ import javax.inject.Inject
 import models.Household
 import play.api.Logging
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, ControllerComponents}
+import play.api.mvc.{Action, ControllerComponents, Request}
 import service.{AuditEvents, EligibilityService}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
@@ -30,11 +30,12 @@ class EligibilityController @Inject() (
     val eligibilityService: EligibilityService,
     val auditEvent: AuditEvents,
     cc: ControllerComponents
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends BackendController(cc)
     with Logging {
 
-  def eligible: Action[JsValue] = Action.async(cc.parsers.json) { implicit request =>
+  def eligible: Action[JsValue] = Action.async(cc.parsers.json) { request =>
+    given Request[JsValue] = request
     request.body
       .validate[Household]
       .fold(
