@@ -70,7 +70,7 @@ object TFCEligibilityInput {
   given tfcReads: Reads[TFCEligibilityInput] =
     (JsPath \ "from")
       .read[LocalDate]
-      .and((JsPath \ "numberOfPeriod").read[Short].orElse(Reads.pure(1)))
+      .and((JsPath \ "numberOfPeriods").read[Short].orElse(Reads.pure(1)))
       .and((JsPath \ "location").read[String])
       .and(
         (JsPath \ "claimants")

@@ -30,9 +30,8 @@ import utils.{CCConfig, Period, TFCConfig}
 class HHToTFCEligibilityInputSpec extends FakeCCEligibilityApplication with MockitoSugar {
 
   val mockTFC = mock[TFCConfig]
-  val SUT     = new HHToTFCEligibilityInput(mockTFC, mock[CCConfig])
-
   val mockConfig = mock[CCConfig]
+  val SUT     = new HHToTFCEligibilityInput(mockTFC, mockConfig)
 
   "HHToTFCEligibilityInput" must {
 

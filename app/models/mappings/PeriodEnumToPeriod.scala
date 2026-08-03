@@ -26,12 +26,11 @@ trait PeriodEnumToPeriod {
   def convert(inputPeriod: PeriodEnum): Period =
     inputPeriod match {
       case PeriodEnum.FORTNIGHTLY => Period.Fortnightly
-      case PeriodEnum.INVALID     => Period.INVALID
       case PeriodEnum.MONTHLY     => Period.Monthly
       case PeriodEnum.QUARTERLY   => Period.Quarterly
       case PeriodEnum.WEEKLY      => Period.Weekly
       case PeriodEnum.YEARLY      => Period.Yearly
-      case null                   => Period.INVALID
+      case _                      => Period.INVALID
     }
 
 }
