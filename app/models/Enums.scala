@@ -71,7 +71,6 @@ object PeriodEnum extends Enumerable.Implicits {
   given Enumerable[PeriodEnum] = Enumerable.apply(PeriodEnum.values)
 }
 
-
 enum SchemeEnum(val scheme: String) {
   case TFCELIGIBILITY extends SchemeEnum("tfcEligibility")
   case ESCELIGIBILITY extends SchemeEnum("escEligibility")
